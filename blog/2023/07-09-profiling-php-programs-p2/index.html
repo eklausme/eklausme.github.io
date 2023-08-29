@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Profiling PHP Programs #2</title>
+
+	<link href=/jscss/prism.css rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2023-07-09 15:30:00">9th July 2023</time>, 44 min read</p>
+<h1>Profiling PHP Programs #2</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2">eklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2</a>.</p>
+<br>
+<p>After adding a number of smaller features to <a href="../../../blog/2021/10-31-simplified-saaze"><em>Simplified Saaze</em></a> I wanted to make sure that not too much fat has been added. So I profiled <em>Simplified Saaze</em> with XHProf. I had written on PHP profiling in <a href="../../../blog/2021/10-18-profiling-php-programs">Profiling PHP Programs</a>. I used XHProf version 2.3.9 and PHP version 8.2.8 on Arch Linux kernel 6.4.1. <em>Simplified Saaze</em> has below version:</p>
+<pre class="line-numbers"><code class="language-bash">$ php saaze -v
+Version 1.29, 08-Jul-2023, written by Elmar Klausmeier
+</code></pre>
+<p>First a run <em>without</em> profiler.</p>
+<pre class="line-numbers" data-line="10"><code class="language-bash">$ time php saaze -mortb /tmp/build
+Building static site in /tmp/build...
+        execute(): filePath=/home/klm/php/sndsaaze/content/aux.yml, nentries=6, totalPages=1, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/blog.yml, nentries=409, totalPages=21, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/gallery.yml, nentries=6, totalPages=1, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/music.yml, nentries=56, totalPages=3, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/error.yml, nentries=1, totalPages=1, entries_per_page=20
+Finished creating 5 collections, 4 with index, and 495 entries (0.15 secs / 10.83MB)
+#collections=5, YamlParser=0.0074/501-5, md2html=0.0145, MathParser=0.0078/495, renderEntry=495, content=495/0, excerpt=0/0
+        real 0.17s
+        user 0.15s
+        sys 0
+        swapped 0
+        total space 0
+</code></pre>
+<p>Now <em>with</em> profiler for the exact same input.</p>
+<pre class="line-numbers" data-line="16"><code class="language-bash">$ time php saaze -mortb /tmp/build
+Building static site in /tmp/build...
+        execute(): filePath=/home/klm/php/sndsaaze/content/aux.yml, nentries=6, totalPages=1, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/blog.yml, nentries=409, totalPages=21, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/gallery.yml, nentries=6, totalPages=1, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/music.yml, nentries=56, totalPages=3, entries_per_page=20
+        execute(): filePath=/home/klm/php/sndsaaze/content/error.yml, nentries=1, totalPages=1, entries_per_page=20
+Finished creating 5 collections, 4 with index, and 495 entries (0.27 secs / 11.02MB)
+#collections=5, YamlParser=0.0109/501-5, md2html=0.0205, MathParser=0.0253/495, renderEntry=495, content=495/0, excerpt=0/0
+Warning: Must specify directory location for XHProf runs. Trying /tmp as default. You can either pass the directory location as an argument to the constructor for XHProfRuns_Default() or set xhprof.output_dir ini param, or set XHPROF_OUTPUT_DIR environment variable.
+---------------
+Assuming you have set up the http based UI for
+XHProf at some address, you can view run at
+http://&lt;xhprof-ui-address&gt;/index.php?run=64a9a7b7f24b2&amp;source=saaze
+---------------
+        real 0.29s
+        user 0.18s
+        sys 0
+        swapped 0
+        total space 0
+</code></pre>
+<p>One can clearly see that XHProf makes the program almost <em>two times</em> slower. In our case this is no problem at all, as runtime is still way below half a second for all our roughly 500 blog posts.</p>
+<p>Analyzing the output via GUI. We create a symlink to XHProf's PHP and JavaScript code:</p>
+<pre class="line-numbers"><code class="language-bash">cd /srv/http
+ln -s /usr/share/webapps/xhprof/xhprof_html
+</code></pre>
+<p>Results are then viewed on <code>http://localhost/xhprof_html/index.php</code>. Below tables is the result of this <a href="../../../pdf/64a9a7b7f24b2.saaze.xhprof">data</a>. Time unit is µs.</p>
+<table cellpadding=2 cellspacing=1 bgcolor="#bdc7d8" align=center>
+<tr><th style='text-align:right'>Overall Summary</th><th></th></tr>
+<tr><td style='text-align:right; font-weight:bold'>Total Incl. Wall Time (microsec):</td><td>268,275 microsecs</td></tr>
+<tr><td style='text-align:right; font-weight:bold'>Total Incl. CPU (microsecs):</td><td>266,828 microsecs</td></tr>
+<tr><td style='text-align:right; font-weight:bold'>Total Incl. MemUse (bytes):</td><td>9,671,352 bytes</td></tr>
+<tr><td style='text-align:right; font-weight:bold'>Total Incl.  PeakMemUse (bytes):</td><td>9,792,824 bytes</td></tr>
+<tr><td style='text-align:right; font-weight:bold'>Number of Function Calls:</td><td>192,936</td></tr>
+</table>
+<p>Details.</p>
+<table border=1 cellpadding=2 cellspacing=1 rules=rows bordercolor="#bdc7d8" align=center>
+<tr bgcolor="#bdc7d8" align=right>
+<th align=left>Function Name</th>
+<th  class="vwbar">Calls</th>
+<th  class="vwbar">Calls%</th>
+<th  class="vwbar">Incl. Wall Time<br>(microsec)</th>
+<th  class="vwbar">IWall%</th>
+<th  class="vwbar">Excl. Wall Time<br>(microsec)</th>
+<th  class="vwbar">EWall%</th>
+<th  class="vwbar">Incl. CPU<br>(microsecs)</th>
+<th  class="vwbar">ICpu%</th>
+<th  class="vwbar">Excl. CPU<br>(microsec)</th>
+<th  class="vwbar">ECPU%</th>
+<th  class="vwbar">Incl.<br>MemUse<br>(bytes)</th>
+<th  class="vwbar">IMemUse%</th>
+<th  class="vwbar">Excl.<br>MemUse<br>(bytes)</th>
+<th  class="vwbar">EMemUse%</th>
+<th  class="vwbar">Incl.<br> PeakMemUse<br>(bytes)</th>
+<th  class="vwbar">IPeakMemUse%</th>
+<th  class="vwbar">Excl.<br>PeakMemUse<br>(bytes)</th>
+<th  class="vwbar">EPeakMemUse%</th></tr>
+<tr><td>main()</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">268,275</td>
+<td class="vbbar">100.0%</td>
+<td class="vbar">30</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">266,828</td>
+<td class="vbar">100.0%</td>
+<td class="vbar">25</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">9,671,352</td>
+<td class="vbar">100.0%</td>
+<td class="vbar">-18,488</td>
+<td class="vbar">-0.2%</td>
+<td class="vbar">9,792,824</td>
+<td class="vbar">100.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\BuildCommand::buildAllStatic</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">267,921</td>
+<td class="vbbar">99.9%</td>
+<td class="vbar">990</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">266,474</td>
+<td class="vbar">99.9%</td>
+<td class="vbar">834</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">9,516,976</td>
+<td class="vbar">98.4%</td>
+<td class="vbar">-486,936</td>
+<td class="vbar">-5.0%</td>
+<td class="vbar">9,792,824</td>
+<td class="vbar">100.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::buildEntry</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">165,125</td>
+<td class="vbbar">61.6%</td>
+<td class="vbar">3,418</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">164,740</td>
+<td class="vbar">61.7%</td>
+<td class="vbar">2,721</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">1,783,216</td>
+<td class="vbar">18.4%</td>
+<td class="vbar">-18,936,600</td>
+<td class="vbar">-195.8%</td>
+<td class="vbar">3,901,352</td>
+<td class="vbar">39.8%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\TemplateManager::renderEntry</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">145,793</td>
+<td class="vbbar">54.3%</td>
+<td class="vbar">40,623</td>
+<td class="vbar">15.1%</td>
+<td class="vbar">145,444</td>
+<td class="vbar">54.5%</td>
+<td class="vbar">32,168</td>
+<td class="vbar">12.1%</td>
+<td class="vbar">20,529,904</td>
+<td class="vbar">212.3%</td>
+<td class="vbar">-23,448,896</td>
+<td class="vbar">-242.5%</td>
+<td class="vbar">3,901,352</td>
+<td class="vbar">39.8%</td>
+<td class="vbar">466,512</td>
+<td class="vbar">4.8%</td>
+</tr>
+<tr><td>Saaze\Collection::getEntries</td>
+<td class="vbar">5</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">77,137</td>
+<td class="vbbar">28.8%</td>
+<td class="vbar">8</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">76,211</td>
+<td class="vbar">28.6%</td>
+<td class="vbar">8</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">6,791,912</td>
+<td class="vbar">70.2%</td>
+<td class="vbar">376</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">5,462,264</td>
+<td class="vbar">55.8%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Collection::loadEntries</td>
+<td class="vbar">5</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">74,368</td>
+<td class="vbbar">27.7%</td>
+<td class="vbar">11</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">73,440</td>
+<td class="vbar">27.5%</td>
+<td class="vbar">12</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">6,788,976</td>
+<td class="vbar">70.2%</td>
+<td class="vbar">856</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">5,447,368</td>
+<td class="vbar">55.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\Collection::loadMkdwnRecursive</td>
+<td class="vbar">5</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">74,348</td>
+<td class="vbbar">27.7%</td>
+<td class="vbar">58</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">73,419</td>
+<td class="vbar">27.5%</td>
+<td class="vbar">41</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">6,787,744</td>
+<td class="vbar">70.2%</td>
+<td class="vbar">-10,400</td>
+<td class="vbar">-0.1%</td>
+<td class="vbar">5,447,368</td>
+<td class="vbar">55.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Collection::loadMkdwnRecursive@1</td>
+<td class="vbar">21</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">72,785</td>
+<td class="vbbar">27.1%</td>
+<td class="vbar">897</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">71,863</td>
+<td class="vbar">26.9%</td>
+<td class="vbar">627</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">6,569,344</td>
+<td class="vbar">67.9%</td>
+<td class="vbar">-10,376</td>
+<td class="vbar">-0.1%</td>
+<td class="vbar">5,440,880</td>
+<td class="vbar">55.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\Collection::loadEntry</td>
+<td class="vbar">496</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">71,986</td>
+<td class="vbbar">26.8%</td>
+<td class="vbar">1,556</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">71,164</td>
+<td class="vbar">26.7%</td>
+<td class="vbar">1,427</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">6,732,744</td>
+<td class="vbar">69.6%</td>
+<td class="vbar">-5,808</td>
+<td class="vbar">-0.1%</td>
+<td class="vbar">5,447,368</td>
+<td class="vbar">55.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Entry::getContentAndExcerpt</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">52,920</td>
+<td class="vbbar">19.7%</td>
+<td class="vbar">1,428</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">52,056</td>
+<td class="vbar">19.5%</td>
+<td class="vbar">1,205</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">3,330,256</td>
+<td class="vbar">34.4%</td>
+<td class="vbar">-1,640,096</td>
+<td class="vbar">-17.0%</td>
+<td class="vbar">3,561,672</td>
+<td class="vbar">36.4%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::toHtml</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">46,252</td>
+<td class="vbbar">17.2%</td>
+<td class="vbar">6,944</td>
+<td class="vbar">2.6%</td>
+<td class="vbar">45,396</td>
+<td class="vbar">17.0%</td>
+<td class="vbar">5,127</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">4,968,160</td>
+<td class="vbar">51.4%</td>
+<td class="vbar">-2,228,808</td>
+<td class="vbar">-23.0%</td>
+<td class="vbar">3,561,672</td>
+<td class="vbar">36.4%</td>
+<td class="vbar">19,840</td>
+<td class="vbar">0.2%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>load::blog/entry.php</td>
+<td class="vbar">423</td>
+<td class="vbar">0.2%</td>
+<td class="vbbar">18,957</td>
+<td class="vbbar">7.1%</td>
+<td class="vbar">18,957</td>
+<td class="vbar">7.1%</td>
+<td class="vbar">19,027</td>
+<td class="vbar">7.1%</td>
+<td class="vbar">19,027</td>
+<td class="vbar">7.1%</td>
+<td class="vbar">7,078,088</td>
+<td class="vbar">73.2%</td>
+<td class="vbar">7,078,088</td>
+<td class="vbar">73.2%</td>
+<td class="vbar">89,408</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">89,408</td>
+<td class="vbar">0.9%</td>
+</tr>
+<tr><td>load::templates/top-layout.php</td>
+<td class="vbar">525</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">15,161</td>
+<td class="vbbar">5.7%</td>
+<td class="vbar">15,161</td>
+<td class="vbar">5.7%</td>
+<td class="vbar">15,286</td>
+<td class="vbar">5.7%</td>
+<td class="vbar">15,286</td>
+<td class="vbar">5.7%</td>
+<td class="vbar">10,750,256</td>
+<td class="vbar">111.2%</td>
+<td class="vbar">10,750,256</td>
+<td class="vbar">111.2%</td>
+<td class="vbar">363,184</td>
+<td class="vbar">3.7%</td>
+<td class="vbar">363,184</td>
+<td class="vbar">3.7%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>load::templates/read_cattag_json.php</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">14,344</td>
+<td class="vbbar">5.3%</td>
+<td class="vbar">14,344</td>
+<td class="vbar">5.3%</td>
+<td class="vbar">14,449</td>
+<td class="vbar">5.4%</td>
+<td class="vbar">14,449</td>
+<td class="vbar">5.4%</td>
+<td class="vbar">4,175,336</td>
+<td class="vbar">43.2%</td>
+<td class="vbar">4,175,336</td>
+<td class="vbar">43.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\Entry::__construct</td>
+<td class="vbar">496</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">12,221</td>
+<td class="vbbar">4.6%</td>
+<td class="vbar">534</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">12,250</td>
+<td class="vbar">4.6%</td>
+<td class="vbar">476</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">3,194,120</td>
+<td class="vbar">33.0%</td>
+<td class="vbar">-2,497,920</td>
+<td class="vbar">-25.8%</td>
+<td class="vbar">1,885,696</td>
+<td class="vbar">19.3%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>load::templates/bottom-layout.php</td>
+<td class="vbar">525</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">12,178</td>
+<td class="vbbar">4.5%</td>
+<td class="vbar">12,178</td>
+<td class="vbar">4.5%</td>
+<td class="vbar">12,263</td>
+<td class="vbar">4.6%</td>
+<td class="vbar">12,263</td>
+<td class="vbar">4.6%</td>
+<td class="vbar">6,169,952</td>
+<td class="vbar">63.8%</td>
+<td class="vbar">6,169,952</td>
+<td class="vbar">63.8%</td>
+<td class="vbar">560,952</td>
+<td class="vbar">5.7%</td>
+<td class="vbar">560,952</td>
+<td class="vbar">5.7%</td>
+</tr>
+<tr><td>Saaze\Entry::parseEntry</td>
+<td class="vbar">496</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">11,370</td>
+<td class="vbbar">4.2%</td>
+<td class="vbar">3,225</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">11,456</td>
+<td class="vbar">4.3%</td>
+<td class="vbar">2,519</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">5,530,320</td>
+<td class="vbar">57.2%</td>
+<td class="vbar">4,256</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,885,696</td>
+<td class="vbar">19.3%</td>
+<td class="vbar">1,168</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>md4c_toHtml</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">9,714</td>
+<td class="vbbar">3.6%</td>
+<td class="vbar">9,714</td>
+<td class="vbar">3.6%</td>
+<td class="vbar">9,078</td>
+<td class="vbar">3.4%</td>
+<td class="vbar">9,078</td>
+<td class="vbar">3.4%</td>
+<td class="vbar">48,072</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">48,072</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">672</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">672</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>file_put_contents</td>
+<td class="vbar">529</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">9,601</td>
+<td class="vbbar">3.6%</td>
+<td class="vbar">9,601</td>
+<td class="vbar">3.6%</td>
+<td class="vbar">9,715</td>
+<td class="vbar">3.6%</td>
+<td class="vbar">9,715</td>
+<td class="vbar">3.6%</td>
+<td class="vbar">2,240</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,240</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">568</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">568</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\BuildCommand::clearBuildDirectory</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">8,852</td>
+<td class="vbbar">3.3%</td>
+<td class="vbar">2</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">8,832</td>
+<td class="vbar">3.3%</td>
+<td class="vbar">3</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">20,232</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">664</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::delTree</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">8,843</td>
+<td class="vbbar">3.3%</td>
+<td class="vbar">14</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">8,822</td>
+<td class="vbar">3.3%</td>
+<td class="vbar">14</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">19,016</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">-240</td>
+<td class="vbar">-0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\BuildCommand::delTree@1</td>
+<td class="vbar">4</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">8,741</td>
+<td class="vbbar">3.3%</td>
+<td class="vbar">62</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">8,717</td>
+<td class="vbar">3.3%</td>
+<td class="vbar">33</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">14,160</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">-5,392</td>
+<td class="vbar">-0.1%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::delTree@2</td>
+<td class="vbar">31</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">8,592</td>
+<td class="vbbar">3.2%</td>
+<td class="vbar">797</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">8,578</td>
+<td class="vbar">3.2%</td>
+<td class="vbar">569</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">11,560</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">-124,424</td>
+<td class="vbar">-1.3%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>printf</td>
+<td class="vbar">30,111</td>
+<td class="vbar">15.6%</td>
+<td class="vbbar">8,301</td>
+<td class="vbbar">3.1%</td>
+<td class="vbar">8,301</td>
+<td class="vbar">3.1%</td>
+<td class="vbar">10,966</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">10,966</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">2,857,640</td>
+<td class="vbar">29.5%</td>
+<td class="vbar">2,857,640</td>
+<td class="vbar">29.5%</td>
+<td class="vbar">15,656</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">15,656</td>
+<td class="vbar">0.2%</td>
+</tr>
+<tr><td>substr</td>
+<td class="vbar">38,306</td>
+<td class="vbar">19.9%</td>
+<td class="vbbar">7,588</td>
+<td class="vbbar">2.8%</td>
+<td class="vbar">7,588</td>
+<td class="vbar">2.8%</td>
+<td class="vbar">10,921</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">10,921</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">9,411,528</td>
+<td class="vbar">97.3%</td>
+<td class="vbar">9,411,528</td>
+<td class="vbar">97.3%</td>
+<td class="vbar">733,920</td>
+<td class="vbar">7.5%</td>
+<td class="vbar">733,920</td>
+<td class="vbar">7.5%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>strpos</td>
+<td class="vbar">14,121</td>
+<td class="vbar">7.3%</td>
+<td class="vbbar">6,972</td>
+<td class="vbbar">2.6%</td>
+<td class="vbar">6,972</td>
+<td class="vbar">2.6%</td>
+<td class="vbar">8,288</td>
+<td class="vbar">3.1%</td>
+<td class="vbar">8,288</td>
+<td class="vbar">3.1%</td>
+<td class="vbar">6,040</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">6,040</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::delTree@3</td>
+<td class="vbar">498</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">6,778</td>
+<td class="vbbar">2.5%</td>
+<td class="vbar">1,445</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">6,849</td>
+<td class="vbar">2.6%</td>
+<td class="vbar">1,119</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">57,720</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">-213,720</td>
+<td class="vbar">-2.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\BuildCommand::buildCollectionIndex</td>
+<td class="vbar">32</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">6,475</td>
+<td class="vbbar">2.4%</td>
+<td class="vbar">184</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">6,453</td>
+<td class="vbar">2.4%</td>
+<td class="vbar">171</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">57,832</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">-971,448</td>
+<td class="vbar">-10.0%</td>
+<td class="vbar">62,592</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\Entry::slug</td>
+<td class="vbar">1,484</td>
+<td class="vbar">0.8%</td>
+<td class="vbbar">5,493</td>
+<td class="vbbar">2.0%</td>
+<td class="vbar">3,647</td>
+<td class="vbar">1.4%</td>
+<td class="vbar">5,661</td>
+<td class="vbar">2.1%</td>
+<td class="vbar">3,028</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">234,320</td>
+<td class="vbar">2.4%</td>
+<td class="vbar">-295,248</td>
+<td class="vbar">-3.1%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\TemplateManager::renderCollection</td>
+<td class="vbar">30</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">5,446</td>
+<td class="vbbar">2.0%</td>
+<td class="vbar">1,253</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">5,440</td>
+<td class="vbar">2.0%</td>
+<td class="vbar">1,058</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,019,592</td>
+<td class="vbar">10.5%</td>
+<td class="vbar">-1,355,408</td>
+<td class="vbar">-14.0%</td>
+<td class="vbar">62,592</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>prtCatOrTag</td>
+<td class="vbar">2</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">5,415</td>
+<td class="vbbar">2.0%</td>
+<td class="vbar">3,192</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">5,374</td>
+<td class="vbar">2.0%</td>
+<td class="vbar">2,523</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">552,960</td>
+<td class="vbar">5.7%</td>
+<td class="vbar">-172,840</td>
+<td class="vbar">-1.8%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>ob_get_contents</td>
+<td class="vbar">528</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">5,169</td>
+<td class="vbbar">1.9%</td>
+<td class="vbar">5,169</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">5,251</td>
+<td class="vbar">2.0%</td>
+<td class="vbar">5,251</td>
+<td class="vbar">2.0%</td>
+<td class="vbar">19,498,632</td>
+<td class="vbar">201.6%</td>
+<td class="vbar">19,498,632</td>
+<td class="vbar">201.6%</td>
+<td class="vbar">838,960</td>
+<td class="vbar">8.6%</td>
+<td class="vbar">838,960</td>
+<td class="vbar">8.6%</td>
+</tr>
+<tr><td>str_contains</td>
+<td class="vbar">24,694</td>
+<td class="vbar">12.8%</td>
+<td class="vbbar">5,006</td>
+<td class="vbbar">1.9%</td>
+<td class="vbar">5,006</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">7,223</td>
+<td class="vbar">2.7%</td>
+<td class="vbar">7,223</td>
+<td class="vbar">2.7%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::myTag</td>
+<td class="vbar">2,026</td>
+<td class="vbar">1.1%</td>
+<td class="vbbar">4,962</td>
+<td class="vbbar">1.8%</td>
+<td class="vbar">3,341</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">5,202</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">2,879</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">297,136</td>
+<td class="vbar">3.1%</td>
+<td class="vbar">-766,728</td>
+<td class="vbar">-7.9%</td>
+<td class="vbar">39,400</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">352</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>str_word_count</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">4,880</td>
+<td class="vbbar">1.8%</td>
+<td class="vbar">4,880</td>
+<td class="vbar">1.8%</td>
+<td class="vbar">4,950</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">4,950</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::getExcerpt</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">4,794</td>
+<td class="vbbar">1.8%</td>
+<td class="vbar">1,125</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">4,818</td>
+<td class="vbar">1.8%</td>
+<td class="vbar">936</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">438,712</td>
+<td class="vbar">4.5%</td>
+<td class="vbar">-2,630,104</td>
+<td class="vbar">-27.2%</td>
+<td class="vbar">2,714,336</td>
+<td class="vbar">27.7%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::build_cat_and_tag</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">4,133</td>
+<td class="vbbar">1.5%</td>
+<td class="vbar">3,010</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">4,207</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">2,637</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">849,496</td>
+<td class="vbar">8.8%</td>
+<td class="vbar">831,256</td>
+<td class="vbar">8.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>array_map</td>
+<td class="vbar">909</td>
+<td class="vbar">0.5%</td>
+<td class="vbbar">4,126</td>
+<td class="vbbar">1.5%</td>
+<td class="vbar">1,715</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">4,205</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">1,515</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">401,184</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">215,496</td>
+<td class="vbar">2.2%</td>
+<td class="vbar">680</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">680</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>load::jscss/blogklm.css</td>
+<td class="vbar">525</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">4,025</td>
+<td class="vbbar">1.5%</td>
+<td class="vbar">4,025</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">4,141</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">4,141</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">2,684,832</td>
+<td class="vbar">27.8%</td>
+<td class="vbar">2,684,832</td>
+<td class="vbar">27.8%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>file_get_contents</td>
+<td class="vbar">502</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">3,966</td>
+<td class="vbbar">1.5%</td>
+<td class="vbar">3,966</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">4,066</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">4,066</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">2,956,024</td>
+<td class="vbar">30.6%</td>
+<td class="vbar">2,956,024</td>
+<td class="vbar">30.6%</td>
+<td class="vbar">1,635,184</td>
+<td class="vbar">16.7%</td>
+<td class="vbar">1,635,184</td>
+<td class="vbar">16.7%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::hackLNHighlight</td>
+<td class="vbar">157</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">3,904</td>
+<td class="vbbar">1.5%</td>
+<td class="vbar">1,411</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">3,916</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">1,096</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,750,440</td>
+<td class="vbar">18.1%</td>
+<td class="vbar">-11,205,304</td>
+<td class="vbar">-115.9%</td>
+<td class="vbar">99,200</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">45,528</td>
+<td class="vbar">0.5%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Entry::getUrl</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">3,348</td>
+<td class="vbbar">1.2%</td>
+<td class="vbar">1,211</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">3,405</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">1,028</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">89,760</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">-48,792</td>
+<td class="vbar">-0.5%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>strip_tags</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">3,321</td>
+<td class="vbbar">1.2%</td>
+<td class="vbar">3,321</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,355</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">3,355</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">2,779,096</td>
+<td class="vbar">28.7%</td>
+<td class="vbar">2,779,096</td>
+<td class="vbar">28.7%</td>
+<td class="vbar">2,714,336</td>
+<td class="vbar">27.7%</td>
+<td class="vbar">2,714,336</td>
+<td class="vbar">27.7%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>load::templates/head.php</td>
+<td class="vbar">526</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">3,276</td>
+<td class="vbbar">1.2%</td>
+<td class="vbar">3,276</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,414</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">3,414</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">1,589,648</td>
+<td class="vbar">16.4%</td>
+<td class="vbar">1,589,648</td>
+<td class="vbar">16.4%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>load::templates/entry.php</td>
+<td class="vbar">70</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">3,185</td>
+<td class="vbbar">1.2%</td>
+<td class="vbar">3,185</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,208</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,208</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">1,131,120</td>
+<td class="vbar">11.7%</td>
+<td class="vbar">1,131,120</td>
+<td class="vbar">11.7%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>yaml_parse</td>
+<td class="vbar">501</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">3,150</td>
+<td class="vbbar">1.2%</td>
+<td class="vbar">3,150</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,253</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">3,253</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">646,448</td>
+<td class="vbar">6.7%</td>
+<td class="vbar">646,448</td>
+<td class="vbar">6.7%</td>
+<td class="vbar">51,496</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">51,496</td>
+<td class="vbar">0.5%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::inlineMath</td>
+<td class="vbar">143</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">3,066</td>
+<td class="vbbar">1.1%</td>
+<td class="vbar">2,013</td>
+<td class="vbar">0.8%</td>
+<td class="vbar">3,084</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">1,545</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">127,704</td>
+<td class="vbar">1.3%</td>
+<td class="vbar">-3,570,144</td>
+<td class="vbar">-36.9%</td>
+<td class="vbar">102,712</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">78,648</td>
+<td class="vbar">0.8%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>str_replace</td>
+<td class="vbar">8,197</td>
+<td class="vbar">4.2%</td>
+<td class="vbbar">3,038</td>
+<td class="vbbar">1.1%</td>
+<td class="vbar">3,038</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">4,031</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">4,031</td>
+<td class="vbar">1.5%</td>
+<td class="vbar">1,545,328</td>
+<td class="vbar">16.0%</td>
+<td class="vbar">1,545,328</td>
+<td class="vbar">16.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\TemplateManager::renderGeneral</td>
+<td class="vbar">3</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">2,820</td>
+<td class="vbbar">1.1%</td>
+<td class="vbar">1,255</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">2,801</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">949</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">456,216</td>
+<td class="vbar">4.7%</td>
+<td class="vbar">-649,976</td>
+<td class="vbar">-6.7%</td>
+<td class="vbar">191,696</td>
+<td class="vbar">2.0%</td>
+<td class="vbar">64</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Collection::sortEntries</td>
+<td class="vbar">5</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">2,761</td>
+<td class="vbbar">1.0%</td>
+<td class="vbar">18</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,763</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">16</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,560</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">856</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">14,896</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>usort</td>
+<td class="vbar">5</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">2,742</td>
+<td class="vbbar">1.0%</td>
+<td class="vbar">1,680</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">2,743</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">1,347</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">1,152</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">600</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">14,896</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">14,896</td>
+<td class="vbar">0.2%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>scandir</td>
+<td class="vbar">574</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">2,739</td>
+<td class="vbbar">1.0%</td>
+<td class="vbar">2,739</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">2,842</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">2,842</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">394,936</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">394,936</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::youtube</td>
+<td class="vbar">491</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">2,409</td>
+<td class="vbbar">0.9%</td>
+<td class="vbar">315</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">2,501</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">340</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">240,472</td>
+<td class="vbar">2.5%</td>
+<td class="vbar">-2,712</td>
+<td class="vbar">-0.0%</td>
+<td class="vbar">21,152</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">256</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>unlink</td>
+<td class="vbar">528</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">2,334</td>
+<td class="vbbar">0.9%</td>
+<td class="vbar">2,334</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">2,416</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">2,416</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">2,904</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,904</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\TemplateManager::{closure}</td>
+<td class="vbar">2,238</td>
+<td class="vbar">1.2%</td>
+<td class="vbbar">2,308</td>
+<td class="vbbar">0.9%</td>
+<td class="vbar">1,799</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">2,532</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">1,718</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">185,136</td>
+<td class="vbar">1.9%</td>
+<td class="vbar">176,728</td>
+<td class="vbar">1.8%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::gallery</td>
+<td class="vbar">274</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">2,298</td>
+<td class="vbbar">0.9%</td>
+<td class="vbar">940</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">2,337</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">774</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">223,264</td>
+<td class="vbar">2.3%</td>
+<td class="vbar">-20,208</td>
+<td class="vbar">-0.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::compRbase</td>
+<td class="vbar">525</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">2,287</td>
+<td class="vbbar">0.9%</td>
+<td class="vbar">1,560</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">2,364</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">1,273</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">25,536</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">-72,008</td>
+<td class="vbar">-0.7%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>is_dir</td>
+<td class="vbar">2,218</td>
+<td class="vbar">1.1%</td>
+<td class="vbbar">2,173</td>
+<td class="vbbar">0.8%</td>
+<td class="vbar">2,173</td>
+<td class="vbar">0.8%</td>
+<td class="vbar">2,485</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">2,485</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">6,128</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">6,128</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\BuildCommand::save_cat_and_tag</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">1,939</td>
+<td class="vbbar">0.7%</td>
+<td class="vbar">459</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">1,937</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">365</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">4,072</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">-773,864</td>
+<td class="vbar">-8.0%</td>
+<td class="vbar">174,920</td>
+<td class="vbar">1.8%</td>
+<td class="vbar">128</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>strlen</td>
+<td class="vbar">9,506</td>
+<td class="vbar">4.9%</td>
+<td class="vbbar">1,810</td>
+<td class="vbbar">0.7%</td>
+<td class="vbar">1,810</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">2,727</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">2,727</td>
+<td class="vbar">1.0%</td>
+<td class="vbar">7,088</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">7,088</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">232</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">232</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>substr_replace</td>
+<td class="vbar">1,204</td>
+<td class="vbar">0.6%</td>
+<td class="vbbar">1,804</td>
+<td class="vbbar">0.7%</td>
+<td class="vbar">1,804</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">1,921</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">1,921</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">13,529,136</td>
+<td class="vbar">139.9%</td>
+<td class="vbar">13,529,136</td>
+<td class="vbar">139.9%</td>
+<td class="vbar">90,080</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">90,080</td>
+<td class="vbar">0.9%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>mkdir</td>
+<td class="vbar">508</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">1,746</td>
+<td class="vbbar">0.7%</td>
+<td class="vbar">1,746</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">1,826</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">1,826</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">1,088</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,088</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>strtotime</td>
+<td class="vbar">1,022</td>
+<td class="vbar">0.5%</td>
+<td class="vbbar">1,341</td>
+<td class="vbbar">0.5%</td>
+<td class="vbar">1,341</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">1,482</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">1,482</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">1,864</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,864</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>date</td>
+<td class="vbar">1,549</td>
+<td class="vbar">0.8%</td>
+<td class="vbbar">1,152</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">1,152</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,313</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">1,313</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">397,648</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">397,648</td>
+<td class="vbar">4.1%</td>
+<td class="vbar">504</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">504</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>array_key_exists</td>
+<td class="vbar">4,747</td>
+<td class="vbar">2.5%</td>
+<td class="vbbar">1,120</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">1,120</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,539</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">1,539</td>
+<td class="vbar">0.6%</td>
+<td class="vbar">2,776</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,776</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::mermaid</td>
+<td class="vbar">424</td>
+<td class="vbar">0.2%</td>
+<td class="vbbar">1,118</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">300</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">1,180</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">304</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">36,752</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">-3,832</td>
+<td class="vbar">-0.0%</td>
+<td class="vbar">18,960</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">712</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\TemplateManager::templateExists</td>
+<td class="vbar">528</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">1,107</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">520</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">1,176</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">529</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">2,368</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,816</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\Collection::Saaze\{closure}</td>
+<td class="vbar">4,096</td>
+<td class="vbar">2.1%</td>
+<td class="vbbar">1,062</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">1,062</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,396</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">1,396</td>
+<td class="vbar">0.5%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>is_link</td>
+<td class="vbar">1,061</td>
+<td class="vbar">0.5%</td>
+<td class="vbbar">1,008</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">1,008</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,140</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,140</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">2,144</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,144</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>rmdir</td>
+<td class="vbar">534</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">997</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">997</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,076</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,076</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">2,144</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,144</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::moreTag</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">966</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">334</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">1,039</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">340</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">569,008</td>
+<td class="vbar">5.9%</td>
+<td class="vbar">648</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>json_decode</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">958</td>
+<td class="vbbar">0.4%</td>
+<td class="vbar">958</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">959</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">959</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,353,568</td>
+<td class="vbar">14.0%</td>
+<td class="vbar">1,353,568</td>
+<td class="vbar">14.0%</td>
+<td class="vbar">1,345,496</td>
+<td class="vbar">13.7%</td>
+<td class="vbar">1,345,496</td>
+<td class="vbar">13.7%</td>
+</tr>
+<tr><td>urlencode</td>
+<td class="vbar">3,340</td>
+<td class="vbar">1.7%</td>
+<td class="vbbar">867</td>
+<td class="vbbar">0.3%</td>
+<td class="vbar">867</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">1,194</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">1,194</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">150,352</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">150,352</td>
+<td class="vbar">1.6%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::displayMath</td>
+<td class="vbar">143</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">821</td>
+<td class="vbbar">0.3%</td>
+<td class="vbar">515</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">846</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">417</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">107,592</td>
+<td class="vbar">1.1%</td>
+<td class="vbar">-943,480</td>
+<td class="vbar">-9.8%</td>
+<td class="vbar">89,832</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">29,872</td>
+<td class="vbar">0.3%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::vimeo</td>
+<td class="vbar">324</td>
+<td class="vbar">0.2%</td>
+<td class="vbbar">808</td>
+<td class="vbbar">0.3%</td>
+<td class="vbar">235</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">861</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">245</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">2,368</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">568</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">64</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">64</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::codepen</td>
+<td class="vbar">261</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">712</td>
+<td class="vbbar">0.3%</td>
+<td class="vbar">214</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">745</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">207</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">7,288</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">216</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\MarkdownContentParser::twitter</td>
+<td class="vbar">270</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">678</td>
+<td class="vbbar">0.3%</td>
+<td class="vbar">189</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">727</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">209</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">3,280</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">472</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">256</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::markmap</td>
+<td class="vbar">256</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">642</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">152</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">685</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">192</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">2,256</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">568</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>FFI::string</td>
+<td class="vbar">495</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">621</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">621</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">713</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">713</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">2,779,096</td>
+<td class="vbar">28.7%</td>
+<td class="vbar">2,779,096</td>
+<td class="vbar">28.7%</td>
+<td class="vbar">327,336</td>
+<td class="vbar">3.3%</td>
+<td class="vbar">327,336</td>
+<td class="vbar">3.3%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>file_exists</td>
+<td class="vbar">528</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">587</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">587</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">647</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">647</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">552</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>sort</td>
+<td class="vbar">1,187</td>
+<td class="vbar">0.6%</td>
+<td class="vbbar">586</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">586</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">683</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">683</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">224,904</td>
+<td class="vbar">2.3%</td>
+<td class="vbar">224,904</td>
+<td class="vbar">2.3%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>microtime</td>
+<td class="vbar">2,479</td>
+<td class="vbar">1.3%</td>
+<td class="vbbar">568</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">568</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">875</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">875</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">1,640</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,640</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>preg_match</td>
+<td class="vbar">1,430</td>
+<td class="vbar">0.7%</td>
+<td class="vbbar">549</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">549</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">671</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">671</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">1,288</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,288</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>getenv</td>
+<td class="vbar">1,543</td>
+<td class="vbar">0.8%</td>
+<td class="vbbar">537</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">537</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">730</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">730</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">1,104</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,104</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>json_encode</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">518</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">518</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">515</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">515</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">504,360</td>
+<td class="vbar">5.2%</td>
+<td class="vbar">504,360</td>
+<td class="vbar">5.2%</td>
+<td class="vbar">174,224</td>
+<td class="vbar">1.8%</td>
+<td class="vbar">174,224</td>
+<td class="vbar">1.8%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::tiktok</td>
+<td class="vbar">269</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">504</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">328</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">534</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">263</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">4,368</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">808</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">2,288</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">576</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>load::blog/index.php</td>
+<td class="vbar">22</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">443</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">443</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">450</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">450</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">113,032</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">113,032</td>
+<td class="vbar">1.2%</td>
+<td class="vbar">24,896</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">24,896</td>
+<td class="vbar">0.3%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>strrpos</td>
+<td class="vbar">1,874</td>
+<td class="vbar">1.0%</td>
+<td class="vbbar">423</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">423</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">609</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">609</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">1,632</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">1,632</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>ltrim</td>
+<td class="vbar">2,025</td>
+<td class="vbar">1.0%</td>
+<td class="vbbar">418</td>
+<td class="vbbar">0.2%</td>
+<td class="vbar">418</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">645</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">645</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">136,912</td>
+<td class="vbar">1.4%</td>
+<td class="vbar">136,912</td>
+<td class="vbar">1.4%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>implode</td>
+<td class="vbar">1,487</td>
+<td class="vbar">0.8%</td>
+<td class="vbbar">384</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">384</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">518</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">518</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">453,936</td>
+<td class="vbar">4.7%</td>
+<td class="vbar">453,936</td>
+<td class="vbar">4.7%</td>
+<td class="vbar">66,352</td>
+<td class="vbar">0.7%</td>
+<td class="vbar">66,352</td>
+<td class="vbar">0.7%</td>
+</tr>
+<tr><td>rtrim</td>
+<td class="vbar">1,543</td>
+<td class="vbar">0.8%</td>
+<td class="vbbar">366</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">366</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">458</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">458</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">23,672</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">23,672</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>load::saaze/MarkdownContentParser.php</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">317</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">317</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">318</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">318</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">161,720</td>
+<td class="vbar">1.7%</td>
+<td class="vbar">161,720</td>
+<td class="vbar">1.7%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>Saaze\CollectionArray::getCollections</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">288</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">2</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">288</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">3</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">33,472</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">712</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\MarkdownContentParser::wpvideo</td>
+<td class="vbar">271</td>
+<td class="vbar">0.1%</td>
+<td class="vbbar">286</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">149</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">311</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">141</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">3,472</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">648</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>ob_start</td>
+<td class="vbar">528</td>
+<td class="vbar">0.3%</td>
+<td class="vbbar">270</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">270</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">347</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">347</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">8,720,120</td>
+<td class="vbar">90.2%</td>
+<td class="vbar">8,720,120</td>
+<td class="vbar">90.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>Saaze\CollectionArray::loadCollections</td>
+<td class="vbar">1</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">259</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">27</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">259</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">23</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">29,680</td>
+<td class="vbar">0.3%</td>
+<td class="vbar">-7,056</td>
+<td class="vbar">-0.1%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>array_push</td>
+<td class="vbar">1,061</td>
+<td class="vbar">0.5%</td>
+<td class="vbbar">236</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">236</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">360</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">360</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">17,672</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">17,672</td>
+<td class="vbar">0.2%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>ksort</td>
+<td class="vbar">4</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">233</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">233</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">234</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">234</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">85,664</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">85,664</td>
+<td class="vbar">0.9%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr><td>load::templates/index.php</td>
+<td class="vbar">8</td>
+<td class="vbar">0.0%</td>
+<td class="vbbar">212</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">212</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">215</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">215</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">42,296</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">42,296</td>
+<td class="vbar">0.4%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+<tr bgcolor="#e5e5e5"><td>ctype_space</td>
+<td class="vbar">992</td>
+<td class="vbar">0.5%</td>
+<td class="vbbar">202</td>
+<td class="vbbar">0.1%</td>
+<td class="vbar">202</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">298</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">298</td>
+<td class="vbar">0.1%</td>
+<td class="vbar">536</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">536</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+<td class="vbar">0</td>
+<td class="vbar">0.0%</td>
+</tr>
+</table>
+<p><strong>1. <code>array_key_exists()</code>.</strong> Looking at above number of calls for PHP function <code>array_key_exists()</code> one could assume that replacing this function call with something else, might be a good idea. Therefore I checked original and possible alternative.</p>
+<pre class="line-numbers" data-line="2,3"><code class="language-bash">$ time php -r '$v=Array(); $a=microtime(true); for($i=0;$i&lt;900000;++$i) if (array_key_exists($i,$v)) echo $a; printf(&quot;%f\n&quot;,microtime(true)-$a);'
+0.011149
+        real 0.04s
+        user 0.02s
+        sys 0
+        swapped 0
+        total space 0
+</code></pre>
+<p>Avoiding the function call of <code>array_key_exists()</code> by using PHP null coalescing operator <code>??</code> is in <em>no</em> way faster:</p>
+<pre class="line-numbers" data-line="2,3"><code class="language-bash">$ time php -r '$v=Array(); $a=microtime(true); for($i=0;$i&lt;900000;++$i) if ($v[$i] ?? false) echo $a; printf(&quot;%f\n&quot;,microtime(true)-$a);'
+0.027347
+        real 0.06s
+        user 0.05s
+        sys 0
+        swapped 0
+        total space 0
+</code></pre>
+<p>So in this case XHProf <em>overestimates</em> the impact of plain PHP function calls. This was also noted in <a href="https://tideways.com/profiler/blog/profiling-overhead-and-php-7">Profiling Overhead and PHP 7</a>.</p>
+<table border=1 cellpadding=2 cellspacing=1 rules=rows bordercolor="#bdc7d8" align=center>
+<tr bgcolor="#bdc7d8" align=right>
+<th align=left>Function Name</th>
+<th  class="vwbar">Calls</th>
+<th  class="vwbar">Calls%</th>
+<th  class="vwbar">Incl. Wall Time<br>(microsec)</th>
+<th  class="vwbar">IWall%</th>
+<th  class="vwbar">Incl. CPU<br>(microsecs)</th>
+<th  class="vwbar">ICpu%</th>
+<th  class="vwbar">Incl.<br>MemUse<br>(bytes)</th>
+<th  class="vwbar">IMemUse%</th>
+<th  class="vwbar">Incl.<br> PeakMemUse<br>(bytes)</th>
+<th  class="vwbar">IPeakMemUse%</th>
+</tr>
+<tr bgcolor='#e0e0ff'><td><b><i><center>Current Function</center></i></b></td></tr><tr><td>array_key_exists</td><td   class="vbar">4,747</td>
+<td   class="vbar">99.7%</td>
+<td   class="vbbar">1,120</td>
+<td   class="vbbar">0.4%</td>
+<td   class="vbar">1,539</td>
+<td   class="vbar">0.6%</td>
+<td   class="vbar">2,776</td>
+<td   class="vbar">0.0%</td>
+<td   class="vbar">0</td>
+<td   class="vbar">0.0%</td>
+</tr><tr bgcolor='#ffffff'><td style='text-align:right;color:blue'>Exclusive Metrics  for Current Function</td><td  class="vbar"></td><td  class="vbar"></td><td type='Child' metric='wt'  class="vbbar">1,120</td>
+<td type='Child' metric='wt'  class="vbbar">100.0%</td>
+<td type='Child' metric='cpu'  class="vbar">1,539</td>
+<td type='Child' metric='cpu'  class="vbar">100.0%</td>
+<td type='Child' metric='mu'  class="vbar">2,776</td>
+<td type='Child' metric='mu'  class="vbar">100.0%</td>
+<td type='Child' metric='pmu'  class="vbar">0</td>
+<td type='Child' metric='pmu'  class="vbar">N/A%</td>
+</tr><tr bgcolor='#e0e0ff'><td><b><i><center>Parent functions</center></i></b></td></tr><tr><td>Saaze\BuildCommand::build_cat_and_tag</td><td type='Parent' metric='ct'  class="vbar">3,723</td>
+<td type='Parent' metric='ct'  class="vbar">78.4%</td>
+<td type='Parent' metric='wt'  class="vbbar">887</td>
+<td type='Parent' metric='wt'  class="vbbar">79.2%</td>
+<td type='Parent' metric='cpu'  class="vbar">1,210</td>
+<td type='Parent' metric='cpu'  class="vbar">78.6%</td>
+<td type='Parent' metric='mu'  class="vbar">568</td>
+<td type='Parent' metric='mu'  class="vbar">20.5%</td>
+<td type='Parent' metric='pmu'  class="vbar">0</td>
+<td type='Parent' metric='pmu'  class="vbar">N/A%</td>
+</tr><tr bgcolor="#e5e5e5"><td>Saaze\Entry::getContentAndExcerpt</td><td type='Parent' metric='ct'  class="vbar">495</td>
+<td type='Parent' metric='ct'  class="vbar">10.4%</td>
+<td type='Parent' metric='wt'  class="vbbar">123</td>
+<td type='Parent' metric='wt'  class="vbbar">11.0%</td>
+<td type='Parent' metric='cpu'  class="vbar">167</td>
+<td type='Parent' metric='cpu'  class="vbar">10.9%</td>
+<td type='Parent' metric='mu'  class="vbar">552</td>
+<td type='Parent' metric='mu'  class="vbar">19.9%</td>
+<td type='Parent' metric='pmu'  class="vbar">0</td>
+<td type='Parent' metric='pmu'  class="vbar">N/A%</td>
+</tr><tr><td>Saaze\Entry::getUrl</td><td type='Parent' metric='ct'  class="vbar">495</td>
+<td type='Parent' metric='ct'  class="vbar">10.4%</td>
+<td type='Parent' metric='wt'  class="vbbar">96</td>
+<td type='Parent' metric='wt'  class="vbbar">8.6%</td>
+<td type='Parent' metric='cpu'  class="vbar">151</td>
+<td type='Parent' metric='cpu'  class="vbar">9.8%</td>
+<td type='Parent' metric='mu'  class="vbar">536</td>
+<td type='Parent' metric='mu'  class="vbar">19.3%</td>
+<td type='Parent' metric='pmu'  class="vbar">0</td>
+<td type='Parent' metric='pmu'  class="vbar">N/A%</td>
+</tr><tr bgcolor="#e5e5e5"><td>Saaze\BuildCommand::buildCollectionIndex</td><td type='Parent' metric='ct'  class="vbar">32</td>
+<td type='Parent' metric='ct'  class="vbar">0.7%</td>
+<td type='Parent' metric='wt'  class="vbbar">14</td>
+<td type='Parent' metric='wt'  class="vbbar">1.2%</td>
+<td type='Parent' metric='cpu'  class="vbar">11</td>
+<td type='Parent' metric='cpu'  class="vbar">0.7%</td>
+<td type='Parent' metric='mu'  class="vbar">568</td>
+<td type='Parent' metric='mu'  class="vbar">20.5%</td>
+<td type='Parent' metric='pmu'  class="vbar">0</td>
+<td type='Parent' metric='pmu'  class="vbar">N/A%</td>
+</tr><tr><td>Saaze\BuildCommand::save_cat_and_tag</td><td type='Parent' metric='ct'  class="vbar">2</td>
+<td type='Parent' metric='ct'  class="vbar">0.0%</td>
+<td type='Parent' metric='wt'  class="vbbar">0</td>
+<td type='Parent' metric='wt'  class="vbbar">0.0%</td>
+<td type='Parent' metric='cpu'  class="vbar">0</td>
+<td type='Parent' metric='cpu'  class="vbar">0.0%</td>
+<td type='Parent' metric='mu'  class="vbar">552</td>
+<td type='Parent' metric='mu'  class="vbar">19.9%</td>
+<td type='Parent' metric='pmu'  class="vbar">0</td>
+<td type='Parent' metric='pmu'  class="vbar">N/A%</td>
+</tr>
+</table>
+<p>Above table clearly shows that the computation of categories and tags is the culprit for the high number of calls to <code>array_key_exists()</code>. This makes sense, as every blog post must be checked for their cats and tags.</p>
+<p><strong>2. <code>str_word_count()</code>.</strong> This function is needed to compute the number of words and therefore the reading time. We don't need to worry about the additional runtime required to compute these two values.</p>
+<p><strong>3. <code>youtube()</code>.</strong> Initially the number of calls of this function looked quite high, above table shows 491 calls. Similarly, the number of calls of <code>vimeo()</code> is also astonishingly high. These numbers can be explained by the fact that both routines are called for each <em>part</em> of the Markdown-file separated by either single-backslash or triple backslash.</p>
+<p>Counting the occurences of the <code>[youtube]</code> tag:</p>
+<pre class="line-numbers"><code class="language-bash">cd .../content
+rg --count-matches '\[youtube' | perl -ane 'printf(&quot;%5d %s&quot;,$c+=$1,$_) if /:(\d+)$/'
+    1 blog/2015/05-27-commuting-to-work-with-an-e-bike.md:1
+    3 blog/2015/08-16-urban-planning.md:2
+    5 blog/2022/04-26-various-quotes-from-kristian-koehntopp.md:2
+    6 blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4.md:1
+    . . .
+  426 music/2021/05-18-music-from-joachim-raff.md:7
+  429 music/2021/08-08-music-from-rodrigo-riera.md:3
+  442 music/2021/01-23-music-from-max-bruch.md:13
+</code></pre>
+<p>So apparently we have 442 actual YouTube videos embedded into this blog. The rest of the calls is due to the separation according backquotes. Though, <code>youtube()</code> function is <em>not</em> called per YouTube video but per part of file separated by backquote!</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Profiling+PHP+Programs+%232%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Profiling+PHP+Programs+%232&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2&amp;title=Profiling+PHP+Programs+%232" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Profiling+PHP+Programs+%232&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Profiling+PHP+Programs+%232%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2023/07-09-profiling-php-programs-p2" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#programming>programming</a>, <a href=../../../aux/categories/#PHP>PHP</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#XHProf>XHProf</a>, <a href=../../../aux/tags/#Saaze>Saaze</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>programming:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="../../../blog/2013/01-11-opengl-program-earth-with-moon-rotating-around-sun">2013-01-11: OpenGL Program: Earth with Moon Rotating around Sun</a></li>
+		<li><a href="../../../blog/2013/04-21-counting-to-ten-on-linux">2013-04-21: Counting to Ten on Linux</a></li>
+		<li><a href="../../../blog/2013/06-21-generators-are-now-in-php-5-5">2013-06-21: Generators are now in PHP 5.5</a></li>
+		<li><a href="../../../blog/2013/06-29-gnu-c-extensions-to-the-c-language-family">2013-06-29: GNU C: Extensions to the C Language Family</a></li>
+		<li><a href="../../../blog/2013/06-29-hash-functions-an-empirical-comparison-article-by-peter-kankowski">2013-06-29: Hash functions: An empirical comparison -- article by Peter Kankowski</a></li>
+		<li><a href="../../../blog/2013/06-30-hashing-just-numbers">2013-06-30: Hashing Just Random Numbers</a></li>
+		<li><a href="../../../blog/2013/06-30-very-simple-sha1-test-program-written-in-c">2013-06-30: Very simple SHA1 test program written in C</a></li>
+		<li><a href="../../../blog/2013/07-24-hiphop-virtual-machine-can-run-wordpress">2013-07-24: HipHop Virtual Machine can run WordPress</a></li>
+		<li><a href="../../../blog/2013/08-15-syncsort-sort-is-not-stable">2013-08-15: SyncSort Sort is Not Stable</a></li>
+		<li><a href="../../../blog/2013/09-12-dramatic-faster-sorting-in-linux-using-nsort">2013-09-12: Dramatic Faster Sorting in Linux Using Nsort</a></li>
+		<li><a href="../../../blog/2013/09-18-graphs-with-jpgraph-by-asial">2013-09-18: Graphs with JpGraph by Asial</a></li>
+		<li><a href="../../../blog/2013/09-21-georg-hagers-blog-intel-vs-gcc-for-the-openmp-vector-triad-barrier-shootout">2013-09-21: Georg Hager's Blog: Intel vs. GCC for the OpenMP vector triad: Barrier shootout!</a></li>
+		<li><a href="../../../blog/2013/10-13-javascript-grid-editor-i-want-to-be-excel">2013-10-13: JavaScript grid editor: I want to be Excel</a></li>
+		<li><a href="../../../blog/2013/10-18-what-makes-a-good-programming-environment">2013-10-18: What Makes a Good Programming Environment?</a></li>
+		<li><a href="../../../blog/2013/10-27-programming-in-excel-vba-compared-to-libreoffice-openoffice-calc">2013-10-27: Programming in Excel VBA Compared To LibreOffice (OpenOffice) Calc</a></li>
+		<li><a href="../../../blog/2013/10-30-good-fast-cheap-you-can-only-pick-two">2013-10-30: Good, Fast, Cheap: You Can Only Pick Two!</a></li>
+		<li><a href="../../../blog/2013/11-30-working-with-system-v-ipc-queues">2013-11-30: Working with System V IPC queues</a></li>
+		<li><a href="../../../blog/2013/12-01-output-from-devicequery-for-nvidia-gtx-560">2013-12-01: Output from deviceQuery for NVidia GTX 560</a></li>
+		<li><a href="../../../blog/2013/12-12-linux-commands-expect-and-kibitz">2013-12-12: Linux commands: expect and kibitz</a></li>
+		<li><a href="../../../blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="../../../blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="../../../blog/2014/01-13-changing-euid-effective-user-id">2014-01-13: Changing euid (effective user ID)</a></li>
+		<li><a href="../../../blog/2014/02-09-scheduling-cron-jobs-on-business-days">2014-02-09: Scheduling Cron Jobs on Business Days</a></li>
+		<li><a href="../../../blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method">2014-02-24: Calculating number of seats in parliament using d'Hondt's method</a></li>
+		<li><a href="../../../blog/2014/05-01-defeating-annoying-timeout-in-openshift-ssh-access">2014-05-01: Defeating Annoying Timeout in OpenShift SSH Access</a></li>
+		<li><a href="../../../blog/2014/05-03-announcement-workshop-programming-of-heterogeneous-systems-in-physics-july-2014">2014-05-03: Announcement:  Workshop Programming of Heterogeneous Systems in Physics, July 2014</a></li>
+		<li><a href="../../../blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="../../../blog/2014/05-15-patching-faulty-edid-information">2014-05-15: Patching Faulty EDID Information</a></li>
+		<li><a href="../../../blog/2014/07-05-splitting-large-files-on-microsoft-windows">2014-07-05: Splitting Large Files on Microsoft Windows</a></li>
+		<li><a href="../../../blog/2014/10-27-effect-of-optimizer-in-gcc-on-intelamd-and-power8">2014-10-27: Effect of Optimizer in gcc on Intel/AMD and Power8</a></li>
+		<li><a href="../../../blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="../../../blog/2015/02-12-download-boost-library">2015-02-12: Downloading Binary Data, for example Boost C++ Library</a></li>
+		<li><a href="../../../blog/2015/10-27-working-with-windows-junctions-in-python">2015-10-27: Working with Windows Junctions in Python</a></li>
+		<li><a href="../../../blog/2016/02-03-performance-comparison-mmap-versus-read-versus-fread">2016-02-03: Performance Comparison of mmap() versus read() versus fread()</a></li>
+		<li><a href="../../../blog/2016/03-23-slides-on-openmp-by-christian-terboven">2016-03-23: Slides on OpenMP by Christian Terboven & Dirk Schmidl</a></li>
+		<li><a href="../../../blog/2016/04-05-performance-comparison-c-vs-lua-vs-luajit-vs-java">2016-04-05: Performance Comparison C vs. Lua vs. LuaJIT vs. Java</a></li>
+		<li><a href="../../../blog/2016/05-23-convert-ascii-to-hex-and-vice-versa-in-c-and-excel-vba">2016-05-23: Convert ASCII to Hex and vice versa in C and Excel VBA</a></li>
+		<li><a href="../../../blog/2016/05-30-gcc-6-1-compiler-optimization-level-benchmarks">2016-05-30: GCC 6.1 Compiler Optimization Level Benchmarks</a></li>
+		<li><a href="../../../blog/2016/11-22-operation-costs-measured-in-cpu-clock-cycles">2016-11-22: Operation Costs Measured in CPU Clock Cycles</a></li>
+		<li><a href="../../../blog/2017/06-26-text-analysis-using-concordance">2017-06-26: Text Analysis using Concordance</a></li>
+		<li><a href="../../../blog/2017/07-17-c-pointer-surprises">2017-07-17: C Pointer Surprises</a></li>
+		<li><a href="../../../blog/2018/01-23-hashing-with-iterator-in-c">2018-01-23: Hashing with Iterator in C</a></li>
+		<li><a href="../../../blog/2018/01-30-rewriting-perl-to-plain-c">2018-01-30: Rewriting Perl to plain C</a></li>
+		<li><a href="../../../blog/2018/02-06-parallelization-and-cpu-cache-overflow">2018-02-06: Parallelization and CPU Cache Overflow</a></li>
+		<li><a href="../../../blog/2018/02-22-unix-command-comm-compare-two-files">2018-02-22: Unix Command comm: Compare Two Files</a></li>
+		<li><a href="../../../blog/2018/03-03-towards-web-based-delta-synchronization-for-cloud-storage-systems">2018-03-03: Towards web-based delta synchronization for cloud storage systems</a></li>
+		<li><a href="../../../blog/2018/05-17-using-scooter-software-beyond-compare">2018-05-17: Using Scooter Software Beyond Compare</a></li>
+		<li><a href="../../../blog/2018/07-22-passing-hashmap-from-java-to-java-nashorn">2018-07-22: Passing HashMap from Java to Java Nashorn</a></li>
+		<li><a href="../../../blog/2019/01-19-java-sql-sqlrecoverableexception-io-error-connection-reset-by-peer-authentication-lapse">2019-01-19: java.sql.SQLRecoverableException: IO Error: Connection reset by peer, Authentication lapse</a></li>
+		<li><a href="../../../blog/2020/05-05-performance-comparison-in-computing-exponential-function">2020-05-05: Performance Comparison in Computing Exponential Function</a></li>
+		<li><a href="../../../blog/2020/05-12-installing-pallene-compiler">2020-05-12: Installing Pallene Compiler</a></li>
+		<li><a href="../../../blog/2020/05-14-performance-comparison-pallene-vs-lua-5-1-5-2-5-3-5-4-vs-c">2020-05-14: Performance Comparison Pallene vs. Lua 5.1, 5.2, 5.3, 5.4 vs. C</a></li>
+		<li><a href="../../../blog/2020/06-23-calling-c-from-julia">2020-06-23: Calling C from Julia</a></li>
+		<li><a href="../../../blog/2020/12-19-compiling-java-source-to-binary-native">2020-12-19: Compiling Java source to binary (native)</a></li>
+		<li><a href="../../../blog/2021/02-01-performance-comparison-ryzen-vs-intel-vs-bulldozer-vs-arm">2021-02-01: Performance comparison Ryzen vs. Intel vs. Bulldozer vs. ARM</a></li>
+		<li><a href="../../../blog/2021/03-29-php-extension-seg-faulting">2021-03-29: PHP extension seg-faulting</a></li>
+		<li><a href="../../../blog/2021/07-11-calling-md4c-from-php-via-ffi">2021-07-11: Calling MD4C from PHP via FFI</a></li>
+		<li><a href="../../../blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl">2021-07-13: Performance Comparison C vs. Java vs. Javascript vs. LuaJIT vs. PyPy vs. PHP vs. Python vs. Perl</a></li>
+		<li><a href="../../../blog/2021/08-17-generating-json-with-cobol">2021-08-17: Generating JSON with COBOL</a></li>
+		<li><a href="../../../blog/2021/08-19-printing-cobol-section-names">2021-08-19: Printing COBOL Section Names</a></li>
+		<li><a href="../../../blog/2021/10-02-parallel-mass-file-processing">2021-10-02: Parallel Mass-File Processing</a></li>
+		<li><a href="../../../blog/2021/10-03-compiling-gnucobol">2021-10-03: Compiling GnuCOBOL</a></li>
+		<li><a href="../../../blog/2021/10-05-comparing-gnucobol-to-ibm-cobol">2021-10-05: Comparing GnuCOBOL to IBM COBOL</a></li>
+		<li><a href="../../../blog/2021/10-06-pecls-yaml-way-faster-than-symfonys-yaml">2021-10-06: PECL's Yaml Way Faster Than Symfony's Yaml</a></li>
+		<li><a href="../../../blog/2021/10-18-profiling-php-programs">2021-10-18: Profiling PHP Programs</a></li>
+		<li><a href="../../../blog/2021/10-29-saving-attachments-in-outlook-via-vba">2021-10-29: Saving Attachments in Outlook via VBA</a></li>
+		<li><a href="../../../blog/2022/01-23-ims-dc-mfs-to-php">2022-01-23: IMS/DC MFS To PHP</a></li>
+		<li><a href="../../../blog/2022/02-07-mass-lowercasing-of-file-names">2022-02-07: Mass Lowercasing of File Names</a></li>
+		<li><a href="../../../blog/2022/03-20-testing-cobolworx-gcc-cobol">2022-03-20: Testing COBOLworx gcc-cobol</a></li>
+		<li><a href="../../../blog/2022/03-21-phpmagazin-on-simplified-saaze">2022-03-21: PHPMagazin On Simplified Saaze</a></li>
+		<li><a href="../../../blog/2022/06-15-decompressing-zip-files-on-mainframe">2022-06-15: Decompressing ZIP Files on Mainframe</a></li>
+		<li><a href="../../../blog/2022/11-12-line-length-distribution-in-files">2022-11-12: Line Length Distribution in Files</a></li>
+		<li><a href="../../../blog/2022/11-13-fixed-block-files">2022-11-13: Fixed Block Files</a></li>
+		<li><a href="../../../blog/2022/11-19-introduction-to-hashing">2022-11-19: Introduction to Hashing</a></li>
+		<li><a href="../../../blog/2023/02-12-testing-cobolworx-gcc-cobol-p2">2023-02-12: Testing COBOLworx gcc-cobol #2</a></li>
+		<li><a href="../../../blog/2023/03-25-performance-comparison-c-vs-java-vs-javascript-vs-php-vs-python-vs-cobol-dart">2023-03-25: Performance Comparison C vs. Java vs. Javascript vs. PHP vs. Python vs. Cobol vs. Dart</a></li>
+	</ol>
+	<p>PHP:</p>
+	<ol>
+		<li><a href="../../../blog/2013/07-24-hiphop-virtual-machine-can-run-wordpress">2013-07-24: HipHop Virtual Machine can run WordPress</a></li>
+		<li><a href="../../../blog/2013/09-18-graphs-with-jpgraph-by-asial">2013-09-18: Graphs with JpGraph by Asial</a></li>
+		<li><a href="../../../blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="../../../blog/2014/07-10-no-perl-and-php-on-mainframe-from-ibm">2014-07-10: No Perl and PHP on Mainframe from IBM</a></li>
+		<li><a href="../../../blog/2021/03-29-php-extension-seg-faulting">2021-03-29: PHP extension seg-faulting</a></li>
+		<li><a href="../../../blog/2021/09-02-considerations-regarding-simplifications-of-saaze">2021-09-02: Considerations Regarding Simplifications of Saaze</a></li>
+		<li><a href="../../../blog/2021/10-18-profiling-php-programs">2021-10-18: Profiling PHP Programs</a></li>
+		<li><a href="../../../blog/2021/10-31-simplified-saaze">2021-10-31: Simplified Saaze</a></li>
+		<li><a href="../../../blog/2022/01-23-ims-dc-mfs-to-php">2022-01-23: IMS/DC MFS To PHP</a></li>
+		<li><a href="../../../blog/2022/03-21-phpmagazin-on-simplified-saaze">2022-03-21: PHPMagazin On Simplified Saaze</a></li>
+		<li><a href="../../../blog/2022/04-05-adding-categories-to-saaze">2022-04-05: Adding Categories to Saaze</a></li>
+		<li><a href="../../../blog/2023/03-11-simple-web-clipboard">2023-03-11: Simple Web-Clipboard</a></li>
+		<li><a href="../../../blog/2023/05-06-accessing-j-pilot-data-from-mobile-and-web">2023-05-06: Accessing J-Pilot Data From Mobile And Web</a></li>
+		<li><a href="../../../blog/2023/08-27-mixing-php-into-markdown">2023-08-27: Mixing PHP into Markdown</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+	<script src="/jscss/prism.js"></script>
+
+</body>
+</html>

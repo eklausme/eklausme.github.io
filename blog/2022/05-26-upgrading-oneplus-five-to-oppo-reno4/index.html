@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Upgrading OnePlus Five to Oppo Reno4</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2022-05-26 21:10:00">26th May 2022</time>, 4 min read</p>
+<h1>Upgrading OnePlus Five to Oppo Reno4</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4">eklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4</a>.</p>
+<br>
+<p>I upgraded my smartphone <a href="https://en.wikipedia.org/wiki/OnePlus_5">OnePlus Five</a> to <a href="https://www.oppo.com/en/smartphones/series-reno/reno4-pro-5g/">Oppo Reno4 Pro 5G</a>. The OnePlus Five smartphone has a Qualcomm Snapdragon 835 CPU, while the newer Oppo smartphone uses a Qualcomm Snapdragon 765. I paid 347.17 EUR for the Oppo phone, which I bought at Amazon. I paid 499 EUR in June 2017 for the OnePlus Five, which I bought directly from OnePlus. The Reno4 is not sold worldwide. It seems that it is not sold in UK and in the US. The main reason for the upgrade was that the OnePlus was almost full w.r.t. to storage. The OnePlus only has 64 GB storage. The Reno4 offers 256 GB. Also, RAM increased from 6 GB to 12 GB, which helps when you switch apps.</p>
+<p>The first very obvious difference is that the Oppo weights 172g, while the OnePlus weights 153g, the Oppo feels heavier. This only matters if you have the phone in your hand for a longer time. Another striking difference is that the Oppo phone charges very quickly. Within a 5-10 minutes you can charge enough for the entire day. Oppo calls this <a href="https://en.wikipedia.org/wiki/VOOC">SuperVOOC</a> charging.</p>
+<p>The whole package includes phone, charger, USB earphones, case protector, paper leaflets, SIM card stick. After unpacking the new Oppo phone I had to update four times including a reboot each time. After that I am now at ColorOS 12.1, Android 12, security update 5-Apr-2022. Build number is CPH2089_11_F.71, baseband version Q_V1_P14,Q_V1_P14, kernel version 4.19.1157-perf+.</p>
+<p>Reno4 Pro looks nice and noble. User experience using this ColorOS is good. The Reno4 Pro should not be confused with the Reno4 or Reno4 Z: <a href="https://nanoreview.net/en/phone-compare/oppo-reno-4-pro-vs-oppo-reno-4">Oppo Reno 4 Pro 5G vs Reno 4</a>.</p>
+<p><img src="../../../img/Reno4-camera-weu-477.jpg" alt=""></p>
+<p>Some technical specs:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OLED screen</td>
+<td>6.5 inch</td>
+</tr>
+<tr>
+<td>Screen refresh rate</td>
+<td>90 Hz</td>
+</tr>
+<tr>
+<td><a href="http://whatismyscreenresolution.net">Screen resolution</a></td>
+<td>360 x 800</td>
+</tr>
+<tr>
+<td>Max. touch sampling rate</td>
+<td>180 Hz, usually 120 Hz</td>
+</tr>
+<tr>
+<td>Movie aspect reation</td>
+<td>21:9</td>
+</tr>
+<tr>
+<td>Certification</td>
+<td>HDR 10+</td>
+</tr>
+<tr>
+<td>Speakers</td>
+<td>Dual Linear Speakers Dolby Atmos</td>
+</tr>
+<tr>
+<td>Weight</td>
+<td>172 g</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>ColorOS 12.1, Android 12</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>48 MP, 12 MP ultranight, 13 MP telephoto</td>
+</tr>
+<tr>
+<td>Selfie camera</td>
+<td>32 MP</td>
+</tr>
+<tr>
+<td>Charging</td>
+<td>65 W</td>
+</tr>
+<tr>
+<td>Battery</td>
+<td>4000 mAh</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/Reno4-kv-weu-3-1440.png" alt="Photo"></p>
+<p><a href="https://nanoreview.net/en/soc-compare/qualcomm-snapdragon-835-vs-qualcomm-snapdragon-765">Snapdragon 835 vs Snapdragon 765</a> contains a comparison of those two CPUs. <a href="https://www.qualcomm.com/products/application/smartphones/snapdragon-8-series-mobile-platforms/snapdragon-835-mobile-platform">Snapdragon 835</a> was announced November 2016, while <a href="https://www.qualcomm.com/products/application/smartphones/snapdragon-7-series-mobile-platforms/snapdragon-765-5g-mobile-platform">Snapdragon 765</a> was announced December 2019, i.e., three years later. Key characterics are given in below table.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Snapdragon 835</th>
+<th>Snapdragon 765</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Architecture</td>
+<td>4 × 2.45 GHz Kyro 280 (Cortex A73)<br> 4 × 1.9 GHz Kyro 280 Cortex A53)</td>
+<td>1 × 2.3 GHz Kyro 475 (Cortex A76)<br> 1 × 2.2 GHz Kyro 475 (Cortex A76)<br> 6 × 1.8 GHz Kyro 475 (Cortex A55)</td>
+</tr>
+<tr>
+<td>Cores</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>2450 MHz</td>
+<td>2300 MHz</td>
+</tr>
+<tr>
+<td>Instruction set</td>
+<td>ARMv8-A</td>
+<td>ARMv8.3-A</td>
+</tr>
+<tr>
+<td>L1 cache</td>
+<td>128 KB</td>
+<td></td>
+</tr>
+<tr>
+<td>L2 cache</td>
+<td>2 MB</td>
+<td></td>
+</tr>
+<tr>
+<td>Process</td>
+<td>10 nm</td>
+<td>7 nm</td>
+</tr>
+<tr>
+<td>Transistor count</td>
+<td>3 × 10<sup>9</sup></td>
+<td></td>
+</tr>
+<tr>
+<td>TDP</td>
+<td>9 W</td>
+<td>5 W</td>
+</tr>
+</tbody>
+</table>
+<p>Graphics comparison</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Snapdragon 835</th>
+<th>Snapdragon 765</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU name</td>
+<td>Adreno 540</td>
+<td>Adreno 620</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>2450 MHz</td>
+<td>2300 MHz</td>
+</tr>
+<tr>
+<td>Execution units</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Shading units</td>
+<td>256</td>
+<td>192</td>
+</tr>
+<tr>
+<td>FLOPS</td>
+<td>558 Gigaflops</td>
+<td>600 Gigaflops</td>
+</tr>
+<tr>
+<td>Vulkan version</td>
+<td>1.1</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>OpenCL version</td>
+<td>2.0</td>
+<td></td>
+</tr>
+<tr>
+<td>DirectX version</td>
+<td>12</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>Memory comparison</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Snapdragon 835</th>
+<th>Snapdragon 765</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory type</td>
+<td>LPDDR4X</td>
+<td>LPDDR4X</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>1866 MHz</td>
+<td>2133 MHz</td>
+</tr>
+<tr>
+<td>Bus</td>
+<td>2 × 32 Bit</td>
+<td>2 × 16 Bit</td>
+</tr>
+<tr>
+<td>Max bandwidth</td>
+<td>29.8 GBit/s</td>
+<td>17 GBit/s</td>
+</tr>
+<tr>
+<td>Max size</td>
+<td>8 GB</td>
+<td>12 GB</td>
+</tr>
+</tbody>
+</table>
+<p>Multimedia comparison</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Snapdragon 835</th>
+<th>Snapdragon 765</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Neural processor (NPU)</td>
+<td>Hexagon 682</td>
+<td>Hexagon 696</td>
+</tr>
+<tr>
+<td>Storage type</td>
+<td>UFS 2.1</td>
+<td>eMMC 5.1, UFS 3.0</td>
+</tr>
+<tr>
+<td>Max display resolution</td>
+<td>3840 × 2160</td>
+<td>3200 × 1800</td>
+</tr>
+<tr>
+<td>Max camera resolution</td>
+<td>1 × 32MP, 2 × 16MP</td>
+<td>1 × 192MP, 2 × 22MP</td>
+</tr>
+<tr>
+<td>Video capture</td>
+<td>4K at 30 FPS</td>
+<td>4K at 30 FPS</td>
+</tr>
+<tr>
+<td>Video playback</td>
+<td>4K at 60 FPS</td>
+<td>4K at 30 FPS</td>
+</tr>
+<tr>
+<td>Video codecs</td>
+<td>H.264, H.265, VP9</td>
+<td>H.264, H.265, VP8, VP9</td>
+</tr>
+<tr>
+<td>Audio codecs</td>
+<td>AAC, AIFF, CAF, MP3, Mp4, WAV</td>
+<td>AAC, AIFF, CAF, MP4, WAV</td>
+</tr>
+</tbody>
+</table>
+<p>Connectivity comparison</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Snapdragon 835</th>
+<th>Snapdragon 765</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modem</td>
+<td>X16 LTE</td>
+<td>X52</td>
+</tr>
+<tr>
+<td>4G support</td>
+<td>LTE Cat. 16</td>
+<td>LTE Cat. 18</td>
+</tr>
+<tr>
+<td>5G support</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Download speed</td>
+<td>Up to 1 GBit/s</td>
+<td>Up to 1.2 GBit/s</td>
+</tr>
+<tr>
+<td>Upload speed</td>
+<td>Up to 150 MBit/s</td>
+<td>Up to 210 MBit/s</td>
+</tr>
+<tr>
+<td>WiFi</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Bluetooth</td>
+<td>5.0</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>Navigation</td>
+<td>GPS, GLONASS, Beidou, Galileo, QZSS, SBAS</td>
+<td>GPS, GLONASS, Beidou, Galileo, QZSS, SBAS, NAVIC</td>
+</tr>
+</tbody>
+</table>
+<p>Specification according phone leaflet in below table.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product</td>
+<td>CPH2089</td>
+</tr>
+<tr>
+<td>Main screen parameter</td>
+<td>16.5 cm</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td>159 × 72.5 × 7.6 (mm)</td>
+</tr>
+<tr>
+<td>Battery</td>
+<td>DC 7.74V 1955 mAh/15.13Wh (Minimal)<br> DC 7.74V 2000mAh/15.48Wh (Typical)</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>48 Megapixels + 13 Megapixels + 12 Megapixels rear + 32 Megapixels front</td>
+</tr>
+<tr>
+<td>Operating temperatures</td>
+<td>0°-35°</td>
+</tr>
+<tr>
+<td>CE SAR</td>
+<td>0.892 W/kg (head)<br>1.318 W/kg (body)</td>
+</tr>
+<tr>
+<td>RCM SAR</td>
+<td>1.493 W/kg (head)<br>1.444 W/kg (body)</td>
+</tr>
+<tr>
+<td>FCC SAR</td>
+<td>1.19 W/kg (head&gt;<br>0.42 W/kg (body)<br>1.19 W/kg (hotspot)</td>
+</tr>
+</tbody>
+</table>
+<p>Radio wave specification according phone leaflet. 33 dBm is roughly 2 W, 23 dBm is roughly 200 mW, 8.5±2 dBM is roughly 5-10 mW. GSM is 2G, WCDMA is 3G, LTE is 4G.</p>
+<table>
+<thead>
+<tr>
+<th>Radio</th>
+<th>Frequency</th>
+<th>max output power</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GSM</td>
+<td>850 MHz</td>
+<td>32.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>900 MHz</td>
+<td>33 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>1800 MHz</td>
+<td>30 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>1900 MHz</td>
+<td>29.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>WCDMA</td>
+<td>Bands 1/5/6/8/19</td>
+<td>24 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>Bands 2/7</td>
+<td>23.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>LTE FDD</td>
+<td>Bands 1/3/4/28/66</td>
+<td>23.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>Bands 2/7</td>
+<td>23 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>Bands 5/8/12/17/18/19/20/26</td>
+<td>24 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>Band 32</td>
+<td>/</td>
+</tr>
+<tr>
+<td>LTE TDD</td>
+<td>Bands 38/39/40/41</td>
+<td>23.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>Band 42</td>
+<td>23 ± 1 dBm</td>
+</tr>
+<tr>
+<td>5G NR</td>
+<td>n1/n3/n28/n38</td>
+<td>23 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>n40/n41/n77/n78</td>
+<td>23 ± 1.2 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>n5/n8/n20</td>
+<td>23.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>n7</td>
+<td>22.5 ± 1 dBm</td>
+</tr>
+<tr>
+<td>Bluetooth</td>
+<td>2.4 - 2.4835 GHz</td>
+<td>8.5 ± 2 dBm (EIRP)</td>
+</tr>
+<tr>
+<td>2.4G WiFi</td>
+<td>2.4 - 2.4835 GHz</td>
+<td>16 ± 2 dBm (EIRP)</td>
+</tr>
+<tr>
+<td>5G WiFi</td>
+<td>5.15 -5.35 GHz, 5.47 - 5.725 GHz</td>
+<td>15 ± 2.5 dBm (EIRP)</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>5.725 - 5.85 GHz</td>
+<td>10 ± 2.5 dBm (EIRP)</td>
+</tr>
+<tr>
+<td>NFC</td>
+<td>13.56 MHz</td>
+<td>42 dBµA/m @10m</td>
+</tr>
+</tbody>
+</table>
+<p>A review is here:</p>
+<iframe width=560 height=315 src=https://www.youtube.com/embed/KCIQlnii6hg frameborder=0 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Upgrading+OnePlus+Five+to+Oppo+Reno4%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Upgrading+OnePlus+Five+to+Oppo+Reno4&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4&amp;title=Upgrading+OnePlus+Five+to+Oppo+Reno4" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Upgrading+OnePlus+Five+to+Oppo+Reno4&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Upgrading+OnePlus+Five+to+Oppo+Reno4%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/05-26-upgrading-oneplus-five-to-oppo-reno4" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#hardware>hardware</a>, <a href=../../../aux/categories/#Android>Android</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#OnePlus>OnePlus</a>, <a href=../../../aux/tags/#Oppo>Oppo</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>hardware:</p>
+	<ol>
+		<li><a href="../../../aux/uses">2023-07-02: Uses</a></li>
+		<li><a href="../../../blog/2013/09-11-harddisk-drive-speed-in-mbs">2013-09-11: Harddisk Drive Speed in MB/s</a></li>
+		<li><a href="../../../blog/2013/09-23-dotscale-2013-mysql-talk">2013-09-23: dotScale 2013 MySQL Talk</a></li>
+		<li><a href="../../../blog/2013/10-06-amd-bulldozer-cpu-architecture-overview">2013-10-06: AMD Bulldozer CPU Architecture Overview</a></li>
+		<li><a href="../../../blog/2013/12-08-surfing-the-internet-with-100-mbits">2013-12-08: Surfing the internet with 100 MBit/s</a></li>
+		<li><a href="../../../blog/2013/12-09-wikipedia-infrastructure-as-of-2013">2013-12-09: Wikipedia Infrastructure as of 2013</a></li>
+		<li><a href="../../../blog/2014/01-07-plotting-power-consumption-of-my-desktop-pc">2014-01-07: Plotting Power Consumption of my Desktop PC</a></li>
+		<li><a href="../../../blog/2014/03-23-enabling-power-aware-applications-on-linux-using-cyrogenic-module">2014-03-23: Enabling Power-Aware Applications on Linux Using Cyrogenic Module</a></li>
+		<li><a href="../../../blog/2014/10-21-review-of-the-oneplus-one-smartphone">2014-10-21: Review of the OnePlus One Smartphone</a></li>
+		<li><a href="../../../blog/2014/12-28-hard-disk-and-usb-drive-speed-comparisons">2014-12-28: Hard-Disk and USB Drive Speed Comparisons</a></li>
+		<li><a href="../../../blog/2014/12-30-three-free-invites-for-the-oneplus-one">2014-12-30: Three Free Invites For the OnePlus One</a></li>
+		<li><a href="../../../blog/2015/01-22-two-free-invites-for-the-oneplus-one">2015-01-22: Two Free Invites for the OnePlus One</a></li>
+		<li><a href="../../../blog/2015/03-20-two-free-invites-for-the-oneplus-one-2">2015-03-20: Two Free Invites for the OnePlus One, #2</a></li>
+		<li><a href="../../../blog/2015/04-05-two-free-invites-for-the-oneplus-one-3">2015-04-05: Two Free Invites for the OnePlus One, #3</a></li>
+		<li><a href="../../../blog/2015/04-09-two-free-invites-for-the-oneplus-one-4">2015-04-09: Two Free Invites for the OnePlus One, #4</a></li>
+		<li><a href="../../../blog/2015/04-17-four-free-invites-for-the-oneplus-one-5">2015-04-17: Four Free Invites for the OnePlus One, #5</a></li>
+		<li><a href="../../../blog/2015/05-25-hard-disk-and-ssd-speed-comparisons">2015-05-25: Hard-Disk and SSD Speed Comparisons</a></li>
+		<li><a href="../../../blog/2015/07-23-pc-overheating">2015-07-23: PC overheating</a></li>
+		<li><a href="../../../blog/2015/08-09-output-of-lstopo-from-hwloc">2015-08-09: Output of lstopo from hwloc</a></li>
+		<li><a href="../../../blog/2015/11-03-small-scale-computing">2015-11-03: Small Scale Computing</a></li>
+		<li><a href="../../../blog/2016/07-27-ssd-speed-on-dell-xps-13-9350">2016-07-27: SSD Speed on Dell XPS 13 9350</a></li>
+		<li><a href="../../../blog/2016/10-11-interior-of-dell-xps-13-and-acer-aspire">2016-10-11: Interior of Dell XPS-13 and Acer Aspire</a></li>
+		<li><a href="../../../blog/2016/10-26-bluetooth-headphones-in-arch-linux">2016-10-26: Bluetooth Headphones in Arch Linux</a></li>
+		<li><a href="../../../blog/2016/11-22-operation-costs-measured-in-cpu-clock-cycles">2016-11-22: Operation Costs Measured in CPU Clock Cycles</a></li>
+		<li><a href="../../../blog/2017/06-12-hp-eprint-obsolescense">2017-06-12: HP ePrint Obsolescense</a></li>
+		<li><a href="../../../blog/2017/12-09-filippo-mantovani-arm-for-hpc">2017-12-09: Filippo Mantovani: ARM for HPC</a></li>
+		<li><a href="../../../blog/2018/02-06-parallelization-and-cpu-cache-overflow">2018-02-06: Parallelization and CPU Cache Overflow</a></li>
+		<li><a href="../../../blog/2020/07-07-asrock-deskmini-a300m-with-amd-ryzen-3400g">2020-07-07: ASRock DeskMini A300M with AMD Ryzen 3400G</a></li>
+		<li><a href="../../../blog/2020/08-09-ssd-speed-on-dell-xps-13-9350-with-samsung-evo-970-plus">2020-08-09: SSD Speed on Dell XPS 13 9350 with Samsung EVO 970 Plus</a></li>
+		<li><a href="../../../blog/2022/04-26-various-quotes-from-kristian-koehntopp">2022-04-26: Various Quotes from Kristian Köhntopp</a></li>
+		<li><a href="../../../blog/2022/05-03-upgrade-amd-bulldozer-to-cezanne">2022-05-03: Upgrade AMD Bulldozer to Cezanne</a></li>
+		<li><a href="../../../blog/2022/08-06-nima-badizadegan-on-cloud-computing">2022-08-06: Nima Badizadegan on Cloud Computing</a></li>
+		<li><a href="../../../blog/2022/09-11-electricity-measurement-with-shelly-3em">2022-09-11: Electricity Measurement with Shelly 3EM</a></li>
+		<li><a href="../../../blog/2023/06-30-data-centers-in-africa">2023-06-30: Data Centers in Africa</a></li>
+		<li><a href="../../../blog/2023/08-28-crucial-4tb-ssd-in-asrock-a300m">2023-08-28: Crucial 4TB SSD in Asrock A300M</a></li>
+	</ol>
+	<p>Android:</p>
+	<ol>
+		<li><a href="../../../blog/2013/03-13-screenshots-on-nexus-4-android-4-x">2013-03-13: Screenshots on Nexus 4 (Android 4.x)</a></li>
+		<li><a href="../../../blog/2013/08-04-google-now-emergency-alert">2013-08-04: Google Now Emergency Alert</a></li>
+		<li><a href="../../../blog/2013/08-04-ssh-and-rsync-for-android">2013-08-04: ssh and rsync for Android</a></li>
+		<li><a href="../../../blog/2013/09-08-india-is-now-the-third-largest-smartphone-market-in-the-world-android-authority">2013-09-08: India is now the third largest Smartphone market in the world - Android Authority</a></li>
+		<li><a href="../../../blog/2013/12-30-performance-of-dalvik-versus-native-c-compilation">2013-12-30: Performance of Dalvik versus native C compilation</a></li>
+		<li><a href="../../../blog/2014/10-21-review-of-the-oneplus-one-smartphone">2014-10-21: Review of the OnePlus One Smartphone</a></li>
+		<li><a href="../../../blog/2014/11-19-i-have-oneplus-invites-to-give-away">2014-11-19: I have OnePlus invites to give away</a></li>
+		<li><a href="../../../blog/2014/12-30-three-free-invites-for-the-oneplus-one">2014-12-30: Three Free Invites For the OnePlus One</a></li>
+		<li><a href="../../../blog/2015/05-24-installing-oxygenos-1-0-on-the-oneplus-one-smartphone">2015-05-24: Installing OxygenOS 1.0 on the OnePlus One Smartphone</a></li>
+		<li><a href="../../../blog/2015/07-27-accessing-android-phone-via-usb-cable">2015-07-27: Accessing Android phone via USB cable</a></li>
+		<li><a href="../../../blog/2015/10-10-upgrading-from-oxygenos-1-0-0-to-1-0-3-on-the-oneplus-one-smartphone">2015-10-10: Upgrading from OxygenOS 1.0.0 to 1.0.3 on the OnePlus One Smartphone</a></li>
+		<li><a href="../../../blog/2015/11-23-one-free-invite-for-the-oneplus-x">2015-11-23: One Free Invite for the OnePlus X</a></li>
+		<li><a href="../../../blog/2016/04-12-upgrading-from-oxygenos-1-0-3-to-2-1-4-on-the-oneplus-one-smartphone">2016-04-12: Upgrading from OxygenOS 1.0.3 to 2.1.4 on the OnePlus One Smartphone</a></li>
+		<li><a href="../../../blog/2019/06-29-google-chrome-in-android-cannot-clear-cookies">2019-06-29: Google Chrome in Android Cannot Clear Cookies</a></li>
+		<li><a href="../../../blog/2020/03-12-ssh-and-rsync-for-android-termux">2020-03-12: ssh and rsync for Android, Termux</a></li>
+		<li><a href="../../../blog/2020/03-19-j-pilot-data-on-android-phone-contacts">2020-03-19: J-Pilot Data on Android Phone: Contacts</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+
+</body>
+</html>

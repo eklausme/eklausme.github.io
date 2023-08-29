@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Ein Static Site Generator in PHP, schneller als Hugo oder Zola</title>
+
+	<link href=/jscss/prism.css rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2022-02-25 19:00:00">25th February 2022</time>, 27 min read</p>
+<h1>Ein Static Site Generator in PHP, schneller als Hugo oder Zola</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola">eklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola</a>.</p>
+<br>
+<p><em>Dieser Artikel ist gedacht für eine Veröffentlichung im PHP-Magazin, Redaktionsleiter Hartmut Schlosser.</em></p>
+<p>Zusammenfassung: Wir stellen Techniken wie PHP-FFI, PHP-PECL und Profiling mit XHProf vor. Mit diesen Techniken wird ein in PHP geschriebener Static Site Generator performanter, wie die beiden bekannten Generatoren Hugo und Zola, die in Go oder Rust geschrieben wurden.</p>
+<p>Kann PHP gegen in Go oder in Rust erstellte CMS antreten und trotzdem performanter sein? Wenn ja, was sind die wesentlichen Elemente für die Performance? Sind diese Elemente auch auf andere PHP-Projekte übertragbar, also Projekte, die gar nichts mit CMS zu tun haben? Wie kann man die performance-kritischen Stellen in einem PHP Programm erkennen? Was kann man mit diesen Ergebnissen dann anstellen? Dieser Artikel beantwortet diese Fragen.</p>
+<p>Von Elmar Klausmeier</p>
+<h2>Was ist ein Static Site Generator?</h2>
+<p>Bekannte datenbank-gestützte Content Management Systeme (CMS), wie WordPress oder Joomla, erzeugen aus den Daten in einer Datenbank während einer Web-Anfrage mit Hilfe von PHP entsprechenden HTML Code, der an den Nutzer ausgeliefert wird. D.h. pro Request finden Datenbankoperationen statt und es wird PHP Code ausgeführt. Zusätzlich ausgelieferten JavaScript Code lassen wir hierbei noch außer acht. Flat File CMS ersetzen hierbei die Datenbank durch reine Dateioperationen.</p>
+<p>Static Site Generatoren gehen hierbei einen grundsätzlich anderen Weg. Anstatt pro Anfrage eines Nutzers die HTML-Seite dynamisch zusammen zu setzen, werden sämtliche HTML-Seiten vorab generiert. Kommt nun eine Anfrage eines Nutzers, so liegt die HTML-Seite bereits komplett fertig vor und muß vom Web-Server nur noch ausgeliefert werden. D.h. auf der Web-Server Seite ist nur ein klassischer Web-Server, wie z.B. nginx oder Apache, nötig, aber keine dynamische Komponenten wie PHP, JSP, ASP u.s.w. Aus Performance- und Sicherheitsgründen ist damit ein Static Site Generator sehr attraktiv.</p>
+<p>Kein Licht ohne Schatten. Nachteilig beim Static Site Generator sind, daß zum einen ein separater Deployment-Schritt der generierten Seiten auf den Web-Server notwendig ist und zum anderen, daß die Erzeugung der ganzen statischen HTML-Seiten einmalige Generierzeit benötigt.</p>
+<p>Ein Static Site Generator benötigt den eigentlichen Content und ein oder mehrere Templates (Schablonen) aus denen dann die statischen HTML-Seiten erzeugt werden.</p>
+<div class=mermaid>
+flowchart LR
+    A[Templates] & B[Markdown Content] --> C[Static HTML]
+</div>
+<p>Das Template definiert üblicherweise den Kopf und Fuß, sowie die Navigationsleisten der Web-Site. Der Content ist häufig in <a href="https://daringfireball.net/projects/markdown">Markdown</a> /1/ oder <a href="https://de.wikipedia.org/wiki/ReStructuredText">reStructuredText</a> /2/ verfaßt, kann aber auch eine eigene spezielle Sprache sein.</p>
+<p>In den letzten Jahren sind eine ganze Reihe von Static Site Generatoren entstanden. An Programmiersprachen zur Erstellung von Static Site Generatoren findet man öfters: Go, Rust, Ruby, JavaScript, Python und PHP. Nachfolgende Tabelle enthält eine Auswahl von Static Site Generatoren.</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>Programmiersprache</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hugo</td>
+<td>Go</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td>Rust</td>
+</tr>
+<tr>
+<td>Eleventy</td>
+<td>JavaScript</td>
+</tr>
+<tr>
+<td>GitBook</td>
+<td>JavaScript</td>
+</tr>
+<tr>
+<td>Pelican</td>
+<td>Python</td>
+</tr>
+<tr>
+<td>Jekyll</td>
+<td>Ruby</td>
+</tr>
+<tr>
+<td>Grav</td>
+<td>PHP</td>
+</tr>
+<tr>
+<td>Saaze</td>
+<td>PHP</td>
+</tr>
+<tr>
+<td>Nift</td>
+<td>C++</td>
+</tr>
+</tbody>
+</table>
+<p>Auf <a href="https://jamstack.org/generators">Site Generators</a> /3/ findet man mehr als 300 Static Site Generatoren. Und diese genannte Liste ist nicht vollständig.</p>
+<p>Man würde annehmen, daß die Generierzeit zur Erzeugung aller statischen Seiten bei einem Static Site Generator geringer ist, wenn eine compilierte Sprache, wie Go oder Rust, benutzt wird. Wir werden im weiteren sehen, daß die geschickte Kombination von PHP-FFI und PHP-PECL den bekannten compilierten Sprachen nicht nur Paroli bieten können, sondern sie sogar schlagen können.</p>
+<h2>Warum Ablösung von WordPress durch einen Static Site Generator?</h2>
+<p>Der Autor hat über knapp zehn Jahre in WordPress einen kleinen Blog über Computer geführt. Von solchen Computer-Blogs gibt es Tausende. Ähnlich wie Reise-Blogs, Koch-Blogs, SEO-Blogs u.s.w. Wenn man über diese zehn Jahre so ca. 300 Artikel gesammelt hat, dann möchte man, daß diese Seiten auch bestehen bleiben und nicht durch Änderungen auf Seiten von WordPress auf einmal &quot;kaputt&quot; gehen, also man den Inhalt eines oder mehrerer Artikel nochmal erfassen muß. Mit der Einführung des sogenannten Gutenberg-Editors in WordPress geschah aber nun genau das. Bestehender Content wurde, wenn man ihn anfaßte, völlig zerstört. Auch das Einfügen von mathematischen Formeln ist in WordPress etwas umständlich. Ferner kann WordPress nur i.w. ein einziges Blog führen, nicht mehrere parallel unter einer URL. Das war der Punkt, wo Ersatz her mußte. Im Vorfeld hatte ich mich öfters mit Hugo beschäftigt und sogar dafür einen <a href="https://eklausmeier.goip.de/blog/2017/04-24-converting-wordpress-export-file-to-hugo">Converter</a> /4/ in Go geschrieben, der WordPress Daten in Hugo-Dateien umwandeln kann. Im Rahmen dieser Converter-Erstellung hatte ich aber bemerkt, daß die Entwickler von Hugo etwas <a href="https://eklausmeier.goip.de/blog/2017/06-19-contributing-to-hugo-static">reserviert bis abweisend</a> /5/ auf Änderungswünsche reagierten.</p>
+<p>Ich suchte nun einen Static Site Generator, der einfach zu bedienen ist, denn ich wollte nun zügig von WordPress umsteigen. Ich wollte ja bloggen und mich nicht mit Static Site Generatoren als solchem auseinander setzen. Ich schaute mir Stati, Pico und schließlich Saaze an.</p>
+<h2>Saaze Static Site Generator</h2>
+<p><a href="https://saaze.dev">Saaze</a> /6/ wurden durch den schottischen Designer und Entwickler <a href="https://gilbitron.me">Gilbert Pellegrom</a> /7/ erstellt. Dieser hatte bereits diverse andere CMS implementiert, wie PicoCMS, Baun, Handle und Circulate. Leider wird keines der von ihm entwickelten CMS von ihm selber weiter entwickelt. Zum Thema Abandonware komme ich nachher nochmal.</p>
+<p>Saaze besticht durch folgende Eigenschaften:</p>
+<ol>
+<li>Einfach in der Benutzung und Installation</li>
+<li>Einfach zu hosten -- das ist bei statischen Seiten generell kein großes Problem</li>
+<li>Saaze kann sowohl als Static Site Generator benutzt werden, aber auch dynamisch Content erzeugen, d.h. wie ein klassisches Flat File CMS arbeiten</li>
+<li>Leichte Erweiterbarkeit</li>
+</ol>
+<p>Die leichte Erweiterbarkeit von Saaze war wichtig, weil ich mathematische Formeln, YouTube Videos oder Twitter Tweets einfach einbetten wollte. Von Haus aus bot Saaze das nicht, aber es war unkompliziert diese Funktionalität zu ergänzen. Die Reise startete also mit Saaze.</p>
+<p>Der Content von Saaze wird in Markdown vorgehalten. Jede Markdown Datei enthält im Kopf sogenannten Frontmatter in Yaml. Das sind Informationen zu Titel, Datum, Entwurf (&quot;Draft&quot;), ggf. verwendete Bibliotheken u.s.w. Eine solche Markdown-Datei mit Frontmatter sieht beispielsweise wie folgt aus:</p>
+<pre class="line-numbers"><code class="language-yaml">---
+date: &quot;2021-05-18 13:00:00&quot;
+title: &quot;Moved Blog To eklausmeier.goip.de&quot;
+draft: false
+categories: [&quot;WordPress&quot;]
+tags: [&quot;Saaze&quot;, &quot;PHP&quot;, &quot;Go&quot;]
+author: &quot;Elmar Klausmeier&quot;
+---
+
+The blog [eklausmeier.wordpress.com](https://eklausmeier.wordpress.com) is no longer maintained. I moved to [eklausmeier.goip.de](https://eklausmeier.goip.de), i.e., this one. During migration I corrected a couple of minor typos and dead links.
+...
+</code></pre>
+<p>Saaze verwendet Blade als Template Engine.</p>
+<p>Wie oben bereits erwähnt, so gibt es zwei Nachteile von Static Site Generatoren: Deployment und Generierzeit. Bei mir ist das Deployment ein kurzes Shell-Script, welches letztlich nur Directories umbenennt. Das ist bei einem kleinen privaten Blog keine große Sache. Die Generierzeit ist allerdings ein Thema, wenn man schnell nochmal alles neu generieren muß, weil man feststellt, daß man doch noch was ändern will. Sei nun die Änderung am Template oder am Content ist egal -- es muß neu generiert werden.</p>
+<h2>Saaze schneller machen</h2>
+<p>Mir war bei der Installation von Saaze mit Hilfe von Composer aufgefallen, daß Saaze eine Reihe von störenden Abhängigkeiten zu anderen PHP Bibliotheken hat. Störend deswegen, weil die Installation von Saaze mit PHP8 ohne Klimmzüge nicht vonstatten ging. Vielmehr mußte Composer über PHP7 aufgerufen werden, damit alle Abhängigkeiten befriedigt werden konnten. Zuerst habe ich das dem Umstand zugeschrieben, daß PHP8 noch neu ist. Wenn nun alle Abhängigkeiten installiert sind, dann kann man Saaze auch mit PHP8 aufrufen. Wenn man sich die Abhängigkeit dann im Source Code von Saaze anschaut, dann sieht man allerdings, daß diese Abhängigkeiten eigentlich nur Trivialitäten erledigen. Ich notierte mir als Merkposten, daß ich dort mal aufräumen sollte, wenn mal Zeit wäre. Später stellte sich heraus, daß diese Abhängigkeiten ein Grund für die vergleichsweise langen Generierzeiten sind. Dazu aber später mehr.</p>
+<p>Der Weg war aber nun vorgezeichnet:</p>
+<ol>
+<li>Einsatz von FFI, um die Konvertierung von Markdown zu HTML zu beschleunigen</li>
+<li>Profiling der Anwendung, um Schwachstellen zu erkennen</li>
+<li>Reduktion der Abhängigkeiten</li>
+</ol>
+<p>Der Fahrplan ist nun:</p>
+<div class=mermaid>
+flowchart LR
+    A[FFI] --> B[Profiling] --> C[Dependency reduction]
+</div>
+<p>Man erkennt, daß FFI schon vor dem eigentlichen Profiling verwendet wurde. Es ist bei einem Markdown-basierten Static Site Generator offenkundig, daß die Umwandlung von Markdown zu HTML einen wesentlichen Einfluß auf die Laufzeit hat. Wenn man von seiner Anwendung keine offenkundigen Performance-kritischen Stellen vorab kennt, muß man natürlich mit Profiling anfangen.</p>
+<h2>Simplified Saaze</h2>
+<p>Die beschleunigte Version von Saaze nenne ich im weiteren <a href="https://eklausmeier.goip.de/blog/2021/10-31-simplified-saaze/">&quot;Simplified Saaze&quot;</a> /8/. Der Name kommt daher, daß der Code für Simplified Saaze kleiner ist als für Saaze. Trotz des geringeren Codeumfangs bietet Simplified jedoch folgende Funktionen, die Saaze nicht anbietet:</p>
+<ol>
+<li>Mathematische Formeln mit <a href="https://www.mathjax.org">MathJax</a> /9/</li>
+<li>Einbettung von Twitter, sowie YouTube, Vimeo und WordPress Videos</li>
+<li>Einbettung von <a href="https://mermaid-js.github.io/mermaid">Mermaid</a> /10/</li>
+<li>Einbettung von <a href="https://codepen.io">CodePen</a> /11/</li>
+<li>Entwurfsmodus</li>
+<li>Einzelgenerierung von Markdown Dateien</li>
+<li>Native PHP als Template Engine</li>
+</ol>
+<h2>FFI</h2>
+<p>Seit PHP 7.4 bietet PHP die Möglichkeit <em>sehr einfach</em> C Routinen von PHP aus aufzurufen. Die Betonung liegt hier auf der Einfachheit. FFI steht für Foreign Function Interface. FFI wurde von <a href="https://www.zend.com/blog/php-foreign-function-interface-ffi">Dmity Stogov</a> /12/ der Firma Zend implementiert. Es orientiert sich an <a href="https://luajit.org">LuaJIT</a> /13/ FFI von <a href="https://luajit.org/contact.html">Michael Pall</a> /14/. PHP ist in C geschrieben und PHP um C Funktionen zu erweitern war nie wirklich schwierig, jedoch etwas mühsam, weil man den kompletten PHP Source Code zuerst runterladen und übersetzen muß, um dann für diese Version die richtige Erweiterung zu implementieren. FFI umgeht dies. Es reicht vollkommen aus, wenn man mit Hilfe von <code>FFF::cdef</code> die Signatur der C Routine angibt, d.h. Name der Routine plus Return-Type und Argument-Typen. Zusätzlich gibt man den Ort der shared library an, wo sich diese Routine befindet. Hat man das gemacht, so kann man diese C Routine direkt mittels <code>FFI::string()</code> aufrufen, wenn beispielsweise die C-Routine einen <code>char *</code> zurück liefert. Wenn der Return-Type der C-Routine nur <code>int</code> oder <code>double</code> ist, dann kann der Aufruf sogar direkt erfolgen, siehe nachfolgendes Beispiel:</p>
+<pre class="line-numbers"><code class="language-PHP">$ffj0 = FFI::cdef(&quot;double j0(double);&quot;, &quot;libm.so.6&quot;);
+printf(&quot;j0(2) = %f&lt;br&gt;\n&quot;, $ffj0-&gt;j0(2));
+</code></pre>
+<p>Einfacher kann der Aufruf von C Routinen nicht mehr werden.</p>
+<p>Damit man FFI in PHP benutzen kann, muß man in der <code>php.ini</code> folgendes setzen:</p>
+<pre class="line-numbers"><code class="language-ini">extension=ffi
+ffi.enable=true
+</code></pre>
+<p>Diese Schalterstellung prüft man am besten mit <code>phpinfo()</code>. Das sollte dann wie folgt aussehen:
+<img src="../../../img/FFI_Extension_phpinfo.png" alt=""></p>
+<p>Mit der leichten Aufrufbarkeit von C hat man damit natürlich auch C++, Julia und Go.</p>
+<p>Die <a href="https://www.php.net/manual/en/intro.ffi.php">PHP Dokumentation</a> /15/ schreibt zu FFI:</p>
+<blockquote>
+<p>Currently, accessing FFI data structures is significantly (about 2 times) slower than accessing native PHP arrays and objects. Therefore, it makes no sense to use the FFI extension for speed; however, it may make sense to use it to reduce memory consumption.</p>
+</blockquote>
+<p>Dies ist m.E. irreführend, weil einer der Gründe für den Aufruf von C Routinen ist selbstverständlich Geschwindigkeit. In unserem Falle werden wir sehen, daß der Aufruf von MD4C zu einer Halbierung der Laufzeit von Saaze führt. Merken sollte man sich allerdings, daß die Geschwindigkeit nicht ganz dieselbe ist wie bei einer PHP Extension, weil die Verkapselung der PHP Daten für die Weiterverarbeitung in C etwas Zeit kostet.</p>
+<p>Seine C Routine compiliert man wie folgt:</p>
+<pre class="line-numbers"><code class="language-bash">cc -fPIC -Wall -O2 -shared ...
+</code></pre>
+<p>Grund für die Kommandozeilenoptionen <code>-fPIC</code> und <code>-shared</code>: Die C Routine soll in einer shared library liegen.</p>
+<p>Es soll nicht verschwiegen werden, daß derzeit FFI einen Nachteil gegenüber in PHP implementierten Routinen hat: Die Integration in Composer ist noch nicht direkt vorhanden. D.h. wenn die eigene Software C Routinen via FFI einbettet, dann ist diese C Routine bei der Installation via Composer in gewisser Hinsicht ein Fremdkörper, der separate Installationsschritte bedarf. Wie man oben sieht ist es nicht schwierig oder kompliziert, aber halt nicht direkt in Composer integriert.</p>
+<h2>FFI im Vergleich zu PHP Extensions</h2>
+<p>Einer der wesentlichen Vorteile von FFI ist die sehr einfache Aufrufbarkeit von C Routinen aus PHP heraus. Nachfolgend kurz die Darstellung, wie man eine PHP Extension erstellt.</p>
+<ol>
+<li>Man lädt sich den Source Code von PHP herunter.</li>
+<li>Man lädt sich die Abhängigkeiten herunter, die benötigt werden. In meinem Falle von Arch Linux war dies <code>pacman -S tidy freetds</code>.</li>
+<li>Man rekonstruiert die configure Parameter: <code>php -i | grep &quot;Configure Command&quot;</code>. Die Ausgabe ist ein mehrzeilger Befehl für <code>configure</code>.</li>
+<li>Man ruft <code>make</code>.</li>
+</ol>
+<p>Eine einfache Extension sieht dann bspw. so aus:</p>
+<pre class="line-numbers"><code class="language-C">/* {{{ void test1() */
+PHP_FUNCTION(test1)
+{
+    ZEND_PARSE_PARAMETERS_NONE();
+
+    php_printf(&quot;test1(): The extension %s is loaded and working!\r\n&quot;, &quot;callcob&quot;);
+    cob_init(0,NULL);
+}
+/* }}} */
+</code></pre>
+<p>Man sieht, daß das ganze wesentlich zäher ist als der FFI Aufruf. Ein weiterer Nachteil ist, daß bei einer neuen PHP Version, bspw. ein Wechsel von PHP 8.0 auf 8.1, man diese Prozedur wiederholen muß.</p>
+<p>Eine gute Einführung in die Programmierung von PHP Extensions findet man in <a href="https://www.amazon.de/-/en/Sara-Golemon/dp/067232704X" title="Sara Golemon: Extending and Embedding PHP, Sams Publishing, 2006">Golemon</a> /16/ und in <a href="https://www.zend.com/sites/zend/files/pdfs/whitepaper-zend-php-extensions.pdf">Zend</a> /17/.</p>
+<h2>Aufruf von MD4C via FFI</h2>
+<p>Zurück zu Saaze und der Verkürzung der Generierzeit. Einer der wesentlichen Aufgaben eines Static Site Generators ist die Umwandlung von Markdown in HTML. Wie oben beschrieben, manche Static Site Generatoren akzeptieren und fordern andere Eingabeformat als Markdown, wie z.B. reStructuredText. Saaze benötigt Markdown. Die Umwandlung von Markdown zu HTML geschieht in Saaze mittels <a href="https://github.com/erusev/parsedown-extra">Parsedown Extra</a> /18/, welches i.w. von <a href="https://erusev.com">Emanuil Rusev</a> /19/ programmiert wurde. Ersetzt man Parsedown Exrtra durch <a href="https://github.com/mity/md4c">MD4C</a> /20/ zeigt sich, daß man die Umwandlungszeit von Markdown zu HTML um den Faktor acht senken kann. In der Summe kommt man auf Reduktion der Laufzeit um fast die Hälfte.</p>
+<p>MD4C ist eine in C geschriebene Routine für die Umwandlung von Markdown zu HTML. Programmiert wurde sie von <a href="https://github.com/mity">Martin Mitas</a> /21/. Um sich einen groben Überblick zu verschaffen, um wieviel schneller MD4C gegenüber anderen Implementierung ist, nachfolgend zwei Tabellen. Man siehe <a href="https://talk.commonmark.org/t/why-is-md4c-so-fast-c/2520/12">Why is MD4C so fast?</a> /22/:</p>
+<table>
+<thead>
+<tr>
+<th>Test name</th>
+<th>Simple input</th>
+<th>MD4C (seconds)</th>
+<th>Cmark (seconds)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmark-benchinput.md</td>
+<td>(benchmark from CMark)</td>
+<td>0.3650</td>
+<td>0.7060</td>
+</tr>
+<tr>
+<td>long-block-multiline.md</td>
+<td>&quot;foo\n&quot; * 1000000</td>
+<td>0.0400</td>
+<td>0.2300</td>
+</tr>
+<tr>
+<td>long-block-oneline.md</td>
+<td>&quot;foo &quot; * 10 * 1000000</td>
+<td>0.0700</td>
+<td>0.1000</td>
+</tr>
+<tr>
+<td>many-atx-headers.md</td>
+<td>&quot;###### foo\n&quot; * 1000000</td>
+<td>0.0900</td>
+<td>0.4670</td>
+</tr>
+<tr>
+<td>many-blanks.md</td>
+<td>&quot;\n&quot; * 10 * 1000000</td>
+<td>0.0700</td>
+<td>0.3110</td>
+</tr>
+<tr>
+<td>many-emphasis.md</td>
+<td>&quot;<em>foo</em> &quot; * 1000000</td>
+<td>0.1100</td>
+<td>0.8460</td>
+</tr>
+<tr>
+<td>many-fenced-code-blocks.md</td>
+<td>&quot;~~~\nfoo\n~~~\n\n&quot; * 1000000</td>
+<td>0.1600</td>
+<td>0.4010</td>
+</tr>
+<tr>
+<td>many-links.md</td>
+<td>&quot;<a href="/url">a</a> &quot; * 1000000</td>
+<td>0.2100</td>
+<td>0.5110</td>
+</tr>
+<tr>
+<td>many-paragraphs.md</td>
+<td>&quot;foo\n\n&quot; * 1000000</td>
+<td>0.0900</td>
+<td>0.4860</td>
+</tr>
+</tbody>
+</table>
+<p>Ein weiterer <a href="https://github.com/commonmark/cmark/blob/master/benchmarks.md">Geschwindigkeitsvergleich</a> /23/ zwischen cmark, md4c und commonmark.js:</p>
+<table>
+<thead>
+<tr>
+<th>Implementation</th>
+<th align="right">Time (sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>commonmark.js</strong></td>
+<td align="right">0.59</td>
+</tr>
+<tr>
+<td><strong>cmark</strong></td>
+<td align="right">0.12</td>
+</tr>
+<tr>
+<td><strong>md4c</strong></td>
+<td align="right">0.04</td>
+</tr>
+</tbody>
+</table>
+<p>MD4C wurde speziell im Hinblick auf Performance und geringen Speicherverbrauch hin entwickelt.</p>
+<p>Während Parsedown direkt in PHP implementiert ist und sich damit mittels Composer einfach als Abhängigkeit hinzufügen läßt, so ist bisher kein MD4C Paket in PHP bekannt. Hier hilft nun FFI. Es ist eben sehr einfach MD4C, welches in C geschrieben ist, in PHP via FFI aufzurufen.</p>
+<p>Der Aufruf von MD4C aus PHP heraus sieht nun wie folgt aus:</p>
+<pre class="line-numbers"><code class="language-PHP">&lt;?php
+    $ffi = FFI::cdef(&quot;char *md4c_toHtml(const char*);&quot;,&quot;/srv/http/php_md4c_toHtml.so&quot;);
+    printf(&quot;argv1 = %s\n&quot;, $argv[1]);
+    $markdown = file_get_contents($argv[1]);
+    $html = FFI::string( $ffi-&gt;md4c_toHtml($markdown) );
+    printf(&quot;%s&quot;, $html);
+</code></pre>
+<p>Die eigentliche C Routine <code>md4c_toHtml()</code> für den MD4C Aufruf ist:</p>
+<pre class="line-numbers"><code class="language-C">/* Provide md4c to PHP via FFI
+   Copied many portions from Martin Mitas:
+       https://github.com/mity/md4c/blob/master/md2html/md2html.c
+
+   Compile like this:
+       cc -fPIC -Wall -O2 -shared php_md4c_toHtml.c -o php_md4c_toHtml.so -lmd4c-html
+
+   This routine is not thread-safe. For threading we either need a thread-id passed
+   or using a mutex to guard the static/global mbuf.
+*/
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;md4c-html.h&gt;
+
+
+struct membuffer {
+    char* data;
+    size_t asize;
+    size_t size;
+};
+
+
+static void membuf_init(struct membuffer* buf, MD_SIZE new_asize) {
+    buf-&gt;size = 0;
+    buf-&gt;asize = new_asize;
+    if ((buf-&gt;data = malloc(buf-&gt;asize)) == NULL) {
+        fprintf(stderr, &quot;membuf_init: malloc() failed.\n&quot;);
+        exit(1);
+    }
+}
+
+
+static void membuf_grow(struct membuffer* buf, size_t new_asize) {
+    buf-&gt;data = realloc(buf-&gt;data, new_asize);
+    if(buf-&gt;data == NULL) {
+        fprintf(stderr, &quot;membuf_grow: realloc() failed.\n&quot;);
+        exit(1);
+    }
+    buf-&gt;asize = new_asize;
+}
+
+
+static void membuf_append(struct membuffer* buf, const char* data, MD_SIZE size) {
+    if(buf-&gt;asize &lt; buf-&gt;size + size)
+        membuf_grow(buf, buf-&gt;size + buf-&gt;size / 2 + size);
+    memcpy(buf-&gt;data + buf-&gt;size, data, size);
+    buf-&gt;size += size;
+}
+
+
+static void process_output(const MD_CHAR* text, MD_SIZE size, void* userdata) {
+    membuf_append((struct membuffer*) userdata, text, size);
+}
+
+
+static struct membuffer mbuf = { NULL, 0, 0 };
+
+
+char *md4c_toHtml(const char *markdown) {	// return HTML string
+    int ret;
+    if (mbuf.asize == 0) membuf_init(&amp;mbuf,16777216);
+
+    mbuf.size = 0;	// prepare for next call
+    ret = md_html(markdown,strlen(markdown),process_output,&amp;mbuf,MD_DIALECT_GITHUB,0);
+    membuf_append(&amp;mbuf,&quot;\0&quot;,1); // make it a null-terminated C string, so PHP can deduce length
+    if (ret &lt; 0) return &quot;&lt;br&gt;- - - Error in Markdown - - -&lt;br&gt;\n&quot;;
+
+    return mbuf.data;
+}
+</code></pre>
+<p>Obiger Code wird in Simplified Saaze verwendet. Obiger Code ließe sich aber auch in Grav, PicoCMS, Sculpin, Stati oder Statamic einfach verwenden.</p>
+<h2>Profiling mit XHProf</h2>
+<p>Profiling ist das Messen, wie lange Funktionsaufrufe dauern und wie häufig Funktionen aufgerufen werden. Ein sehr leistungsstarkes Werkzeug für PHP ist hierbei <a href="https://pecl.php.net/package/xhprof">XHProf</a> /24/. Dieser &quot;Hierarchical Profiler&quot; genannte Profiler wurde ursprünglich von Facebook entwickelt. Vor der Benutzung der auf PHP basierten Programmiersprache <a href="https://en.wikipedia.org/wiki/Hack_(programming_language)">Hack</a> /25/ hat Facebook intensiv PHP benutzt.</p>
+<p>Die Installation von XHProf nach Download ist wie folgt:</p>
+<ol>
+<li><code>cd extension</code></li>
+<li><code>phpize</code></li>
+<li><code>configure</code></li>
+<li><code>make</code></li>
+<li>Kopiere so Datei in das PHP Library Directory, unter Arch Linux ist dies <code>/usr/lib/php/modules/</code></li>
+<li>Passe <code>php.ini</code> an</li>
+<li>Kopiere JavaScript Libraries, z.B. nach <code>/usr/share/webapps/xhprof/</code></li>
+</ol>
+<p>Um nun die Messung zu starten muß XHProf explizit aufgerufen werden:</p>
+<pre class="line-numbers"><code class="language-PHP">xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
+</code></pre>
+<p>Um die Messung zu stoppen:</p>
+<pre class="line-numbers"><code class="language-PHP">stopXhprof();
+</code></pre>
+<p>Obige Hilfsfunktion ist wie folgt definiert:</p>
+<pre class="line-numbers"><code class="language-PHP">function stopXhprof() {
+    $xhprof_data = xhprof_disable();
+
+    //
+    // Saving the XHProf run
+    // using the default implementation of iXHProfRuns.
+    //
+    include_once &quot;/usr/share/webapps/xhprof/xhprof_lib/utils/xhprof_lib.php&quot;;
+    include_once &quot;/usr/share/webapps/xhprof/xhprof_lib/utils/xhprof_runs.php&quot;;
+
+    $xhprof_runs = new \XHProfRuns_Default();
+
+    // Save the run under a namespace &quot;xhprof_foo&quot;.
+    //
+    // **NOTE**:
+    // By default save_run() will automatically generate a unique
+    // run id for you. [You can override that behavior by passing
+    // a run id (optional arg) to the save_run() method instead.]
+    //
+    $run_id = $xhprof_runs-&gt;save_run($xhprof_data, &quot;saaze&quot;);
+
+    echo &quot;---------------\n&quot;.
+        &quot;Assuming you have set up the http based UI for \n&quot;.
+        &quot;XHProf at some address, you can view run at \n&quot;.
+        &quot;http://&lt;xhprof-ui-address&gt;/index.php?run=$run_id&amp;source=saaze\n&quot;.
+        &quot;---------------\n&quot;;
+    }
+</code></pre>
+<p>Man beachte, daß durch die Messung via XHProf die Ablaufgeschwindigkeit insgesamt langsamer wird. Im Falle von Saaze wird die Ausführungsgeschwindigkeit dreimal langsamer bei Simplified Saaze und bis zu siebenmal langsamer bei Saaze.</p>
+<p>Die Ausgabe von XHProf ist eine Web-Seite mit einer großen Tabelle. Jede Zeile der Tabelle enthält für jede PHP Funktion die Anzahl der Aufrufe und die verbrauchte CPU-Zeit. Man kann dann per drill-down in die PHP Funktion reinklicken und sieht dann, was diese Funktion wiederum aufgerufen hat, d.h. wie sich der CPU-Verbrauch dieser PHP Funktion zusammensetzt. Die Tabelle kann man auch nach unterschiedlichen Spalten sortieren lassen.</p>
+<p>In unserem Fall stellt man nun fest, daß Saaze von vier Plagen befallen ist:</p>
+<ol>
+<li>Parsedown-Extra -- das war zu erwarten und das hatten wir bereits ausgemerzt</li>
+<li>Blade Template Verarbeitung</li>
+<li>Yaml-Parser</li>
+<li>Doppel und Dreifachberechnungen von bereits berechneten Werten</li>
+</ol>
+<p>Die beiden Problemfälle 2 und 3 wurden nun im Rahmen der Reduktion der Abhängigkeiten bereinigt. Die exorbitant hohe Anzahl von Funktionsaufrufen für Parsedown sind in Saaze einfach ein Fehler, weil Dinge, die schon vormals berechnet wurden, immer wieder neu berechnet werden. Dieser Bug in Saaze ist aber Saaze spezifisch und ließ sich durch eine PHP Referenz lösen. Für das Thema Performane Tuning ist lediglich wichtig, daß der Profiler das geeigneteMittel ist, um überhaupt zu erkennen, daß man ein Problem mit der <em>Anzahl</em> der Aufrufe hat.</p>
+<h2>Reduktion von Abhängigkeiten</h2>
+<p>Schon bei der Installation von Saaze war aufgefallen, daß Saaze Abhängigkeiten hat, die empfindlich auf Versionsänderungen reagieren. Diesen und anderen Abhängigkeiten galt es nun zu Leibe zu rücken. Insbesondere da mit XHProf augenscheinlich wurde, daß der Yaml-Parser und die Blade Template Engine prozentual viel Rechenzeit verbrauchen.</p>
+<p>Was ist nun schlimm mit Abhängigkeiten? Nun, wenn eine Abhängigkeit für eine konkrete Problemlösung benutzt wird, dann ist dagegen nichts grundsätzlich zu sagen. In unserem Beispiel wurde eine Abhängigkeit zu <code>jenssegers\blade</code> hergestellt. Will man Blade Templates, dann muß man das entweder selber programmieren, oder man findet etwas bereits vorhandenes. Nachteilig ist nun, daß eine Abhängigkeit wiederum weitere Abhängigkeiten einschleppen kann. Hier gilt nun die Regel, je mehr Code man importiert, desto höher ist auch die Wahrscheinlichkeit, daß man damit Fehler und Malware importiert.</p>
+<p>Ein bekanntes Beispiel, wo diese Abhängigkeitskaskade so richtig schief gegangen ist, war als in den beiden JavaScript Bibliotheken coa und rc in npm absichtlich platzierte Malware gefunden wurde, siehe <a href="https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads">Malware found in coa and rc</a> /26/. Diese beiden Pakete hatten wöchentliche Downloadzahlen von 23 Millionen. Es gibt nun sogar <a href="https://drewdevault.com/2021/11/16/Cash-for-leftpad.html">Geldprämien</a> /27/, wenn man Trivial-npm's eliminiert. Obwohl dieses abschreckende Beispiel für npm galt, so gilt ähnliches für PHP.</p>
+<p>Oben hatte ich bereits erwähnt, daß zahlreiche Open Source Projekte angelegt werden, aber nach kurzer Zeit das Interesse daran vom Originalautor erlahmt. Der Originalautor wendet sich ab und die Software wird nicht weiterentwickelt, evtl. Fehler werden nicht behoben, auf Fragen von Anwendern wird nicht reagiert. Das nennt man dann Abandonware. Im Falle von Abhängigkeiten muß man nun damit rechnen, daß entweder die Abhängigkeit selber, oder in der Kette der Abhängigkeiten eine solche tote Stelle auftritt. Fehler in dieser Totstelle können dann zu Problemen in allen abhängigen Modulen führen. In Saaze war übrigens eine Software von Spatie so ein Problemfall: Die Aufteilung einer Datei in Frontmatter und Markdown war fehlerhaft. Fehlermeldungen dazu blieben aber unberücksichtigt. Hier muß man dann die Abhängigkeit komplett entfernen und eigenen, korrekten Code einfügen. Abandonware ist keine Eigenheit, die man daran festmachen kann, ob jemand etwas als Hobby oder beruflich erstellt hat. Es gibt zahlreiche Firmen, die Software als Open Source bereitstellen, sie aber nicht weiter pflegen, sondern &quot;vergammeln&quot; lassen. In Deutschland hat dies sogar den Gesetzgeber auf den Plan gerufen, weil ungewartete Software auch ein Sicherheitsrisiko darstellen kann.</p>
+<p>Zurück zu Blade Templates: Benötigt ein auf PHP basierender Static Site Generator ein separates Template-Verfahren, oder ist PHP nicht selber schon eine Template-Sprache? Man kann hierzu geteilter Meinung sein, klar ist jedoch, daß PHP alle Anforderungn grundsätzlich abdeckt. D.h. der Verzicht auf Blade führt zu keinen funktionalen Einschränkungen. In unserem Fall von Saaze führt dies zu einer <em>Vervielfachung</em> der Performance, d.h. die Steigerung der Performance nicht um Prozentpunkte, sondern um Faktoren.</p>
+<p>Anderes Beispiel für Abhängigkeiten: Was ist einfacher zu codieren und was ist einfacher zu verstehen?</p>
+<pre class="line-numbers"><code class="language-PHP">protected function loadMkdwnRecursive(string $dir) : void {	// recursively load Markdown files: *.md
+    foreach (scandir($dir) as $fn) {
+        if ($fn === '.' || $fn === '..') continue;
+        $fn = $dir . DIRECTORY_SEPARATOR . $fn;
+        if (is_dir($fn)) $this-&gt;loadMkdwnRecursive($fn);
+        else if (substr($fn,-3) === '.md') $this-&gt;loadEntry($fn);
+    }
+}
+</code></pre>
+<p>Alternativ mit einer Abhängigkeit zu Symfony:</p>
+<pre class="line-numbers"><code class="language-PHP">use Symfony\Component\Finder\Finder;
+
+...
+$paths = (new Finder())-&gt;in($collectionDir)-&gt;files()-&gt;name('*.md');
+
+foreach ($paths as $file) {
+    $this-&gt;loadEntry($file-&gt;getPathname());
+}
+</code></pre>
+<p>Bei der Variante, die nur PHP Bordmittel einsetzt, ist genau klar, was die Routine tut. Bei der Symfony Variante sollte man sich zuvor unterrichten, welche Funktionalität die <a href="https://symfony.com/doc/current/components/finder.html"><code>Finder</code> Klasse</a> /28/ bereitstellt. Von der Performance sollte es keine Unterschiede geben. Bei Simplified Saaze wurde die abhängigkeitsfreie Variante gewählt.</p>
+<p>Wenn PHP bereits Yaml-Parsing bereitstellt, so liegt es nahe dies auch direkt zu verwenden, anstatt <code>Symfony\Component\Yaml\Yaml</code>. Durch die Verwendung der PECL Yaml Bibliothek ließ sich die Laufzeit um 40% reduzieren. Der Aufruf ohne Symfony:</p>
+<pre class="line-numbers"><code class="language-PHP">yaml_parse(...);
+</code></pre>
+<p>Mit Symfony:</p>
+<pre class="line-numbers"><code class="language-PHP">Yaml::parse(...);
+</code></pre>
+<p>D.h. die Vermeidung dieser Abhängigkeit ist simpel.</p>
+<p>Die Installation der PECL Yaml Bibliothek ist wie folgt:</p>
+<ol>
+<li>Download des aktuellen yaml Pakets von <a href="https://pecl.php.net/package/yaml">PECL</a> /29/</li>
+<li><code>tar zxf yaml...</code></li>
+<li>Aufruf <code>phpize</code></li>
+<li>Aufruf <code>./configure</code></li>
+<li>Aufruf <code>make</code>. Shared Library ist hier <code>modules/yaml.so</code>.</li>
+<li>Aufruf <code>make test</code>. Damit werden 74 Tests durchgeführt, welche alle erfolgreich sind.</li>
+<li>Als User root kopiert man <code>modules/yaml.so</code> nach <code>/usr/lib/php/modules</code> in Arch Linux</li>
+<li>Änderung <code>/etc/php/php.ini</code> und hinzufügen <code>extension=yaml</code></li>
+</ol>
+<p>Nun sollte man einen yaml Eintrag sehen, wenn man <code>phpinfo()</code> aufruft oder <code>php -m</code> oder <code>php -i</code>.
+<img src="../../../img/phpyaml.png" alt=""></p>
+<p>Wie bereits erwähnt, so ist ein Nachteil der PECL Pakete, daß man bei einer neuen PHP Version das obige Verfahren wiederholen muß, sofern die PHP Version nicht ohnehin mit den gewünschten PECL Paketen bereits bestückt ist.</p>
+<p>Es gab eine Reihe von Abhängigkeiten, die in Saaze ausgebaut wurden. Dies hatte aber weniger etwas mit Performance Optimierung zu tun. Beispielsweise wurde ein Dependency Injection Framework ausgebaut. Bei einer Code Größe von ca. 1 kLine scheint DI etwas überdimensioniert.</p>
+<h2>Ist PHP eigentlich schnell genug?</h2>
+<p>Wenn man kurz innehält, kann man fragen, ob die Programmiersprache PHP überhaupt geeignet ist, wenn es um das Thema Geschwindigkeit geht. Bekannt ist, daß beim Umstieg von PHP5 auf PHP7 erhebliche Geschwindigkeitsvorteile zutage traten. Oder anders formuliert, PHP5 war niemals schnell.</p>
+<p>Nachfolgende Tabelle enthält die Laufzeiten auf drei verschiedenen Maschinen, NUC (Intel), Ryzen (AMD) und Odroid (ARM). Es wird das sogenannte <em>n</em>-Damen Problem nicht-rekursiv gelöst. Also, wie positioniert man <em>n</em> Damen auf einem Schachbrett, sodaß sich keine der Damen schlagen können. In untenstehender Tabelle wird das <em>n</em>-Damen Problem für eins bis zwölf gelöst. Bei mehr als zwölf fangen Python und Perl an zu schwächeln und es dauert arg lange.</p>
+<table>
+<thead>
+<tr>
+<th>Sprache</th>
+<th>NUC</th>
+<th>Ryzen</th>
+<th>Odroid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C</td>
+<td>0.17</td>
+<td>0.15</td>
+<td>0.44</td>
+</tr>
+<tr>
+<td>Java 1.8.0</td>
+<td>0.31</td>
+<td>0.22</td>
+<td>108.17</td>
+</tr>
+<tr>
+<td>node.js 16.4</td>
+<td>0.34</td>
+<td>0.21</td>
+<td>1.67</td>
+</tr>
+<tr>
+<td>LuaJIT</td>
+<td>0.49</td>
+<td>0.33</td>
+<td>2.06</td>
+</tr>
+<tr>
+<td>PyPy3 7.3.5</td>
+<td>1.57</td>
+<td>0.86</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>PHP 8</td>
+<td>3.23</td>
+<td>2.35</td>
+<td>42.38</td>
+</tr>
+<tr>
+<td>Python 3.9.6</td>
+<td>12.29</td>
+<td>7.65</td>
+<td>168.17</td>
+</tr>
+<tr>
+<td>Perl 5.34</td>
+<td>25.87</td>
+<td>21.14</td>
+<td>209.47</td>
+</tr>
+</tbody>
+</table>
+<p>Erkenntnisse:</p>
+<ol>
+<li>C ist bei weitem am schnellsten, bis zu einem Faktor von zwei auf Intel zu seinen beiden nächsten Konkurrenten: Java and Javascript. Auf einem Ryzen ist die Differenz nicht so ausgeprägt.</li>
+<li>Javascript und Java sind fast gleich von der Geschwindigkeit her -- das hätte man wohl so nicht erwartet.</li>
+<li>Javas Performance auf ARM ist fürchterlich, sogar schlechter als Javascript, LuaJIT, und PHP zusammengenommen. Das bedeutet, daß aller Voraussicht nach Java auf Apple's M1 oder Amazon Graviton nicht performant laufen wird.</li>
+<li><a href="https://luajit.org/contact.html">Michael Pall</a>s /14/ LuaJIT ist ein starker Konkurrent zu allen anderen Sprachen.</li>
+<li>PyPy ist mehr als siebenmal schneller als Python.</li>
+<li>PHP 8 ist deutlich schneller als Python, aber fast zehnmal langsamer als Javascript. Dies ist in Übereinstimmung mit den Ergebnisse von <a href="https://thinkmobiles.com/blog/php-vs-nodejs">Viktor Korol</a> /30/ und mit den Messungen von <a href="https://blog.famzah.net/2016/09/10/cpp-vs-python-vs-php-vs-java-vs-others-performance-benchmark-2016-q3">Ivan Zahariev</a> /31/.</li>
+<li>Während C ungefähr zweieinhalb-mal langsamer auf ARM als auf Intel ist, so sind die anderen Sprachen überproportional langsamer, also Faktor 5, 6, 7, 8-mal langsamer. Java ist hier mit dem Faktor von nahe 500 ein krasser Ausreißer.</li>
+</ol>
+<p>Das PHP Programm für das <em>n</em>-Damen Problem ist:</p>
+<pre class="line-numbers"><code class="language-PHP">&lt;?php
+/* Check if k-th queen is attacked by any other prior queen.
+   Return nonzero if configuration is OK, zero otherwise.
+*/
+function configOkay (int $k, &amp;$a) {
+    $z = $a[$k];
+
+    for ($j=1; $j&lt;$k; ++$j) {
+        $l = $z - $a[$j];
+        if ($l == 0  ||  abs($l) == $k - $j) return 0;
+    }
+    return 1;
+}
+
+function solve (int $N, &amp;$a) {  // return number of positions
+    $cnt = 0;
+    $k = $a[1] = 1;
+    $N2 = $N;  //(N + 1) / 2;
+
+    loop:
+        if (configOkay($k,$a)) {
+            if ($k &lt; $N)  { $a[++$k] = 1;  goto loop; }
+            else ++$cnt;
+        }
+        do
+            if ($a[$k] &lt; $N)  { $a[$k] += 1;  goto loop; }
+        while (--$k &gt; 1);
+        $a[1] += 1;
+        if ($a[1] &gt; $N2) return $cnt;
+        $k = 2 ;  $a[2] = 1;
+    goto loop;
+}
+</code></pre>
+<p>Puristen mögen sich an den <code>goto</code>'s stören. Endanwender, die zügig Ergebnisse wollen, freuen sich, wenn sie www nicht mit weltweitem Warten verbinden.</p>
+<p>Die weiteren Programme zu diesen Messungen findet man unter <a href="https://eklausmeier.goip.de/blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl">Performance Comparison C vs. other</a> /32/.</p>
+<h2>Performance Vergleich mit Hugo und Zola</h2>
+<p>Nach den Performance Optimierungen war es nun interessant zu erfahren wie sich Simplified Saaze zu den Platzhirschen verhielt. Hugo ist nach Eigenbeschreibung der schnellste Static Site Generator. Ein jüngerer Herausforderer ist Zola, früher unter dem Namen Gutenberg bekannt.</p>
+<p>Man findet zwar Vergleiche zwischen Hugo und Eleventy und anderen JavaScript basierten Static Site Generatoren aber nur einen einzigen Vergleich Hugo gegen Zola. Im Vergleich zu Eleventy ist Hugo um ein <em>Vielfaches</em> schneller. Gleiches gilt für Jekyll, Gatsby, Next und Nuxt. Diese Static Site Generatoren haben keine Chance gegen Hugo. Sie sind um Faktoren langsamer. Die Ergebnisse findet man in <a href="https://css-tricks.com/comparing-static-site-generator-build-times">comparison of Eleventy vs. Gatsby vs. Hugo vs. Jekyll vs. Next vs. Nuxt</a> /33/.</p>
+<p>Bevor wir die Laufzeiten für unterschiedliche Blog-Größen vergleichen, ein kurzer Vergleich der Installationsgröße unter Arch Linux für x86 und Odroid/ARM. Man erkennt deutlich, daß Simplified Saaze der kleinste Generator ist.</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th align="right">Size/MB x86</th>
+<th align="right">Size/MB ARM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S.Saaze 1.1</td>
+<td align="right">0.05</td>
+<td align="right">0.05</td>
+</tr>
+<tr>
+<td>Hugo 0.88.1</td>
+<td align="right">61.01</td>
+<td align="right">49.17</td>
+</tr>
+<tr>
+<td>Zola 0.14.1</td>
+<td align="right">21.33</td>
+<td align="right">16.89</td>
+</tr>
+</tbody>
+</table>
+<p>In der nachfolgenden Tabelle sind alle Laufzeiten in Sekunden. x86 steht für Intel NUC i5-4250U, 4 Cores, max 2.6 GHz betrieben unter Arch Linux 5.14.14; ARM ist Cortex-A7, 8 core, big-little, max 1.5 GHz ebenfalls betrieben mit Arch Linux 4.14.180-3.
+Getestet wurden alle drei Static Site Generatoren mit 13 Blog Posts, dann 347, dann 681 und schließlich mit 1349 Blog-Posts. Die Anzahl der Posts ist der entscheidende Faktor für die Laufzeit.</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th align="right">#posts</th>
+<th align="right">real x86</th>
+<th align="right">user x86</th>
+<th align="right">real ARM</th>
+<th align="right">user ARM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S. Saaze</td>
+<td align="right">13</td>
+<td align="right">0.04</td>
+<td align="right">0.02</td>
+<td align="right">0.09</td>
+<td align="right">0.06</td>
+</tr>
+<tr>
+<td>S. Saaze</td>
+<td align="right">347</td>
+<td align="right">0.15</td>
+<td align="right">0.09</td>
+<td align="right">0.37</td>
+<td align="right">0.25</td>
+</tr>
+<tr>
+<td>S. Saaze</td>
+<td align="right">681</td>
+<td align="right">0.26</td>
+<td align="right">0.17</td>
+<td align="right">0.64</td>
+<td align="right">0.41</td>
+</tr>
+<tr>
+<td>S. Saaze</td>
+<td align="right">1349</td>
+<td align="right">0.47</td>
+<td align="right">0.36</td>
+<td align="right">1.32</td>
+<td align="right">0.86</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">13</td>
+<td align="right">0.22</td>
+<td align="right">0.31</td>
+<td align="right">0.76</td>
+<td align="right">1.47</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">347</td>
+<td align="right">1.53</td>
+<td align="right">4.50</td>
+<td align="right">4.39</td>
+<td align="right">17.73</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">681</td>
+<td align="right">2.43</td>
+<td align="right">7.34</td>
+<td align="right">6.76</td>
+<td align="right">29.88</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">1349</td>
+<td align="right">3.87</td>
+<td align="right">12.41</td>
+<td align="right">11.83</td>
+<td align="right">52.08</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="right">13</td>
+<td align="right">0.08</td>
+<td align="right">0.06</td>
+<td align="right">0.27</td>
+<td align="right">0.23</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="right">347</td>
+<td align="right">0.36</td>
+<td align="right">0.31</td>
+<td align="right">1.16</td>
+<td align="right">1.10</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="right">681</td>
+<td align="right">0.60</td>
+<td align="right">0.58</td>
+<td align="right">2.05</td>
+<td align="right">1.99</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="right">1349</td>
+<td align="right">1.17</td>
+<td align="right">1.09</td>
+<td align="right">3.75</td>
+<td align="right">3.67</td>
+</tr>
+</tbody>
+</table>
+<p>Man würde meinen, daß Static Site Generatoren, die in Go oder Rust geschrieben sind, schneller sein müßten als ein Generator in PHP. Man sieht: PHP schlägt alles aus dem Feld.</p>
+<p>In der obigen Tabelle wurde zwischen Real- und User-Zeit unterschieden. Real-Zeit ist diejenige Zeit, die der Benutzer effektiv wartet, bis er sein Ergebnis bekommt. Wenn der Prozeß nur einen Kern verwendet, dann ist Real-Zeit immer größer oder gleich der User-Zeit. Wenn jedoch der Prozeß die Arbeit auf mehrere Kerne verteilen kann, dann kann die User-Zeit ein Vielfaches der Real-Zeit sein. Umgangssprachlich: Der Computer hat wie blöd parallel gerechnet, durch die Parallelisierung ist die Real-Zeit aber dann noch akzeptabel. Beispiel: Simplified Saaze benötigt für 1349 Posts auf einem ARM Prozessor an User-Zeit 0.86 Sekunden, hingegen benötigt Hugo für die gleiche Menge an Posts 52.08 Sekunden User-Zeit. Effektiv fertig war Simplified Saaze nach 1.32 Sekunden, Hugo in 11.83 Sekunden.</p>
+<p>User-Zeiten sind in Hugo deutlich höher, weil Hugo Threads zur Parallelisierung nutzt. Während Hugo <em>alle</em> Kerne des vorhandenen Rechners vollständig nutzt, ist es um Faktoren langsamer als Simplified Saaze oder Zola. Weder Simplified Saaze noch Zola nutzen Threads. Sollte nun Simplified Saaze ebenfalls die Arbeit auf Threads aufteilen, dann wäre der Abstand der beiden Programme noch erheblich größer. Vom Grundsatz her wäre eine Parallelisierung in Simplified Saaze einfach zu implementieren; die sogenannten &quot;Entries&quot; und die sogenannten &quot;Collections&quot; könnten auf natürliche Weise parallel bearbeitet werden.</p>
+<p>Vergleich der x86 Real- und User-Zeiten:
+<img src="../../../img/ssgPerfRealUserx86a.png" alt=""></p>
+<p>Vergleich der ARM Real- und User-Zeiten:
+<img src="../../../img/ssgPerfRealUserARMa.png" alt=""></p>
+<p>Resultate für Hugo:</p>
+<ol>
+<li>Hugo ist immer am langsamsten. Dies steht im Gegensatz zur Eigenbezeichnung &quot;The world’s fastest framework for building websites&quot;</li>
+<li>Hugos Template Konfiguration ist etwas umständlicher</li>
+<li>Hugo ist sehr CPU intensiv, man vgl. dazu auch <a href="https://eklausmeier.goip.de/blog/2017/04-24-converting-wordpress-export-file-to-hugo">Converting WordPress Export File to Hugo</a> /4/</li>
+<li>Hugos Goldmark Implementierung kann leider kein originäres HTML verarbeiten</li>
+<li>Zur Verteidigung von Hugo: Hugo erzeugt automatisch Syntax Highlighting via HTML Code. Das verlangsamt eindeutig die Verarbeitung. In Zola habe ich deswegen die Syntax Highlighting Durchführung via HTML Code abgeschaltet. Andernfalls wäre Zola um den Faktor zwei langsamer.</li>
+</ol>
+<p>Die obigen Performance Resultate zwischen Zola und Hugo sind in Übereinkunft mit den Ergebnisse in <a href="https://github.com/grego/ssg-bench">Static site generator benchmarks</a> /34/. Die Zahlen dazu:</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th align="right">Zeit in ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blade</td>
+<td align="right">2.9</td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="right">29.1</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">45.7</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://www.getblades.org">Blade</a> /35/ ist ein weiterer Static Site Generator, welcher von Maroš Grego programmiert wurde. Blade ist in Rust geschrieben und verwendet das <a href="https://mustache.github.io">mustache</a> /36/ Template System. Den Static Site Generator Blade darf man nicht mit dem Blade Template System verwechseln.</p>
+<p>Daß Hugo zu schlagen ist, zeigt auch ein Vergleich von <a href="https://nift.dev">Nift</a> /37/ mit Hugo. Nift schlägt Hugo um den Faktor vier für Real-Zeit. Bzgl. User-Zeit ist Hugo sechsmal langsamer, man siehe hierzu die <a href="https://hugo-vs-nift.gitlab.io">Ergebnisse</a> /38/:</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th align="right">Real</th>
+<th align="right">User</th>
+<th align="right">Sys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nift</td>
+<td align="right">1.107</td>
+<td align="right">1.846</td>
+<td align="right">1.982</td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="right">4.222</td>
+<td align="right">11.644</td>
+<td align="right">1.276</td>
+</tr>
+</tbody>
+</table>
+<p>Nift ist in C, C++ und Lua geschrieben, Source Code zu Nift ist in <a href="https://github.com/nifty-site-manager/nsm">GitHub</a> /39/. Programmierer ist <a href="https://n-ham.com">Nicholas Ham</a> /40/.</p>
+<h2>Diskussion der Ergebnisse</h2>
+<p>Wie in der Einleitung erwähnt, so würde man erwarten, daß compilierte Sprachen, wie Go und Rust, die Programmiersprache PHP bei der Performance in die Schranken verweisen. Wir hatten oben in der isolierten Betrachtung gesehen, daß PHP in der Tat gegen C, Java und LuaJIT performance-mäßig keine Chance hat. Wenn man jedoch ein Gesamtsystem betrachtet, wo mehrere Komponenten zusammenspielen, dann kann man durch geschickten Aufruf von C Routinen, in unserem Fall per FFI und durch geeignete Verwendung von PHP Extensions die performance-kritischen Stellen abmildern oder sogar komplett unschädlich machen. In unserem Falle sorgen dann die optimierten C Routinen sogar für eine Geschwindigkeit, die höher ist als die von Go und Rust. Das gilt insbesondere auch für JavaScript oder Node, die zwar individuell durchaus performant sind, aber PHP mit geeigneten C Routinen saust dann doch davon. Damit keine Mißverständnisse aufkommen: Würden Hugo oder Zola ebenfalls MD4C verwenden, so würden sie ihrerseits davon entsprechend profitieren. Analog gilt das für die Verwendung des Yaml-Parsers. MD4C wurde gezielt in C entwickelt mit besonderem Augenmerk auf Geschwindigkeit und Speicherverbrauch. Dieser Aufwand und diese Sorgfalt zahlt sich natürlich aus. Manchmal hat es den Eindruck, daß die Programmierer glauben, daß nur weil etwas in C/C++, Go oder Rust programmiert sei, dann müsse es deswegen schon schnell sein. Wie sagte so schön Prof. Dr. Treusch in der Physik-Vorlesung: &quot;Es gilt das Gesetz von der Erhaltung der Mühsal&quot;.</p>
+<h2>Links und Literatur</h2>
+<ol>
+<li><a href="https://daringfireball.net/projects/markdown">https://daringfireball.net/projects/markdown</a></li>
+<li><a href="https://de.wikipedia.org/wiki/ReStructuredText">https://de.wikipedia.org/wiki/ReStructuredText</a></li>
+<li><a href="https://jamstack.org/generators">https://jamstack.org/generators</a></li>
+<li><a href="https://eklausmeier.goip.de/blog/2017/04-24-converting-wordpress-export-file-to-hugo">https://eklausmeier.goip.de/blog/2017/04-24-converting-wordpress-export-file-to-hugo</a></li>
+<li><a href="https://eklausmeier.goip.de/blog/2017/06-19-contributing-to-hugo-static">https://eklausmeier.goip.de/blog/2017/06-19-contributing-to-hugo-static</a></li>
+<li><a href="https://saaze.dev">https://saaze.dev</a></li>
+<li><a href="https://gilbitron.me">https://gilbitron.me</a></li>
+<li><a href="https://eklausmeier.goip.de/blog/2021/10-31-simplified-saaze/">https://eklausmeier.goip.de/blog/2021/10-31-simplified-saaze/</a></li>
+<li><a href="https://www.mathjax.org">https://www.mathjax.org</a></li>
+<li><a href="https://mermaid-js.github.io/mermaid">https://mermaid-js.github.io/mermaid</a></li>
+<li><a href="https://codepen.io">https://codepen.io</a></li>
+<li><a href="https://www.zend.com/blog/php-foreign-function-interface-ffi">https://www.zend.com/blog/php-foreign-function-interface-ffi</a></li>
+<li><a href="https://luajit.org">https://luajit.org</a></li>
+<li><a href="https://luajit.org/contact.html">https://luajit.org/contact.html</a></li>
+<li><a href="https://www.php.net/manual/en/intro.ffi.php">https://www.php.net/manual/en/intro.ffi.php</a></li>
+<li><a href="https://www.amazon.de/-/en/Sara-Golemon/dp/067232704X">https://www.amazon.de/-/en/Sara-Golemon/dp/067232704X</a> &quot;Sara Golemon: Extending and Embedding PHP, Sams Publishing, 2006&quot;</li>
+<li><a href="https://www.zend.com/sites/zend/files/pdfs/whitepaper-zend-php-extensions.pdf">https://www.zend.com/sites/zend/files/pdfs/whitepaper-zend-php-extensions.pdf</a></li>
+<li><a href="https://github.com/erusev/parsedown-extra">https://github.com/erusev/parsedown-extra</a></li>
+<li><a href="https://erusev.com">https://erusev.com</a></li>
+<li><a href="https://github.com/mity/md4c">https://github.com/mity/md4c</a></li>
+<li><a href="https://github.com/mity">https://github.com/mity</a></li>
+<li><a href="https://talk.commonmark.org/t/why-is-md4c-so-fast-c/2520/12">https://talk.commonmark.org/t/why-is-md4c-so-fast-c/2520/12</a></li>
+<li><a href="https://github.com/commonmark/cmark/blob/master/benchmarks.md">https://github.com/commonmark/cmark/blob/master/benchmarks.md</a></li>
+<li><a href="https://pecl.php.net/package/xhprof">https://pecl.php.net/package/xhprof</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hack_(programming_language)">https://en.wikipedia.org/wiki/Hack_(programming_language)</a></li>
+<li><a href="https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads">https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads</a></li>
+<li><a href="https://drewdevault.com/2021/11/16/Cash-for-leftpad.html">https://drewdevault.com/2021/11/16/Cash-for-leftpad.html</a></li>
+<li><a href="https://symfony.com/doc/current/components/finder.html">https://symfony.com/doc/current/components/finder.html</a></li>
+<li><a href="https://pecl.php.net/package/yaml">https://pecl.php.net/package/yaml</a></li>
+<li><a href="https://thinkmobiles.com/blog/php-vs-nodejs">https://thinkmobiles.com/blog/php-vs-nodejs</a></li>
+<li><a href="https://blog.famzah.net/2016/09/10/cpp-vs-python-vs-php-vs-java-vs-others-performance-benchmark-2016-q3">https://blog.famzah.net/2016/09/10/cpp-vs-python-vs-php-vs-java-vs-others-performance-benchmark-2016-q3</a></li>
+<li><a href="https://eklausmeier.goip.de/blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl">https://eklausmeier.goip.de/blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl</a></li>
+<li><a href="https://css-tricks.com/comparing-static-site-generator-build-times">https://css-tricks.com/comparing-static-site-generator-build-times</a></li>
+<li><a href="https://github.com/grego/ssg-bench">https://github.com/grego/ssg-bench</a></li>
+<li><a href="https://www.getblades.org">https://www.getblades.org</a></li>
+<li><a href="https://mustache.github.io">https://mustache.github.io</a></li>
+<li><a href="https://nift.dev">https://nift.dev</a></li>
+<li><a href="https://hugo-vs-nift.gitlab.io">https://hugo-vs-nift.gitlab.io</a></li>
+<li><a href="https://github.com/nifty-site-manager/nsm">https://github.com/nifty-site-manager/nsm</a></li>
+<li><a href="https://n-ham.com">https://n-ham.com</a></li>
+</ol>
+<p><strong>Autoreninfo:</strong> Elmar Klausmeier, Jahrgang 64, war nach dem Studium der Mathematik und Informatik an der Universität Dortmund 5 Jahre in der IT-Abteilung der Westdeutschen Landesbank, heute Portigon, beschäftigt. Seit über 25 Jahren ist er bei der Sopra Steria SE Unternehmensberatung. Schwerpunktmäßig ist er in der Beratung von Banken tätig. Die Meinungen und Aussagen in diesem Artikel sind vom Autor und geben nicht notwendigerweise die Meinung des Arbeitgebers und seiner Kunden wieder.</p>
+<p><img src="../../../img/ElmarCommerzbank.jpg" alt="Photo"></p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Ein+Static+Site+Generator+in+PHP%2C+schneller+als+Hugo+oder+Zola%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Ein+Static+Site+Generator+in+PHP%2C+schneller+als+Hugo+oder+Zola&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola&amp;title=Ein+Static+Site+Generator+in+PHP%2C+schneller+als+Hugo+oder+Zola" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Ein+Static+Site+Generator+in+PHP%2C+schneller+als+Hugo+oder+Zola&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Ein+Static+Site+Generator+in+PHP%2C+schneller+als+Hugo+oder+Zola%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/02-25-ein-static-site-generator-in-php-schneller-als-hugo-oder-zola" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="/jscss/prism.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>The Cost of Installing wine</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2014-09-16 19:37:44">16th September 2014</time>, 2 min read</p>
+<h1>The Cost of Installing wine</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine">eklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine</a>.</p>
+<br>
+<p>German tax laws requires you to issue a tax declaration if you earn more than a certain threshold or own a company. To create this tax declaration you needed the so called <a href="https://www.elster.de/" title="Elster-Software">Elster-Software</a> which only runs under <a href="http://windows.microsoft.com/" title="Microsoft Windows">Microsoft Windows</a>. Luckily there now seems to be a <a href="https://www.elsteronline.de" title="ElsterOnline">web-form</a> for doing the same thing.</p>
+<p>The following packages need to be installed if one wants or needs <a href="https://www.winehq.org/" title="wine"><code>wine</code></a>:</p>
+<pre><code>The following NEW packages will be installed:
+  attr binfmt-support cabextract cups-bsd fonts-droid fonts-horai-umefont fonts-unfonts-core fonts-wqy-microhei gcc-4.8-base:i386 gcc-4.9-base:i386
+  gnome-exe-thumbnailer icoutils libaio1 libasn1-8-heimdal:i386 libasound2:i386 libasound2-plugins:i386 libasyncns0:i386 libavahi-client3:i386
+  libavahi-common-data:i386 libavahi-common3:i386 libc6:i386 libcapi20-3 libcapi20-3:i386 libcgmanager0:i386 libcomerr2:i386 libcups2:i386
+  libdb5.3:i386 libdbus-1-3:i386 libdrm-intel1:i386 libdrm-nouveau2:i386 libdrm-radeon1:i386 libdrm2:i386 libelf1:i386 libexif12:i386 libexpat1:i386
+  libffi6:i386 libfile-copy-recursive-perl libflac8:i386 libfontconfig1:i386 libfreetype6:i386 libgcc1:i386 libgcrypt11:i386 libgd3:i386 libgif4:i386
+  libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 libglapi-mesa:i386 libglib2.0-0:i386 libglu1-mesa:i386 libgnutls26:i386 libgpg-error0:i386
+  libgphoto2-6:i386 libgphoto2-port10:i386 libgpm2:i386 libgssapi-krb5-2:i386 libgssapi3-heimdal:i386 libgstreamer-plugins-base0.10-0:i386
+  libgstreamer0.10-0:i386 libhcrypto4-heimdal:i386 libhdb9-heimdal libheimbase1-heimdal:i386 libheimntlm0-heimdal:i386 libhx509-5-heimdal:i386
+  libice6:i386 libieee1284-3:i386 libjack-jackd2-0:i386 libjbig0:i386 libjpeg-turbo8:i386 libjpeg8:i386 libjson-c2:i386 libk5crypto3:i386
+  libkdc2-heimdal libkeyutils1:i386 libkrb5-26-heimdal:i386 libkrb5-3:i386 libkrb5support0:i386 liblcms2-2:i386 libldap-2.4-2:i386 libllvm3.4:i386
+  libltdl7:i386 liblzma5:i386 libmpg123-0 libmpg123-0:i386 libncurses5:i386 libnih-dbus1:i386 libnih1:i386 libodbc1 libogg0:i386 libopenal1:i386
+  liborc-0.4-0:i386 libosmesa6 libosmesa6:i386 libp11-kit-gnome-keyring libp11-kit-gnome-keyring:i386 libp11-kit0:i386 libpciaccess0:i386 libpcre3:i386
+  libpng12-0:i386 libpulse0:i386 libroken18-heimdal:i386 libsamplerate0:i386 libsane:i386 libsasl2-2:i386 libsasl2-modules:i386
+  libsasl2-modules-db:i386 libselinux1:i386 libsm6:i386 libsndfile1:i386 libspeexdsp1:i386 libsqlite3-0:i386 libssl1.0.0:i386 libstdc++6:i386
+  libtasn1-6:i386 libtiff5:i386 libtinfo5:i386 libtxc-dxtn-s2tc0:i386 libudev1:i386 libusb-1.0-0:i386 libuuid1:i386 libv4l-0:i386 libv4lconvert0:i386
+  libvorbis0a:i386 libvorbisenc2:i386 libvpx1:i386 libwind0-heimdal:i386 libwrap0:i386 libx11-6:i386 libx11-xcb1:i386 libxau6:i386 libxcb-dri2-0:i386
+  libxcb-dri3-0:i386 libxcb-glx0:i386 libxcb-present0:i386 libxcb-sync1:i386 libxcb1:i386 libxcomposite1:i386 libxcursor1:i386 libxdamage1:i386
+  libxdmcp6:i386 libxext6:i386 libxfixes3:i386 libxi6:i386 libxinerama1:i386 libxml2:i386 libxpm4:i386 libxrandr2:i386 libxrender1:i386
+  libxshmfence1:i386 libxslt1.1:i386 libxt6:i386 libxxf86vm1:i386 ocl-icd-libopencl1 ocl-icd-libopencl1:i386 odbcinst odbcinst1debian2 p11-kit-modules
+  p11-kit-modules:i386 p7zip python-dnspython samba samba-dsdb-modules samba-vfs-modules tdb-tools ttf-mscorefonts-installer ttf-wqy-microhei unixodbc
+  unzip update-inetd winbind wine wine-gecko2.21 wine-gecko2.21:i386 wine-mono0.0.8 wine1.6 wine1.6-amd64 wine1.6-i386:i386 winetricks zip zlib1g:i386
+The following packages will be upgraded:
+  libcgmanager0 libelf1 libfreetype6 libfreetype6-dev libjbig0 libsane libsane-common libselinux1 libsmbclient libssl1.0.0 libtiff5 libudev1
+  libwbclient0 libxml2 python-samba samba-common samba-common-bin samba-libs smbclient udev
+20 upgraded, 179 newly installed, 1 to remove and 86 not upgraded.
+Need to get 196 MB of archives.
+After this operation, 634 MB of additional disk space will be used.
+Do you want to continue? [Y/n] 
+</code></pre>
+<p>So a complete CD for this imbecile <a href="http://windows.microsoft.com/" title="Microsoft Windows">Microsoft Windows</a>!</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=The+Cost+of+Installing+wine%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=The+Cost+of+Installing+wine&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine&amp;title=The+Cost+of+Installing+wine" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=The+Cost+of+Installing+wine&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=The+Cost+of+Installing+wine%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2014/09-16-the-cost-of-installing-wine" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#Linux>Linux</a>, <a href=../../../aux/categories/#tax>tax</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#tax-declaration>tax declaration</a>, <a href=../../../aux/tags/#wine>wine</a>, <a href=../../../aux/tags/#ELSTER>ELSTER</a>, <a href=../../../aux/tags/#Windows>Windows</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>Linux:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-11-opengl-program-earth-with-moon-rotating-around-sun">2013-01-11: OpenGL Program: Earth with Moon Rotating around Sun</a></li>
+		<li><a href="../../../blog/2013/01-29-inotify-tools-inotifywait">2013-01-29: inotify-tools: inotifywait</a></li>
+		<li><a href="../../../blog/2013/02-12-ext3-vs-ext4">2013-02-12: ext3 vs. ext4</a></li>
+		<li><a href="../../../blog/2013/02-17-jpilot-dump">2013-02-17: jpilot-dump + jpilot-merge</a></li>
+		<li><a href="../../../blog/2013/02-24-dead-keys-and-compose-key">2013-02-24: Dead Keys and Compose Key</a></li>
+		<li><a href="../../../blog/2013/02-27-enhancements-to-j-pilot">2013-02-27: Possible Enhancements to J-Pilot</a></li>
+		<li><a href="../../../blog/2013/03-21-linux-3-8-4-compile-times">2013-03-21: linux-3.8.4: Compile times</a></li>
+		<li><a href="../../../blog/2013/04-21-counting-to-ten-on-linux">2013-04-21: Counting to Ten on Linux</a></li>
+		<li><a href="../../../blog/2013/04-30-linux-3-9-compile-times">2013-04-30: linux-3.9: Compile times</a></li>
+		<li><a href="../../../blog/2013/05-05-phoronix-nvidia-vs-nouveau-drivers-on-ubuntu-13-04">2013-05-05: Phoronix: NVIDIA vs. Nouveau Drivers On Ubuntu 13.04</a></li>
+		<li><a href="../../../blog/2013/05-06-john-raff-dmitry-sandalov-access-google-translate-from-a-terminal">2013-05-06: John Raff / Dmitry Sandalov: Access Google translate from a terminal</a></li>
+		<li><a href="../../../blog/2013/05-15-porting-source-to-linux-valves-lessons-learned">2013-05-15: Porting Source to Linux - Valve's Lessons Learned</a></li>
+		<li><a href="../../../blog/2013/05-16-cuda-without-x">2013-05-16: CUDA without X Window System</a></li>
+		<li><a href="../../../blog/2013/05-29-how-to-use-truetype-fonts-in-xterm-or-uxterm">2013-05-29: How to use TrueType Fonts in xterm or uxterm</a></li>
+		<li><a href="../../../blog/2013/06-09-mainframe-rehosting-cost-reduction-hardware-sizing-tools-and-methodology">2013-06-09: Mainframe Rehosting: Cost Reduction, Hardware Sizing, Tools, and Methodology</a></li>
+		<li><a href="../../../blog/2013/08-25-copy-directories-with-symbolic-links-via-ssh">2013-08-25: Copy Directories with Symbolic Links via ssh</a></li>
+		<li><a href="../../../blog/2013/09-08-inhibit-annoying-message-of-the-day-in-ubuntu">2013-09-08: Inhibit Annoying Message of the Day in Ubuntu</a></li>
+		<li><a href="../../../blog/2013/09-12-dramatic-faster-sorting-in-linux-using-nsort">2013-09-12: Dramatic Faster Sorting in Linux Using Nsort</a></li>
+		<li><a href="../../../blog/2013/09-29-re-installing-grub-when-ms-windows-destroyed-it">2013-09-29: Re-installing Grub when MS Windows Destroyed It</a></li>
+		<li><a href="../../../blog/2013/10-02-force-rsync-not-to-use-timestamps">2013-10-02: Force rsync Not To Use Timestamps</a></li>
+		<li><a href="../../../blog/2013/11-30-working-with-system-v-ipc-queues">2013-11-30: Working with System V IPC queues</a></li>
+		<li><a href="../../../blog/2013/12-12-linux-commands-expect-and-kibitz">2013-12-12: Linux commands: expect and kibitz</a></li>
+		<li><a href="../../../blog/2013/12-21-what-is-generally-better-64-bit-or-32-bit">2013-12-21: What is generally better: 64-bit or 32-bit?</a></li>
+		<li><a href="../../../blog/2014/01-07-plotting-power-consumption-of-my-desktop-pc">2014-01-07: Plotting Power Consumption of my Desktop PC</a></li>
+		<li><a href="../../../blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="../../../blog/2014/01-13-changing-euid-effective-user-id">2014-01-13: Changing euid (effective user ID)</a></li>
+		<li><a href="../../../blog/2014/01-15-ignoring-security-certificate-errors-in-google-chrome">2014-01-15: Ignoring Security Certificate Errors in Google Chrome</a></li>
+		<li><a href="../../../blog/2014/02-09-scheduling-cron-jobs-on-business-days">2014-02-09: Scheduling Cron Jobs on Business Days</a></li>
+		<li><a href="../../../blog/2014/03-23-enabling-power-aware-applications-on-linux-using-cyrogenic-module">2014-03-23: Enabling Power-Aware Applications on Linux Using Cyrogenic Module</a></li>
+		<li><a href="../../../blog/2014/04-01-youtube-video-to-mp3">2014-04-01: Youtube video to mp3</a></li>
+		<li><a href="../../../blog/2014/04-14-syncing-with-j-pilot-via-bluetooth">2014-04-14: Syncing with J-Pilot via Bluetooth</a></li>
+		<li><a href="../../../blog/2014/04-26-installing-ubuntu-14-04-server-edition">2014-04-26: Installing Ubuntu 14.04 Server Edition</a></li>
+		<li><a href="../../../blog/2014/05-15-patching-faulty-edid-information">2014-05-15: Patching Faulty EDID Information</a></li>
+		<li><a href="../../../blog/2014/05-30-installing-missing-debian-packages-for-google-chrome">2014-05-30: Installing Missing Debian Packages for Google Chrome</a></li>
+		<li><a href="../../../blog/2014/06-01-setting-up-luksdm-crypt-for-external-usb-drive">2014-06-01: Setting-Up LUKS/dm-crypt for External USB-Drive</a></li>
+		<li><a href="../../../blog/2014/07-07-creating-user-account-with-empty-password-on-linux">2014-07-07: Creating User Account With Empty Password on Linux</a></li>
+		<li><a href="../../../blog/2014/07-12-hdmi-audio-on-intel-nuc">2014-07-12: HDMI Audio on Intel NUC</a></li>
+		<li><a href="../../../blog/2014/08-08-google-chrome-became-a-performance-hog">2014-08-08: Google Chrome Became a Performance Hog</a></li>
+		<li><a href="../../../blog/2014/10-27-effect-of-optimizer-in-gcc-on-intelamd-and-power8">2014-10-27: Effect of Optimizer in gcc on Intel/AMD and Power8</a></li>
+		<li><a href="../../../blog/2015/01-17-setting-up-slurm-on-multiple-machines">2015-01-17: Setting up SLURM on Multiple Machines</a></li>
+		<li><a href="../../../blog/2015/03-06-testing-file-size-limits">2015-03-06: Testing file-size limits</a></li>
+		<li><a href="../../../blog/2015/10-05-linux-pam-and-etcshells">2015-10-05: Linux pam and /etc/shells</a></li>
+		<li><a href="../../../blog/2015/11-07-nginx-413-request-entity-too-large-file-upload-issue">2015-11-07: nginx: 413 Request Entity Too Large - File Upload Issue</a></li>
+		<li><a href="../../../blog/2016/02-03-performance-comparison-mmap-versus-read-versus-fread">2016-02-03: Performance Comparison of mmap() versus read() versus fread()</a></li>
+		<li><a href="../../../blog/2016/05-02-no-youtube-videos-on-google-chrome-v50">2016-05-02: No YouTube Videos on Google Chrome v50</a></li>
+		<li><a href="../../../blog/2016/09-28-libreoffice-impress-becoming-very-slow-after-copypaste">2016-09-28: LibreOffice Impress Becoming Very Slow After Copy/Paste</a></li>
+		<li><a href="../../../blog/2016/10-04-setting-keyboard-language-in-icewm">2016-10-04: Setting Keyboard-Language in IceWM</a></li>
+		<li><a href="../../../blog/2016/10-18-running-bacman-in-parallel">2016-10-18: Running bacman in parallel</a></li>
+		<li><a href="../../../blog/2016/10-26-bluetooth-headphones-in-arch-linux">2016-10-26: Bluetooth Headphones in Arch Linux</a></li>
+		<li><a href="../../../blog/2016/12-14-slurmd-confused-of-pid-file">2016-12-14: slurmd confused of pid-file</a></li>
+		<li><a href="../../../blog/2017/01-30-downgrading-pulseaudio-with-downgrade-sh">2017-01-30: Downgrading PulseAudio with downgrade.sh</a></li>
+		<li><a href="../../../blog/2017/02-13-switching-from-ext4-to-btrfs">2017-02-13: Switching from ext4 to btrfs</a></li>
+		<li><a href="../../../blog/2017/03-15-make-usb-stick-bootable">2017-03-15: Make USB Stick Bootable</a></li>
+		<li><a href="../../../blog/2017/03-20-wiping-disks">2017-03-20: Wiping Disks</a></li>
+		<li><a href="../../../blog/2017/04-14-using-odroid-as-ip-router">2017-04-14: Using Odroid as IP Router</a></li>
+		<li><a href="../../../blog/2017/04-19-browsing-linux-kernel-source-with-grokbit">2017-04-19: Browsing Linux Kernel Source with Grokbit</a></li>
+		<li><a href="../../../blog/2018/02-13-unix-sort-issue">2018-02-13: Unix sort Issue</a></li>
+		<li><a href="../../../blog/2018/03-14-set-up-lets-encrypt-for-hiawatha-web-server">2018-03-14: Set-Up "Let's Encrypt" for Hiawatha Web-Server</a></li>
+		<li><a href="../../../blog/2018/04-17-remote-unlocking-of-encrypted-disks">2018-04-17: Remote Unlocking of Encrypted Disks</a></li>
+		<li><a href="../../../blog/2018/05-03-instant-messaging-client-pidgin-and-skype-lync">2018-05-03: Instant Messaging Client Pidgin and Skype / Lync</a></li>
+		<li><a href="../../../blog/2018/05-17-using-scooter-software-beyond-compare">2018-05-17: Using Scooter Software Beyond Compare</a></li>
+		<li><a href="../../../blog/2018/06-15-balking-arm-archlinux-update">2018-06-15: Balking ARM ArchLinux Update</a></li>
+		<li><a href="../../../blog/2020/01-05-slurmctld-showing-nodes-as-drain">2020-01-05: slurmctld showing nodes as 'drain'</a></li>
+		<li><a href="../../../blog/2020/03-26-sharing-terminal-screen-using-tmux">2020-03-26: Sharing Terminal Screen Using Tmux</a></li>
+		<li><a href="../../../blog/2020/07-14-blocking-ip-addresses-with-ipset">2020-07-14: Blocking IP addresses with ipset</a></li>
+		<li><a href="../../../blog/2020/08-29-configure-boot-settings-in-uefi">2020-08-29: Configure boot settings in UEFI</a></li>
+		<li><a href="../../../blog/2021/01-23-dumpe2fs-when-was-my-hard-drive-first-formatted">2021-01-23: dumpe2fs: When was my hard-drive first formatted?</a></li>
+		<li><a href="../../../blog/2021/02-21-ssh-as-socks-server">2021-02-21: ssh as SOCKS server</a></li>
+		<li><a href="../../../blog/2021/02-28-analysis-and-usage-of-sshguard">2021-02-28: Analysis And Usage of SSHGuard</a></li>
+		<li><a href="../../../blog/2021/03-02-testing-j-pilot-feature-gtk3-branch">2021-03-02: Testing J-Pilot feature-gtk3 branch</a></li>
+		<li><a href="../../../blog/2021/03-15-add-disjoint-ip-addresses-to-sshguard-blacklist">2021-03-15: Add Disjoint IP Addresses To SSHGuard Blacklist</a></li>
+		<li><a href="../../../blog/2021/06-05-using-nuc-as-wlan-router">2021-06-05: Using NUC as WLAN Router</a></li>
+		<li><a href="../../../blog/2021/10-04-installing-ibm-cobol-for-linux-on-arch-linux">2021-10-04: Installing IBM COBOL for Linux on Arch Linux</a></li>
+		<li><a href="../../../blog/2021/10-26-copy-directories-to-ftp-server">2021-10-26: Copy Directories to FTP-Server</a></li>
+		<li><a href="../../../blog/2022/05-02-copy-archlinux-to-ssd">2022-05-02: Copy Arch Linux to SSD</a></li>
+		<li><a href="../../../blog/2022/05-06-multi-tenancy-ms-teams">2022-05-06: Multi Tenancy MS-Teams</a></li>
+		<li><a href="../../../blog/2022/12-10-updating-aur-package">2022-12-10: Updating AUR Package</a></li>
+		<li><a href="../../../blog/2023/03-30-sqlite3-sqldiff-command">2023-03-30: SQLite3 sqldiff command</a></li>
+		<li><a href="../../../blog/2023/08-07-cpio-command-cheat-sheet">2023-08-07: cpio command cheat sheet</a></li>
+		<li><a href="../../../blog/2023/08-13-installing-openlitespeed-on-arch-linux">2023-08-13: Installing OpenLiteSpeed on Arch Linux</a></li>
+	</ol>
+	<p>tax:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="../../../blog/2015/07-22-lexware-financial-office-pro-2015-does-not-work-with-wine">2015-07-22: Lexware Financial Office Pro 2015 does not work with wine</a></li>
+		<li><a href="../../../blog/2020/06-16-gunnar-uldalls-tax-tariff">2020-06-16: Gunnar Uldall's Tax Tariff</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+
+</body>
+</html>

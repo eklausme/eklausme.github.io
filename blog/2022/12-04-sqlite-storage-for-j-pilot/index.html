@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>SQLite Storage for J-Pilot</title>
+
+	<link href=/jscss/prism.css rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2022-12-04 18:00:00">4th December 2022</time>, 10 min read</p>
+<h1>SQLite Storage for J-Pilot</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot">eklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot</a>.</p>
+<br>
+<p>I am using <a href="https://en.wikipedia.org/wiki/J-Pilot">J-Pilot</a> since more than 20 years. I am using it on a daily basis. I do no longer use any Palm device. I had owned a <a href="https://en.wikipedia.org/wiki/Palm_III">Palm III</a>, a <a href="https://en.wikipedia.org/wiki/Palm_V">Palm V</a>, and a <a href="https://en.wikipedia.org/wiki/Palm_Tungsten">Tungsten</a>, but they all failed at some point in time, and are no longer usable. Therefore, I do no HotSync between PC and Palm device. I use J-Pilot as a stand-alone application. But I do copy my datebook, and address data to my Android devices, see <a href="../../../blog/2015/03-21-importing-calendar-data-to-google-calendar">Importing Calendar Data to Google-Calendar</a> and <a href="../../../blog/2020/03-19-j-pilot-data-on-android-phone-contacts">J-Pilot Data on Android Phone: Contacts</a>.</p>
+<p>My first Palm device, the Palm III, was a gift from my brother, who bought them at the <a href="https://www.sap.com/about/events/sapphire.html">SAPPHIRE</a> conference in the US. Before using this device, I kept my addresses in a MS-Word file, which I printed out on paper every few weeks, whenever too many changes were written on the previous paper. When I started with the Palm III, I was still using MS Windows. Therefore, I used the original Palm Windows application, which looks pretty similar to J-Pilot, well, no wonder. Starting in 2001 I began using Linux, and J-Pilot was one of my first applications in regular use.</p>
+<p>Around ten years ago I proposed to store the J-Pilot data in SQLite, see <a href="../../../blog/2013/02-27-enhancements-to-j-pilot">Possible Enhancements to J-Pilot</a>, instead of using the internal pdb/pc3-format. Two years ago I devised a datamodel for this, see <a href="../../../blog/2020/04-27-sql-datamodel-for-j-pilot">SQL Datamodel For J-Pilot</a>. I implemented a J-Pilot plugin, which stores J-Pilot data in SQLite, see <a href="../../../blog/2020/04-29-j-pilot-plugin-for-sqlite-export">J-Pilot Plugin For SQLite Export</a>. This plugin is working like an export mechanism, i.e., once you press a button, all data from the internal format is stored in SQLite — but J-Pilot itself still uses the internal pdb/pc3-format.</p>
+<p>Now I have implemented all the necessary changes within J-Pilot, so that J-Pilot no longer uses the internal pdb/pc3-format, but rather reads and writes all its data from/to SQLite. No pdb/pc3-files are used anymore. Also, the alarm file and the preference file is stored within SQLite. Only <code>jpilot.log</code>, <code>jpilotcss.default</code>, and <code>jpilot.plugins</code> remain as separate files. The rest is stored in <code>jptables.db</code>, a SQLite3 file.</p>
+<pre class="line-numbers"><code class="language-bash">$ ls -l .jpilot
+total 20308
+-rw-r--r--  1 klm klm    8750 Sep 12 16:20 jpilotcss.default
+-rw-------  1 klm klm       0 Mar 27  2021 jpilot.plugins
+-rw-------  1 klm klm 7217152 Dec  3 15:23 jptables.db
+drwxr-xr-x  2 klm klm    4096 Nov 26 18:33 old/
+drwxr-xr-x  2 klm klm    4096 Nov 26 17:16 plugins/
+</code></pre>
+<p>I also fixed the issues mentioned in <a href="../../../blog/2022/11-06-crashing-j-pilot">Crashing J-Pilot</a>. Another null-pointer exceptions in ToDo's was also fixed along the way.</p>
+<p>I am productive since 26-Nov-2022, i.e., I am only using the new version based on SQLite.</p>
+<p><strong>1. Code changes.</strong> Main program <code>jpilot.c</code> now uses <code>getopt()</code> so that options can be merged without given separate dashes for each individual option. For example, you can now start <code>jpilot</code> like so</p>
+<pre class="line-numbers"><code class="language-bash">jpilot -Sdr
+</code></pre>
+<p>I added opions <code>-S</code> for SQLite storage and option <code>-r</code> to suppress permanent saving into preference file. I noticed that J-Pilot constantly writes into <code>jpilot.rc</code>. In many cases this is not necessary, or just superflous. Therefore this additional option <code>-r</code>. When you start <code>jpilot</code> <em>without</em> <code>-S</code> it will behave as before, i.e., everything will be saved in pdb/pc3-files.</p>
+<p>The other executables were not changed to use <code>getopt()</code>, as they lose their importance, when data is stored in SQLite. For example, <code>jpilot-dump</code> is no longer required, when data can easily be accessed via SQLite. Same with <code>jpilot-merge</code>. <code>jpilot-dump</code> reads pdb/pc3-files and produces text files. <code>jpilot-merge</code> combines pdb and pc3 into a single pdb file.</p>
+<p>Overall the changes in the existing code basis are very few. Essentially they look like this:</p>
+<pre class="line-numbers"><code class="language-C">if (glob_sqlite) jpsqlite_DatebookSEL(&amp;cel,NULL,1);
+else get_days_calendar_events2(&amp;cel, NULL, 2, 2, 1, CATEGORY_ALL, NULL);
+</code></pre>
+<p>All interaction with SQLite is in <code>libsqlite.c</code>.</p>
+<p>As proposed in <a href="../../../blog/2013/02-27-enhancements-to-j-pilot">Possible Enhancements to J-Pilot</a> the search routine no longer makes unnecessary <code>malloc()</code> and <code>free()</code> calls, i.e., <code>jp_strstr()</code> now uses <code>strcasestr()</code>.</p>
+<p>Serious development started in October and finished in November 2022. In November I tried to check each functionality in J-Pilot at least once, so that it still works with SQLite. I made quite intensive use of gdb, using Marc Heisenko's <a href="https://darkdust.net/files/GDB%20Cheat%20Sheet.pdf">cheat-sheet</a>. The debug-option in J-Pilot, <code>-d</code>, also proved to be very valuable to see which functions are involved.</p>
+<div class=mermaid>
+%%{init: { 'gitGraph':{'mainBranchName':'master'} } }%%
+gitGraph
+    commit id: "ccb225a"
+    commit id: "6aaded5"
+    branch feature-gtk3
+    commit id: "9ba0ce5"
+    commit id: "0a8989b" tag: "2.0.1"
+    commit id: "..."
+    commit id: "200d954" type: HIGHLIGHT
+    commit id: "7ec8251"
+    commit id: "73f4179"
+    checkout master
+    commit id: "5170c25"
+    commit id: "8c43c5b"
+</div>
+<p>I started development at Git commit <code>200d954</code> in the <code>feature-gtk3</code> branch, but incorporated the changes contained in the two later commits. Though, they lead to a warning during compilation.</p>
+<p>Overview of lines of code.</p>
+<table><tr>
+    <td><table>
+<tr><th> LOC   <th> words  <th>chars   <th>C file
+<tr><td>    526<td>    1577<td>   15486<td> ./address.c
+<tr><td>   4740<td>   13369<td>  196368<td> ./address_gui.c
+<tr><td>   1082<td>    2825<td>   31590<td> ./alarms.c
+<tr><td>    633<td>    1800<td>   18635<td> ./calendar.c
+<tr><td>   1020<td>    3080<td>   37367<td> ./category.c
+<tr><td>    803<td>    2277<td>   22486<td> ./contact.c
+<tr><td>     94<td>     545<td>    3599<td> ./cp1250.c
+<tr><td>   1273<td>    3599<td>   35669<td> ./dat.c
+<tr><td>    890<td>    3082<td>   27454<td> ./datebook.c
+<tr><td>   5936<td>   16826<td>  235733<td> ./datebook_gui.c
+<tr><td>    387<td>    1035<td>   13964<td> ./dialer.c
+<tr><td>    554<td>    1594<td>   13309<td> ./dialer/jpilot-dial.c
+<tr><td>   2195<td>    6110<td>   77753<td> ./Expense/expense.c
+<tr><td>    369<td>     982<td>   12981<td> ./export_gui.c
+<tr><td>     86<td>     148<td>    2494<td> ./font.c
+<tr><td>   4873<td>   38304<td>  245635<td> ./icons/icons.c
+<tr><td>    436<td>    1211<td>   14841<td> ./import_gui.c
+<tr><td>    477<td>    1278<td>   16768<td> ./install_gui.c
+<tr><td>    278<td>     814<td>    9608<td> ./install_user.c
+<tr><td>    244<td>    1017<td>    7150<td> ./japanese.c
+<tr><td>     76<td>     307<td>    2467<td> ./jp-contact.c
+<tr><td>   2242<td>    6554<td>   76522<td> ./jpilot.c
+<tr><td>   1916<td>    5521<td>   71820<td> ./jpilot-dump.c
+<tr><td>    317<td>    1020<td>    9877<td> ./jpilot-merge.c
+<tr><td>    282<td>     982<td>    9037<td> ./jpilot-sync.c
+<tr><td>    859<td>    2483<td>   30071<td> ./jpsqlite/jpsqlite.c
+<tr><td>   2903<td>    8331<td>  101505<td> ./KeyRing/keyring.c
+<tr><td>    950<td>    2500<td>   25866<td> ./libplugin.c
+<tr><td>   2018<td>    6174<td>   86382<td> ./libsqlite.c
+<tr><td>    215<td>     715<td>    6094<td> ./log.c
+<tr><td>    386<td>    1079<td>   10269<td> ./memo.c
+<tr><td>   2049<td>    5748<td>   72251<td> ./memo_gui.c
+<tr><td>    544<td>    1608<td>   18430<td> ./monthview_gui.c
+<tr><td>    329<td>    1053<td>    9129<td> ./otherconv.c
+<tr><td>    367<td>    1086<td>   10509<td> ./password.c
+<tr><td>    105<td>     332<td>    2875<td> ./pidfile.c
+<tr><td>    445<td>    1331<td>   13382<td> ./plugins.c
+<tr><td>    916<td>    2613<td>   26913<td> ./prefs.c
+<tr><td>   1012<td>    2898<td>   38779<td> ./prefs_gui.c
+<tr><td>   1340<td>    3507<td>   40224<td> ./print.c
+<tr><td>    355<td>     975<td>   12070<td> ./print_gui.c
+<tr><td>    906<td>    4400<td>   37995<td> ./print_headers.c
+<tr><td>    453<td>     649<td>   32340<td> ./print_logo.c
+<tr><td>    383<td>    1172<td>   15482<td> ./restore_gui.c
+<tr><td>    127<td>     319<td>    4695<td> ./russian.c
+<tr><td>    741<td>    1935<td>   26316<td> ./search_gui.c
+<tr><td>   3862<td>   12436<td>  128907<td> ./sync.c
+<tr><td>    118<td>     401<td>    3545<td> ./SyncTime/synctime.c
+<tr><td>    437<td>    1542<td>   12280<td> ./task.c
+<tr><td>    520<td>    1446<td>   13885<td> ./todo.c
+<tr><td>   2769<td>    7564<td>  106979<td> ./todo_gui.c
+<tr><td>   3838<td>   11945<td>  120301<td> ./utils.c
+<tr><td>    403<td>    1170<td>   13742<td> ./weekview_gui.c
+<tr><td>  61079<td>  203269<td> 2229829<td> total
+    </table>
+    <td><table>
+<tr><th> LOC   <th> words  <th>chars   <th>header file
+<tr><td>    95<td>    428<td>   3527<td> ./address.h
+<tr><td>    30<td>    194<td>   1328<td> ./alarms.h
+<tr><td>    65<td>    287<td>   2633<td> ./calendar.h
+<tr><td>   205<td>    944<td>   5724<td> ./config.h
+<tr><td>    30<td>    175<td>   1156<td> ./cp1250.h
+<tr><td>   142<td>    662<td>   4833<td> ./datebook.h
+<tr><td>    53<td>    239<td>   2047<td> ./export.h
+<tr><td>   265<td>   1207<td>   9470<td> ./gettext.h
+<tr><td>    38<td>    185<td>   1283<td> ./i18n.h
+<tr><td>   278<td>    814<td>   5882<td> ./icons/appl_menu_icons.h
+<tr><td>   215<td>    695<td>   4607<td> ./icons/list_mini_icons.h
+<tr><td>   101<td>    388<td>   2828<td> ./icons/lock_icons.h
+<tr><td>    28<td>    146<td>   1063<td> ./install_user.h
+<tr><td>    30<td>    170<td>   1202<td> ./japanese.h
+<tr><td>    24<td>    156<td>   1110<td> ./jpilot.h
+<tr><td>    59<td>    269<td>   2073<td> ./jp-pi-contact.h
+<tr><td>   379<td>   1541<td>  11324<td> ./libplugin.h
+<tr><td>    53<td>    310<td>   2889<td> ./libsqlite.h
+<tr><td>    51<td>    258<td>   1935<td> ./log.h
+<tr><td>    39<td>    190<td>   1492<td> ./memo.h
+<tr><td>    39<td>    224<td>   1524<td> ./otherconv.h
+<tr><td>    51<td>    251<td>   1702<td> ./password.h
+<tr><td>    27<td>    152<td>   1076<td> ./pidfile.h
+<tr><td>    92<td>    384<td>   2797<td> ./pi-task.h
+<tr><td>    89<td>    312<td>   2819<td> ./plugins.h
+<tr><td>    23<td>    143<td>   1011<td> ./prefs_gui.h
+<tr><td>   187<td>    754<td>   6367<td> ./prefs.h
+<tr><td>    77<td>    318<td>   2847<td> ./print.h
+<tr><td>    28<td>    166<td>   1216<td> ./print_headers.h
+<tr><td>    22<td>    154<td>   1029<td> ./print_logo.h
+<tr><td>    26<td>    152<td>   1062<td> ./restore.h
+<tr><td>    29<td>    164<td>   1166<td> ./russian.h
+<tr><td>    49<td>    225<td>   1890<td> ./stock_buttons.h
+<tr><td>    59<td>    231<td>   1902<td> ./sync.h
+<tr><td>    68<td>    253<td>   2359<td> ./todo.h
+<tr><td>   592<td>   2267<td>  18441<td> ./utils.h
+<tr><td>  3638<td>  15408<td> 117614<td> total
+    </table>
+</table>
+<p><code>libsqlite.c</code> and <code>libsqlite.h</code> are entirely new. <code>libjpsqlite.c</code> is the plugin, which I wrote two years ago, see <a href="../../../blog/2020/04-29-j-pilot-plugin-for-sqlite-export">J-Pilot Plugin For SQLite Export</a>.</p>
+<p><strong>2. Limitations.</strong> The current implementation with storing all data in SQLite has some limitations:</p>
+<ol>
+<li>currently no HotSync with your Palm device</li>
+<li>no &quot;Calendar&quot;, just &quot;Datebook&quot; — main difference being the first having categories</li>
+<li>no contact (i.e., version 2 address), which has 39 fields, while version 1 (a.k.a. address) having 20 fields</li>
+<li>no undelete as all insertions, updates and deletions happen directly on the SQLite database</li>
+</ol>
+<p>I investigated whether I should also implement &quot;Calendar&quot; and &quot;Contact v2&quot;, but saw no compelling reason for me, so left that. If others raise their voice for that being included, I will surely reconsider.</p>
+<p><strong>3. File format.</strong> SQLite as file format has a number of advantages over the previous internal format stored in pdb/pc3 files. Below points are reproduced from <a href="https://sqlite.org/aff_short.html">SQLite As An Application File Format</a>:</p>
+<blockquote>
+<ol>
+<li>Better performance: Reading and writing from an SQLite database is often faster than reading and writing individual files from disk.</li>
+<li>Reduced complexity.</li>
+<li>Portability: The application file is portable across all operating systems, 32-bit and 64-bit and big- and little-endian architectures. I.e., SQLite can be read and written on Intel/AMD and ARM.</li>
+<li>Reliability: Content can be updated continuously and atomically so that little or no work is lost in a power failure or crash.</li>
+<li>Accessibility: SQLite database content can be viewed using a wide variety third-party tools. SQLite database files are recommended by the US Library of Congress as a storage format for long-term preservation of digital content.</li>
+</ol>
+</blockquote>
+<p><strong>4. Moving from pdb/pc3 to SQLite.</strong> I had written a J-Pilot plugin, which stores the internal format in SQLite format. This plugin is now part of the J-Pilot source-tree, similar to the Expense plugin. This allows an easy migration from old to new format. That way you can get warm with the new format, but still using the pdb/pc3 storage format. I used this approach for more than two years.</p>
+<p>The SQLite plugin and the sole storage in SQLite are two entirely separate things. One can use one without the other. I.e., one can use the SQLite plugin without actually storing the entire data in SQLite, and vice versa, once you have stored all your data in SQLite, then there is no real need for the plugin anymore.</p>
+<p><strong>5. Outlook.</strong> SQLite is the native data storage format for Android apps. Therefore, the next step would be to implement an Android app to continue to use the SQLite data format. The HotSync mechanism was outlined in <a href="../../../blog/2020/04-27-sql-datamodel-for-j-pilot">SQL Datamodel For J-Pilot</a>. Currently I am still unsure what route to follow:</p>
+<ol>
+<li><a href="https://en.wikipedia.org/wiki/Progressive_web_app">PWA</a> (progressive web app) making the use of an app-store unneccessary. The <a href="https://play.google.com/store/apps/details?id=com.weather.forecast.weatherchannel&amp;hl=en">Google Android weather app</a> is a prominent example of a PWA.</li>
+<li><a href="https://webassembly.org">WebAssembly</a> based app using current J-Pilot source.</li>
+<li>App programmed in <a href="https://en.wikipedia.org/wiki/Flutter_(software)">Flutter</a> using the Dart programming language. <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.walletnfcrel&amp;hl=en">Google Wallet</a> (a.k.a. Google Pay) is a prominent example of an app written in Flutter/Dart.</li>
+</ol>
+<p>All routes would provide the J-Pilot functionality on Android and iOS.</p>
+<p>The source code of J-Pilot is easy to read and understand. In particular, some longer functions contain all the processing required, instead of calling millions of small, but otherwise useless mini-functions. Nevertheless, some possible improvements:</p>
+<ol>
+<li>J-Pilot uses <a href="https://en.wikipedia.org/wiki/Automake">automake</a> to generate the final Makefile, which is quite arcane. A possible alternative would be <a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a>, or use a plain Makefile. Though, there is this saying, &quot;if it ain't broke, don't fix it&quot;.</li>
+<li>Definition of global variables should be concentrated in a single C file, possibly within a <code>struct</code> like so:</li>
+</ol>
+<pre class="line-numbers"><code class="language-C">struct {
+    int app, rc_file_write, date_time_flag, child_pid, sqlite;
+} glob;
+</code></pre>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=SQLite+Storage+for+J-Pilot%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=SQLite+Storage+for+J-Pilot&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot&amp;title=SQLite+Storage+for+J-Pilot" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=SQLite+Storage+for+J-Pilot&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=SQLite+Storage+for+J-Pilot%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2022/12-04-sqlite-storage-for-j-pilot" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#J-Pilot>J-Pilot</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#SQLite>SQLite</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>J-Pilot:</p>
+	<ol>
+		<li><a href="../../../blog/2013/02-17-jpilot-dump">2013-02-17: jpilot-dump + jpilot-merge</a></li>
+		<li><a href="../../../blog/2013/02-27-enhancements-to-j-pilot">2013-02-27: Possible Enhancements to J-Pilot</a></li>
+		<li><a href="../../../blog/2013/05-01-a-praise-for-icewm">2013-05-01: A Praise for IceWM</a></li>
+		<li><a href="../../../blog/2014/04-14-syncing-with-j-pilot-via-bluetooth">2014-04-14: Syncing with J-Pilot via Bluetooth</a></li>
+		<li><a href="../../../blog/2020/03-19-j-pilot-data-on-android-phone-contacts">2020-03-19: J-Pilot Data on Android Phone: Contacts</a></li>
+		<li><a href="../../../blog/2020/04-27-sql-datamodel-for-j-pilot">2020-04-27: SQL Datamodel For J-Pilot</a></li>
+		<li><a href="../../../blog/2020/04-29-j-pilot-plugin-for-sqlite-export">2020-04-29: J-Pilot Plugin For SQLite Export</a></li>
+		<li><a href="../../../blog/2020/06-09-splitting-and-anti-merging-vcard-files">2020-06-09: Splitting and anti-merging vCard files</a></li>
+		<li><a href="../../../blog/2021/03-02-testing-j-pilot-feature-gtk3-branch">2021-03-02: Testing J-Pilot feature-gtk3 branch</a></li>
+		<li><a href="../../../blog/2022/10-09-renumbering-j-pilot-sqlite-data">2022-10-09: Renumbering J-Pilot SQLite Data</a></li>
+		<li><a href="../../../blog/2022/11-06-crashing-j-pilot">2022-11-06: Crashing J-Pilot</a></li>
+		<li><a href="../../../blog/2023/04-08-j-pilot-usage-statistics">2023-04-08: J-Pilot Usage Statistics</a></li>
+		<li><a href="../../../blog/2023/05-06-accessing-j-pilot-data-from-mobile-and-web">2023-05-06: Accessing J-Pilot Data From Mobile And Web</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
+	<script src="/jscss/prism.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Filtering Bots and Crawlers from Access.log</title>
+
+	<link href=/jscss/prism.css rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2021-12-13 20:00:00">13th December 2021</time>, 9 min read</p>
+<h1>Filtering Bots and Crawlers from Access.log</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log">eklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log</a>.</p>
+<br>
+<p><strong>1. Problem statement.</strong> When you run a web-server on your machine many <a href="https://en.wikipedia.org/wiki/Internet_bot">bots</a> and <a href="https://en.wikipedia.org/wiki/Web_crawler">crawlers</a> will visit. When analysing how many &quot;real&quot; visitors you have, you should therefore suppress these entries in your analysis from your log file of the web-server.</p>
+<p>This blog is served by <a href="https://www.hiawatha-webserver.org">Hiawatha</a> web-server. Every visitor writes at least one entry into the web-server's log file. Hiawatha and many other web-servers call it access.log. Hiawatha has other log files, e.g., error.log, garbage.log, and system.log. An entry in access.log looks something like this:</p>
+<pre class="line-numbers"><code class="language-log">192.168.178.24|Mon 13 Dec 2021 11:37:03 +0100|200|6148|GET /blog/2014/09-20-advances-in-automotive-technology/ HTTP/1.1||Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36|Host: nucsaaze|Connection: keep-alive|Cache-Control: max-age=0|Upgrade-Insecure-Requests: 1|Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9|Sec-GPC: 1|Accept-Encoding: gzip, deflate|Accept-Language: en-US,en;q=0.9
+192.168.178.24|Mon 13 Dec 2021 11:37:04 +0100|200|168499|GET /img/RynoSingleWheel.jpg HTTP/1.1|http://nucsaaze/blog/2014/09-20-advances-in-automotive-technology/|Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36|Host: nucsaaze|Connection: keep-alive|Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8|Sec-GPC: 1|Accept-Encoding: gzip, deflate|Accept-Language: en-US,en;q=0.9
+192.168.178.24|Mon 13 Dec 2021 11:37:04 +0100|304|182|GET /img/LitMotorBike.jpg HTTP/1.1|http://nucsaaze/blog/2014/09-20-advances-in-automotive-technology/|Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36|Host: nucsaaze|Connection: keep-alive|Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8|Sec-GPC: 1|Accept-Encoding: gzip, deflate|Accept-Language: en-US,en;q=0.9|If-Modified-Since: Mon, 13 Dec 2021 10:14:34 GMT
+171.25.193.77|Mon 13 Dec 2021 12:58:31 +0100|200|6419|GET / HTTP/1.1||Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36|Host: 94.114.1.108:8443|Connection: close|Accept: */*|Accept-Encoding: gzip
+185.220.100.242|Mon 13 Dec 2021 12:58:36 +0100|200|2456|GET /favicon.ico HTTP/1.1||Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36|Host: 94.114.1.108:8443|Connection: close|Accept: */*|Accept-Encoding: gzip
+</code></pre>
+<p>Hiawatha's access.log has the following fields, separated by <code>|</code>:</p>
+<ol>
+<li>host</li>
+<li>date</li>
+<li>code</li>
+<li>size</li>
+<li>URL</li>
+<li>referer</li>
+<li>user agent</li>
+<li>and other fields</li>
+</ol>
+<p><strong>2. Examples.</strong> Here is the <a href="https://developers.google.com/search/docs/advanced/crawling/googlebot">Google-Bot</a>, seen in access.log, which is a highly welcomed crawler:</p>
+<pre class="line-numbers"><code class="language-log">66.249.76.169|Fri 10 Dec 2021 12:32:14 +0100|200|7037|GET /blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl/ HTTP/1.1||Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)|Host: eklausmeier.goip.de|Connection: keep-alive|Accept: text/html,application/xhtml+xml,application/signed-exchange;v=b3,application/xml;q=0.9,*/*;q=0.8|From: googlebot(at)googlebot.com|Accept-Encoding: gzip, deflate, br|If-Modified-Since: Fri, 19 Nov 2021 04:23:35 GMT
+</code></pre>
+<p>Here are two entries of the <a href="http://yandex.com/bots">Yandex-Bot</a>, also highly welcomed:</p>
+<pre class="line-numbers"><code class="language-log">5.255.253.106|Wed 08 Dec 2021 12:06:43 +0100|200|2761|GET /blog/2014/01-19-cisco-2014-annual-security-report-java-continues-to-be-most-vulnerable-of-all-web-exploits HTTP/1.1||Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)|Host: eklausmeier.goip.de|Connection: keep-alive|From: support@search.yandex.ru|Accept-Encoding: gzip,deflate|Accept: */*
+213.180.203.141|Wed 08 Dec 2021 12:06:44 +0100|200|2434|GET /blog/2013/12-08-surfing-the-internet-with-100-mbits HTTP/1.1||Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)|Host: eklausmeier.goip.de|Connection: keep-alive|From: support@search.yandex.ru|Accept-Encoding: gzip,deflate|Accept: */*
+</code></pre>
+<p>Here is an example of a bot, whose purpose is doubtful and probably just nonsense:</p>
+<pre class="line-numbers"><code class="language-log">45.155.205.233|Wed 08 Dec 2021 19:45:48 +0100|303|228|GET /index.php?s=/Index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=md5&amp;vars[1][]=HelloThinkPHP21 HTTP/1.1||Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36|Host: 94.114.1.108:443|Accept-Encoding: gzip|Connection: close
+</code></pre>
+<p>Some of the bots and crawlers identify themselves in the user-agent field, e.g., Google and Yandex. But unfortunately, many do not. Quite the contrary, they try to hide as normal browsers.</p>
+<p>Below Perl script <code>accesslogFilter</code> filters access.log so that only the &quot;real&quot; visitors remain. The script filters according:</p>
+<ol>
+<li>IP addresses: some bots and crawlers do not identify themselves, so we have to resort to naked addresses</li>
+<li>HTTP status codes</li>
+<li>identifying string in the user-agent field</li>
+</ol>
+<p><strong>3. Configuration.</strong> Here is the list of IP addresses I found to be &quot;annoying&quot; in any analysis:</p>
+<pre class="line-numbers"><code class="language-Perl">my %ips = (
+    '18.212.118.57' =&gt; 0, '18.232.89.176' =&gt; 0, '3.94.81.106' =&gt; 0,
+    '34.239.184.105' =&gt; 0, '54.80.126.99' =&gt; 0, '54.162.60.209' =&gt; 0,       # compute-1.amazonaws.com
+    '62.138.2.14' =&gt; 0, '62.138.2.214' =&gt; 0, '62.138.2.160' =&gt; 0,
+    '62.138.3.52' =&gt; 0, '62.138.6.15' =&gt; 0, '85.25.210.23' =&gt; 0,    # startdedicated.de
+    '66.240.192.138' =&gt; 0, '66.240.219.133' =&gt; 0, '66.240.219.146' =&gt; 0, '66.240.236.119' =&gt; 0,
+    '71.6.135.131' =&gt; 0, '71.6.146.185' =&gt; 0, '71.6.158.166' =&gt; 0, '71.6.165.200' =&gt; 0,
+    '71.6.167.142' =&gt; 0, '71.6.199.23' =&gt; 0, '80.82.77.33' =&gt; 0, '80.82.77.139' =&gt; 0,
+    '82.221.105.6' =&gt; 0, '82.221.105.7' =&gt; 0,       # shodan.io
+    '138.246.253.24' =&gt; 0, '106.55.250.60' =&gt; 0,    # various robots.txt reader
+    '127.0.0.1' =&gt; 0,       # localhost
+    '192.168.178.2' =&gt; 0, '192.168.178.20' =&gt; 0, '192.168.178.24' =&gt; 0,
+    '192.168.178.118' =&gt; 0, '192.168.178.249' =&gt; 0  # local network
+);
+</code></pre>
+<p>For example, <a href="https://www.shodan.io/">shodan.io</a> does not identify itself in the user-agent string. Therefore I simply identified them by using <code>nslookup</code>:</p>
+<pre class="line-numbers"><code class="language-bash">$ nslookup 82.221.105.7
+7.105.221.82.in-addr.arpa       name = census11.shodan.io.
+</code></pre>
+<p>Here is the list of HTTP status codes, which are filtered out:</p>
+<pre class="line-numbers"><code class="language-Perl">my %errorCode = ( 301 =&gt; 0, 302 =&gt; 0, 400 =&gt; 0, 403 =&gt; 0, 404 =&gt; 0, 405 =&gt; 0, 500 =&gt; 0, 501 =&gt; 0, 503 =&gt; 0, 505 =&gt; 0 );
+</code></pre>
+<p>Status code 404 would also be very useful to find links on my web-server which point to nowhere. But the bots are so numerous that it seems to be more beneficial to just filter it out.</p>
+<p>Here is the list of user-agent strings, which identify a bot or crawler:</p>
+<pre class="line-numbers"><code class="language-Perl">my %bots = (
+    adsbot =&gt; 0, adscanner =&gt; 0, ahrefsbot =&gt; 0, applebot =&gt; 0, 'archive.org_bot' =&gt; 0,
+    baiduspider =&gt; 0, bingbot =&gt; 0, blexbot =&gt; 0,
+    ccbot =&gt; 0, censysinspect =&gt; 0,
+    'clark-crawler2' =&gt; 0, crawler =&gt; 0, crawler2 =&gt; 0, 'crawler.php' =&gt; 0,
+    criteobot =&gt; 0, curl =&gt; 0,
+    dataforseobot =&gt; 0, dotbot =&gt; 0, 'feedsearch-crawler' =&gt; 0,
+    facebookexternalhit =&gt; 0, fluid =&gt; 0, 'go-http-client' =&gt; 0,
+    googlebot =&gt; 0, ioncrawl =&gt; 0, lighthouse =&gt; 0, ltx71 =&gt; 0,
+    mediapartners =&gt; 0, 'mediapartners-google' =&gt; 0,
+    netestate =&gt; 0, nuclei =&gt; 0, nicecrawler =&gt; 0, petalbot =&gt; 0,
+    proximic =&gt; 0, 'pulsepoint-ads.txt-crawler' =&gt; 0, 'python-requests' =&gt; 0,
+    semrushbot =&gt; 0, 'semrushbot-ba' =&gt; 0, sitecheckerbotcrawler =&gt; 0, sitelockspider =&gt; 0,
+    twitterbot =&gt; 0, ucrawl =&gt; 0,
+    virustotal =&gt; 0, 'web-crawler' =&gt; 0, 'webmeup-crawler' =&gt; 0,
+    'x-fb-crawlerbot' =&gt; 0, yandexbot =&gt; 0,
+);
+</code></pre>
+<p><strong>4. Perl script.</strong> With those configurations in place, the rest of the Perl script <code>accesslogFilter</code> is pretty straightforward:</p>
+<pre class="line-numbers"><code class="language-Perl">use strict;
+
+use Getopt::Std;
+my %opts = ();
+getopts('o:',\%opts);
+my $statout = (defined($opts{'o'}) ? $opts{'o'} : undef);
+my ($emptyUA,$badURL,$smallUA) = (0,0,0);
+</code></pre>
+<p>Put the above config, i.e., the hash tables after these declarations. Now the actual filtering-code:</p>
+<pre class="line-numbers"><code class="language-Perl">W: while (&lt;&gt;) {
+        my @F = split /\|/;
+        if (defined($ips{$F[0]})) { $ips{$F[0]} += 1; next; }
+        if ($#F &lt;= 5) { $emptyUA += 1; next; }
+        if (defined($errorCode{$F[2]})) { $errorCode{$F[2]} += 1; next; }       # not found errors are ignored
+        if ($F[4] =~ /XDEBUG_SESSION_START|HelloThink(CMF|PHP)/) { $badURL += 1; next; }
+        if ($#F &gt;= 6) { # Is UA field available?
+                if (length($F[6]) &lt;= 3) { $smallUA += 1; next W; }
+                for ( split(/[ :;,\/\(\)\@]/,lc $F[6]) ) {
+                        if (defined($bots{$_})) { $bots{$_} += 1; next W; }     # skip bots
+                }
+        }
+        print;
+}
+</code></pre>
+<p>For reporting purposes only, i.e., when given command line option <code>-o report.txt</code>, not required for filtering:</p>
+<pre class="line-numbers"><code class="language-Perl">if (defined($statout)) {
+        open(F,&quot;&gt;$statout&quot;) || die(&quot;Cannot write to $statout&quot;);
+        for (sort keys %ips) {
+                next if ($ips{$_} == 0);
+                printf(F &quot;IP\t%d\t%s\n&quot;,$ips{$_},$_);
+        }
+        printf(F &quot;eUA\t%d\n&quot;,$emptyUA);
+        printf(F &quot;badURL\t%d\n&quot;,$badURL);
+        for (sort keys %errorCode) {
+                next if ($errorCode{$_} == 0);
+                printf(F &quot;code\t%d\t%d\n&quot;,$errorCode{$_},$_);
+        }
+        printf(F &quot;sUA\t%d\n&quot;,$smallUA);
+        for (sort keys %bots) {
+                next if ($bots{$_} == 0);
+                printf(F &quot;bot\t%d\t%s\n&quot;,$bots{$_},$_);
+        }
+}
+</code></pre>
+<p>The script is in <a href="https://github.com">GitHub</a>: <a href="https://github.com/eklausme/bin/blob/master/accesslogFilter">eklausme/bin/accesslogFilter</a>.</p>
+<p><strong>5. Reporting.</strong> Now to get a feeling how much filtering actually happens when applying above rules:</p>
+<ol>
+<li>Unmodified access.log for ca. one year: 181,282 entries</li>
+<li>Filtered access.log with <code>accesslogFilter</code>: 32,451 entries remain, i.e., less than 20%</li>
+</ol>
+<p>So 80% of the visits of my web-server is stemming from bots, crawlers, junk, or from myself.</p>
+<p>Unfiltered output of goaccess looks like this:
+<img src="../../../img/accesslogAll.png" alt=""></p>
+<p>Filtered output of goaccess looks like this:
+<img src="../../../img/accesslogAllFilter.png" alt=""></p>
+<p>I have written about goacess here: <a href="../../../blog/2021/05-22-using-goaccess-with-hiawatha-web-server">Using GoAccess with Hiawatha Web-Server</a>. Unfortunately goaccess is not good at filtering.</p>
+<p>The statistics of <code>accesslogFilter</code> are below. First statistics for filtering according IP address. Host &quot;startdedicated&quot; is at the top:</p>
+<pre class="line-numbers"><code class="language-log">IP	704	106.55.250.60
+IP	154	127.0.0.1
+IP	419	138.246.253.24
+IP	335	18.212.118.57
+IP	333	18.232.89.176
+IP	1753	192.168.178.118
+IP	1341	192.168.178.2
+IP	1554	192.168.178.20
+IP	6180	192.168.178.24
+IP	496	192.168.178.249
+IP	331	3.94.81.106
+IP	335	34.239.184.105
+IP	335	54.162.60.209
+IP	329	54.80.126.99
+IP	282	62.138.2.14
+IP	6757	62.138.2.160
+IP	286	62.138.2.214
+IP	1353	62.138.3.52
+IP	631	62.138.6.15
+IP	11	66.240.192.138
+IP	14	66.240.219.133
+IP	6	66.240.219.146
+IP	17	66.240.236.119
+IP	32	71.6.135.131
+IP	10	71.6.146.185
+IP	14	71.6.158.166
+IP	5	71.6.165.200
+IP	10	71.6.167.142
+IP	17	71.6.199.23
+IP	32	80.82.77.139
+IP	44	80.82.77.33
+IP	52	82.221.105.6
+IP	41	82.221.105.7
+IP	15688	85.25.210.23
+</code></pre>
+<p>Above numbers are depicted in below pie-chart:</p>
+<div class="chartarea" id="container1"></div>
+<p>Special filtering according user-agent or bad/silly URL:</p>
+<pre class="line-numbers"><code class="language-log">eUA	143
+badURL	1835
+sUA	3580
+</code></pre>
+<p>Distribution of filtered HTTP status code. As mentioned above, code 404 dominates by far:</p>
+<pre class="line-numbers"><code class="language-txt">code	16033	301
+code	15	302
+code	16	400
+code	67	403
+code	48222	404
+code	3877	405
+code	91	500
+code	126	501
+code	981	503
+</code></pre>
+<p>Above numbers as pie-chart:</p>
+<div class="chartarea" id="container2"></div>
+<p>Statistics on filtered entries according user-agent strings. Google is at the top, followed by <a href="https://www.semrush.com">Semrush</a>:</p>
+<pre class="line-numbers"><code class="language-txt">bot	326	adsbot
+bot	932	adscanner
+bot	5163	ahrefsbot
+bot	325	applebot
+bot	18	archive.org_bot
+bot	426	baiduspider
+bot	1011	bingbot
+bot	1105	blexbot
+bot	2	ccbot
+bot	1131	censysinspect
+bot	182	clark-crawler2
+bot	39	crawler
+bot	88	crawler.php
+bot	4	criteobot
+bot	196	curl
+bot	379	dataforseobot
+bot	1688	dotbot
+bot	8	facebookexternalhit
+bot	1	feedsearch-crawler
+bot	16	fluid
+bot	226	go-http-client
+bot	7016	googlebot
+bot	34	ioncrawl
+bot	19	ltx71
+bot	2059	mediapartners-google
+bot	410	netestate
+bot	1	nicecrawler
+bot	346	nuclei
+bot	1088	petalbot
+bot	77	proximic
+bot	4	pulsepoint-ads.txt-crawler
+bot	342	python-requests
+bot	6609	semrushbot
+bot	159	semrushbot-ba
+bot	26	sitecheckerbotcrawler
+bot	699	sitelockspider
+bot	68	twitterbot
+bot	2	ucrawl
+bot	4	virustotal
+bot	1715	yandexbot
+</code></pre>
+<p>Above data as pie-chart.</p>
+<div class="chartarea" id="container3"></div>
+<p>This gives a good graphical presentation why Bing, or Baidu are way inferior to Google search.</p>
+<p><strong>6. References.</strong> Below links might provide further information on bots &amp; crawlers.</p>
+<ol>
+<li><a href="http://www.blogtips.org/web-crawlers-love-the-good-but-kill-the-bad-and-the-ugly">Web Crawlers: Love the Good, but Kill the Bad and the Ugly</a>: This post talks about limiting the bots &amp; crawlers to your web-site as they are slowing down the entire server. The author mentions facebookexternalhit visiting his site 541 times per hour!</li>
+<li><a href="https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list">IAB/ABC International Spiders and Bots List</a>: A commercial list with bots, spiders, and crawlers. The list costs 15,000 USD.</li>
+<li><a href="https://www.pedromonjo.com/2020/01/bots-and-the-adobe-experience-cloud.html">Bots and the Adobe Experience Cloud</a>: AEC uses IAB.</li>
+<li>List of bots in <a href="https://wordpress.org/plugins/stopbadbots">StopBadBots</a>: <a href="https://github.com/sminozzi/stopbadbots/blob/master/functions/aBots.php">aBots.php</a></li>
+<li><a href="https://www.awstats.org">AWStats</a> robot list: <a href="https://github.com/eldy/AWStats/blob/develop/robots.pm">robots.pm</a></li>
+</ol>
+<p>Added 14-Mar-2022: I added further IP addresses, HTTP status codes, and bot names to script <a href="https://github.com/eklausme/bin/blob/master/accesslogFilter"><code>accesslogFilter</code></a>. Then I compared the ratio of original log file to filtered log file. Below table shows the results. One can see that bots, crawlers, junk and myself make up to almost 90% of the traffic. Below table is chronologically in reverse order, i.e., lowest number is youngest.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Log file</th>
+<th align="right">#entries</th>
+<th align="right">after filtering</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">0</td>
+<td align="right">1813</td>
+<td align="right">375</td>
+<td>0.207</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">10913</td>
+<td align="right">1605</td>
+<td>0.147</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">8631</td>
+<td align="right">1411</td>
+<td>0.163</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">8146</td>
+<td align="right">1287</td>
+<td>0.158</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">10319</td>
+<td align="right">1380</td>
+<td>0.134</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">6287</td>
+<td align="right">1276</td>
+<td>0.203</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">8064</td>
+<td align="right">1239</td>
+<td>0.154</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="right">9684</td>
+<td align="right">1023</td>
+<td>0.106</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">6317</td>
+<td align="right">1110</td>
+<td>0.176</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="right">8115</td>
+<td align="right">1096</td>
+<td>0.135</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td align="right">7334</td>
+<td align="right">1302</td>
+<td>0.178</td>
+</tr>
+<tr>
+<td align="right">11</td>
+<td align="right">6835</td>
+<td align="right">1262</td>
+<td>0.185</td>
+</tr>
+<tr>
+<td align="right">12</td>
+<td align="right">7239</td>
+<td align="right">922</td>
+<td>0.127</td>
+</tr>
+<tr>
+<td align="right">13</td>
+<td align="right">10457</td>
+<td align="right">1297</td>
+<td>0.124</td>
+</tr>
+<tr>
+<td align="right">14</td>
+<td align="right">8897</td>
+<td align="right">1102</td>
+<td>0.124</td>
+</tr>
+<tr>
+<td align="right">15</td>
+<td align="right">9554</td>
+<td align="right">1051</td>
+<td>0.110</td>
+</tr>
+<tr>
+<td align="right">16</td>
+<td align="right">8945</td>
+<td align="right">1020</td>
+<td>0.114</td>
+</tr>
+<tr>
+<td align="right">17</td>
+<td align="right">4873</td>
+<td align="right">891</td>
+<td>0.183</td>
+</tr>
+<tr>
+<td align="right">18</td>
+<td align="right">4961</td>
+<td align="right">753</td>
+<td>0.152</td>
+</tr>
+<tr>
+<td align="right">19</td>
+<td align="right">5865</td>
+<td align="right">611</td>
+<td>0.104</td>
+</tr>
+<tr>
+<td align="right">20</td>
+<td align="right">4850</td>
+<td align="right">501</td>
+<td>0.103</td>
+</tr>
+<tr>
+<td align="right">21</td>
+<td align="right">4290</td>
+<td align="right">492</td>
+<td>0.115</td>
+</tr>
+<tr>
+<td align="right">22</td>
+<td align="right">4863</td>
+<td align="right">514</td>
+<td>0.106</td>
+</tr>
+<tr>
+<td align="right">23</td>
+<td align="right">4652</td>
+<td align="right">485</td>
+<td>0.104</td>
+</tr>
+<tr>
+<td align="right">24</td>
+<td align="right">4289</td>
+<td align="right">520</td>
+<td>0.121</td>
+</tr>
+<tr>
+<td align="right">25</td>
+<td align="right">3940</td>
+<td align="right">706</td>
+<td>0.179</td>
+</tr>
+<tr>
+<td align="right">26</td>
+<td align="right">4292</td>
+<td align="right">634</td>
+<td>0.148</td>
+</tr>
+<tr>
+<td align="right">27</td>
+<td align="right">3044</td>
+<td align="right">608</td>
+<td>0.200</td>
+</tr>
+<tr>
+<td align="right">28</td>
+<td align="right">4390</td>
+<td align="right">538</td>
+<td>0.123</td>
+</tr>
+<tr>
+<td align="right">29</td>
+<td align="right">3149</td>
+<td align="right">410</td>
+<td>0.130</td>
+</tr>
+<tr>
+<td align="right">30</td>
+<td align="right">4402</td>
+<td align="right">470</td>
+<td>0.107</td>
+</tr>
+<tr>
+<td align="right">31</td>
+<td align="right">3894</td>
+<td align="right">456</td>
+<td>0.117</td>
+</tr>
+<tr>
+<td align="right">32</td>
+<td align="right">3018</td>
+<td align="right">518</td>
+<td>0.172</td>
+</tr>
+<tr>
+<td align="right">33</td>
+<td align="right">5170</td>
+<td align="right">646</td>
+<td>0.125</td>
+</tr>
+<tr>
+<td align="right">34</td>
+<td align="right">3980</td>
+<td align="right">581</td>
+<td>0.146</td>
+</tr>
+<tr>
+<td align="right">35</td>
+<td align="right">3325</td>
+<td align="right">457</td>
+<td>0.137</td>
+</tr>
+<tr>
+<td align="right">36</td>
+<td align="right">2979</td>
+<td align="right">478</td>
+<td>0.160</td>
+</tr>
+<tr>
+<td align="right">37</td>
+<td align="right">5648</td>
+<td align="right">596</td>
+<td>0.106</td>
+</tr>
+<tr>
+<td align="right">38</td>
+<td align="right">3139</td>
+<td align="right">470</td>
+<td>0.150</td>
+</tr>
+<tr>
+<td align="right">39</td>
+<td align="right">2859</td>
+<td align="right">360</td>
+<td>0.126</td>
+</tr>
+<tr>
+<td align="right">40</td>
+<td align="right">3157</td>
+<td align="right">700</td>
+<td>0.222</td>
+</tr>
+<tr>
+<td align="right">41</td>
+<td align="right">2370</td>
+<td align="right">280</td>
+<td>0.118</td>
+</tr>
+<tr>
+<td align="right">42</td>
+<td align="right">3457</td>
+<td align="right">286</td>
+<td>0.083</td>
+</tr>
+<tr>
+<td align="right">43</td>
+<td align="right">8597</td>
+<td align="right">403</td>
+<td>0.047</td>
+</tr>
+<tr>
+<td align="right">44</td>
+<td align="right">2414</td>
+<td align="right">258</td>
+<td>0.107</td>
+</tr>
+<tr>
+<td align="right">45</td>
+<td align="right">2913</td>
+<td align="right">318</td>
+<td>0.109</td>
+</tr>
+<tr>
+<td align="right">46</td>
+<td align="right">1835</td>
+<td align="right">308</td>
+<td>0.168</td>
+</tr>
+<tr>
+<td align="right">47</td>
+<td align="right">2027</td>
+<td align="right">420</td>
+<td>0.207</td>
+</tr>
+<tr>
+<td align="right">48</td>
+<td align="right">1777</td>
+<td align="right">319</td>
+<td>0.180</td>
+</tr>
+<tr>
+<td align="right">49</td>
+<td align="right">1369</td>
+<td align="right">443</td>
+<td>0.324</td>
+</tr>
+<tr>
+<td align="right">50</td>
+<td align="right">2860</td>
+<td align="right">415</td>
+<td>0.145</td>
+</tr>
+<tr>
+<td align="right">51</td>
+<td align="right">2965</td>
+<td align="right">292</td>
+<td>0.098</td>
+</tr>
+<tr>
+<td align="right">52</td>
+<td align="right">1325</td>
+<td align="right">264</td>
+<td>0.199</td>
+</tr>
+</tbody>
+</table>
+<p>Added 29-Mar-2022: Added even more IP addresses and bot names to <code>accesslogFilter</code>. Table is now chronologically in order, i.e., lower number is older.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Log file</th>
+<th align="right">#entries</th>
+<th align="right">after filtering</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">1</td>
+<td align="right">1325</td>
+<td align="right">254</td>
+<td>0.192</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">2965</td>
+<td align="right">286</td>
+<td>0.096</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">2860</td>
+<td align="right">402</td>
+<td>0.141</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">1369</td>
+<td align="right">416</td>
+<td>0.304</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">1777</td>
+<td align="right">303</td>
+<td>0.171</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">2027</td>
+<td align="right">404</td>
+<td>0.199</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="right">1835</td>
+<td align="right">298</td>
+<td>0.162</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">2913</td>
+<td align="right">297</td>
+<td>0.102</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="right">2414</td>
+<td align="right">253</td>
+<td>0.105</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td align="right">8597</td>
+<td align="right">400</td>
+<td>0.047</td>
+</tr>
+<tr>
+<td align="right">11</td>
+<td align="right">3457</td>
+<td align="right">284</td>
+<td>0.082</td>
+</tr>
+<tr>
+<td align="right">12</td>
+<td align="right">2370</td>
+<td align="right">277</td>
+<td>0.117</td>
+</tr>
+<tr>
+<td align="right">13</td>
+<td align="right">3157</td>
+<td align="right">699</td>
+<td>0.221</td>
+</tr>
+<tr>
+<td align="right">14</td>
+<td align="right">2859</td>
+<td align="right">358</td>
+<td>0.125</td>
+</tr>
+<tr>
+<td align="right">15</td>
+<td align="right">3139</td>
+<td align="right">451</td>
+<td>0.144</td>
+</tr>
+<tr>
+<td align="right">16</td>
+<td align="right">5648</td>
+<td align="right">556</td>
+<td>0.098</td>
+</tr>
+<tr>
+<td align="right">17</td>
+<td align="right">2979</td>
+<td align="right">456</td>
+<td>0.153</td>
+</tr>
+<tr>
+<td align="right">18</td>
+<td align="right">3325</td>
+<td align="right">442</td>
+<td>0.133</td>
+</tr>
+<tr>
+<td align="right">19</td>
+<td align="right">3980</td>
+<td align="right">559</td>
+<td>0.140</td>
+</tr>
+<tr>
+<td align="right">20</td>
+<td align="right">5170</td>
+<td align="right">626</td>
+<td>0.121</td>
+</tr>
+<tr>
+<td align="right">21</td>
+<td align="right">3018</td>
+<td align="right">497</td>
+<td>0.165</td>
+</tr>
+<tr>
+<td align="right">22</td>
+<td align="right">3894</td>
+<td align="right">441</td>
+<td>0.113</td>
+</tr>
+<tr>
+<td align="right">23</td>
+<td align="right">4402</td>
+<td align="right">447</td>
+<td>0.102</td>
+</tr>
+<tr>
+<td align="right">24</td>
+<td align="right">3149</td>
+<td align="right">394</td>
+<td>0.125</td>
+</tr>
+<tr>
+<td align="right">25</td>
+<td align="right">4390</td>
+<td align="right">509</td>
+<td>0.116</td>
+</tr>
+<tr>
+<td align="right">26</td>
+<td align="right">3044</td>
+<td align="right">580</td>
+<td>0.191</td>
+</tr>
+<tr>
+<td align="right">27</td>
+<td align="right">4292</td>
+<td align="right">605</td>
+<td>0.141</td>
+</tr>
+<tr>
+<td align="right">28</td>
+<td align="right">3940</td>
+<td align="right">675</td>
+<td>0.171</td>
+</tr>
+<tr>
+<td align="right">29</td>
+<td align="right">4289</td>
+<td align="right">491</td>
+<td>0.114</td>
+</tr>
+<tr>
+<td align="right">30</td>
+<td align="right">4652</td>
+<td align="right">466</td>
+<td>0.100</td>
+</tr>
+<tr>
+<td align="right">31</td>
+<td align="right">4863</td>
+<td align="right">498</td>
+<td>0.102</td>
+</tr>
+<tr>
+<td align="right">32</td>
+<td align="right">4290</td>
+<td align="right">464</td>
+<td>0.108</td>
+</tr>
+<tr>
+<td align="right">33</td>
+<td align="right">4850</td>
+<td align="right">489</td>
+<td>0.101</td>
+</tr>
+<tr>
+<td align="right">34</td>
+<td align="right">5865</td>
+<td align="right">591</td>
+<td>0.101</td>
+</tr>
+<tr>
+<td align="right">35</td>
+<td align="right">4961</td>
+<td align="right">739</td>
+<td>0.149</td>
+</tr>
+<tr>
+<td align="right">36</td>
+<td align="right">4873</td>
+<td align="right">861</td>
+<td>0.177</td>
+</tr>
+<tr>
+<td align="right">37</td>
+<td align="right">8945</td>
+<td align="right">964</td>
+<td>0.108</td>
+</tr>
+<tr>
+<td align="right">38</td>
+<td align="right">9554</td>
+<td align="right">994</td>
+<td>0.104</td>
+</tr>
+<tr>
+<td align="right">39</td>
+<td align="right">8897</td>
+<td align="right">1067</td>
+<td>0.120</td>
+</tr>
+<tr>
+<td align="right">40</td>
+<td align="right">10457</td>
+<td align="right">1270</td>
+<td>0.121</td>
+</tr>
+<tr>
+<td align="right">41</td>
+<td align="right">7239</td>
+<td align="right">889</td>
+<td>0.123</td>
+</tr>
+<tr>
+<td align="right">42</td>
+<td align="right">6835</td>
+<td align="right">1233</td>
+<td>0.180</td>
+</tr>
+<tr>
+<td align="right">43</td>
+<td align="right">7334</td>
+<td align="right">1252</td>
+<td>0.171</td>
+</tr>
+<tr>
+<td align="right">44</td>
+<td align="right">8115</td>
+<td align="right">1056</td>
+<td>0.130</td>
+</tr>
+<tr>
+<td align="right">45</td>
+<td align="right">6317</td>
+<td align="right">1068</td>
+<td>0.169</td>
+</tr>
+<tr>
+<td align="right">46</td>
+<td align="right">9684</td>
+<td align="right">974</td>
+<td>0.101</td>
+</tr>
+<tr>
+<td align="right">47</td>
+<td align="right">8064</td>
+<td align="right">1119</td>
+<td>0.139</td>
+</tr>
+<tr>
+<td align="right">48</td>
+<td align="right">6287</td>
+<td align="right">1251</td>
+<td>0.199</td>
+</tr>
+<tr>
+<td align="right">49</td>
+<td align="right">10319</td>
+<td align="right">1341</td>
+<td>0.130</td>
+</tr>
+<tr>
+<td align="right">50</td>
+<td align="right">8146</td>
+<td align="right">1107</td>
+<td>0.136</td>
+</tr>
+<tr>
+<td align="right">51</td>
+<td align="right">8631</td>
+<td align="right">1237</td>
+<td>0.143</td>
+</tr>
+<tr>
+<td align="right">52</td>
+<td align="right">10913</td>
+<td align="right">1309</td>
+<td>0.120</td>
+</tr>
+<tr>
+<td align="right">53</td>
+<td align="right">7086</td>
+<td align="right">1364</td>
+<td>0.192</td>
+</tr>
+<tr>
+<td align="right">54</td>
+<td align="right">8863</td>
+<td align="right">2121</td>
+<td>0.239</td>
+</tr>
+<tr>
+<td align="right">55</td>
+<td align="right">5241</td>
+<td align="right">436</td>
+<td>0.083</td>
+</tr>
+</tbody>
+</table>
+<p>Script for generating this is:</p>
+<pre class="line-numbers"><code class="language-bash">for k in `seq 54 -1 0`; do
+    let km=&quot;55-$k&quot;; i=access.log.$k; wci=`cat $i | wc -l`;
+    filt=`accesslogFilter $i | wc -l`; let pr=&quot;1.0*$filt/$wci&quot;;
+    printf &quot; %2d | %5d | %4d | %6.3f\n&quot; $km $wci $filt $pr;
+done
+</code></pre>
+<div class="chartarea" id="container4"></div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<script>
+
+let chartDom1 = document.getElementById('container1');
+let ipAddr = echarts.init(chartDom1);
+let app = {};
+
+let ipAddrOption = {
+    title: {
+        text: 'Filtered IP Addresses',
+        subtext: 'This Blog 2021',
+        left: 'center'
+    },
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left' },
+    series: [ {
+        name: 'Access From',
+        type: 'pie',
+        radius: '50%',
+        data: [
+            { value: 1998, name:'computeAWS' },
+            { value: 11478, name:'local' },
+            { value: 305, name:'shodan.io' },
+            { value: 24997, name:'startdedicated' },
+            { value: 1123, name:'various' }
+        ],
+        emphasis: {
+            itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+        }
+    } ]
+};
+
+
+let chartDom2 = document.getElementById('container2');
+let httpStatus = echarts.init(chartDom2);
+
+let httpStatusOption = {
+    title: {
+        text: 'HTTP Status Code',
+        subtext: 'This Blog 2021',
+        left: 'center'
+    },
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left' },
+    series: [ {
+        name: 'Occured',
+        type: 'pie',
+        radius: '50%',
+        data: [
+            { value:16033, name:301 },
+            { value:15, name:302 },
+            { value:16, name:400 },
+            { value:67, name:403 },
+            { value:48222, name:404 },
+            { value:3877, name:405 },
+            { value:91, name:500 },
+            { value:126, name:501 },
+            { value:981, name:503 }
+        ],
+        emphasis: {
+            itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+        }
+    } ]
+};
+
+
+let chartDom3 = document.getElementById('container3');
+let bot = echarts.init(chartDom3);
+
+let botOption = {
+    title: {
+        text: 'Bots & Crawlers',
+        subtext: 'This Blog 2021',
+        left: 'center'
+    },
+    tooltip: { trigger: 'item' },
+    //legend: { orient: 'vertical', left: 'right' },
+    series: [ {
+        name: 'Occured',
+        type: 'pie',
+        radius: '50%',
+        data: [
+            { value:326, name:'adsbot' },
+            { value:932, name:'adscanner' },
+            { value:5163, name:'ahrefsbot' },
+            { value:325, name:'applebot' },
+            { value:18, name:'archive.org_bot' },
+            { value:426, name:'baiduspider' },
+            { value:1011, name:'bingbot' },
+            { value:1105, name:'blexbot' },
+            { value:2, name:'ccbot' },
+            { value:1131, name:'censysinspect' },
+            { value:182, name:'clark-crawler2' },
+            { value:39, name:'crawler' },
+            { value:88, name:'crawler.php' },
+            { value:4, name:'criteobot' },
+            { value:196, name:'curl' },
+            { value:379, name:'dataforseobot' },
+            { value:1688, name:'dotbot' },
+            { value:8, name:'facebookexternalhit' },
+            { value:1, name:'feedsearch-crawler' },
+            { value:16, name:'fluid' },
+            { value:226, name:'go-http-client' },
+            { value:7016, name:'googlebot' },
+            { value:34, name:'ioncrawl' },
+            { value:19, name:'ltx71' },
+            { value:2059, name:'mediapartners-google' },
+            { value:410, name:'netestate' },
+            { value:1, name:'nicecrawler' },
+            { value:346, name:'nuclei' },
+            { value:1088, name:'petalbot' },
+            { value:77, name:'proximic' },
+            { value:4, name:'pulsepoint-ads.txt-crawler' },
+            { value:342, name:'python-requests' },
+            { value:6609, name:'semrushbot' },
+            { value:159, name:'semrushbot-ba' },
+            { value:26, name:'sitecheckerbotcrawler' },
+            { value:699, name:'sitelockspider' },
+            { value:68, name:'twitterbot' },
+            { value:2, name:'ucrawl' },
+            { value:4, name:'virustotal' },
+            { value:1715, name:'yandexbot' }
+        ],
+        emphasis: {
+            itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+        }
+    } ]
+};
+
+let chartDom4 = document.getElementById('container4');
+let filterRatio = echarts.init(chartDom4);
+let filterRatioOption = {
+    xAxis: {
+        type: 'category',
+        data: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55]
+    },
+    yAxis: { type: 'value' },
+    tooltip: { trigger:'axis' },
+    series: [ {
+        data: [  0.192,  0.096,  0.141,  0.304,  0.171,  0.199,  0.162,  0.102,  0.105,  0.047,  0.082,  0.117,  0.221,  0.125,  0.144,  0.098,  0.153,  0.133,  0.140,  0.121,  0.165,  0.113,  0.102,  0.125,  0.116,  0.191,  0.141,  0.171,  0.114,  0.100,  0.102,  0.108,  0.101,  0.101,  0.149,  0.177,  0.108,  0.104,  0.120,  0.121,  0.123,  0.180,  0.171,  0.130,  0.169,  0.101,  0.139,  0.199,  0.130,  0.136,  0.143,  0.120,  0.192,  0.239,  0.083 ],
+        type: 'line',
+        smooth: true
+    } ]
+};
+
+if (ipAddrOption && typeof ipAddrOption === 'object') { ipAddr.setOption(ipAddrOption); }
+if (httpStatusOption && typeof httpStatusOption === 'object') { httpStatus.setOption(httpStatusOption); }
+if (botOption && typeof botOption === 'object') { bot.setOption(botOption); }
+if (filterRatioOption && typeof filterRatioOption === 'object') { filterRatio.setOption(filterRatioOption); }
+
+</script>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Filtering+Bots+and+Crawlers+from+Access.log%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Filtering+Bots+and+Crawlers+from+Access.log&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log&amp;title=Filtering+Bots+and+Crawlers+from+Access.log" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Filtering+Bots+and+Crawlers+from+Access.log&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Filtering+Bots+and+Crawlers+from+Access.log%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2021/12-13-filtering-bots-and-crawlers-from-access-log" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#web-server>web-server</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#Hiawatha>Hiawatha</a>, <a href=../../../aux/tags/#access.log>access.log</a>, <a href=../../../aux/tags/#bot>bot</a>, <a href=../../../aux/tags/#crawler>crawler</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>web-server:</p>
+	<ol>
+		<li><a href="../../../blog/2013/12-09-wikipedia-infrastructure-as-of-2013">2013-12-09: Wikipedia Infrastructure as of 2013</a></li>
+		<li><a href="../../../blog/2015/11-07-nginx-413-request-entity-too-large-file-upload-issue">2015-11-07: nginx: 413 Request Entity Too Large - File Upload Issue</a></li>
+		<li><a href="../../../blog/2018/03-06-set-up-hiawatha-web-server">2018-03-06: Set-Up Hiawatha Web-Server</a></li>
+		<li><a href="../../../blog/2018/03-14-set-up-lets-encrypt-for-hiawatha-web-server">2018-03-14: Set-Up "Let's Encrypt" for Hiawatha Web-Server</a></li>
+		<li><a href="../../../blog/2021/05-22-using-goaccess-with-hiawatha-web-server">2021-05-22: Using GoAccess with Hiawatha Web-Server</a></li>
+		<li><a href="../../../blog/2021/05-29-configure-lighttpd-with-php-and-https">2021-05-29: Configure Lighttpd With PHP and HTTPS</a></li>
+		<li><a href="../../../blog/2021/06-03-matomo-with-hiawatha">2021-06-03: Matomo with Hiawatha</a></li>
+		<li><a href="../../../blog/2021/11-30-awstats-and-hiawatha">2021-11-30: AWStats and Hiawatha</a></li>
+		<li><a href="../../../blog/2021/12-14-url-count-statistics">2021-12-14: URL Count Statistics</a></li>
+		<li><a href="../../../blog/2022/01-04-hashover-comment-system-with-hiawatha">2022-01-04: HashOver Comment System with Hiawatha</a></li>
+		<li><a href="../../../blog/2022/03-06-reverseproxy-and-urltoolkit-in-hiawatha">2022-03-06: ReverseProxy and UrlToolkit in Hiawatha</a></li>
+		<li><a href="../../../blog/2023/06-30-data-centers-in-africa">2023-06-30: Data Centers in Africa</a></li>
+		<li><a href="../../../blog/2023/08-13-installing-openlitespeed-on-arch-linux">2023-08-13: Installing OpenLiteSpeed on Arch Linux</a></li>
+		<li><a href="../../../blog/2023/08-29-from-hiawatha-to-nginx">2023-08-29: From Hiawatha to NGINX</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAG10lEQVR42rWWCXBUVRaGz7lv6S1Lp5N0wAgJIQsGmWhQSSyXgjhlQWZQB4oaZYhLaQkpN9wot5JRSzbFYphhhnWowQUnKjXBEmeMxpLBGiUowUBKSUgk6TSdzmrS3a/fcu+cTowaCTHS5a166cp779zz3f/8596HEMewGmbLiE7GZh7Uz3cOjAvgROmLKOe+y/L3vPeLAZhfP+qWs9b3/fi+3rKsRNI7D6FSuIvlvHTXWLG85U47m7ZDiwtAP7N+haR1LUMp8Qk25ana7+63r6yRwifLmDorDLJ7Ol646swodRpLctFZvIllbSmPCyDauXE20wN1ErgFKBk7QEq4zxDBLNS/bpQGjyGzXQpgz96Nk+6+fSTGaLl5EUZbtrG0e4GlLU2NDyCwzotGICAZYWCuUhCK95Apuv4LkYbfscFPfMw2h6NjxiSueB4zeccAGmeewGhrGeMcmKeiF92/9sQLkEwAfVLoc8CUijpS4S8cxb9kd3mv1bXHgehgLHVxyOp7x2VZZ+aDfnoFRtvnSUo+oKuoCd3X58UJ8GImGh3HmdZyH0uY9wo6Cm4CVJcCsquABB6ewuoXgv8PRPR1oXe8CpFTZSh5toMz9whL+c3CCQHo/g1uKRq8BUH+FOSU06ikR4WSlsAhPEMYHT7Gku0op+9G5igCmVRliRQtfRstyPIRahlqFt7fAlboTmFpjVxSllu824lm50zUO7yo+xnKGT5kCbeyrE09ZymgBzZ+LEd7SokeQKHFKan9ArCEFphDyapQcjtBuYCixhHOGoi1iCWEsdyCyH4uQp+i2TWVGSFgai4HyXUTS19WPWYJop0vzEWz533JCCHGEsmpt5Iix0DwQxToBDV7YltXTAnDZ3Fh/paL/jDT/LWMJSEZeD2bXLlqXA/ovoe3oXbqLhY5XoeuuSVoKzxCbxWBOhWoBSeQfbgiED1J3Iaf1CuAqH83lfQKkJz5tF9ExgUw2lbaUW+rIdl2oO2yQSpH1dADRy79kScGMLSSdirHIMGYjwjrm8Nk3EtY9vObzmnCkcGDrxUAmrcLrXkdmpFdCNKNQw9sWWQ8ZeIAUd+wMUHUc6YUWzbPdWrGA/85JwA//WwJKqnPgeKdJ9T0JpZ0bT5vvjeIgGlDL8ju4WtCJTAJoH3kH27JiW4rIbuKDHoSjK6nbJlrvjtb0Gx9WKYk66g+DwCTGTI7UL0/hIEjC1APhkexKun081MqkAHMblpR9HtVJUehmVT4KIjIbai392K0bRtakdfk/AP1aLQ9qXLVfS2I0BKm+25BrcmJuu8DZDkLERMHzxKMueiywZjtEFt5rO5gjr6NysVCTXtQqO47RmRHyXUQuLZ41CxGy9IMIlxLEFdIRb6Z4lh5TKrkszNRGJIhkX07Hacs1vA1BpZgtlSwpbxMnbCAStwhZM9zpPhWlraEj9nV1ok5tHpvDWrht6iE10+s8OcsyFesuLbAaq7cisz1b5CS97OpTxo/WMrZg3funkuRHvS/kUS70664ACT1GdN7TTUo9s1g9papU14afx8YCgq+UkPnAELn2wsgWNuIQkw7z/z9PCEnz7zgurXI++5ArXWPkv33inEBuG/jIlTS3hCSHUT33nIMNmhoGLH+lSacdmTIrttE+pWfi4TpRzjjMmjHgQx+g1xQO/ZZYLU+Nh2lpE+EbE8VGm1ekcYO0Povw2/McjS0v/0cCCEpz4D7og2QXPgxLWhW7HATDEH0VZ2gbrlYmvGRGAVgtD1tJ1e/JWR1DpgBpF7tYtHWRgTHUYCcLdh9tBhCrTvJ05PHTUyyg819P0/JfBMdKWUoT+tFNaOfSqrQMZ4JYqAY+g/sYXn7ms7pgVElaVqxARz5S2jmCuF/8zPsrr8bjPAfKHAWPWbf58WTIDv3iuSL/mxNKp0M0sDLdKjdQ3J/NN78PwkgmirfEc6C+ZxpQoQO78PBL/+EEeMgWi4XWNYUAQYD1HzS1c29vGHxbEgsrLQc3grQvpBRa75Ezq+pjwuANy2v486c2Vx0UZ7mdvrafYGxqY3guPRBcEzzmzDIMXx4EgsdbUfb5bNQzSy1VA8IvSH2/uUEUBcnQOVnRlJeEZrBDfTJ9Ec1e+dQH4u2NZvpc/wek9HuN/gBGfbLRUyecQDV7K1C9S6zjEbA8FFy/IfVcQGYpx+vtuzp223elftHlca/xU2mOmVJmCIGajrACGQrudVDOxwP7FxIR/ca0ffPKinv7dVxARjtqz3Khat7xlSne99aC8OrRKS+Us1c/9dRz4L/QDCDOWzyQ81xAYw3rN79v+K8dzM3A3NtGY/w85kjLoDY0Hv2elXP7zvPN/7/Zc3tui6Q8LYAAAAASUVORK5CYII=" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+	<script src="/jscss/prism.js"></script>
+
+</body>
+</html>

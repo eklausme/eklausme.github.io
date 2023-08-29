@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Calculating number of seats in parliament using d'Hondt's method</title>
+
+	<link href=/jscss/prism.css rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2014-02-24 20:34:10">24th February 2014</time>, 3 min read</p>
+<h1>Calculating number of seats in parliament using d'Hondt's method</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method">eklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method</a>.</p>
+<br>
+<p><a href="http://en.wikipedia.org/" title="Wikipedia">Wikipedia</a> contains an article on <a href="http://en.wikipedia.org/wiki/D%27Hondt_method" title="d'Hondt">d'Hondt's</a> method for calculating the number of seats given the number of votes for each party. I wrote a short <a href="http://www.perl.org/" title="Perl">Perl</a> program for its calculation including the case when d'Hondt's method by its design leads to drawing the lots. Its input contains a list of party names and its corresponding votes. The number of seats is given as parameter <code>-s</code>. This implementation of d'Hondt uses integer division and rounds the division to the lower integer (<a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions" title="floor">floor</a>).</p>
+<pre class="line-numbers"><code class="language-R">#!/usr/bin/perl -W
+# Calculate seats in parliament according d'Hondt's method
+
+use strict;
+use Getopt::Std;
+my %opts = ('d' =&gt; 0, 's' =&gt; 2);
+getopts('ds:',\%opts);
+my $s = (($opts{'s'} &gt; 0) ? $opts{'s'} : 2);
+
+my (@F,@votes,@party,@seat,@calc,@divisor,$i,$j,$n,$max,$multi,@drawing);
+
+while (&lt;&gt;) {
+        @F = split;
+        push @party,$F[0];
+        push @votes,$F[1];
+        push @calc,$F[1];
+}
+
+for ($i=0; $i&lt;=$n; ++$i) {
+        ($seat[$i],$divisor[$i]) = (0,1);
+}
+
+# $u is used seats so far
+for (my $u=0; $u&lt;$s; ++$u) {
+        ($max,$j) = ($calc[0],0);       # calculate maximum in @calc
+        $drawing[$multi=0] = 0;
+        for ($i=1; $i&lt;=$n; ++$i) {
+                if ($calc[$i] &gt; $max) {
+                        ($max,$j) = ($calc[$i],$i);
+                        $drawing[$multi=0] = $i;
+                } elsif ($calc[$i] == $max) {
+                        $drawing[++$multi] = $i;
+                }
+        }
+        if ($u + $multi &gt;= $s) {
+                printf(&quot;Drawing of lots for %d seats required for parties:&quot;, $s - $u);
+                for ($i=0; $i&lt;=$multi; ++$i) {
+                        print &quot; $party[$drawing[$i]]&quot;;
+                }
+                print &quot;\n&quot;;
+                last;
+        }
+        $seat[$j] += 1;
+        $divisor[$j] += 1;      # this is specific for d'Hondt
+        $calc[$j] = int($votes[$j] / $divisor[$j]);
+}
+
+for ($i=0; $i&lt;=$n; ++$i) {
+        print &quot;$party[$i] - $seat[$i]\n&quot;;
+}
+</code></pre>
+<p>Above Perl code is also in <a href="https://github.com/eklausme/bin/blob/master/dHondt" title="GitHub">GitHub</a>.</p>
+<p>Here are some results.</p>
+<p>Test case #1 from <a href="http://en.wikipedia.org/wiki/D%27Hondt_method" title="d'Hondt">Wikipedia</a> where 4 parties compete for 8 seats in parliament:</p>
+<pre><code>Party A        100,000
+Party B         80,000
+Party C         30,000
+Party D         20,000
+</code></pre>
+<p><code>printf &quot;A 100000\nB 80000\nC 30000\nD 20000\n&quot; | dHondt -s8</code> gives</p>
+<pre><code>A - 4
+B - 3
+C - 1
+D - 0
+</code></pre>
+<p>Test case #2 from <a href="http://www.bundeswahlleiter.de/de/glossar/texte/d_Hondtsche_Sitzverteilung.html" title="Bundeswahlleiter">Bundeswahlleiter</a> with 3 parties again competing for 8 seats:</p>
+<pre><code>Party A       10,000
+Party B        6,000
+Party C        1,500
+</code></pre>
+<p>Running <code>printf &quot;A 10000\nB 6000\nC 1500\n&quot; | dHondt -s8</code> produces</p>
+<pre><code>A - 5
+B - 3
+C - 0
+</code></pre>
+<p>Test case #3 from <a href="https://stat.ethz.ch/pipermail/r-help/2009-February/187126.html" title="R function to calculate the seats in parliament">R function to calculate the seats in parliament</a> with 5 parties competing for 10 seats:</p>
+<pre><code>Party A         448
+Party B       7,685
+Party C       5,445
+Party D         482
+Party E       6,266
+</code></pre>
+<p>Running <code>printf &quot;A 448\nB 7685\nC 5445\nD  482\nE 6266\n&quot; | dHondt -s10</code> gives</p>
+<pre><code>A - 0
+B - 4
+C - 3
+D - 0
+E - 3
+</code></pre>
+<p>I think the given implementation in <a href="http://www.r-project.org/" title="R">R</a> is faulty, although for above example it is correct.</p>
+<p>Test case #4 checks the borderline.</p>
+<pre><code>Party A       8
+Party B       8
+Party C       8
+</code></pre>
+<p>Running <code>printf &quot;A 8\nB 8\nC 8\n&quot; | dHondt -s1</code> gives</p>
+<pre><code>Drawing of lots for 1 seats required for parties: A B C
+A - 0
+B - 0
+C - 0
+</code></pre>
+<p>Test case #5 also checks borderline. Input as given in test case #4 but number of seats is 2. Perl program computes</p>
+<pre><code>Drawing of lots for 2 seats required for parties: A B C
+A - 0
+B - 0
+C - 0
+</code></pre>
+<p>Some historical notes on d'Hondt. According <a href="https://de.wikipedia.org/wiki/Friedrich_Pukelsheim" title="Friedrich Pukelsheim">Friedrich Pukelsheim</a> in his report seen in <a href="http://www.wahlrecht.de/doku/RE392.PS" title="Wahlrecht.de">wahlrecht.de</a> the naming of various methods used for seat allocation are good examples of <a href="https://en.wikipedia.org/wiki/Stigler%27s_law_of_eponymy" title="Stigler's law of eponymy">Stigler's law of eponymy</a>. D'Hondt's method was already used by <a href="https://en.wikipedia.org/wiki/Thomas_Jefferson" title="Thomas Jefferson">Thomas Jefferson</a>. D'Hondt's method is also known under the name <a href="https://de.wikipedia.org/wiki/Hagenbach-Bischoff-Verfahren" title="Hagenbach-Bischoff-Verfahren">Hagenbach-Bischoff method</a>.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Calculating+number+of+seats+in+parliament+using+d%27Hondt%27s+method%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Calculating+number+of+seats+in+parliament+using+d%27Hondt%27s+method&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method&amp;title=Calculating+number+of+seats+in+parliament+using+d%27Hondt%27s+method" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Calculating+number+of+seats+in+parliament+using+d%27Hondt%27s+method&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Calculating+number+of+seats+in+parliament+using+d%27Hondt%27s+method%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2014/02-24-calculating-number-of-seats-in-parliament-using-dhondts-method" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#Perl>Perl</a>, <a href=../../../aux/categories/#programming>programming</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#Hagenbach-Bischoff>Hagenbach-Bischoff</a>, <a href=../../../aux/tags/#election>election</a>, <a href=../../../aux/tags/#Jefferson>Jefferson</a>, <a href=../../../aux/tags/#parliament>parliament</a>, <a href=../../../aux/tags/#Sitzzuteilung>Sitzzuteilung</a>, <a href=../../../aux/tags/#Bundestag>Bundestag</a>, <a href=../../../aux/tags/#d'Hondt>d'Hondt</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>Perl:</p>
+	<ol>
+		<li><a href="../../../blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="../../../blog/2014/02-09-scheduling-cron-jobs-on-business-days">2014-02-09: Scheduling Cron Jobs on Business Days</a></li>
+		<li><a href="../../../blog/2014/07-10-no-perl-and-php-on-mainframe-from-ibm">2014-07-10: No Perl and PHP on Mainframe from IBM</a></li>
+		<li><a href="../../../blog/2015/01-05-migrating-from-delicious-com-to-wordpress">2015-01-05: Migrating from delicious.com to WordPress</a></li>
+		<li><a href="../../../blog/2017/06-26-text-analysis-using-concordance">2017-06-26: Text Analysis using Concordance</a></li>
+		<li><a href="../../../blog/2018/01-30-rewriting-perl-to-plain-c">2018-01-30: Rewriting Perl to plain C</a></li>
+		<li><a href="../../../blog/2018/02-06-parallelization-and-cpu-cache-overflow">2018-02-06: Parallelization and CPU Cache Overflow</a></li>
+		<li><a href="../../../blog/2018/02-22-unix-command-comm-compare-two-files">2018-02-22: Unix Command comm: Compare Two Files</a></li>
+		<li><a href="../../../blog/2020/06-09-splitting-and-anti-merging-vcard-files">2020-06-09: Splitting and anti-merging vCard files</a></li>
+		<li><a href="../../../blog/2021/06-21-wordpress-com-bulk-update">2021-06-21: WordPress.com Bulk Update</a></li>
+		<li><a href="../../../blog/2021/12-14-url-count-statistics">2021-12-14: URL Count Statistics</a></li>
+		<li><a href="../../../blog/2022/04-05-adding-categories-to-saaze">2022-04-05: Adding Categories to Saaze</a></li>
+		<li><a href="../../../blog/2022/04-09-table-of-contents-in-saaze">2022-04-09: Table of Contents in Saaze</a></li>
+		<li><a href="../../../blog/2022/11-12-line-length-distribution-in-files">2022-11-12: Line Length Distribution in Files</a></li>
+		<li><a href="../../../blog/2023/04-22-website-checking-with-ahrefs">2023-04-22: Website Checking with Ahrefs</a></li>
+	</ol>
+	<p>programming:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="../../../blog/2013/01-11-opengl-program-earth-with-moon-rotating-around-sun">2013-01-11: OpenGL Program: Earth with Moon Rotating around Sun</a></li>
+		<li><a href="../../../blog/2013/04-21-counting-to-ten-on-linux">2013-04-21: Counting to Ten on Linux</a></li>
+		<li><a href="../../../blog/2013/06-21-generators-are-now-in-php-5-5">2013-06-21: Generators are now in PHP 5.5</a></li>
+		<li><a href="../../../blog/2013/06-29-gnu-c-extensions-to-the-c-language-family">2013-06-29: GNU C: Extensions to the C Language Family</a></li>
+		<li><a href="../../../blog/2013/06-29-hash-functions-an-empirical-comparison-article-by-peter-kankowski">2013-06-29: Hash functions: An empirical comparison -- article by Peter Kankowski</a></li>
+		<li><a href="../../../blog/2013/06-30-hashing-just-numbers">2013-06-30: Hashing Just Random Numbers</a></li>
+		<li><a href="../../../blog/2013/06-30-very-simple-sha1-test-program-written-in-c">2013-06-30: Very simple SHA1 test program written in C</a></li>
+		<li><a href="../../../blog/2013/07-24-hiphop-virtual-machine-can-run-wordpress">2013-07-24: HipHop Virtual Machine can run WordPress</a></li>
+		<li><a href="../../../blog/2013/08-15-syncsort-sort-is-not-stable">2013-08-15: SyncSort Sort is Not Stable</a></li>
+		<li><a href="../../../blog/2013/09-12-dramatic-faster-sorting-in-linux-using-nsort">2013-09-12: Dramatic Faster Sorting in Linux Using Nsort</a></li>
+		<li><a href="../../../blog/2013/09-18-graphs-with-jpgraph-by-asial">2013-09-18: Graphs with JpGraph by Asial</a></li>
+		<li><a href="../../../blog/2013/09-21-georg-hagers-blog-intel-vs-gcc-for-the-openmp-vector-triad-barrier-shootout">2013-09-21: Georg Hager's Blog: Intel vs. GCC for the OpenMP vector triad: Barrier shootout!</a></li>
+		<li><a href="../../../blog/2013/10-13-javascript-grid-editor-i-want-to-be-excel">2013-10-13: JavaScript grid editor: I want to be Excel</a></li>
+		<li><a href="../../../blog/2013/10-18-what-makes-a-good-programming-environment">2013-10-18: What Makes a Good Programming Environment?</a></li>
+		<li><a href="../../../blog/2013/10-27-programming-in-excel-vba-compared-to-libreoffice-openoffice-calc">2013-10-27: Programming in Excel VBA Compared To LibreOffice (OpenOffice) Calc</a></li>
+		<li><a href="../../../blog/2013/10-30-good-fast-cheap-you-can-only-pick-two">2013-10-30: Good, Fast, Cheap: You Can Only Pick Two!</a></li>
+		<li><a href="../../../blog/2013/11-30-working-with-system-v-ipc-queues">2013-11-30: Working with System V IPC queues</a></li>
+		<li><a href="../../../blog/2013/12-01-output-from-devicequery-for-nvidia-gtx-560">2013-12-01: Output from deviceQuery for NVidia GTX 560</a></li>
+		<li><a href="../../../blog/2013/12-12-linux-commands-expect-and-kibitz">2013-12-12: Linux commands: expect and kibitz</a></li>
+		<li><a href="../../../blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="../../../blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="../../../blog/2014/01-13-changing-euid-effective-user-id">2014-01-13: Changing euid (effective user ID)</a></li>
+		<li><a href="../../../blog/2014/02-09-scheduling-cron-jobs-on-business-days">2014-02-09: Scheduling Cron Jobs on Business Days</a></li>
+		<li><a href="../../../blog/2014/05-01-defeating-annoying-timeout-in-openshift-ssh-access">2014-05-01: Defeating Annoying Timeout in OpenShift SSH Access</a></li>
+		<li><a href="../../../blog/2014/05-03-announcement-workshop-programming-of-heterogeneous-systems-in-physics-july-2014">2014-05-03: Announcement:  Workshop Programming of Heterogeneous Systems in Physics, July 2014</a></li>
+		<li><a href="../../../blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="../../../blog/2014/05-15-patching-faulty-edid-information">2014-05-15: Patching Faulty EDID Information</a></li>
+		<li><a href="../../../blog/2014/07-05-splitting-large-files-on-microsoft-windows">2014-07-05: Splitting Large Files on Microsoft Windows</a></li>
+		<li><a href="../../../blog/2014/10-27-effect-of-optimizer-in-gcc-on-intelamd-and-power8">2014-10-27: Effect of Optimizer in gcc on Intel/AMD and Power8</a></li>
+		<li><a href="../../../blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="../../../blog/2015/02-12-download-boost-library">2015-02-12: Downloading Binary Data, for example Boost C++ Library</a></li>
+		<li><a href="../../../blog/2015/10-27-working-with-windows-junctions-in-python">2015-10-27: Working with Windows Junctions in Python</a></li>
+		<li><a href="../../../blog/2016/02-03-performance-comparison-mmap-versus-read-versus-fread">2016-02-03: Performance Comparison of mmap() versus read() versus fread()</a></li>
+		<li><a href="../../../blog/2016/03-23-slides-on-openmp-by-christian-terboven">2016-03-23: Slides on OpenMP by Christian Terboven & Dirk Schmidl</a></li>
+		<li><a href="../../../blog/2016/04-05-performance-comparison-c-vs-lua-vs-luajit-vs-java">2016-04-05: Performance Comparison C vs. Lua vs. LuaJIT vs. Java</a></li>
+		<li><a href="../../../blog/2016/05-23-convert-ascii-to-hex-and-vice-versa-in-c-and-excel-vba">2016-05-23: Convert ASCII to Hex and vice versa in C and Excel VBA</a></li>
+		<li><a href="../../../blog/2016/05-30-gcc-6-1-compiler-optimization-level-benchmarks">2016-05-30: GCC 6.1 Compiler Optimization Level Benchmarks</a></li>
+		<li><a href="../../../blog/2016/11-22-operation-costs-measured-in-cpu-clock-cycles">2016-11-22: Operation Costs Measured in CPU Clock Cycles</a></li>
+		<li><a href="../../../blog/2017/06-26-text-analysis-using-concordance">2017-06-26: Text Analysis using Concordance</a></li>
+		<li><a href="../../../blog/2017/07-17-c-pointer-surprises">2017-07-17: C Pointer Surprises</a></li>
+		<li><a href="../../../blog/2018/01-23-hashing-with-iterator-in-c">2018-01-23: Hashing with Iterator in C</a></li>
+		<li><a href="../../../blog/2018/01-30-rewriting-perl-to-plain-c">2018-01-30: Rewriting Perl to plain C</a></li>
+		<li><a href="../../../blog/2018/02-06-parallelization-and-cpu-cache-overflow">2018-02-06: Parallelization and CPU Cache Overflow</a></li>
+		<li><a href="../../../blog/2018/02-22-unix-command-comm-compare-two-files">2018-02-22: Unix Command comm: Compare Two Files</a></li>
+		<li><a href="../../../blog/2018/03-03-towards-web-based-delta-synchronization-for-cloud-storage-systems">2018-03-03: Towards web-based delta synchronization for cloud storage systems</a></li>
+		<li><a href="../../../blog/2018/05-17-using-scooter-software-beyond-compare">2018-05-17: Using Scooter Software Beyond Compare</a></li>
+		<li><a href="../../../blog/2018/07-22-passing-hashmap-from-java-to-java-nashorn">2018-07-22: Passing HashMap from Java to Java Nashorn</a></li>
+		<li><a href="../../../blog/2019/01-19-java-sql-sqlrecoverableexception-io-error-connection-reset-by-peer-authentication-lapse">2019-01-19: java.sql.SQLRecoverableException: IO Error: Connection reset by peer, Authentication lapse</a></li>
+		<li><a href="../../../blog/2020/05-05-performance-comparison-in-computing-exponential-function">2020-05-05: Performance Comparison in Computing Exponential Function</a></li>
+		<li><a href="../../../blog/2020/05-12-installing-pallene-compiler">2020-05-12: Installing Pallene Compiler</a></li>
+		<li><a href="../../../blog/2020/05-14-performance-comparison-pallene-vs-lua-5-1-5-2-5-3-5-4-vs-c">2020-05-14: Performance Comparison Pallene vs. Lua 5.1, 5.2, 5.3, 5.4 vs. C</a></li>
+		<li><a href="../../../blog/2020/06-23-calling-c-from-julia">2020-06-23: Calling C from Julia</a></li>
+		<li><a href="../../../blog/2020/12-19-compiling-java-source-to-binary-native">2020-12-19: Compiling Java source to binary (native)</a></li>
+		<li><a href="../../../blog/2021/02-01-performance-comparison-ryzen-vs-intel-vs-bulldozer-vs-arm">2021-02-01: Performance comparison Ryzen vs. Intel vs. Bulldozer vs. ARM</a></li>
+		<li><a href="../../../blog/2021/03-29-php-extension-seg-faulting">2021-03-29: PHP extension seg-faulting</a></li>
+		<li><a href="../../../blog/2021/07-11-calling-md4c-from-php-via-ffi">2021-07-11: Calling MD4C from PHP via FFI</a></li>
+		<li><a href="../../../blog/2021/07-13-performance-comparison-c-vs-java-vs-javascript-vs-luajit-vs-pypy-vs-php-vs-python-vs-perl">2021-07-13: Performance Comparison C vs. Java vs. Javascript vs. LuaJIT vs. PyPy vs. PHP vs. Python vs. Perl</a></li>
+		<li><a href="../../../blog/2021/08-17-generating-json-with-cobol">2021-08-17: Generating JSON with COBOL</a></li>
+		<li><a href="../../../blog/2021/08-19-printing-cobol-section-names">2021-08-19: Printing COBOL Section Names</a></li>
+		<li><a href="../../../blog/2021/10-02-parallel-mass-file-processing">2021-10-02: Parallel Mass-File Processing</a></li>
+		<li><a href="../../../blog/2021/10-03-compiling-gnucobol">2021-10-03: Compiling GnuCOBOL</a></li>
+		<li><a href="../../../blog/2021/10-05-comparing-gnucobol-to-ibm-cobol">2021-10-05: Comparing GnuCOBOL to IBM COBOL</a></li>
+		<li><a href="../../../blog/2021/10-06-pecls-yaml-way-faster-than-symfonys-yaml">2021-10-06: PECL's Yaml Way Faster Than Symfony's Yaml</a></li>
+		<li><a href="../../../blog/2021/10-18-profiling-php-programs">2021-10-18: Profiling PHP Programs</a></li>
+		<li><a href="../../../blog/2021/10-29-saving-attachments-in-outlook-via-vba">2021-10-29: Saving Attachments in Outlook via VBA</a></li>
+		<li><a href="../../../blog/2022/01-23-ims-dc-mfs-to-php">2022-01-23: IMS/DC MFS To PHP</a></li>
+		<li><a href="../../../blog/2022/02-07-mass-lowercasing-of-file-names">2022-02-07: Mass Lowercasing of File Names</a></li>
+		<li><a href="../../../blog/2022/03-20-testing-cobolworx-gcc-cobol">2022-03-20: Testing COBOLworx gcc-cobol</a></li>
+		<li><a href="../../../blog/2022/03-21-phpmagazin-on-simplified-saaze">2022-03-21: PHPMagazin On Simplified Saaze</a></li>
+		<li><a href="../../../blog/2022/06-15-decompressing-zip-files-on-mainframe">2022-06-15: Decompressing ZIP Files on Mainframe</a></li>
+		<li><a href="../../../blog/2022/11-12-line-length-distribution-in-files">2022-11-12: Line Length Distribution in Files</a></li>
+		<li><a href="../../../blog/2022/11-13-fixed-block-files">2022-11-13: Fixed Block Files</a></li>
+		<li><a href="../../../blog/2022/11-19-introduction-to-hashing">2022-11-19: Introduction to Hashing</a></li>
+		<li><a href="../../../blog/2023/02-12-testing-cobolworx-gcc-cobol-p2">2023-02-12: Testing COBOLworx gcc-cobol #2</a></li>
+		<li><a href="../../../blog/2023/03-25-performance-comparison-c-vs-java-vs-javascript-vs-php-vs-python-vs-cobol-dart">2023-03-25: Performance Comparison C vs. Java vs. Javascript vs. PHP vs. Python vs. Cobol vs. Dart</a></li>
+		<li><a href="../../../blog/2023/07-09-profiling-php-programs-p2">2023-07-09: Profiling PHP Programs #2</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+	<script src="/jscss/prism.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAF7/cAumQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Elmar Klausmeier's Blog on Computers, Programming, and Mathematics">
+	<meta name="keywords" content="Computers, Programming, Mathematics">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+	<meta name="google-site-verification" content="oFWG5ZvD8FyusuGQTQlYACEt4z36pGjHtlwwKf3OSf4">
+	<title>Malcolm Gladwell: Don't go to Harvard, go to the Lousy Schools!</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+*/
+
+:root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+body {
+	background-color: var(--bg-color);
+	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	margin: auto;
+	max-width: var(--klmwidth);
+}
+article, aside { background-color: var(--bgAcolor) }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+
+@media screen and (min-width:50rem) {
+	/*article, aside { margin-left:3rem; width:46rem }*/
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	article, aside { margin-left:0.3rem }
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: var(--klmwidth);
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: Sandybrown; }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="../../../blog">Blog</a>
+			<a href="../../../aux/about">About</a>
+			<a href="../../../music"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABMUlEQVR42u2X0Q2CMBCGzwnUDdhAR+CBdxlBJxAmUCfADXQDGYAEnUCcQEZgA/0bS2y0lIOgBtMml4Ny99/XAjkY0I/HwAL0HsDzvBHcVJ4KL86HmjlKkuStXiMAFAvgZq/C3NEFQArntt2tLgBuDWvmMOdTAEfYSR5nsKI8RqFCl9MpgE6sTY4FsAAW4P8AlOZUICb7GgCuuXArMvSKRgByJXPYhB5d7yILvIkhVsTt6hbABpCCERnabSmGWAfuTIzWzAKAoA934IrJb4SoLp4ez8SYA3AlpYUyANak3BrD2CBnzQFg9XwFwIVLa8L3iF/oLrQF2EIwVHLELQg0cTksRGxcJaQDqBIzbiXyxLvvK1OZqXAlgBQTBZb0fLLFF04si+eMHWKP/v8XWIDeA9wBx7+7IWanAyUAAAAASUVORK5CYII=" height=32 width=32 alt=Music></a>
+			<a href="../../../gallery"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACNklEQVR42u2WTUhUURTHzxiE4C4QTAvDjSuVcpFSZB9uIlHyAyxd1KJAoaJMaGFE1EKwD1JQ0EWbUkFNCsRVqYFYgiW2yYURVEMQuBNEMP0d7pkYH9hMwx0KmgM/3rtz7r3nP/eee94NyV+2UEpASoA966Em4BuBQXgE2UmKH44IGIISeGPtyHsdbMAMfPMcPAdKowWIBQy2VUCtrYhP0xUfVgFh2B2jczWMBn77Anvs/Svs3WbsYZiEHdZ+CNeiBeg/vA+zgYE/zafPcVgN+I9Apr3/gNfbCEiHk5Bm7ffwKSjgAbxNYBkjW7iRwNiDuhKhBAd7s4iAeJNM9+8KPIEeeGdz7IcmaBR3bK/GMdeWLYhHgAa+B2fhmbjaccJ8L8XVDE3WfrhuQrwJ2AWfTUAHjMEhmDJ/GUzDKWg1Aftg2ZeAi+JOShbchAtwDBbMXwgT0Ad34Du0QK8vATpRHpSLq4i6/3cDfdrE5UGObcmSCfciYAB22qA1OCdur6OtAR5bvxHrd8aXAF3+o1AsrpDMw/lAHw1eBAdgTlz1a/ElQJPrBeRbAM34W9Bl/ktwW9zJUIEfoVJcsnoRoHX8g7iTUAHN0A4Z5l+BG9BtQXOhANZ9CVDT0qmZ/lxccqmoUvPNWDBN1ipxJyRWaf9jAWrHbfl1zFNbbjWthJqEIduGV3HMlZAANS1Kl+G0uJxQWxT3ue6U3xcfLwJ82RYBybhyxbJfV7JkXjpjWfifuZanBPy/AjYB2JuaL4ap5tEAAAAASUVORK5CYII=" height=32 width=32 alt="Gallery"></a>
+			<a href="../../../aux/search.php"><img src="data:image/png;base64,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" height=32 width=32 alt=Search></a>
+			<a href="../../../aux/yearOverview"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMUlEQVR42mNkGGDAiEtCU0ubtbq+sZmRkYmho6Wx9vKli79JMRhFfytQ/0Xs+nE6ID071ycsImoziL1h3Rrfyf29W0hxALH6cTqguaQkzMo/eCWIfWrLhvDKzs5VpDiguagozCowFKJ/2+bwyvY2rPoxHBCrriTeqqUw75uKlutTv2hWkJj0xiUM/DcukmI/w0cNfYan/jFgtvSmpb+571zb3XDzUfLca3de4HXAwwCnrWx/fnm9UFRnuOzkBxbT3beJQeL+TZIcgE3/H1a2bbLr93njdcBzH9tfDAz/Wa+ISDPccvUHi6nt3sig8+YpSQ7Arp/xt+SWw2wEHGDzH0Rf+/6L4V5QHFhMad0iBi1ONoKWIgNc+iW3HEGxE6cDXn39xvD+x0+wmCAHO4MYNxdJDsCln2gH/P//n+H7n79gMU4WZgZGRkYGUgAu/UQ7gFZg8DvgzYePNHWAiAD/EHHAr9+/Gb59+w4W4+LiBNOU8NlYWUlzwIePnxgePnoCFpOXkwHTlPAF+PmGmAMGPAoG3AEDHgUD7oABj4IBd8CAR8GAOeD1+w//QXU3LaIA1EYQFRTA74B7j5784+PjJa31QST49OnzfyU5GSa8Djh4/NR1WWkpDV5eHpJbQbgAyOefP39hePz02Q17SzNNvA6oaWh2cXR2WQ9k8lA5AL4cPXwosK6qfA9eB4CAm4eXqLKKqhUwAFipEgIMDL/v3717bMe2La/R5WgS16SAAXcAAFbo4DBXnKDKAAAAAElFTkSuQmCC" height=32 width=32 alt="Year Overview"></a>
+			<a onclick="return darkLightToggle()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=" alt="Moon" class="Moon" id="darkLightIcon" height=32 width=32></a>
+			<a href="../../../sitemap.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYw+3XPUgcURSG4Se6BhFCBEGIvZaCRZpEQbCwstJGmyjY2UhKC60SAgYrCwutBEt/ChcbC1ER0qRJIXYWtpqABFZ3Y5obmGKWzMy6s8L6wWnuzJzvnftzOJdm14sq4614g5aMeW9xnRWqBxf4U0OUsZTErBAz9iHMTD8qGX9iFF/wKcCkAujAFX7UsLRdeBkiNUCuqjfAGEr4jstGAGxETtIwvuUN0I3fOMV4IwD+6RfamnITPgM0B0BrKLlRtecFMIk1vIp5VsF9vQGWQ7Xbjoy9w2es5wHwGsc4iZgvYAtzeW/C9yhiD9OhMckNYBD72MVMUvPHAhjCLHbSmlcDuEEvJv7XzYQjOI/NLObV1IlD3AWAcjhSpdDtRuMaXxN0z0WsJJ2BnxiJSXCOj42qhA817pdCteVJmvQIixjIYN6Ct1hNczOKe28KfSm+ic7eGQ486ynqL0FCUbvgKUTtAAAAAElFTkSuQmCC" height=32 width=32 alt=Sitemap></a>
+			<a href="../../../aux/categories"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAQAAABJYMuwAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cFHBIdJMl3GR4AAAL1SURBVDjLddRfSN11GMfx19Hjv6MNdUL5f9aW2QHdJsUyi9U21lZE7aKLukqMRRlLqCYtwquIkkFQdDFojF00YiUbtC7WWi1kFplFuqBsyWq4+Rdt05rneLo4R3fUc56b5/d7vs/7+/s8v+/3eYCwY+qltpAPfCJreTAIyj2pyvOGhTWocYuIEYP6XfOmFucFza/G8l102TFTilx1ybRsWzwlw5wFR2xYKSGOFZjwsmfMOe2S2cRKiXvd54gt7hJIpX+vs3Kls1bnhJaHMkCtieXal9mUYiWrsXIP+0w0LfaNGXtWYiH3izkDCjUlia2xUQDjuj2qWF4yeNKQXmFZ2O4ntYLWKECnE7KRp8WYHq8kYzt8bdoFJ7S5W71sr+pzyu1K1dqs01nDrnnbnTehTBets2C/HI+46rQoWvToNmVSu3rdem3QZnj5uY2pUeqKAWNyFAjJV65IgX8Mi5i004SFZIkBdQ5pNKvfqEPu0CakT4VCM9rV22WjKqM+tj/5b+cJe8mwJ0Cl3ZrkKvW4bUJo0O9Dm1ZfMILe8JsXFa6I59ij32FF6Y40qNWI817TrMZtKjXa63PXvSc/VXrcIk7Z5w87PCtmXqYMk75VbMT19Bj16DCuQpl8/7rishmve9BBN9JePJ1OruxhbHXB+tXJGQmf7R7fp+iCQXMa02Olqn2XQsO4XzyQHqsT82sKLOacRoW4VZcuj8UbdhFr8LfRlDX3KlSHiCll3vWRqsWlgKMOJp4zE3Nj0ef5UvtSXtgXuhXHv1agxgDI95YGBB3wEJgzoGFJ8qAXVHsujpUo8nti752qkWWb2kTykIqknv/Tp56OY2sFEpXFRMVgyTMjL+la8LOyjKU60o+gAjeWreaJxrFRMevSYo2GzC29Zdrtxzj2lz6t8hPSoogkPM2aHV+Ccu3TpCuuOeIdhx113H/W2GxWyFphW1XqMCFoO3JU2mW9A766Ods36dAkJMe8iIAcUfOyZZsTFRATM63H+37gf0xG1O2CK9QzAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA1LTI4VDE4OjA4OjExKzAwOjAwEkcwRQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNS0yOFQxODowODoxMSswMDowMGMaiPkAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjMtMDUtMjhUMTg6Mjk6MzYrMDA6MDAEI0IqAAAAAElFTkSuQmCC" height=32 width=27 alt="Categories"></a>
+			<a href="../../../feed.xml"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR42u2XW2wUZRTH/zOzs5dpC2yFhFJoKSVqagWBQkIoWEIMEiOmJpAIaqKiD5SEy4skEHiAhAcuIn2BAFICSEwwgoXIg4m1xEZRrEptaW1ppaXlfmu7c9v9hjOU7uzHDEuhTfvCedrvzPm++c25/GdW6PxhDhPIMARmkQldp1+3huLmvfYcwAUQmLwFYjgPMO/B0m+AdbeBdf6H2O3zYF3NGOhucQEEp+2ENPI1z2AWuYLolQpE207BUlsHH6DXqHkRu1YFo/ErWF1Ngw/ggDBEW0/CaNgDxLoHBsCX/R7EtAkQ/CMgKmMgKBlUdzHpIUy9Cv3vTWB3a/oP4DIpBVJ4EqRRs+DLKIIgp3png5kwancherl8gAESTQzCl7kA8oSl9HOkZ4jRcADGxTL0VVyfTQcIRM79CHLOIs/y2BBm88FnA/Dnr4eYmk0acJPmvgWM5j926w8qtO7mCE8h3dgAMRDm/PaUGDXbEG0/9fQAXlNgRVU67Ed6qqOwtHb+gOBo2rOVoMfxe6gntN9Wgt2r7T9A4qFm8zcwmyi9lulckMMIzSgliLFcPIt0QK36hEY0MjAAvRa7Uw/9r/VUpusJmchAaOZuGt/hXKzZ8h2M+i/7DiDnLoOUPhliShaEwPDHbmTqdWi/ryZJbov7xPQCBAu2chNgsRhlYRms7ua+AcQ3kldMy4VvzHzIY9+i+U/xgLhGdS7hMuF/aSXk8cVcXLTjZ+j/bHw6AM58w+jgEgKZ71GOC9DOrrA7tcdBwhWafZibDFuy1cr3XQ3cd4Bejsy34c9bBUGUOL/ReIgac78Tl70YgZeX8zFNh2E27usfQA/EQgTy13A+ezrUMx/SE3b0OEQFStExKpvilKu7HZEzS1zfE94AYoC0v/BBR7M7/9IHST132f/KWirHm5zPvFQOo2570phIJUGql54A4E9HaPpOmumsh/WzKHVlMC8mSKsvDcrsrwkwzclCVEPkp2K7Mx+s7QcITt3MHa3b6nj5ZHIAf/46yJlv8CkmCO3X5aRqdXGfPPFT+HOXcnFa9Qb6UKnsWUipUOaVcyNp/n8CxoUvkgOE5hyDGHK/6YyGvaSCR5yNKeOhFJbxZWj5lkSn1Dmr8CjpSUZ8HbvxJ7RzfP+4lXDmAUjDclwAes0OSt/3CVkBlLnHqV1GJNygmm6wOr4OTN0G36iC+Jp1tUL95YPkAF5dbqueWvUxKUon5w9OLyXVfPWxN3i0nEy/C7XineQAdr3lrHfpXU8jQ2LCbp2HXrudk9x4H7xYAumFKc5e7Sb06s+d6yTrvtFFznUzQqL1WXKAwbbnAMIQ/z3HfQ7n42k1VPCfAAAAAElFTkSuQmCC" height=32 width=32 alt="RSS Feed"></a>
+		</div>
+		</nav>
+	</header>
+
+
+	<main>
+	<article>
+	<p class=dimmedColor><time datetime="2013-11-02 22:44:04">2nd November 2013</time>, 15 min read</p>
+<h1>Malcolm Gladwell: Don't go to Harvard, go to the Lousy Schools!</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools">eklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools</a>.</p>
+<br>
+<p><a href="https://en.wikipedia.org/wiki/Malcolm_Gladwell">Malcolm Gladwell</a> held a speech at Google Zeitgeist Americas 2013 about drop-out rates in schools, especially in math and science. It turns out that going to one of the top universities is rarely a good idea, contrary to popular belief.</p>
+<p>Some quotes:</p>
+<ol>
+<li>EICD - elite institution cognitive disorder</li>
+<li>Your chance of graduating with a STEM degree from Maryland is 30% higher than it would be from Harvard.</li>
+</ol>
+<p>He cites a paper by <a href="https://ideas.repec.org/p/van/wpaper/vuecon-sub-13-00009.html">John P. Conley and Ali Sina Onder</a> (mistakenly copied as John Connelly and Allie Under in the transcript).</p>
+<iframe width=560 height=315 src=https://www.youtube.com/embed/3UEwbRWFZVc frameborder=0 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>Transcript is in <a href="https://web.archive.org/web/20180622135805/http://lybio.net:80/malcolm-gladwell-zeitgeist-americas-2013/science-technology/" title="malcolm-gladwell-zeitgeist-americas-2013">Malcolm Gladwell: Zeitgeist Americas 2013</a>. Or drectly on the YouTube video.</p>
+<blockquote>
+<p>It’s a real pleasure to be here. I was — I’m acutely conscious to the fact as I listened both to our previous speaker and also the ones before that everyone has been speaking about very consequential and high-minded things this morning, and I’m not going to do that at all. In fact, I intend to give what I am sure will be the most solipsistic talk ever at a Google Zeitgeist. I simply want to talk about why on earth I decided to say yes and come here. Here’s the situation. I’m a writer. Part of what I do to make my living is I go and give speeches at conferences like this. And I get paid, right, as one would, and it’s that money that I use to make my living. So how much is Google paying me for this? Zero. It is a company with, what, $50 billion in the bank, and they don’t have a dime for poor little old Malcolm. Now, we could talk at length about what this says about Google, but that’s not what interests me. What interests me is what that says about me. Why on earth would I say yes under such a circumstance? Why — you know, I’m busy. My time is really valuable. Why did I fly all the way out here, across the country, to give away my intellectual property for free? In fact, it wasn’t even free. I had to print out my speech this morning in the business center. And — this is the bill — it cost me $9.87. It is costing me to be here. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>Now, you can say that I came here because there is all kinds of interesting people here, which is true. I don’t mean to cast any aspersions on any of you, but my life is lousy with interesting people. I got more interesting people than I know what to — So you could say maybe I should have come here — I should come here because I can make contacts that will help me, you know, in the business world. I’m not in the business world. I don’t need to meet a V.C. I work out of my apartment. If I want to renovate my kitchen, I will just go to the bank for a loan. There’s no — it doesn’t make any sense, in other words, for me to be here. So why did I say yes? Well, the answer is that this conference is run by Google, one of the most prestigious and successful companies in the world. I would not have agreed to speak for free at a Yahoo! conference, would I? Right. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>So, in other words, my decision to do something that is not in my best interest was caused by my association with an elite institution. And this is what I want to talk about today. It is an argument that I make in my new book, “David and Goliath,” which in further proof of how baffling my decision was to come here is not available for sale at this conference. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>I like to call this problem elite institution cognitive disorder, or EICD. And it is simply that elite institutions screw us up in all kinds of ways that we’re not always conscious of. And since the theme of this morning’s session is “Imagine a Better World,” I want to try and imagine what the world would look like if we freed ourself of the scourge of EICD. So I am going to give you a couple of examples of EICD in action. But let me start with the very thorny question of science and math education in this country. STEM as we call it. We have a problem in turning out enough science and math graduates, right, in this country. And it is not for lack of interest, by the way, among high school seniors. Lots and lots and lots of high school seniors want to get science and math degrees, but approximately half of them drop out by the end of their second year. So we have a persistence problem in science and math education in this country.</p>
+</blockquote>
+<blockquote>
+<p>So the question is why? Why do so many kids drop out? Well, the obvious answer is that science and math are really hard and you need to have a certain level of cognitive ability to master those subjects and we don’t have enough smart kids, right? So if that’s true, if science and math education is a function of — we should be able to see in the statistics that persistence is a function of your cognitive ability. So let’s take a look. By the way, this is the first time in my life I have ever used PowerPoint. This is like a fantastic moment for me. I feel like I have finally joined the 20th century. It is really kind of amazing. Oh, wow.</p>
+</blockquote>
+<blockquote>
+<p>Okay. So this is — I’ve just chosen Hartwick College as a proxy for American colleges for totally random colleges. Hartwick is a small liberal arts college in upstate New York. What we have a distribution of math S.A.T. scores by — among the people who are intending to major in science and math. What you can see is that there is quite a wide range of native math ability among the kids entering the freshmen STEM programs at Hartwick, right?</p>
+</blockquote>
+<blockquote>
+<p>So what do we see when we look at the — who ends up graduating with a STEM degree? What we see is – that at Hartwick College, the kids in the top third, the top third S.A.T. scores, end up getting well over half of the STEM degrees and the kids with the bottom scores end up getting very few of the STEM degrees. Those kids over there are dropping out like flies, right. This would seem to suggest that our original hypothesis that persistence is a
+function of cognitive ability is true. And this would also — we can also go further. We can say if this hypothesis is true, as we go to more and more selective institutions, we should see a very different pattern of persistence. We should see less kids dropping out because the kids are all smarter, right?</p>
+</blockquote>
+<blockquote>
+<p>So let’s go to Harvard. These numbers are a few years old. But at Harvard, you can see that the bottom third of math S.A.T. scores among kids doing science and math are equal to the top third at Hartwick. The dumb students at Harvard are as smart as the smart students at Hartwick. So you would think everybody at Harvard should be getting a math and science degree, right? Why would they drop out? Everyone is so smart. What do we see?</p>
+</blockquote>
+<blockquote>
+<p>Oh, dear. What we see is the exact same pattern at Harvard that we saw at Hartwick. The smart kids are — the top kids are getting all the degrees. The kids at the bottom aren’t getting any degrees. They are dropping out like flies, right? Even though these kids are brilliant. Right?</p>
+</blockquote>
+<blockquote>
+<p>So what’s happening? Well, clearly what we’re seeing here is that persistence in science and math is not simply a function of your cognitive ability. It’s a function of your relative standing in your class. It is a function of your class rank, right? Those kids who are really, really brilliant don’t get their math degree not because — not as a function of their IQ but as a function of where they are in their class. And, by the way, if you look at any college you want, you will always see, regardless of the level of cognitive ability among the students, you will always see the same pattern. The kids who get the science and math degrees are the ones in the top of their class. And the kids in the bottom of their class never do. Look over at that bottom third — the bottom third chart over there.</p>
+</blockquote>
+<blockquote>
+<p>So the name given for this phenomenon amongst psychologists is <a href="https://en.wikipedia.org/wiki/Relative_deprivation">relative deprivation</a> theory. And it describes this exceedingly robust phenomenon which says that as human beings we do not form our self-assessments based on our standing in the world. We form our self-assessments based on our <strong>standing in our immediate circle,</strong> on those in the same boat as ourselves, right? So a classic example of relative deprivation theory is which kind of country — which countries have the highest suicide rates? Happy countries or unhappy countries? And the answer is happy countries. If you are morbidly depressed in a country where everyone else is really unhappy, you don’t feel that unhappy. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>Right? You are not comparing yourself to the universe — the whole universe of people out there. No. You are comparing yourself to your neighbors and the kids at school and they are unhappy, too, so you are sort of fine. But if you are morbidly depressed in a country where everyone is jumping up and down for joy, you are really depressed, right? That is a very, very, very profoundly serious place to be and so as a result, you get that sad outcome more often.</p>
+</blockquote>
+<blockquote>
+<p>So what’s happening at Harvard then? The kid in the bottom third of his class at Harvard does not say rationally: I’m in the 99.99th percentile of all students in the world when it comes to native math ability, even though that’s true. What that kid says is: That kid over there, Johnny over there, is getting all the answers right and I’m not. I feel like I’m really stupid and I can’t handle math so I’m going to drop out, get a fine arts degree, move to Brooklyn, work, make $15,000 a year and break my parents’ heart, right? [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>So what is the implication of this? The implication of this is that if you want to get a science and math degree, don’t go to Harvard, right? In fact, we can run the numbers on this. Mitchell Chang at UCLA recently did the numbers and he says as a rule of thumb, your odds of graduating — successfully getting a science and math degree fall by two percentage points for every ten-point increase in the average S.A.T. score of your peers. So if you are a kid and you have a choice between — if you get into Harvard and University of Maryland is your safety, University of Maryland has 150 — on average S.A.T. scores are 150 points lower at Maryland. That means your chance of graduating with a STEM degree from Maryland is 30% higher than it would be at Harvard. Right?</p>
+</blockquote>
+<blockquote>
+<p>Now — so if you choose to go to Harvard and not Maryland, you are taking an enormous gamble. You are – you are essentially saying this STEM degree — by the way, the most valuable commodity any college graduate could have in today’s economy, I am going to take a 30% gamble in my chances of getting that degree just so I can put Harvard on my resume’. Is that worth it? I don’t think so. Right? But how many kids given a choice between Harvard and Maryland choose Maryland? Not that many. Why? EICD.</p>
+</blockquote>
+<blockquote>
+<p>Now, why does EICD persist if it is so plainly irrational? Well, I think it is because as human beings, we dramatically underestimate the costs of being at the bottom of a hierarchy. Let me give you another really remarkable example of this. This is from a paper that was — just came out from a guy named — two economists John Connelly and Allie Sundy — Allie Under, rather.</p>
+</blockquote>
+<blockquote>
+<p>They looked at graduates of Ph.D. programs, economics Ph.D. programs at American universities. And what they were interested in was what is the publication record of these graduates in the six years after they took an academic position?</p>
+</blockquote>
+<blockquote>
+<p>So as you know, the principal way by which we evaluate economists is how often and how well do they publish. So what these guys did is they did a little algorithm, took the top economics journals, and rated them according to their level of prestige, and came up with a number of how many — your score in the six years after graduation. So we get this chart here. What you can see, first of all, look at the 99th percentile. So what this says is, the kids who are in the 99th percentile of their Ph.D. program at Harvard, M.I.T., Yale, Princeton, Columbia, Stanford, Chicago, the 99th percentile, that’s what they publish. The Harvard students publish 4.31 journal articles in their first six years after graduation. That’s amazing. Right? Astounding number. Same with M.I.T., 4.73. All the way down the list. What we see here is that the best students at the very best schools are extraordinary, and that comes as no surprise. You just saw Larry Summers here. I don’t know where he went. Larry Summers, that’s Larry Summers, right? Brilliant. Genius. We knew that. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>Let’s look at the 85th percentile. Now, the 85th percentile at these schools, these are schools that might take two dozen Ph.D. students every year. So if you’re in the 85th percentile in the M.I.T. economics program, you’re the fifth or sixth best student in your class. That’s really smart, okay? The 85th percent student at M.I.T — or at Harvard, let’s do Harvard, publishes basically one paper in their first six years versus 4.31 in the top student.</p>
+</blockquote>
+<blockquote>
+<p>So the gap between one and five is enormous, right? It is 5X. Now, let’s go down to the 55th percentile at Harvard. So the 55th percentile at Harvard is the — let’s say, the 12th best person at the greatest economics program in the world.</p>
+</blockquote>
+<blockquote>
+<p>They could arguably say they are one of the 20-top Ph.D. economic students in the world, right? Look what their publication rate, .07. Basically, they’re not publishing at all. By any standard by which we judge academic economists, these people are complete failures, right? Now, I’ve picked lousy schools. [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>And I’ve started with Toronto, which is where I went to school. So this is a little masochistic moment where I basically confess to how paltry my academic pedigree is. I have also picked B.U. and then I have also picked — non-top 30 is simply all the schools that are so terrible I can’t bring myself to name them.</p>
+</blockquote>
+<blockquote>
+<p>We’ve aggregated them all so these are schools that if your child — anyone in this room, if your child said they were going to go to one of these schools, you would weep, okay?</p>
+</blockquote>
+<blockquote>
+<p>What do we see here? What we see here is that the 99th percentile at these lousy schools publish more than everyone at the top schools except for the 99th percentile, right? Do you see that?</p>
+</blockquote>
+<blockquote>
+<p>Look at Toronto, 3.13. The only people who publish more than the top student at Toronto are the top students at those top seven schools. The top student at Boston is publishing three times more than the 80th percentile student at Harvard. What does this tell us?</p>
+</blockquote>
+<blockquote>
+<p>Well, it tells us that — oh, before I get there. The guys that did the study, having done the study, were so stunned at what they were seeing that they end their article with this whole thing about what on earth is going on with Harvard? Right. Here’s a school which is collecting the most brilliant, the most accomplished, probably the best-looking graduate students in economics — [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>I can’t imagine the bar is that high; but, nonetheless, it presumably is a selection criteria. They gather them all together and, yet, everyone except for the very, very best students is basically a flop. And they say, I’m quoting them, “why is it that the majority of these successful applicants who are winners and did all the right things up to the time they applied to graduate school became so unimpressive after they are trained?” Are we — and this moment of genuine distress on the part of these two economists: Are we failing the students or are they failing us? Right?</p>
+</blockquote>
+<blockquote>
+<p>No one’s failing anyone! What you’re just seeing is relative deprivation in action, right? When it comes to confidence and motivation and self-efficacy, the things that really matter when it comes to making your way in the world, relative position matters more than absolute position. Right.</p>
+</blockquote>
+<blockquote>
+<p>The 80th percentile student at Harvard looks at those kids who are smarter than him and says, “I can’t do it.” The number one student at Missouri says, “Wow, I’m lord of the manor. I’m going to go out and conquer the world,” right? So what does it mean? Well, what it means, first of all, when it comes to hiring, it means you should hire on the basis of class rank.</p>
+</blockquote>
+<blockquote>
+<p>And you should be completely indifferent to the institution attended by the applicant. In fact, we should have a ‘don’t ask, don’t tell’ policy for the name of your undergraduate institution. It’s hurting us to know that. Doesn’t help us. And when you hear some institution, some fabulous Wall Street investment bank, some university say, “We only hire from the top schools,” you should say, “You moron!” [ Laughter ]</p>
+</blockquote>
+<blockquote>
+<p>That’s what — that’s — that’s the previous slide. I don’t know how to go backwards on slides.</p>
+</blockquote>
+<blockquote>
+<p>No, you don’t want to hire from only the best schools. You want to hire from the top students from any school under the sun. And it also means that when it comes — if you have kids going to college, when it comes to choosing your undergraduate institution, you should never go to the best institution you get into, never.</p>
+</blockquote>
+<blockquote>
+<p>Go to your second or your third choice. Go to the place where you’re guaranteed to be in the top part of your class. So why don’t we do that? Well, why did I come here when it was profoundly in my self-interest not to, right? Because when we have an opportunity to join elite institutions, we are so enormously flattered and pleased with ourselves that we do things that are irrational. Thank you.</p>
+</blockquote>
+<p>Addendum 28-Nov-2013: Alexandre Afonso: <a href="https://alexandreafonso.me/2013/08/25/do-good-universities-teach-better-or-do-they-just-select-better-students/" title="Do good universities teach better, or do they just select better students?">Do good universities teach better, or do they just select better students?</a></p>
+<p>Addendum 22-Mar-2014: There is a somewhat related article in <a href="https://www.newyorker.com/" title="The New Yorker">The New Yorker</a> by Malcolm Gladwell about college rankings in <a href="https://www.newyorker.com/reporting/2011/02/14/110214fa_fact_gladwell?currentPage=all" title="THE ORDER OF THINGS: What college rankings really tell us.">THE ORDER OF THINGS: What college rankings really tell us.</a></p>
+<p>Added 04-Jul-2023: Compare this with <a href="../../../blog/2023/01-29-price-s-law">Price's law</a>: academic papers produced per person. While Price's law provides a nice formula for the resulting output, Gladwell offers a reason <em>why</em> this outcome ensues, in this case EICD, i.e., doing something, which is not in your best interest.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Malcolm+Gladwell%3A+Don%27t+go+to+Harvard%2C+go+to+the+Lousy+Schools%21%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on Twitter" target=_blank>Twitter</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Malcolm+Gladwell%3A+Don%27t+go+to+Harvard%2C+go+to+the+Lousy+Schools%21&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools&amp;title=Malcolm+Gladwell%3A+Don%27t+go+to+Harvard%2C+go+to+the+Lousy+Schools%21" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Malcolm+Gladwell%3A+Don%27t+go+to+Harvard%2C+go+to+the+Lousy+Schools%21&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Malcolm+Gladwell%3A+Don%27t+go+to+Harvard%2C+go+to+the+Lousy+Schools%21%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2013/11-02-malcolm-gladwell-dont-go-to-harvard-go-to-the-lousy-schools" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=../../../aux/categories>Categories</a>: </strong><a href=../../../aux/categories/#sociology>sociology</a>, <a href=../../../aux/categories/#college>college</a>
+	<br><strong><a href=../../../aux/tags>Tags</a>: </strong><a href=../../../aux/tags/#drop-out>drop-out</a>, <a href=../../../aux/tags/#Maryland>Maryland</a>, <a href=../../../aux/tags/#STEM>STEM</a>, <a href=../../../aux/tags/#university>university</a>, <a href=../../../aux/tags/#Malcolm-Gladwell>Malcolm Gladwell</a>, <a href=../../../aux/tags/#Harvard>Harvard</a>, <a href=../../../aux/tags/#education>education</a>, <a href=../../../aux/tags/#Toronto>Toronto</a>, <a href=../../../aux/tags/#S.A.T.>S.A.T.</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p>Blog posts with same categories.</p>
+	<p>sociology:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-09-dean-kamen-at-bates-college-commencement-2007">2013-01-09: Dean Kamen at Bates College Commencement 2007</a></li>
+		<li><a href="../../../blog/2013/07-19-blend-sohne-und-weltmacht-and-why-nations-fail">2013-07-19: Blend "Söhne und Weltmacht" and "Why Nations Fail"</a></li>
+		<li><a href="../../../blog/2013/08-31-mark-twain-commentary-on-the-macbook-air">2013-08-31: Mark Twain Commentary on the MacBook Air</a></li>
+		<li><a href="../../../blog/2013/10-18-what-makes-a-good-programming-environment">2013-10-18: What Makes a Good Programming Environment?</a></li>
+		<li><a href="../../../blog/2013/11-27-how-academia-resembles-a-drug-gang">2013-11-27: How Academia Resembles a Drug Gang</a></li>
+		<li><a href="../../../blog/2014/06-28-7-day-week-6-day-week-5-day-week-soviet-calendar">2014-06-28: 7-Day Week, 6-Day Week, 5-Day Week, Soviet Calendar</a></li>
+		<li><a href="../../../blog/2015/03-03-average-daily-commuting-time-in-europe-and-the-u-s">2015-03-03: Average daily commuting time in Europe and the U.S.</a></li>
+		<li><a href="../../../blog/2015/03-22-malcolm-gladwell-on-the-importance-of-stubbornness">2015-03-22: Malcolm Gladwell on the importance of stubbornness</a></li>
+		<li><a href="../../../blog/2015/03-28-malcolm-gladwell-on-the-financial-crisis">2015-03-28: Malcolm Gladwell on the financial crisis</a></li>
+		<li><a href="../../../blog/2021/12-31-internet-adoption">2021-12-31: Internet Adoption</a></li>
+		<li><a href="../../../blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+	</ol>
+	<p>college:</p>
+	<ol>
+		<li><a href="../../../blog/2013/01-09-dean-kamen-at-bates-college-commencement-2007">2013-01-09: Dean Kamen at Bates College Commencement 2007</a></li>
+		<li><a href="../../../blog/2015/07-12-visiting-gsi-helmholtz-centre-in-darmstadt">2015-07-12: Visiting GSI Helmholtz Centre in Darmstadt</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 29-Aug-23 11:06 GMT using <a href="../../../blog/2021/10-31-simplified-saaze">Simplified Saaze</a><br><br>
+		</p>
+	</footer>
+
+<script>
+function darkLightToggle() {
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.src = document.body.classList.contains("dark-mode") ?
+		"data:image/png;base64,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" :
+		"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADO0lEQVR42tWXe0hTURzHv/dutd25mivzlRaVjwwl+6P/KiELFgpC/dUDzZKMKc3QGVjgH6FoRDiXlb1T04gws+y/yLTUXqZp5YOKnH8Ulctgm5vb7NwLk8Y0d83d6Avnci73/M73c37nce+l8I9FsZc1qyKVCvmCXaQqFsjXbrJYal8PvDNyAOtj12ZJJZLTQo7cbrdnt3d3VrgANASgTGCAHAKg+/8AJiYmwMgYjFnGhAFgDW1jFoxbx6BKTkbiNhXO6Svw5fMX3wA4HQ5YLWau2CwmUiwIDQuD7spVxMbH40BqOj5++DC3U7AmfJmGcjrKbGYzxm1Wt4ZRMTGoudeEJUFBuHSuEtcuXv5rcw+AMEaqEdO0xxQsCgjAvcdPEEIyYCGZ2K5KgslkEg7gdFUVkrbv4OotD5txTHtkTsy9AoiNX4fG1lZQFNcE5yvOooasA8EAivV67EzfN3lferwITXcahQNo6+9HyNKwyftTJaVouFUvDIBCqUSXYdgt4Eb1dZzRlQsDsDIyEg9edbkFDPT1IWNPmjAAy1esQHNPr1sAeyJm7EnFYP+A7wGkDIM35KilRSK3oOcdT5Gbfcj3AKzut3cgJi7OI/CsTo+66hpeZoxMBofdDpvN5j2ApqAAOQVHPTpzOp04U1aOm7V1Xpkr/P2RmaXGiaJifhlgz/5Hvb1gGNmUHT9paeV2heHT0JTPaZrG5q1boM45hCuVF3C34Q4/AFZZ2nzkFRZOOzo2G10vO/Hi2TMMDxlgtVrhT0YctToaGxISEBQSzO2ezLR9cJC3LG8AEVmEl+vrsSlxC685d+nn6CgO7t2PYYPB45lXAKzYBVRZdwMbExN5mY98H0G+5jCXgankNYArE2qtFurcPG6LzqS21sc4WVyCb1+/TtuGF4BLQaGh2L0/A6qUFERER0++KVn9MBrxtK0djbcb0NPVPSPkrAB+10Ky2JZHREGuUMBEPlCNI0ZeU8QbgKJoSMh6kMjkkPr5YZ5E6pYBvpoZgHQuYVhDP0hJmU/qf2P4ZwAZky2mKP18KQOJn5wzZM0pcpj4Sm6/ZuGLFysDA4N30SKxgD+n5tq37weNc5fTWeoXoRrSMPfs6hIAAAAASUVORK5CYII=";
+}
+//const darkLightIcon = document.querySelector("#darkLightIcon");
+//darkLightIcon.addEventListener('click',darkLightToggle);
+</script>
+
+
+</body>
+</html>
