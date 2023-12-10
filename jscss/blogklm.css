@@ -5,20 +5,31 @@
    11-Jul-2022: p+ul+ol same font
    09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
    28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
 */
 
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
 :root { --bg-color:#fffff8; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:LightGray; --klmwidth:46rem; }
-.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:Orange;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
 body {
 	background-color: var(--bg-color);
-	font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+	font-family:Merriweather,"Times New Roman",ui-serif,Georgia,Cambria,Times,serif;
+	/*font-size: 28px;  font-weight: 100;*/
 	margin: auto;
 	max-width: var(--klmwidth);
 }
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
 article, aside { background-color: var(--bgAcolor) }
 
 a { color:inherit }
 a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
 
 
 img[alt=Photo] { width:var(--klmwidth) }
@@ -29,12 +40,31 @@ td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.
 th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
 tr:nth-child(even) { background-color:var(--nthChild); }
 
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
 
 @media screen and (min-width:50rem) {
 	/*article, aside { margin-left:3rem; width:46rem }*/
 	h1 { font-size:3em; color:var(--h1Color) }
 	h2 { font-size:2.7em; color:var(--h1Color) }
-	h3 { font-size:2em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
 	p { line-height:1.7; font-size:1.3rem }
 	blockquote { line-height:1.5; font-size:1.3rem }
 	ul, ol { line-height:1.5; font-size:1.3rem }
@@ -47,7 +77,8 @@ tr:nth-child(even) { background-color:var(--nthChild); }
 	article, aside { margin-left:0.3rem }
 	h1 { font-size:2.2em; color:var(--h1Color) }
 	h2 { font-size:1.7em; color:var(--h1Color) }
-	h3 { font-size:1.2em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
 	p { line-height:1.5; font-size:1.0rem }
 	ul, ol { line-height:1.4; font-size:1.0rem }
 	li { margin-bottom:0.4rem }
@@ -60,9 +91,11 @@ footer { font-family:sans-serif; color:Gray }
 .chartarea { height:400px; width:600px }
 
 /* Copied from TailwindCSS 2.0 typography.min.css */
-code { color:inherit; font-weight:600; font-size:inherit }
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
 code::before { content:"`" }
 code::after { content:"`" }
+pre > code { font-weight:400 }
 pre code::before { content:"" }
 pre code::after{ content:"" }
 
