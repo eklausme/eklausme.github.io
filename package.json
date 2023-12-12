@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "netlify-cli": "^17.10.1",
-    "vercel": "^32.6.1"
-  }
-}
