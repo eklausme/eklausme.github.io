@@ -1,0 +1,158 @@
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   21-Aug-2022: grid-layout
+   03-Sep-2022: various corrections, commented out helper colors
+*/
+
+:root { --bg-color:white; --textColor:black; color:black; --h1Color:Black; --thColor:LightBlue; --nthChild:LightGray; --buttonlikeColor:lightGray; --buttonlikeBorderColor:blue; --aVisited:black }
+.dark-mode { background-color:black; --textColor:white; color:white; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:orange; --buttonlikeColor:DarkBlue; --buttonlikeBorderColor:red; --aVisited:gray }
+body { background-color: var(--bg-color) }
+
+
+a:visited { color:var(--aVisited); text-decoration:none }
+a.link, a:hover, a:active { color:#007acc }
+
+img[alt=Photo] { width:46rem }
+.imgHero { width:100%; height:auto }
+
+p, ul, ol { font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif }
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:var(--nthChild); }
+.buttonlike { background-color:var(--buttonlikeColor); border-radius:8px; border:2px solid var(--buttonlikeBorderColor); padding:5px }
+.h2index { font-family:sans-serif,"Arial" }
+.warning { background:yellow }
+.hrFat { background-color:black; height:3px; margin-bottom:1.5rem }
+aside { /*background-color:lightgreen*/ }
+
+/* Holy Grail Layout */
+.grid-container {
+	display: grid;
+	grid-template-areas:
+		'header'
+		'mainTitle'
+		'leftAside'
+		'main'
+		'rightAside'
+		'footer';
+	gap: 0.1rem;
+	/*background-color: lightgray;*/
+	padding: 0.8rem 0rem 0.8rem 0rem;
+}
+
+.grid-container > div {
+	/*background-color: lightblue;*/
+	text-align: left;
+	font-size: 1.5rem;
+}
+
+header { grid-area:header }
+.leftAside { grid-area:leftAside }
+main { grid-area:main }
+.mainTitle { grid-area:mainTitle }
+.rightAside { grid-area:rightAside }
+footer { grid-area:footer; /*background-color:yellow*/ }
+
+h1 { font-family: Montserrat, "Helvetica Neue", sans-serif; font-size:2.7em; color:var(--h1Color) }
+h2 { font-size:2.4em; color:var(--h1Color) }
+h3 { font-size:2em; color:var(--h1Color) }
+p, td, label { line-height:1.7; font-size:1.5rem }
+input  { line-height:1.5; font-size:1.3rem }
+blockquote { line-height:1.5; font-size:1.3rem }
+ul { line-height:1.4; font-size:1.5rem }
+ol { line-height:1.5; font-size:1.5rem }
+li { margin-bottom:0.8rem }
+pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+code { color:inherit; font-weight:600; font-size:inherit }
+
+
+
+@media screen and (min-width:99rem) {
+	article { margin-left:0rem; width:46rem }
+	.grid-container {
+		display: grid;
+		justify-content: center;
+		grid-template-columns: 20rem 49rem 25rem;
+		grid-template-areas:
+			'header header header'
+			'mainTitle mainTitle rightAside'
+			'leftAside main rightAside'
+			'footer footer footer';
+		gap: 0.4rem;
+		/*background-color: BurlyWood;*/
+		padding: 0.8rem;
+	}
+	.border { border:21px solid var(--textColor); position:absolute; height:calc(100% - 21px - 3rem); overflow:scroll; top:0; left:0; right:0; bottom: 0; }
+}
+@media screen and (min-width:80rem) and (max-width:99rem) {
+	article { margin-left:0rem; width:46rem }
+	.grid-container {
+		display: grid;
+		justify-content: center;
+		grid-template-columns: 49rem 25rem;
+		grid-template-areas:
+			'header header'
+			'mainTitle rightAside'
+			'leftAside rightAside'
+			'main rightAside'
+			'footer footer';
+		gap: 0.4rem;
+		/*background-color: BurlyWood;*/
+		padding: 0.8rem;
+	}
+	.border { border:21px solid var(--textColor); position:absolute; height:calc(100% - 21px - 3.11rem); overflow:scroll; top:0; left:0; right:0; bottom: 0; }
+}
+@media screen and (max-width:80rem) {
+	.border { border:0; overflow:visible; }
+}
+@media print {
+	aside, nav, footer, header { display:none }
+	.grid-container {
+		display: grid;
+		justify-content: center;
+		grid-template-areas:
+			'mainTitle'
+			'main';
+		gap: 20px;
+		/*background-color: lightgray;*/
+		padding: 0.8rem;
+	}
+	.border { border:0; overflow:visible; }
+}
+
+.dimmedColor { color:Gray }
+.dimmedColorSansSerif { font-family:sans-serif ; color:Gray }
+
+#nukeHeader { display:flex }
+#nukeAbout { font-size:1.4rem }
+
+/* Copied from https://wordpress.org/themes/twentysixteen, version 2.7 */
+.site-branding {
+	margin: 0.875em auto 0.875em 0;
+	max-width: 100%;
+}
+.site-title {
+	font-family: Montserrat, "Helvetica Neue", sans-serif;
+	font-size: 1.8rem;
+	font-weight: 800;
+	line-height:0.6;
+	margin: 0;
+	text-align:left;
+	color:var(--textColor);
+}
+.site-description {
+	color: #686868;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.0;
+	margin: 0.5em 0 0;
+	text-align:left;
+	color:var(--textColor);
+}
