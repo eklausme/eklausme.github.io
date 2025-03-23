@@ -1,0 +1,97 @@
+/* Example CSS for Simplified Saaze blog
+*/
+
+a { color:inherit; text-decoration:underline; position:relative; display:inline-block }
+
+p { font-family:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif }
+img { border-radius:8px }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border: 1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border: 1px solid Black; background-color:Lightblue; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+tr:nth-child(even) { background-color:Lightgray; }
+
+
+@media screen and (min-width: 601px) {
+	.blogarea { margin-left:3rem; width:46rem }
+	h1 { font-size:3em; color:DarkBlue }
+	h2 { font-size:2.7em; color:DarkBlue }
+	h3 { font-size:2em; color:DarkBlue }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	img { width:46rem }
+	ul { line-height:1.4; font-size: 1.3rem }
+	ol { line-height:1.5; font-size: 1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:green; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width: 600px) {
+	.blogarea { margin-left:0rem; width:25rem }
+	h1 { font-size:2.2em; color:DarkBlue }
+	h2 { font-size:1.7em; color:DarkBlue }
+	h3 { font-size:1.2em; color:DarkBlue }
+	p { line-height:1.5; font-size:1.0em }
+	img { width:25rem }
+	ul { line-height:1.3; font-size:1.0em }
+	ol { line-height:1.4; font-size:1.0em }
+	li { margin-bottom:0.4rem }
+	pre { color:green; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+
+.dimmedColor { color:Gray }
+.dimmedColorSansSerif { font-family:sans-serif ; color:Gray }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+code { color:inherit; font-weight:600; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	width: 54rem;
+	background: #000;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display: flex; }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	color: white;
+	text-decoration: none;
+	margin-left: 2rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+#hamitems a:hover { background: DarkGreen /*#401408;*/ }
+
+#hamnav label, #hamburger { display:none; }	/* (C) HIDE HAMBURGER */
+
+@media screen and (max-width: 49rem){	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display: none; }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display: block; }
+}
+
+
+

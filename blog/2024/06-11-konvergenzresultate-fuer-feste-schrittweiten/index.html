@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Konvergenzbeweis für lineare Mehrschrittverfahren zur Lösung gewöhnlicher Differentialgleichungen">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Konvergenzresultate für feste Schrittweiten - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2024-06-11 13:40:00">11th June 2024</time>, 58 min read</p>
+<h1>Konvergenzresultate für feste Schrittweiten</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">eklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten</a>.</p>
+<br>
+<ul>
+<li><a href="#einf">1. Einführung und grundlegende Begriffe</a></li>
+<li><a href="#gronwall">2. Die Lemmata von Gronwall</a></li>
+<li><a href="#darstellungssatz">3. Notation und Darstellungssatz für Differenzengleichungen</a></li>
+<li><a href="#stabfunkt">4. Stabilitätsfunktionale für feste Schrittweiten</a></li>
+<li><a href="#projektorstabfunkt">5. Projektorstabilitätsfunktionale</a></li>
+<li><a href="#nichtaequidistant">6. Nichtäquidistante Gitter</a></li>
+<li><a href="#tridiag">7. Die Eigenwerte gewisser tridiagonaler Matrizen</a></li>
+<li><a href="#parabolisch">8. Verfahren für parabolische Gleichungen</a></li>
+</ul>
+<p>Es folgt ein recht allgemeiner Konvergenzbeweis für mehrstufige
+Verfahren, wobei allerdings vorausgesetzt wird, daß mit fester
+Schrittweite gearbeitet wird.
+Innerhalb des mehrstufigen Prozesses braucht das verwendete Gitter nicht
+äquidistant zu sein, wie z.B. bei Runge-Kutta Verfahren.
+Dabei wird allerdings hier ein etwas längerer Weg eingeschlagen.
+Zuerst werden in breiter Form Stabilitätsfunktionale vorgestellt und
+verschiedene, gleichwertige und äquivalente Darstellungen angegeben.
+Die Beweise für diese Stabilitätsfunktionale enthalten die eigentlichen
+Konvergenzbeweise, jedoch sind Stabilitätsfunktionale allgemeiner.
+Sie liefern direkt Stabilitätsungleichungen für die Differenzen
+zweier Lösungen von Differenzengleichungen, d.h. die Stabilitätsfunktionale
+liefern direkt Aussagen über das Auseinanderlaufen der Lösungen zweier
+Differenzengleichungen in Abhängigkeit von Störungen.
+An Differenzengleichungen werden nur lineare Gleichungen betrachtet,
+allerdings darf die Inhomogenität beliebig sein, wenn sie nur einer
+Lipschitzbedingung genügt.</p>
+<p>Bevor die eigentlichen Überlegungen bzgl. der Stabilitätsfunktionale
+angestellt werden, sollen anhand einfacher, vorangestellter Überlegungen,
+einige grundsätzliche Probleme beleuchtet werden.
+Danach folgen die sehr wichtigen Aussagen von Gronwall.
+Das diskrete Lemma von Gronwall spielt eine entscheidende Rolle beim
+Hauptsatz über Stabilitätsfunktionale.
+Vielerorts befindet sich das diskrete Lemma von Gronwall versteckt in
+Konvergenzbeweisen und hier i.d.R. nur in sehr spezialisierter Form.
+Erst daran anschliessend werden die Stabilitätsfunktionale behandelt
+und verschiedene Äquivalenzen bewiesen.</p>
+<p>$
+\def\diag{\mathop{\rm diag}}
+\def\col{\mathop{\rm col}}
+\def\row{\mathop{\rm row}}
+\def\dcol{\mathop{\rm col\vphantom {dg}}}
+\def\drow{\mathop{\rm row\vphantom {dg}}}
+\def\rank{\mathop{\rm rank}}
+\def\grad{\mathop{\rm grad}}
+\def\adj#1{#1^*}
+\def\iadj#1{#1^*}
+\def\tr{\mathop{\rm tr}}
+\def\mapright#1{\mathop{\longrightarrow}\limits^{#1}}
+\def\fracstrut{}
+$</p>
+<h2>1. Einführung und grundlegende Begriffe<a id=einf></a></h2>
+<p>Es sei $\mathfrak{B}$ ein Banachraum und $h\in\mathbb{R}$ die Schrittweite.
+Die Klasse von Verfahren der Form</p>
+<div class=math>
+$$
+    u_{n+1} = Su_n+h\varphi(u_{n-1}),\qquad n=0,1,\ldots,N, \qquad u_i\in\mathfrak{B},
+$$
+</div>
+<p>berücksichtigt nicht block-implizite Verfahren, oder überhaupt implizite
+Verfahren, zumindestens ersteinmal nicht in sofort offenkundiger Weise.
+Hierbei ist</p>
+<div class=math>
+$$
+    N := \left|b-a\over h\right|, \qquad\hbox{also}\qquad
+    \mathopen|h\mathclose| = {\mathopen|b-a\mathclose|\over N}.
+$$
+</div>
+<p>Subsumiert sind also nicht Verfahren der Vorschrift</p>
+<div class=math>
+$$
+    A_1u_{n+1} + A_0u_n = h\cdot(B_1F_{n+1} + B_0F_n),\qquad n=0,1,\ldots,N.
+$$
+</div>
+<p>bzgl. der rein formalen Schreibweise.</p>
+<p>Verfahren der leicht allgemeineren Form</p>
+<div class=math>
+$$
+    u_{n+1} = Su_n+h\varphi(u_{n+1},u_n),\qquad n=0,1,\ldots,N,\tag{*}
+$$
+</div>
+<p>berücksichtigen blockimplizite Verfahren und gewöhnliche implizite Verfahren.
+Die oben angeschriebene Rekurrenz-Vorschrift für $u_{n+1}$ stellt
+eine implizite Gleichung für $u_{n+1}$ dar.
+An $\varphi$ muß man daher gewisse Voraussetzungen stellen, um eindeutige
+Lösbarkeit der impliziten Differenzengleichung zu garantieren.
+Da die zu integrierende Funktion fast durchweg einer Lipschitzkonstanten
+genügt, ist es naheliegend dasselbe auch für die Inhomogenität der
+Differenzengleichung zu fordern.
+Es möge also gelten</p>
+<div class=math>
+$$
+\eqalign{
+  \mathopen|\varphi(\hat u_{n+1},\hat u_n) - \varphi(u_{n+1},u_n)\mathclose|
+      &{}\le K_1 \mathopen|\hat u_{n+1}-u_{n+1}\mathclose|,\cr
+  \mathopen|\varphi(\hat u_{n+1},\hat u_n) - \varphi(u_{n+1},u_n)\mathclose|
+      &{}\le K_2 \mathopen|\hat u_n-u_n\mathclose|.\cr
+}
+$$
+</div>
+<p><strong>1. Satz:</strong>  Die Differenzengleichung $(*)$ besitzt, für
+genügend kleine
+Schrittweiten $\mathopen|h\mathclose|$, eine eindeutige Lösung.
+Diese eindeutig bestimmte Lösung lässt sich mit Picard-Iteration bestimmen.</p>
+<p><em>Beweis:</em>  Die Keplersche Gleichung für $u_{n+1}$ hat wegen der
+vorausgesetzten Lipschitz-Stetigkeit in der letzten Komponente von $\varphi$,
+nach dem <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem">Banachschen Fixpunktsatz</a>
+eine eindeutig bestimmte Lösung und
+lässt sich durch Fxpunktiteration gewinnen.</p>
+<div class=math>
+$$
+    \mathopen|h K_2\mathclose| \lt  1, \qquad\hbox{für geeigntes $h$}.
+$$
+</div>
+<p>    ☐</p>
+<p><strong>2. Bemerkung:</strong>  Für nicht genügend kleines $\mathopen|h\mathclose|$
+kann die Gleichung in der Tat mehrere oder keine Lösung besitzen.</p>
+<p>Es seien betrachtet die beiden Verfahren der Form</p>
+<div class=math>
+$$
+\eqalign{
+    \hat u_{n+\ell}+A_{\ell-1}\hat u_{n+\ell-1}+\cdots+A_0\hat u_n
+    &{}= h{\mskip 3mu}\varphi(\hat u_{n+\ell},\hat u_{n+\ell-1},\ldots,\hat u_n)+r_n,\cr
+    u_{n+\ell}+A_{\ell-1}u_{n+\ell-1}+\cdots+A_0u_n
+    &{}= h{\mskip 3mu}\varphi(u_{n+\ell},u_{n+\ell-1},\ldots,u_n).\cr
+}
+$$
+</div>
+<p>Das erste Verfahren kann man als gestörtes Verfahren auffassen, während
+hingegen das zweite Verfahren das eigentliche Verfahren zur Berechnung der
+numerischen Lösung ist.
+Es sei</p>
+<div class=math>
+$$
+    P_1 := \pmatrix{I&0&\ldots&0},\qquad
+    R_1 := \pmatrix{0\cr \vdots\cr 0\cr I\cr},
+$$
+</div>
+<p>und $\delta_{n+\ell} := \hat u_{n+\ell}-u_{n+\ell}$ und dazu</p>
+<div class=math>
+$$
+    \hat\delta_{n+\ell} := \varphi(\hat u_{n+\ell},\ldots,\hat u_n) - \varphi(u_{n+\ell},\ldots,u_n).
+$$
+</div>
+<p>Es ist also $\hat\delta_{n+\ell}$ die Differenz der entsprechenden
+Werte für die Funktion $\varphi(\cdot)$, wenn sämtliche Argumente
+verschieden sind.</p>
+<p>Weiter sei</p>
+<div class=math>
+$$
+% bold overlined P1 (pee one) bold overlined R1 (err one)
+\def\bov#1#2{\overline{\bf #1}_{#2}} % boldface and overlined
+\def\bopo{\bov P1} \def\boro{\bov R1} \def\bfR{{\bf R}}
+\def\bovy#1{\bov Y{\!#1}} \def\ovbf#1{\overline{\bf #1}}
+    U := \pmatrix{u_0\cr \vdots\cr u_N\cr},\qquad
+    \hat U := \pmatrix{\hat u_0\cr \vdots\cr \hat u_N\cr},\qquad
+    \bf R := \pmatrix{r_0\cr \vdots\cr r_{N+\ell-1}}.
+$$
+</div>
+<p>Die einzelnen $u_i$ und $\hat u_i$ sind aus dem Vektorraum $\mathbb{R}$,
+nicht notwendig endlichdimensional.
+Hierbei sind die $A_i:\mathfrak{B}\to\mathfrak{B}$ stetige, lineare Operatoren
+zwischen Banach-Räumen.
+Bei <a href="https://en.wikipedia.org/wiki/Continuous_linear_operator">linearen Operatoren</a> ist bekanntlich die Stetigkeit in einem
+Punkte äquivalent mit der globalen Stetigkeit und dies äquivalent
+mit der Beschränktheit.
+$\mathfrak{B}$ ist hierbei entweder ein reller oder komplexer Banachraum.
+Die Vektorraumeigenschaften braucht man der Linearität wegen, die
+Normiertheit für die folgenden Funktionale, und die Vollständigkeit
+wird benötigt bei der Anwendung des <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem">Banachschen Fixpunktsatzes</a>.
+Beispiele sind $\mathfrak{B}=\mathbb{C}^k$ und $\mathfrak{B}=\mathbb{R}^k$, mit $k\ge1$.
+Gelegentlich gelten die Sätze auch in nicht notwendigerweise
+kommutativen Ringen $\mathfrak{B}$.
+Für $\mathfrak{B}$ wird im folgenden stets $\mathbb{C}^k$ gewählt.
+Die Mengen $\mathbb{C}^{k\ell\times k\ell}$ wären dann entsprechend zu
+ersetzen durch $\mathbb{R}^{\ell\times\ell}$ und andere Mengen entsprechend.</p>
+<p>Man beachte, daß die Abschätzung nun abhängig von $h$ ist, die Abschätzung
+aber ausschliesslich für gewisse sehr stark eingeschränkte Schrittweiten $h$
+gilt.
+Ohne Einschränkung an die Schrittweite $h$ ist der Satz nicht richtig.
+Die Unabhängigkeit von den $B_\nu$, bei</p>
+<div class=math>
+$$
+    \sum_{\nu=0}^\ell A_\nu u_{n+\nu} = h{\mskip 3mu}\sum_{\nu=0}^\ell B_\nu{\mskip 3mu}F_{n+\nu},
+    \qquad n=0,1,\ldots,N,
+$$
+</div>
+<p>verlangt eine entsprechende Einschränkung an die Schrittweite $h$.
+Für einen praktischen Einsatz ist zusätzlich ein entsprechend großer
+Stabilitätsbereich erforderlich.
+In die Größe des Stabilitätsbereiches gehen entscheidend die $B_\nu$ ein
+und die Art der Iteration, mit der die impliziten Gleichungen in jedem
+Zeitschritt gelöst werden.
+Der Satz verliert ebenfalls seine Gültigkeit bei “langen”
+Integrationsintervallen.
+$\mathopen|b-a\mathclose|$ wird dann beliebig groß.
+Der Satz zeigt, daß bei endlichem Integrationsintervall
+$\mathopen|b-a\mathclose|$, die $\mathopen|\hat U-U\mathclose|$-Norm mit der
+$\left| \bopo [C_1]^{-1} \boro \bfR\right|$-Norm
+äquivalent ist.
+Bei unendlich langen Integrationsintervallen,
+sind diese Normen nicht notwendigerweise mehr äquivalent.</p>
+<h2>2. Die Lemmata von Gronwall<a id=gronwall></a></h2>
+<p>Das <a href="https://en.wikipedia.org/wiki/Gr%C3%B6nwall%27s_inequality">Lemma von Gronwall</a>, <a href="https://en.wikipedia.org/wiki/Thomas_Hakon_Gr%C3%B6nwall">Thomas Gronwall, (1877--1932)</a> für den
+kontinuierlichen Falle lautet</p>
+<p><strong>1. Satz:</strong>  (Lemma von Gronwall) Seien $h$, $w$ und $k$
+stetige, reell-wertige Funktionen auf dem Intervall $[a,b]$.
+(Es muß lediglich gelten $(\int_a^x f)'=f(x)$, sodaß man mit leicht
+schwächeren Bedingungen auskäme.)
+Es gelte auf diesem Intervall die Abschätzung</p>
+<div class=math>
+$$
+    h(x)\le w(x)+\int_a^x k(t){\mskip 3mu}h(t){\mskip 3mu}dt,\qquad\forall x\in[a,b].
+$$
+</div>
+<p>Das Integral auf der rechten Ungleichungsseite sei stets nicht-negativ,
+was beispielsweise für nicht-negative Funktionen $k$, $w$, $h$
+auf dem Intervall $[a,b]$, sichergestellt werden kann.
+Dann gilt die Abschätzung für die Funktion $h$ auf dem gesamten Intervall
+zu</p>
+<div class=math>
+$$
+    h(x)\le w(x)+\int_a^x \exp\left(\int_t^x k(\tau){\mskip 3mu}d\tau\right)k(t){\mskip 3mu}w(t){\mskip 3mu}dt,
+        \qquad\forall x\in[a,b].
+$$
+</div>
+<p><em>Beweis:</em> siehe Helmut Werner und Herbert Arndt in <a href="https://www.amazon.de/Gew%C3%B6hnliche-Differentialgleichungen-Einf%C3%BChrung-Theorie-Hochschultext/dp/3540152881/">Werner/Arndt (1986)</a>.
+Sei</p>
+<div class=math>
+$$
+    H(x) := \int_a^x k(t){\mskip 3mu}h(t){\mskip 3mu}dt.
+$$
+</div>
+<p>Hiermit gilt dann aufgrund der Stetigkeit von $k$ und $h$</p>
+<div class=math>
+$$
+    H'(x) = k(x){\mskip 3mu}h(x), \qquad H(a)=0, \qquad \forall x\in[a,b].
+$$
+</div>
+<p>Aus dieser Differentialgleichung folgt aufgrund der vorausgesetzten
+Ungleichung für die Funktion $h$</p>
+<div class=math>
+$$
+    H'(x) = k(x){\mskip 3mu}h(x) \le k(x)\cdot\left(w(x)+H(x)\right),
+$$
+</div>
+<p>also die lineare Differentialungleichung</p>
+<div class=math>
+$$
+    H'(x) - k(x){\mskip 3mu}H(x) \le k(x){\mskip 3mu}w(x),\qquad H(a)=0.\tag{*}
+$$
+</div>
+<p>Multiplikation mit</p>
+<div class=math>
+$$
+    e^{-K(x)}\gt 0,\qquad K(x) := \int_a^x k(t){\mskip 3mu}dt,
+$$
+</div>
+<p>führt zu</p>
+<div class=math>
+$$
+      e^{-K(x)}\left[H'(x) - k(x){\mskip 3mu}H(x)\right]
+    = \left(e^{-K(x)}\cdot H(x)\right)'
+    \buildrel{\displaystyle{(*)\atop\downarrow}}\over\le e^{-K(x)}\cdot k(x){\mskip 3mu}w(x).
+$$
+</div>
+<p>Integration von $a$ nach $x$ liefert wegen der mittleren Gleichung
+(Integral ist monotones Funktional)</p>
+<div class=math>
+$$
+    e^{-K(x)}H(x) - e^{-K(a)}H(a) \le \int_a^x e^{-K(t)}\cdot k(t){\mskip 3mu}w(t){\mskip 3mu}dt,
+$$
+</div>
+<p>also wegen $H(a)=0$ somit</p>
+<div class=math>
+$$
+    H(x)\le\int_a^x e^{K(x)-K(t)}\cdot k(t){\mskip 3mu}w(t){\mskip 3mu}dt
+$$
+</div>
+<p>und aufgrund der Voraussetzung von $h(x)\le w(x)+H(x)$ sofort</p>
+<div class=math>
+$$
+    h(x)\le w(x)+\int_a^x\left(\exp\int_t^x k(\tau){\mskip 3mu}d\tau\right)\cdot k(t){\mskip 3mu}w(t){\mskip 3mu}dt.
+$$
+</div>
+<p>    ☐</p>
+<p><strong>2. Folgerung:</strong>  Gilt $h(x)\le w+k\int_a^x h(t){\mskip 3mu}dt$,
+mit festen, nicht-negativen Konstanten $w$ und $k$,
+so folgt die Abschätzung</p>
+<div class=math>
+$$
+    h(x)\le w{\mskip 3mu}e^{k\cdot(x-a)},\qquad\forall x\in[a,b].
+$$
+</div>
+<p>Ein völliges Analogon zum kontinuierlichen Lemma von Gronwall macht das
+diskrete Lemma von Gronwall, welches ebenfalls exponentielles
+Wachstum anzeigt, wenn eine Funktion geeignet auf beiden Seiten einer
+Ungleichung vorkommt.
+Es gilt nun der</p>
+<p><strong>3. Satz:</strong>  (Diskretes Lemma von Gronwall) Es seien $(m+1)$ positive
+Zahlen $0\le\eta_0\le\eta_1\le\ldots\le\eta_m$ vorgegeben.
+Ferner sei $\delta\ge0$, $h_j\ge0$ und $x_{j+1}=x_j+h_j$.
+Es gelte die Ungleichung</p>
+<div class=math>
+$$
+    \varepsilon_0\le\eta_0\qquad\hbox{und}\qquad
+    \varepsilon_{j+1}\le \eta_j + \delta\sum_{\nu=0}^j h_\nu\varepsilon_\nu,
+        \qquad j=0,\ldots,m-1.
+$$
+</div>
+<p>Dann gilt</p>
+<div class=math>
+$$
+    \varepsilon_j\le \eta_j{\mskip 3mu}e^{\delta\cdot(x_j-x_0)},\qquad j=0,\ldots,m.
+$$
+</div>
+<p><em>Beweis:</em> siehe erneut Helmut Werner und Herbert Arndt in <a href="https://www.amazon.de/Gew%C3%B6hnliche-Differentialgleichungen-Einf%C3%BChrung-Theorie-Hochschultext/dp/3540152881/">Werner/Arndt (1986)</a>.
+Der Fall $\delta=0$ ist einfach, wegen $e^0=1$.
+Sei nun $\delta&gt;0$.
+Induktionsverankerung mit $j=0$ ist klar, ebenfalls einfach, wegen $e^0=1$.
+Der eigentliche Beweis reduziert sich jetzt lediglich noch auf
+den Induktionsschluß von $j$ nach $j+1$, wobei $\delta&gt;0$ vorausgesetzt
+werden kann.
+Hier gilt nun</p>
+<div class=math>
+$$
+\eqalign{
+  \varepsilon_{j+1} &{}\le\eta_{j+1}+\delta\sum_{\nu=0}^j h_\nu{\mskip 3mu}\varepsilon_\nu\cr
+      &{}\le\eta_{j+1}+\delta\sum_{\nu=0}^j h_\nu{\mskip 3mu}\eta_\nu{\mskip 3mu}e^{\delta\cdot(x_\nu-x_0)}\cr
+      &{}\le\eta_{j+1}\cdot\left(1+\delta\sum_{\nu=0}^j h_\nu{\mskip 3mu}e^{\delta\cdot(x_\nu-x_0)}\right)\cr
+      &{}\le\eta_{j+1} {\mskip 5mu} e^{\delta\cdot(x_{j+1}-x_0)}.\cr
+}
+$$
+</div>
+<p>Für die Summe in der Klammer schätzte man ab (Untersumme einer streng
+monoton steigenden Funktion)</p>
+<div class=math>
+$$
+        \sum_{\nu=0}^j h_\nu{\mskip 3mu}e^{\delta\cdot(x_\nu-x_0)}
+    \le \int_{x_0}^{x_{j+1}} e^{\delta\cdot(t-x_0)}{\mskip 3mu}dt
+    =   {1\over\delta} \left( e^{\delta(x_{j+1}-x_0)}-1 \right).
+$$
+</div>
+<p>    ☐</p>
+<h2>3. Notation und Darstellungssatz für Differenzengleichungen<a id=darstellungssatz></a></h2>
+<p>Man vgl. auch <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynome</a>.</p>
+<p>Zur multiplen Lipschitzkonstanten von $\varphi$:</p>
+<div class=math>
+$$
+    \mathopen|\varphi(u_\ell,\ldots,\hat u_i,\ldots,u_0) -
+        \varphi(u_\ell,\ldots,u_i,\ldots,u_0)\mathclose|
+    \le K_i \cdot \mathopen|\hat u_i-u_i\mathclose|,\qquad i=0,\ldots,\ell.
+$$
+</div>
+<p>$(\ell+1)$-malige Anwendung der Dreiecksungleichung liefert</p>
+<div class=math>
+$$
+    \mathopen|\varphi(\hat u_\ell,\ldots,\hat u_0)-\varphi(u_\ell,\ldots,u_0)\mathclose|
+    \le \sum_{i=0}^\ell K_i \mathopen|\hat u_i-u_i\mathclose|
+    = \langle \pmatrix{K_0\cr \vdots\cr K_\ell\cr},
+        \pmatrix{\mathopen|\hat u_0-u_0\mathclose|\cr \vdots\cr \mathopen|\hat u_\ell-u_\ell\mathclose|\cr} \rangle
+$$
+</div>
+<p>In der Schreibweise von $\varphi$ seien fortan zahlreiche hier nicht
+weiter interessierende Argumente der Schreibvereinfachung und der
+Klarheit wegen weggelassen.
+Es ist $\varphi(u_\ell,\ldots,u_1) = \varphi(t_\ell,h_\ell,u_\ell,\ldots,u_1)$.</p>
+<p><strong>1. Beispiel:</strong>  Für die Verfahrensvorschrift der Form</p>
+<div class=math>
+$$
+    A_\ell u_{n+\ell}+\cdots+A_0u_n = h(B_\ell F_{n+\ell}+\cdots+B_0F_n),
+        \qquad F_{n+i} := \pmatrix{f_{N\ell+*}\cr \vdots\cr f_{N\ell+*}\cr},
+$$
+</div>
+<p>wobei die $f_k$ Näherungswerte für $f(t_k,y(t_k))$ sind.
+Die Funktion $f$ der Differentialgleichung sei Lipschitz-stetig
+mit der Lipschitzkonstanten $L$ vorausgesetzt, also</p>
+<div class=math>
+$$
+    \left|f(t,\hat y)-f(t,y)\right| \le L \mathopen|\hat y-y\mathclose|.
+$$
+</div>
+<p>Dann gilt für die obigen Lipschitzkonstanten $K_i$ die Verbindung mit
+der Lipschitzkonstanten der Differentialgleichung zu</p>
+<div class=math>
+$$
+    K_i = \left|B_i\right|\cdot L,\qquad\hbox{oder ggf.}\qquad
+    K_i = \left|A^{-1}_\ell B_i\right|\cdot L.
+$$
+</div>
+<p><strong>2. Definition:</strong>  Es sei $T$ eine gänzlich beliebige Matrix der
+Größe $k\times k$.
+Dann wird der <em>Bidiagonaloperator</em> $[T]$ zur Matrix $T$ der Größe
+$(N+1)k\times(N+1)k$, wie folgt definiert</p>
+<div class=math>
+$$
+    \left[T\right] := \pmatrix{
+        I  &   & & \cr
+        -T & I & & \cr
+           &\ddots&\ddots&\cr
+           &   & -T & I\cr}, \qquad
+    \left[T\right]^{-1} = \pmatrix{
+        I      &         &        & \cr
+        T      & I       &        & \cr
+        \vdots & \vdots  & \ddots & \cr
+        T^n    & T^{n-1} & \ldots & I\cr}.
+$$
+</div>
+<p>Rechts daneben steht die Inverse, welche für eine beliebige Matrix $T$
+stets existiert.</p>
+<p>Die speziellen Operatoren $[\cdot]$ und $[\cdot]^{-1}$ tauchen im
+weiteren wiederholt auf.
+Aufgrund der Häufigkeit, wäre es zweckmässiger, die Rollen von
+$[\cdot]$ und $[\cdot]^{-1}$ zu vertauschen, jedoch stände dies dann im
+Gegensatz zur Schreibweise bei <a href="https://www.researchgate.net/publication/243095661_Analysis_of_Fixed-Stepsize_Methods">Skeel (1976)</a>, <a href="https://www.mathgenealogy.org/id.php?id=41538">Robert David Skeel</a>.</p>
+<p><strong>3. Satz:</strong>  (Eigenschaften von $\mathop{\rm col}$, $\mathop{\rm row}$, $\mathop{\rm diag}$, $[\cdot]$)
+Es gilt</p>
+<ol>
+<li>$\mathop{\rm col} A_\nu B_\nu = \mathop{\rm diag} A_\nu{\mskip 5mu}\mathop{\rm col} B_\nu$.</li>
+<li>$\mathop{\rm col} A_\nu B = \left(\mathop{\rm col} A_\nu\right) B$;
+  Rechtsdistributivität des $\mathop{\rm col}$-Operators.</li>
+<li>$\mathop{\rm row} A_\nu B_\nu = \mathop{\rm row} A_\nu{\mskip 5mu}\mathop{\rm diag} B_\nu$.</li>
+<li>$\mathop{\rm row} AB_\nu = A{\mskip 3mu} \mathop{\rm row} B_\nu$;
+  Linksdistributivität des $\mathop{\rm row}$-Operators.</li>
+<li>$\mathop{\rm diag} A_\nu B_\nu = \mathop{\rm diag} A_\nu{\mskip 5mu}\mathop{\rm diag} B_\nu$;
+  multiplikative Distributivität des Bidiagonaloperators.</li>
+<li>$\left[S^{-1}TS\right] = \mathop{\rm diag} S^{-1}{\mskip 3mu} \left[T\right]{\mskip 3mu} \mathop{\rm diag} S$.</li>
+<li>$\left[S^{-1}TS\right]^{-1} = \mathop{\rm diag} S^{-1}{\mskip 5mu}\left[T\right]^{-1} \mathop{\rm diag} S$.</li>
+</ol>
+<p><em>Beweis:</em>  Zu (1):</p>
+<div class=math>
+$$
+    \mathop{\rm col}_{\nu=0}^n A_\nu B_\nu = \pmatrix{A_0B_0\cr \vdots\cr A_nB_n\cr} =
+    \pmatrix{A_0&&\cr &\ddots&\cr &&A_n\cr}\pmatrix{B_0\cr \vdots\cr B_n\cr}.
+$$
+</div>
+<p>Zu (3):</p>
+<div class=math>
+$$
+    \mathop{\rm row}_{\nu=0}^n A_\nu B_\nu = (A_0B_0{\mskip 3mu}\ldots{\mskip 3mu}A_nB_n) =
+    (A_0{\mskip 3mu}\ldots{\mskip 3mu}A_n)\pmatrix{B_0&&\cr &\ddots&\cr &&B_n\cr}.
+$$
+</div>
+<p>Zu (5)</p>
+<div class=math>
+$$
+    \mathop{\rm diag}_{\nu=0}^N A_\nu B_\nu =
+    \pmatrix{A_0B_0&&\cr &\ddots&\cr &&A_nB_n\cr} =
+    \pmatrix{A_0&&\cr &\ddots&\cr &&A_n\cr}
+        \pmatrix{B_0&&\cr &\ddots&\cr &&B_n\cr}.
+$$
+</div>
+<p>Zu (6): Beachte die Definition von $[T]$
+und benutze dann</p>
+<div class=math>
+$$
+    \pmatrix{
+        A_{11} & \ldots & A_{1n}\cr
+        \vdots & \ddots & \vdots\cr
+        A_{m1} & \ldots & A_{mn}\cr}
+    \pmatrix{S_1&&\cr &\ddots&\cr &&S_n\cr} =
+    \pmatrix{
+        A_{11}S_1 & \ldots & A_{1n}S_n\cr
+        \vdots    & \ddots & \vdots\cr
+        A_{m1}S_1 & \ldots & A_{mn}S_n\cr},
+$$
+</div>
+<p>bzw.</p>
+<div class=math>
+$$
+    \pmatrix{S_1&&\cr &\ddots&\cr &&S_m\cr}
+    \pmatrix{
+        A_{11} & \ldots & A_{1n}\cr
+        \vdots & \ddots & \vdots\cr
+        A_{m1} & \ldots & A_{mn}\cr} =
+    \pmatrix{
+        S_1A_{11} & \ldots & S_1A_{1n}\cr
+        \vdots    & \ddots & \vdots\cr
+        S_mA_{m1} & \ldots & S_mA_{mn}\cr}.
+$$
+</div>
+<p>Zu (7): Folgt aus (4), wegen $(AB)^{-1}=B^{-1}A^{-1}$, wobei $[T]$ für
+gänzlich beliebige Matrizen $T$ invertierbar ist.
+Für $T=\bf 0$ ist $[T]$ die Einheitsmatrix der Größe
+$(n+1)k\times(n+1)k$.
+    ☐</p>
+<p><strong>4. Beispiele:</strong>  Es gilt</p>
+<div class=math>
+$$
+    \dcol_{i=0}^{\ell-1} (XT^i) = \left(\mathop{\rm diag}_{i=0}^{\ell-1} X\right)
+        \left(\dcol_{i=0}^{\ell-1} T^i\right)\qquad\hbox{und}\qquad
+    \drow_{i=0}^{\ell-1} (T^iY) = \left(\drow_{i=0}^{\ell-1} T^i\right)
+        \left(\mathop{\rm diag}_{i=0}^{\ell-1} Y\right).
+$$
+</div>
+<p>Im allgemeinen gilt</p>
+<div class=math>
+$$
+    \mathop{\rm diag}_{i\in U} \mathop{\rm diag}_{k\in V} A_k \ne \mathop{\rm diag}_{k\in V} \mathop{\rm diag}_{i\in U} A_i.
+$$
+</div>
+<p>Als nächstes folgt die Darstellung der Differenz der Lösung
+zweier Differenzengleichungen.
+Dieser Satz spielt eine wiederholt wichtige Rolle bei den gleich folgenden
+Hauptsätzen.</p>
+<p><strong>5. Satz:</strong>  (Darstellungssatz) Voraussetzungen:
+$\hat u_n$ und $u_n$ seien die Lösungen der beiden Differenzengleichungen</p>
+<div class=math>
+$$
+\left.
+\eqalign{
+    \hat u_{n+\ell}+A_{\ell-1}\hat u_{n+\ell-1}+\cdots+A_0\hat u_n
+        &= h{\mskip 3mu}\varphi(\hat u_{n+\ell},\ldots,\hat u_n)+r_{n+\ell}\cr
+    u_{n+\ell}+A_{\ell-1}u_{n+\ell-1}+\cdots+A_0u_n
+        &= h{\mskip 3mu}\varphi(u_{n+\ell},\ldots,u_n)\cr
+}
+\right\} \qquad n=0,1,\ldots,N.
+$$
+</div>
+<p>Die “Störungen” $r_{n+\ell}$ korrespondieren zum Wert $\hat u_{n+\ell}$.
+Es seien zur Abkürzung gesetzt</p>
+<div class=math>
+$$
+\left.\eqalign{
+    \delta_{n+\ell} &:= \hat u_{n+\ell} - u_{n+\ell}, \cr
+    \hat\delta_{n+\ell} &:= \varphi(\hat u_{n+\ell},\ldots,\hat u_n) -
+        \varphi(u_{n+\ell},\ldots,u_n) \cr
+}\right\} \qquad n=0,\ldots,N.
+$$
+</div>
+<p>Die Differenzengleichung für $\hat u_n$ habe die Startwerte
+$\hat u_i := u_i + r_i$, für $i=0,\ldots,\ell-1$.
+Es sei $\delta_i := r_i$, für $i=0,\ldots,\ell-1$,
+und $r_\nu := \delta_\nu := \hat\delta_\nu := 0$, für $\nu&gt;N$.</p>
+<p>Behauptung:</p>
+<div class=math>
+$$
+\eqalign{
+     \delta_n &= P_1 C_1^n \pmatrix{\delta_0\cr \vdots\cr \delta_{\ell-1}\cr}
+          + P_1 \sum_{\nu=0}^{n-\ell} C_1^{n-1-\nu} R_1
+               \left( r_{\nu+\ell} + h \hat\delta_{\nu+\ell} \right) \cr
+      &= P_1 C_1^n \pmatrix{\delta_0\cr \vdots\cr \delta_{\ell-1}\cr}
+          + P_1 \sum_{\nu=0}^{n-\ell} C_1^{n-1-\nu} R_1 r_{\nu+\ell}
+          + P_1 \sum_{\nu=0}^{n-\ell} C_1^{n-1-\nu} R_1
+          \hat\delta_{\nu+\ell} \cr
+}
+$$
+</div>
+<p><em>Beweis:</em>  Folgt aus dem allgemeinen Satz über die Lösung inhomogener,
+linearer Matrix-Differenzengleichungen.
+Die allgemeine Lösung der Differenzengleichung</p>
+<div class=math>
+$$
+    x_{n+\ell}+A_{\ell-1}x_{n+\ell-1}+\cdots+A_0x_n = y_n, \qquad
+    n=0,1,\ldots,N
+$$
+</div>
+<p>lautet</p>
+<div class=math>
+$$
+    x_n = P_1 C_1^n z_0  +  P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1 y_\nu.
+$$
+</div>
+<p>Mit den obigen Abkürzungen für $\delta_n$ und $\hat\delta_n$, ergibt
+sich eine Differenzengleichung für $\delta_n$ zu</p>
+<div class=math>
+$$
+    \delta_{n+\ell}+A_{\ell-1}\delta_{n+\ell-1}+\cdots+A_0\delta_n =
+        h \hat\delta_n + r_n.
+$$
+</div>
+<p>Diese Gleichung hat die Lösungsdarstellung</p>
+<div class=math>
+$$
+    \delta_n = P_1 C_1^n \pmatrix{\delta_0\cr \vdots\cr \delta_{\ell-1}\cr}
+        +  P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1
+        \left(h\hat\delta_{\nu+\ell} + r_{\nu+\ell}\right) .
+$$
+</div>
+<p>In der ersten Summe verschwinden die letzten $(\ell-1)$ Terme,
+wegen $P_1 C_1^i R_1=0$, für $i=0,\ldots,\ell-2$.
+Daß hier $P_1 C_1^{\ell-1} R_1 = I$, braucht man noch nicht.
+Für $\nu&gt;n-\ell$ ist $n-1-\nu \le \ell-2$.
+Daher folgt genau die behauptete Gleichung, wie oben angegeben.
+    ☐</p>
+<p>Die folgende Ungleichung liefert nicht die bestmögliche Abschätzung
+für $\ell\ge2$, jedoch bleibt sie einfach zu handhaben und wird nachher
+beim Beweis des Hauptsatzes benötigt.</p>
+<p><strong>6. Hilfssatz:</strong>  (Abschätzungssatz)  Voraussetzung:
+$\varphi(\cdot)$ sei in jeder Komponente Lipschitz-stetig mit den
+Lipschitzkonstanten $K_i$.
+Die Werte $\delta_{\nu+\ell}$ und $\hat\delta_{\nu+\ell}$ seien wie
+oben definiert.</p>
+<p>Behauptung:</p>
+<div class=math>
+$$
+\eqalign{
+    \sum_{\nu=0}^{n-\ell} \mathopen| \hat\delta_{\nu+\ell} \mathclose| &\le
+        K_\ell\mathopen|\delta_n\mathclose| + \left(\sum_{i=0}^\ell K_i\right)
+        \left(\sum_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose|\right)\cr
+    & \le \left(\sum_{i=0}^\ell K_i\right)
+        \left(\sum_{\nu=0}^n \mathopen|\delta_\nu\mathclose|\right)\cr
+    & \le (\ell+1)\cdot\left(
+        \max_{i=0}^\ell K_i\right)\sum_{\nu=0}^n \mathopen|\delta_\nu\mathclose|.\cr
+}
+$$
+</div>
+<p><em>Beweis:</em>  Für $\nu=0,\ldots,n-1$ ist</p>
+<div class=math>
+$$
+\eqalign{
+     \mathopen| \hat\delta_{\nu+\ell} \mathclose|
+     &= \left| \varphi(\hat u_{\nu+\ell},\ldots,\hat u_\nu)
+          - \varphi(u_{\nu+\ell},\ldots,u_\nu) \right|\cr
+     &\le K_0 \mathopen|\delta_\nu\mathclose|  +  K_1 \mathopen|\delta_{\nu+1}\mathclose|
+          +  \cdots  +  K_\ell \mathopen|\delta_{\nu+\ell}\mathclose|.\cr
+}
+$$
+</div>
+<p>Sei jetzt, in einer nicht zu Mißverständnissen führenden Doppelbezeichnung,
+zur Schreibvereinfachung gesetzt $\delta_\nu \gets \mathopen|\delta_\nu\mathclose|$
+und $\hat\delta_\nu \gets \mathopen|\hat\delta_\nu\mathclose|$, d.h. die
+Betragsstriche werden einfach weggelassen.
+Nun ist hiermit</p>
+<div class=math>
+$$
+%\setbox1=\hbox{$\displaystyle{K_1\left(\delta_1+\cdots+\delta_{n-\ell+2} \right)}$}
+%\dimen1=\wd1
+\eqalign{
+    \sum_{\nu=0}^{n-\ell} \hat\delta_\nu &\le
+        \left(K_0\delta_0+\cdots+K_\ell\delta_\ell\right)+
+        \left(K_0\delta_1+\cdots+K_\ell\delta_{\ell+1}\right)+\cdots+
+        \left(K_0\delta_{n-\ell+1}+\cdots+K_\ell\delta_n\right)\cr
+    &= K_0\left(\delta_0+\cdots+\delta_{n-\ell+1}\right)\cr
+    & \qquad+K_1\left(\delta_1+\cdots+\delta_{n-\ell+2} \right)\cr
+    & \qquad\qquad+\qquad\cdots\cr
+    & \qquad\qquad\qquad+K_\ell\left(\delta_\ell+\cdots+\delta_n\right)\cr
+}
+$$
+</div>
+<p>Summation und Abschätzung bzgl. der Spalten im obigen Schema zeigt
+sofort die erste Abschätzung, wenn man die allerletzte Spalte mit
+$K_\ell$ und $\delta_n$ gesondert behandelt.
+Die weiteren behaupteten Ungleichungen ergeben sich sofort aus der
+ersten.
+    ☐</p>
+<p>Zur handlichen Notation der im folgenden Hauptsatz auftauchenden
+Stabilitätsfunktionale seien die folgenden abkürzenden Bezeichnungen
+eingeführt.
+Es war</p>
+<div class=math>
+$$
+    P_1 := \pmatrix{I&0&\ldots&0\cr} \in\mathbb{C}^{k\times k\ell},\qquad
+    R_1 := \pmatrix{0\cr \vdots\cr 0\cr I\cr} \in\mathbb{C}^{k\ell\times k}.
+$$
+</div>
+<p>und die erste Begleitmatrix lautet $(I=I_{k\times k})$</p>
+<div class=math>
+$$
+    C_1 := \pmatrix{
+        0 & I & 0 & \ldots & 0\cr
+        0 & 0 & I & \ldots & 0\cr
+        \vdots & \vdots & \vdots & \ddots & \vdots\cr
+         & & & \ldots & I\cr
+        -A_0 & -A_1 & & \ldots & -A_{\ell-1}\cr}
+    \in\mathbb{C}^{k\ell\times k\ell}.
+$$
+</div>
+<p>Desweiteren sei</p>
+<div class=math>
+$$
+  \bopo := \mathop{\rm diag}_{\nu=0}^N P_1 = \pmatrix{
+      I & 0 & \ldots & 0 &&&&&&&&&\cr
+        &   &        &   & I & 0 & \ldots & 0 &&&&&\cr
+        &   &        &   &   &   &        &   & \ddots &&&&\cr
+        &   &        &   &   &   &        &   &        & I & 0 & \ldots & 0\cr}
+  \in\mathbb{C}^{(N+1)k\times(N+1)k\ell},
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \boro := \mathop{\rm diag}\left(I_{k\ell\times k\ell},{\mskip 3mu} \mathop{\rm diag}_{\nu=1}^N R_1\right)
+    = \pmatrix{
+    I_{k\ell\times k\ell} &&&\cr
+    & 0      &&\cr
+    & \vdots &&\cr
+    & 0      &&\cr
+    & I      &&\cr
+    & & \ddots &\cr
+    & && 0\cr
+    & && \vdots\cr
+    & && 0\cr
+    & && I\cr} \in\mathbb{C}^{(N+1)k\ell\times(N+\ell)k},
+$$
+</div>
+<p>wobei</p>
+<div class=math>
+$$
+    \bfR := \mathop{\rm col}_{\nu=0}^{N+\ell-1} r_\nu =
+    \pmatrix{r_0\cr \vdots\cr r_{N+\ell-1}\cr} \in\mathbb{C}^{(N+\ell)k}.
+$$
+</div>
+<p>Für das Produkt gilt:
+$[C_1]^{-1} \boro \in \mathbb{C}^{(N+1)k\ell \times (N+\ell)k}$.
+Es sei $(X,T,Y)$ ein beliebiges Standard-Tripel.
+Weiter sei</p>
+<div class=math>
+$$
+    \ovbf X := \mathop{\rm diag}_{\nu=0}^N X = \pmatrix{
+        X&&&\cr &X&&\cr &&\ddots&\cr &&&X\cr}
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \ovbf Y := \mathop{\rm diag}\left[\left(\dcol_{i=0}^{\ell-1}
+    XT^i\right)^{-1}, \mathop{\rm diag}_{\nu=1}^N Y\right] = \pmatrix{
+        \left(\mathop{\rm col}_{i=0}^{\ell-1} XT^i\right)^{-1} &&&\cr
+        &Y&&\cr &&\ddots&\cr &&&Y\cr}.
+$$
+</div>
+<p>Es ist, aufgrund der Biorthogonalitätsbeziehung,</p>
+<div class=math>
+$$
+    \left( \mathop{\rm col}_{i=0}^{\ell-1} XT^i \right)^{-1} =
+    \left( \mathop{\rm row}_{i=0}^{\ell-1} T^iY \right) B,
+$$
+</div>
+<p>mit der Block-Hankel-Matrix $B$ zu</p>
+<div class=math>
+$$
+    B = \pmatrix{
+        A_1    & \ldots & A_\ell\cr
+        \vdots & \unicode{x22F0} & \cr
+        A_\ell &        & \cr
+    }, \qquad A_\ell = I.
+$$
+</div>
+<p>Die Sonderbehandlung der Blockmatrix bei $\boro$ und $\ovbf Y$
+in dem ersten “Diagonalelement” hat seinen Ursprung in der
+Lösungsdarstellung einer Differenzengleichung für <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynome</a> der
+Form</p>
+<div class=math>
+$$
+    x_n = XJ^n\left(\mathop{\rm col}_{i=0}^{\ell-1} XJ^i\right)\pmatrix{y_0\cr \vdots\cr y_{\ell-1}\cr}
+        + X \sum_{\nu=0}^{n-1} J^{n-1-\nu} Y y_{\nu+\ell}.
+$$
+</div>
+<p>Für den Fall $\ell=1$, also $\rho(\mu)=I\mu-A$ reduzieren sich $P_1$ und $R_1$
+zu Einheitsmatrizen der Größe $n\times n$.
+Die Biorthogonalitätsbeziehung schrumpft zu $X=Y^{-1}$ oder $X^{-1}=Y$.</p>
+<h2>4. Stabilitätsfunktionale für feste Schrittweiten<a id=stabfunkt></a></h2>
+<p>Man vgl. <a href="https://www.amazon.de/numerische-Behandlung-gew%C3%B6hnlicher-Differentialgleichungen-Ber%C3%BCcksichtigung/dp/3112728440/">Peter Albrecht</a>, &quot;Die numerische Behandlung gewöhnlicher Differentialgleichungen: Eine Einführung unter besonderer Berücksichtigung zyklischer Verfahren&quot;, 1979.
+Sowie <a href="https://doi.org/10.1007/BF01389876">Peter Albrecht, 1985</a>.</p>
+<p>Zuerst sei zur Übersichtlichkeit ein Teil des Beweises des
+nachfolgenden Hauptsatzes nach vorne gezogen.
+Später wird dieser Hilfssatz erweitert.
+Es gibt noch weitere Äquivalenzen zwischen Stabilitätsfunktionalen.</p>
+<p><strong>1. Hilfssatz:</strong>  Voraussetzung: Es sei
+$C_1^i := {\bf0} \in \mathbb{C}^{k\ell\times k\ell}$, falls $i&lt;0$.</p>
+<p>Behauptung: Das verkürzte Stabilitätsfunktional
+ist mit dem ursprünglichen es erzeugenden Stabilitätsfunktional
+normmässig äquivalent, d.h. es gilt</p>
+<div class=math>
+$$
+    \left| [C_1]^{-1} \boro \bfR \right| \sim
+    \left| \bopo [C_1]^{-1} \boro \bfR \right|.
+$$
+</div>
+<p><em>Beweis:</em>  Der Beweis wird in zwei Teile aufgespalten.
+Man schätzt beide Stabilitätsfunktionale gegeneinander ab.
+Die Abschätzung $\left|\bopo [C_1]^{-1} \boro \bfR\right| \le
+\left|\bopo\right| \left|[C_1]^{-1} \boro \bfR\right|$ ist klar, wobei die
+Zeilensummennorm von $\bopo$ unabhängig von $N$ ist.
+Die andere Abschätzungsrichtung berücksichtigt das Verhalten der
+Begleitmatrix $C_1$ intensiver.
+Man vergleiche hier auch die beiden nachstehenden Beispiele zur
+Verdeutlichung des “quasi-nilpotenten” Charakters der Potenzen der
+Matrizen $C_1$.
+Man benutzt</p>
+<div class=math>
+$$
+    \left| C_1^n z_0 \right| \le
+    \left| C_1^{\ell-1} \right| {\mskip 3mu} \left| C_1^{n-\ell+1} z_0 \right| =
+    \left| C_1^{\ell-1} \right| {\mskip 3mu}
+         \max_{i=0}^{\ell-1} \left| P_1 C_1^{n+i-\ell+1} z_0 \right|,
+$$
+</div>
+<p>wegen</p>
+<div class=math>
+$$
+     \left| C_1^n z_0 \right| =
+     \max_{i=0}^{\ell-1} \left| P_1 C_1^{n+i} z_0 \right|.
+$$
+</div>
+<p>Diese letzte Identität hat ihre Wurzel in der eben genannten
+“quasi-nilpotenten” Eigenschaft der Begleitmatrix $C_1$.
+Das Herausziehen von $C_1^{\ell-1}$ ist zulässig, da bei der
+$\sup$-Norm bei $\left| \bopo [C_1]^{-1} \boro \bfR \right|$
+weiterhin über alle Zeilen das Supremun gebildet wird.
+Es geht kein Wert bei der Supremunsbildung verloren.
+Schließlich</p>
+<div class=math>
+$$
+     \left| C_1^{n-1-\nu} R_1 r_{\nu+\ell} \right| \le
+     \left| C_1^{\ell-1} \right| {\mskip 3mu}
+          \left| C_1^{n-\ell-\nu} R_1 r_{\nu+\ell} \right| =
+     \left| C_1^{\ell-1} \right| {\mskip 3mu}
+          \max_{i=0}^{\ell-1} \left| P_1 C_1^{n-\ell-\nu+i} R_1 r_{\nu+\ell} \right|,
+$$
+</div>
+<p>wegen $r_\nu := 0$, für $\nu&gt;N$.
+    ☐</p>
+<p><strong>2. Beispiel:</strong>  Sei $\ell=2$ und sei $N:=n:=3$.
+Es ist $\rho(\mu)=I\mu^2+A_1\mu+A_0\in\mathbb{C}^{k\times k}$ und die Potenzen
+der ersten Begleitmatrix $C_1$ lauten $C_1^\nu$, für $\nu=1,\ldots,N$:</p>
+<div class=math>
+$$
+    C_1 = \pmatrix{
+        0 & I\cr
+        -A_0 & -A_1\cr},\quad
+    C_1^2 = \pmatrix{
+        -A_0 & -A_1\cr
+        A_1A_0 & -A_0+A_1^2\cr},\quad
+    C_1^3 = \pmatrix{
+        A_1A_0 & -A_0+A_1^2\cr
+        A_0^2-A_1^2A_0 & A_0A_1+A_1A_0-A_1^3\cr}.
+$$
+</div>
+<p>Es war</p>
+<div class=math>
+$$
+    P_1 = \pmatrix{I&0\cr} \in\mathbb{C}^{k\times 2k},\qquad
+    R_1 = \pmatrix{0\cr I\cr}\in\mathbb{C}^{2k\times k}.
+$$
+</div>
+<p>Die Matrizen $\bopo$ und $\boro$ haben das Aussehen</p>
+<div class=math>
+$$
+    \bopo = \pmatrix{
+        I&0 && &&\cr
+        && I&0 &&\cr
+        && && I&0\cr}\in\mathbb{C}^{3k\times6k},\qquad
+    \boro = \pmatrix{
+        I&&&\cr
+        &I&&\cr
+        &&0&\cr
+        &&I&\cr
+        &&&0\cr
+        &&&I\cr}\in\mathbb{C}^{6k\times4k}.
+$$
+</div>
+<p>Man berechnet</p>
+<div class=math>
+$$
+    [C_1]^{-1} \boro = \pmatrix{
+        I     & \cr
+        C_1   & R_1 &\cr
+        C_1^2 & C_1R_1 & R_1 &\cr
+        C_1^3 & C_1^2R_1 & C_1R_1 & R_1\cr
+    } \in \mathbb{C}^{8k\times5k}
+$$
+</div>
+<p>zu</p>
+<div class=math>
+$$
+    \begin{pmatrix}
+        \matrix{I&0\cr 0&I\cr} &\\[1em]
+      %\noalign{\vskip 9pt}
+        \matrix{0&I\cr -A_0&-A_1\cr} & \matrix{0\cr I\cr} &\\[1em]
+      %\noalign{\vskip 9pt}
+        \matrix{-A_0&-A_1\cr A_1A_0&-A_0+A_1\cr} & \matrix{I\cr -A_1\cr} &
+            \matrix{0\cr I\cr} &\\[1em]
+      %\noalign{\vskip 9pt}
+        \matrix{A_1A_0&-A_0+A_1^2\cr
+            A_0^2-A_1^2A_0&A_0A_1+A_1A_0-A_1^3\cr}&
+            \matrix{-A_1\cr -A_0+A_1^2\cr} & \matrix{I\cr -A_1\cr} &
+            \matrix{0\cr I\cr} \cr
+    \end{pmatrix}
+$$
+</div>
+<p>An einer weiteren Demonstration ersieht man das sehr schnelle “Großwerden”
+der überstrichenen Matrizen.</p>
+<p><strong>3. Beispiel:</strong>  Es sei nun $\ell=3$ und $N=3$.
+Es ist $\rho(\mu)=I\mu^3+A_2\mu^2+A_1\mu+A_0 \in \mathbb{C}^{k\times k}$.
+Nun berechnet man $C_1^\nu$ für $\nu=1,\ldots,N$:</p>
+<div class=math>
+$$
+     C_1 = \pmatrix{
+          0 & I & 0\cr
+          0 & 0 & I\cr
+          -A_0 & -A_1 & -A_2\cr},\qquad
+     C_1^2 = \pmatrix{
+          0 & 0 & I\cr
+          -A_0 & -A_1 & -A_2\cr
+          A_2A_0 & -A_0+A_2A_1 & -A_1+A_2^2\cr}
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+     C_1^3 = \pmatrix{
+          -A_0 & -A_1 & -A_3\cr
+          A_2A_0 & -A_0+A_2A_1 & -A_1+A_2^2\cr
+          -A_2A_0^2 & A_2A_0+A_1^2-A_2A-1 & -A_0+A_1A_2+A_2A_1-A_2^3\cr}.
+$$
+</div>
+<p>Weiter ist $\bopo\in\mathbb{C}^{4k\times4k\ell}$
+und $\boro\in\mathbb{C}^{4k\ell\times6k}$ mit</p>
+<div class=math>
+$$
+     \bopo = \pmatrix{
+          I&0&0 &&& &&& &&&\cr
+          &&& I&0&0 &&& &&&\cr
+          &&& &&& I&0&0 &&&\cr
+          &&& &&& &&& I&0&0\cr},\qquad
+     \boro = \pmatrix{
+          I && &&&\cr
+          & I & &&&\cr
+          && I &&&\cr
+          &&& 0 &&\cr
+          &&& 0 &&\cr
+          &&& I &&\cr
+          &&& & 0 &\cr
+          &&& & 0 &\cr
+          &&& & I &\cr
+          &&& && 0\cr
+          &&& && 0\cr
+          &&& && I\cr}.
+$$
+</div>
+<p>Nun ist $[C_1]^{-1} \boro \in \mathbb{C}^{12k\times6k}$ mit</p>
+<div class=math>
+$$
+     [C_1]^{-1} \boro = \pmatrix{
+          I &&&\cr
+          C_1 & R_1 &&\cr
+          C_1^2 & C_1R_1 & R_1 &\cr
+          C_1^3 & C_1^2R_1 & C_1R_1 & R_1
+     } \in \mathbb{C}^{4k\ell\times6k},
+$$
+</div>
+<p>also</p>
+<div class=math>
+$$
+     \begin{pmatrix}
+          \matrix{I&&\cr &I&\cr &&I\cr} &&&\\[1em]
+        %\noalign{\vskip 9pt}
+          \matrix{0 & I & 0\cr 0 & 0 & I\cr -A_0 & -A_1 & -A_2\cr} &
+               \matrix{0\cr 0\cr I\cr}&&\\[1em]
+        %\noalign{\vskip 9pt}
+          \matrix{
+          0 & 0 & I\cr
+          -A_0 & -A_1 & -A_2\cr
+          A_2A_0 & -A_0+A_2A_1 & -A_1+A_2^2\cr} &
+               \matrix{0\cr I\cr -A_2\cr} & \matrix{0\cr 0\cr I\cr} &\\[1em]
+        %\noalign{\vskip 9pt}
+          \matrix{
+          -A_0 & -A_1 & -A_3\cr
+          A_2A_0 & -A_0+A_2A_1 & -A_1+A_2^2\cr
+          -A_2A_0^2 & A_2A_0+A_1^2-A_2A-1 & -A_0+A_1A_2+A_2A_1-A_2^3\cr} &
+               \matrix{I\cr -A_2\cr -A_1+A_2^2\cr} &
+                \matrix{0\cr I\cr -A_2\cr} &
+                 \matrix{0\cr 0\cr I\cr}\cr
+     \end{pmatrix}
+$$
+</div>
+<p>Das zugrunde liegende Schema ist hier</p>
+<div class=math>
+$$
+     \begin{matrix}
+          \matrix{1&1&1\cr 2&2&2\cr 3&3&3\cr}\\[1em]
+            %\noalign{\vskip 9pt}
+          \matrix{2&2&2\cr 3&3&3\cr 4&4&4\cr}\\[1em]
+            %\noalign{\vskip 9pt}
+          \matrix{\vdots & \vdots & \vdots\cr}\cr
+     \end{matrix}
+$$
+</div>
+<p>Es folgt nun der angekündigte Hauptsatz, aus dem sich leicht ein
+entsprechender Konvergenzsatz für sehr allgemeine
+Diskretisierungsverfahren ableiten lässt.
+Desweiteren zeigt der Satz mehrere Querverbindungen zwischen
+verschiedenen Stabilitätsfunktionalen auf.
+In gewissen Situationen hat jedes der vorkommenden Funktionale seine
+spezifischen Vor- und Nachteile, und es lohnt sich mehrere Darstellungen,
+oder äquivalente Funktionale zur Verfügung zu haben.
+Insbesondere sollte jede der Darstellungen in gegenseitiger Befruchtung
+gepflegt werden.
+Später werden noch zwei andere Darstellungen hinzukommen, die bei
+gewissen Untersuchungen abermals vereinfachend wirken.</p>
+<p><strong>4. Hauptsatz:</strong>  Voraussetzungen: $(P_1,C_1,R_1)$ sei das
+erste Begleiter-Tripel zum <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a></p>
+<div class=math>
+$$
+    \rho(\mu) := I\mu^\ell+A_{\ell-1}\mu^{\ell-1}+\cdots+A_1\mu+A_0,
+$$
+</div>
+<p>vom Grade $\ell\ge1$.
+Die Funktion $\varphi$ sei Lipschitz-stetig in jeder Komponente mit den
+Lipschitzkonstanten $K_i$, also</p>
+<div class=math>
+$$
+    \left|\varphi(u_\ell,\ldots,\hat u_i,\ldots,u_0)-
+        \varphi(u_\ell,\ldots,u_i,\ldots,u_0)\right|
+    \le K_i\cdot\left|\hat u_i-u_i\right|,\quad\hbox{für}\quad i=0,\ldots,\ell.
+$$
+</div>
+<p>Die Potenzen der Matrix $C_1$ seien beschränkt durch die obere Schranke $D$,
+also $\left|C_1^\nu\right|\le D$, $\forall\nu\in\mathbb{N}$.
+Seien $\xi$ und $\hat\xi$ definiert durch</p>
+<div class=math>
+$$
+    \xi := \left|P_1\right| D \left|R_1\right| K_\ell,\qquad
+    \hat\xi := \left|P_1\right| D \left|R_1\right|
+        \left(\sum_{i=0}^\ell K_i\right).
+$$
+</div>
+<p>Die Größe $\hat\xi$ ist eine Funktion von mehreren Veränderlichen,
+es ist $\hat\xi=\hat\xi(P_1,D,R_1,K_0,\ldots,K_\ell)$.
+Es sei $\mathopen|b-a\mathclose|\ne0$.
+Die Schrittweite $h$ sei so gewählt, daß erstens
+$\mathopen|b-a\mathclose| / \mathopen|h\mathclose|$ natürlich ist und
+zweitens gleichzeitig gilt</p>
+<div class=math>
+$$
+    \mathopen|h\mathclose| \lt  \cases
+        {1/\xi,&falls $\xi\gt 0$;\cr \infty,&falls $\xi=0$.\cr}
+$$
+</div>
+<p>und $N$ sei implizit definiert durch $N\mathopen|h\mathclose| =
+\mathopen|b-a\mathclose|$.</p>
+<p>Behauptungen: (1) Beide (möglicherweise) impliziten Differenzengleichungen</p>
+<div class=math>
+$$
+\eqalign{
+    \hat u_{n+\ell}+A_{\ell-1}\hat u_{n+\ell-1}+\cdots+A_0\hat u_n
+        &= h{\mskip 3mu}\varphi(\hat u_{n+\ell},\ldots,\hat u_n)+r_{n+\ell}\cr
+    u_{n+\ell}+A_{\ell-1}u_{n+\ell-1}+\cdots+A_0u_n
+        &= h{\mskip 3mu}\varphi(u_{n+\ell},\ldots,u_n)\cr
+}
+$$
+</div>
+<p>besitzen für jedes $n$, eine eindeutig bestimmte Lösung $u_{n+\ell}$
+bzw. $\hat u_{n+\ell}$, die man mit Picard-Iteration berechnen kann.</p>
+<p>(2) Für die maximale normmässige Abweichung $\left|\hat u_n-u_n\right|$
+gilt die beidseitige Abschätzung bzgl. der additiven Störglieder $r_n$,
+wie folgt</p>
+<div class=math>
+$$
+    c_1 \left| \bopo [C_1]^{-1} \boro \bfR \right|
+    \le \left| \hat U-U\right|
+    \le c_2 \left| \bopo [C_1]^{-1} \boro \bfR \right|
+    \le c_3 N \left| \bfR \right| .
+$$
+</div>
+<p>(3) Die positiven Konstanten $c_i$, für $i=1,2,3$, sind gegeben durch</p>
+<div class=math>
+$$
+    c_1 = {1\over1+\hat\xi\mathopen|b-a\mathclose|},\qquad
+    c_2 = {1\over1-\mathopen|h\mathclose|\xi}
+        \exp{\hat\xi\mathopen|b-a\mathclose| \over 1-\mathopen|h\mathclose|\xi},\qquad
+    c_3 = c_2 \left|P_1\right| D \left|R_1\right|.
+$$
+</div>
+<p>(4) Die Abschätzung bei (3) ist unabhängig von der Wahl des Standard-Tripels,
+d.h. es gilt</p>
+<div class=math>
+$$
+    \bov X1 [T_1]^{-1} \bovy1 \bfR = \bov X2 [T_2]^{-1} \bovy2 \bfR,
+$$
+</div>
+<p>für zwei beliebige Standard-Tripel $(X_1,T_1,Y_1)$ und $(X_2,T_2,Y_2)$
+zum <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a> $\rho$.</p>
+<p>(5) Das verkürzte Funktional $\left|[C_1]^{-1} \boro \bfR \right|$
+ist ebenfalls Stabilitätsfunktional und zum
+unverkürzten Funktional äquivalent, unabhängig von $N$, d.h. es gilt</p>
+<div class=math>
+$$
+    \left| \bopo [C_1]^{-1} \boro \bfR \right| \sim
+    \left| [C_1]^{-1} \boro \bfR \right|.
+$$
+</div>
+<p>(6) Verkürzte Stabilitätsfunktionale sind bei Wechsel des Standard-Tripels
+untereinander äquivalent, jedoch nicht notwendig mehr gleich.
+Es gilt</p>
+<div class=math>
+$$
+    \left| [T_1]^{-1} \bovy1 \bfR \right| \sim
+    \left| [T_2]^{-1} \bovy2 \bfR \right|.
+$$
+</div>
+<p><em>Beweis:</em>  Zur Abkürzung werde wieder benutzt</p>
+<div class=math>
+$$
+    \delta_{n+\ell} := \hat u_{n+\ell} - u_{n+\ell},\qquad
+    \hat\delta_{n+\ell} := \varphi(\hat u_{n+\ell},\ldots,\hat u_n) -
+        \varphi(u_{n+\ell},\ldots,u_n).
+$$
+</div>
+<p>Zu (1): Beide Differenzengleichungen stellen für jedes $n$ eine
+Lipschitz-stetige Keplersche Gleichung in $\hat u_{n+\ell}$
+bzw. $u_{n+\ell}$ dar.
+Die Fixpunktgleichungen bzgl. $\hat F$ und $F$, mit</p>
+<div class=math>
+$$
+    \hat u_{n+\ell} = \hat F(\hat u_{n+\ell} := h\varphi(\hat u_{n+\ell},\ldots{\mskip 5mu})+\hat\psi,
+    \qquad\hbox{bzw.}\qquad
+    u_{n+\ell} = F(u_{n+\ell}) := h\varphi(u_{n+\ell},\ldots{\mskip 5mu})+\psi,
+$$
+</div>
+<p>sind kontrahierend, falls $\mathopen|h\mathclose| K_\ell &lt; 1$.
+Durch die oben vorausgesetzte Einschränkung an $h$, nämlich
+$\mathopen|h\mathclose|\xi&lt;1$, ist diese hinreichende
+Bedingung für Kontraktion erfüllt.
+Auf einem geeigneten vollständigen Teilraum, lässt sich dann Existenz
+und Eindeutigkeit eines Fixpunktes deduzieren.</p>
+<p>Zu (2): a) Nach dem Hilfssatz über die Darstellung der Differenz der
+Lösung zweier Differenzengleichungen (siehe  Darstellungssatz), folgt sofort
+durch Umstellung, die Abschätzungskette</p>
+<div class=math>
+$$
+\eqalignno{
+    \left|P_1 C_1^n \pmatrix{r_0\cr \vdots\cr r_{\ell-1}\cr} +
+        P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1 r_{\nu+\ell}\right|
+    &\le \mathopen|\delta_n\mathclose| +
+        \mathopen|h\mathclose| \left|P_1\right| D \left|R_1\right|
+        \sum_{\nu=0}^{n-\ell} \left|\hat\delta_{\nu+\ell}\right| \cr
+    &\le \mathopen|\delta_n\mathclose| + \mathopen|h\mathclose| \left|P_1\right| D \left|R_1\right|
+        \left(\sum_{i=0}^\ell K_i\right)
+        \sum_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose| \cr
+    &\le \mathopen|\delta_n\mathclose| + \mathopen|b-a\mathclose| \left|P_1\right|
+        D \left|R_1\right| \left(\sum_{i=0}^\ell K_i\right)
+        \sup_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose| \cr
+    &\le \sup_{\nu=0}^n \mathopen|\delta_\nu\mathclose| + \mathopen|b-a\mathclose|
+        \left|P_1\right| D \left|R_1\right| \left(\sum_{i=0}^\ell K_i\right)
+        \sup_{\nu=0}^n \mathopen|\delta_\nu\mathclose| \cr
+    &= \left( 1+\hat\xi\mathopen|b-a\mathclose| \right)
+        \sup_{\nu=0}^n \mathopen|\delta_\nu\mathclose| . \cr
+}
+$$
+</div>
+<p>Hierbei wurde die Abschätzung</p>
+<div class=math>
+$$
+    \sum_{\nu=0}^{n-\ell} \left|\hat\delta_{\nu+\ell}\right| \le
+        K_\ell \mathopen|\delta_n\mathclose| + \left(\sum_{i=0}^{\ell-1} K_i\right)
+        \left(\sum_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose|\right)
+$$
+</div>
+<p>des Abschätzungssatzes benutzt, desweiteren die Gleichung
+$N\mathopen|h\mathclose| = \mathopen|b-a\mathclose|$ und schließlich die
+Abschätzung $\sum_{\nu=0}^n \mathopen|\delta_\nu\mathclose| \le
+N\sup_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose|$.
+Durchmultiplikation mit</p>
+<div class=math>
+$$
+    { 1 \over  1 + \hat\xi \mathopen|b-a\mathclose| }
+$$
+</div>
+<p>liefert die erste Ungleichung der Behauptung (2),
+wobei sich entsprechend die Konstante $c_1$ ergibt.</p>
+<p>b) Wiederum nach dem Satz über die Darstellung der Differenz
+der Lösungen zweier Differenzengleichungen (siehe  Darstellungssatz), folgt
+sofort beim Übergang zu Normen</p>
+<div class=math>
+$$
+\eqalign{
+    \mathopen|\delta_n\mathclose| &\le \mathopen|h\mathclose|{\mskip 3mu}\left|P_1\right| D \left|R_1\right|
+        \sum_{\nu=0}^{n-\ell} \left|\hat\delta_{\nu+\ell}\right| +
+        \left| P_1 C_1^n \pmatrix{r_0\cr \vdots\cr r_{\ell-1}\cr}
+            + P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1
+            r_{\nu+\ell} \right| \cr
+    &\le \mathopen|h\mathclose| {\mskip 3mu} \underbrace{ \left|P_1\right| D \left|R_1\right|
+            \left( \sum_{i=0}^\ell K_i \right) }_{\displaystyle{{}=\hat\xi}}
+        \sum_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose| + \mathopen|h\mathclose| {\mskip 3mu}
+        \underbrace{ \left|P_1\right| D \left|R_1\right| K_\ell }
+            _{\displaystyle{{}=\xi}} \mathopen|\delta_n\mathclose| +
+        \left| \bopo [C_1]^{-1} \boro \bfR \right|, \cr
+}
+$$
+</div>
+<p>wobei wieder der Abschätzungssatz benutzt wurde, also durch Umformung</p>
+<div class=math>
+$$
+    \left(1-\mathopen|h\mathclose|\xi\right) \mathopen|\delta_n\mathclose| \le \mathopen|h\mathclose|\hat\xi
+        \sum_{\nu=0}^{n-1} \mathopen|\delta_\nu\mathclose| +
+        \left| \bopo [C_1]^{-1} \boro \bfR \right|.
+$$
+</div>
+<p>Wegen der Voraussetzung an $h$, nämlich $\mathopen|h\mathclose|&lt;1/\xi$,
+ist $1-\mathopen|h\mathclose|\xi&gt;0$.
+Mit Hilfe des diskreten Lemmas von Gronwall, wobei man in der dort
+angegebenen Bezeichnung setzt</p>
+<div class=math>
+$$
+    \varepsilon_{j+1} \gets \mathopen|\delta_n\mathclose|,\qquad
+    \eta_j \gets {\left|\bopo[C_1]^{-1}\boro\bfR\right|
+        \over1-\mathopen|h\mathclose|\xi},
+    \qquad
+    \delta \gets {\hat\xi \over 1-\mathopen|h\mathclose|\xi},\qquad
+    h_\nu \gets \mathopen|h\mathclose|,
+$$
+</div>
+<p>erhält man jetzt die Abschätzung</p>
+<div class=math>
+$$
+    \mathopen|\delta_n\mathclose| \le {\left|\bopo[C_1]^{-1}\boro\bfR\right|
+        \over 1-\mathopen|h\mathclose|\xi}
+        \exp {\hat\xi\mathopen|b-a\mathclose| \over 1-\mathopen|h\mathclose|\xi}.
+$$
+</div>
+<p>Anhand dieser Darstellung ersieht man auch das Zustandekommen der
+Konstanten $c_2$.
+Die Konstante $c_3$ ergibt sich sofort durch typische Abschätzungen.</p>
+<p>Zu (4): Das Standard-Tripel $(X_1,T_1,Y_1)$ ist ähnlich zum
+Standard-Tripel $(X_2,T_2,Y_2)$ genau dann, wenn</p>
+<div class=math>
+$$
+    X_2=X_1S,\qquad T_2=S^{-1}T_1S,\qquad Y_2=S^{-1}Y_1,
+$$
+</div>
+<p>oder</p>
+<div class=math>
+$$
+    X_1 = X_2 S^{-1}, \qquad T_1 = S T_2 S^{-1}, \qquad Y_1 = S Y_2.
+$$
+</div>
+<p>Nun ist</p>
+<div class=math>
+$$
+\eqalignno{
+    \bov X1 [T_1]^{-1} \bovy1 \bfR
+    &= \left(\mathop{\rm diag}_{\nu=0}^N X_1\right) [T_1]^{-1}
+          \mathop{\rm diag}\left[ \left(\drow_{i=0}^{\ell-1} T_1^iY\right) B, {\mskip 3mu}
+          \mathop{\rm diag}_{\nu=1}^N Y_1 \right] \bfR \cr
+    &= \left(\mathop{\rm diag}_{\nu=0}^N(X_2S^{-1})\right) [ST_2S^{-1}]^{-1}
+          \mathop{\rm diag}\left\{ \drow_{i=0}^{\ell-1}\left[
+          \left(ST_2S^{-1}\right)^i SY_2\right] B, {\mskip 3mu}
+          \mathop{\rm diag}_{\nu=1}^N (SY_2) \right\} \bfR \cr
+    &= \left(\mathop{\rm diag}_{\nu=0}^N X_2\right) [T_2]^{-1}
+          \mathop{\rm diag}\left[ \left(\drow_{i=0}^{\ell-1} T_2^iY\right) B, {\mskip 3mu}
+          \mathop{\rm diag}_{\nu=1}^N Y_2 \right] \bfR \cr
+    &= \bov X2 [T_2]^{-1} \bovy2 \bfR. \cr
+}
+$$
+</div>
+<p>Hierbei wurden die Recheneigenschaften der Operatoren $\mathop{\rm diag}$, $\mathop{\rm row}$ und
+$[\cdot]$ benutzt.</p>
+<p>Zu (5): Dies wurde im vorausgeschickten Hilfssatz bewiesen.</p>
+<p>Zu (6): Mit der gleichen Notation wie beim Beweis zu (4) rechnet man</p>
+<div class=math>
+$$
+\eqalign{
+    [T_1]^{-1} \bovy1 \bfR
+    &= [ST_2S^{-1}]^{-1} \mathop{\rm diag}\left\{ \drow_{i=0}^{\ell-1}\left[
+       \left(ST_2S^{-1}\right)^i SY_2\right] B, {\mskip 3mu}
+       \mathop{\rm diag}_{\nu=1}^N SY_2 \right\} \bfR \cr
+    &= \left(\mathop{\rm diag}_{\nu=0}^N S\right) [T_2]^{-1} \mathop{\rm diag}\left[
+       \drow_{i=0}^{\ell-1} \left(T_2^iY_2\right) B,{\mskip 3mu} \mathop{\rm diag}_{\nu=1}^N Y_2
+       \right] \bovy2 \bfR \cr
+    &= \left(\mathop{\rm diag}_{\nu=0}^N S\right) [T_2]^{-1} \bovy2 \bfR . \cr
+}
+$$
+</div>
+<p>Durch Multiplikation von links mit $\mathop{\rm diag}_{\nu=0}^N S^{-1}$ folgt sofort</p>
+<div class=math>
+$$
+    [T_2]^{-1} \bovy2 \bfR =
+    \left(\mathop{\rm diag}_{\nu=0}^N S^{-1}\right) [T_1]^{-1} \bovy1 \bfR.
+$$
+</div>
+<p>Damit sind beide verkürzten Funktionale äquivalent.
+    ☐</p>
+<p><strong>5. Bemerkungen:</strong>  Zur Voraussetzung: Aufgrund der Einschränkung
+der Schrittweite $h$ in Abhängigkeit der Konstanten $\xi$, ist
+das Ergebnis nur von praktischer Bedeutung bei kurzen
+Integrationsintervallen und nicht-steifen Differentialgleichungsproblemen,
+also Problemen mit kleiner Lipschitzkonstante.
+Bei steifen Problemen werden die Konstanten
+$\xi$, $\hat\xi$, $c_1$, $c_2$, $c_3$ schnell unangemessen groß.
+Die Konstanten $\xi$ und $\hat\xi$ enthalten direkt als multiplikativen
+Faktor die obere Schranke $D$ für die Matrixpotenzen.
+$\xi$ seinerseits geht exponentiell in die Abschätzung ein.
+Die Aufspaltung in zwei sehr ähnliche Konstanten $\xi$ und $\hat\xi$
+geschieht nur, weil $\xi$ i.a. kleiner ist als $\hat\xi$
+und damit schärfere Schranken liefert.
+Man könnte mit $\hat\xi$ alleine auskommen.
+Dabei würde man $\xi$ vollständig durch $\hat\xi$ ersetzen.
+$\hat\xi$ lässt sich wiederum ersetzen durch
+$\left|P_1\right| D \left|R_1\right| \left(\ell+1\right)
+\left(\max_{i=0}^\ell K_i\right)$, man vergl. hier den entsprechenden
+Hilfssatz mit den diesbezüglichen Abschätzungen, siehe  Abschätzungssatz.
+Erfüllt die erste Begleitmatrix $C_1$ die Bedingung
+$\left|C_1^\nu\right|\le D$, $\forall\nu\in\mathbb{N}$, so auch jede
+zu $C_1$ ähnliche Matrix, allerdings mit u.U. verändertem $D$.</p>
+<p>Numerische Ergebnisse von
+<a href="https://doi.org/10.1137/0904051">Tischer/Sacks-Davis (1983)3</a>
+und <a href="https://dl.acm.org/doi/pdf/10.1145/214408.214417">Tischer/Gupta (1985)2</a>
+zeigen, daß selbst bei steifen Differentialgleichungen das
+Stabilitätsfunktional die richtige Konvergenzordnung anzeigt und dies
+obwohl $\mathopen|h\mathclose| \xi &lt; 1$, verletzt ist.
+Autoren Peter E. Tischer, Ron Sacks-Davis und Gopal K. Gupta.
+Dies deutet darauf hin, daß die Ergebnisse des Hauptsatzes allgemeiner
+gelten als der den Hauptsatz tragende Beweis.</p>
+<p>Kerninhalt der Beweise im Hauptsatz sind der Darstellungssatz,
+das diskrete Lemma von Gronwall und die Abschätzungen im Hilfssatz 6.
+Die obere Schranke $D$ für die Matrixpotenzen $\left|C_1^i\right|$ hängt
+u.U. ab von der Dimension der zugrundeliegenden Differentialgleichung
+$\dot y=f(t,y)$, aufgrund der Beziehung
+$\left|C_1\otimes I\right|=\left|C_1\right|$, falls die zur Maximumnorm
+kompatible Zeilensummennorm verwendet wird.
+Die Lipschitzkonstanten $K_i$ sind abhängig von der Lipschitzkonstante
+von $f$.</p>
+<p>Zu (1): Die Lösungen der möglicherweise impliziten Differenzengleichungen
+müssen nicht mit Picard-Iteration berechnet werden.
+Ebenso gut kann das Newton-Raphson-Iterationsverfahren oder das
+Newton-Kantorovich-Iterationsverfahren benutzt werden.
+Der Startfehlersatz von Liniger liefert eine obere Schranke für die
+Anzahl der nötigen Iterationen.
+Es zeigt sich, daß eine einzige Iteration vielfach vollkommen ausreicht.
+Weitere Iterationen schaffen keinerlei Verbesserungen an denen man
+interessiert ist.
+Für nicht genügend kleine Schrittweiten $\mathopen|h\mathclose|$ können in
+der Tat die beiden angegebenen Differenzengleichungen und damit die
+entsprechenden Keplerschen Gleichungen keine oder mehr als eine Lösung
+besitzen.</p>
+<p>Zu (2): Die Stabilitätsfunktionale
+$\left|\bopo [C_1]^{-1} \bopo \bfR\right|$,
+$\left|[C_1]^{-1} \boro \bfR\right|$ und $\left|\bfR\right|$ sind
+unabhängig von $\varphi(\cdot)$, und unabhängig von den
+Lipschitzkonstanten $K_i$, jedoch abhängig von $N$ und damit letztlich
+abhängig von $h$ und/oder der Länge des Integrationsintervalles
+$\mathopen|b-a\mathclose|$.
+Die Konstanten $c_1$, $c_2$, $c_3$ hängen von den Lipschitzkonstanten $K_i$
+ab.
+Da bei dem Hauptsatz allerdings als zentrale Voraussetzung die
+Lipschitzkonstanten eingehen und beim obigen Beweis auch
+benötigt werden, hängen in soweit auch die Funktionale hiervon ab.
+Das durch die Konstante $c_2$ induzierte exponentielle Wachstum kann bei
+den gegebenen Voraussetzungen des Hauptsatzes nicht so ohne weiteres
+verbessert werden, wie z.B. die beiden Differentialgleichungen
+$\dot y=0$ und $\dot y=y$ mit $y(0)=1$ zeigen, wenn man das explizite
+Eulerverfahren $y_{n+1}=y_n+hf_n$ anwendet.
+Daß hierdurch auch das qualitative Verhalten gänzlich überschätzt werden
+kann, zeigen die beiden Differentialgleichungen $\dot y=0$ und $\dot y=-y$,
+mit $y(0)=1$, wenn man das implizite Eulerverfahren $y_{n+1}=y_n+hf_{n+1}$
+verwendet.
+Dieses Verhalten ist schon beim kontinuierlichen Lemma von Gronwall und den
+hieraus sich ableitenden Sätzen wohl bekannt.
+Dort sind allerdings auch Sätze bekannt, die dieses falsche
+Voraussagen des qualitativen Verhaltens vermeiden,
+siehe Hairer/Wanner/N\o rsett (1987).
+<em>{Hairer, Ernst}</em>{Wanner, Gerhard}_{N\o rsett, Syvert Paul}%
+Hier benutzt man u.a. die logarithmische Norm $\mu$ definiert zu</p>
+<div class=math>
+$$
+    \mu(A) := \lim_{\varepsilon\to0,{\mskip 3mu}\varepsilon\gt 0}
+        {\left|I+\varepsilon A\right| - 1 \over \varepsilon},
+    A \in \mathbb{C}^{k\times k}.
+$$
+</div>
+<p>Für die euklidische-, Maximum- und die 1-Norm ergeben sich</p>
+<div class=math>
+$$
+\eqalignno{
+    \mu(A) &= \lambda_{\rm max}, \qquad
+        \lambda_{\rm max} \hbox{ größter Eigenwert von } {1\over2}(A^\top+A),\cr
+    \mu(A) &= \max_{k=1}^n \left(\mathop{\rm Re}\nolimits  a_{ii} + \sum_{i\ne k} \left|a_{ik}\right|\right),\cr
+    \mu(A) &= \max_{i=1}^n \left(\mathop{\rm Re}\nolimits  a_ii + \sum_{k\ne i} \left|a_{ki}\right|\right).
+}
+$$
+</div>
+<p>Zu (4): Die Aussage (4) zeigt, daß das Stabilitätsfunktional unabhängig
+von der Basisdarstellung und Basiswahl ist.
+Die Abschätzungen sind invariant unter der Wahl des Standard-Tripels.
+Vielfach geeignet ist das Stabilitätsfunktional zum Jordan-Tripel,
+zum ersten Begleiter-Tripel $(P_1,C_1,R_1)$ oder zum zweiten
+Begleiter-Tripel $(P_1B^{-1},C_2,BR_1)$, mit der Block-Hankel-Matrix zu</p>
+<div class=math>
+$$
+    B := \pmatrix{
+        A_1 & A_2 & \ldots & A_{\ell-1} & I\cr
+        A_2 & \unicode{x22F0} & \unicode{x22F0} & \unicode{x22F0} & \cr
+        \vdots & \unicode{x22F0} & \unicode{x22F0} & & \cr
+        A_{\ell-1} & I & & & \cr
+        I & & & & \cr}.
+$$
+</div>
+<p>Zu (5) und (6): Gleichheit beider verkürzter Stabilitätsfunktionale ist
+nicht mehr zu erwarten.
+Desweiteren erkennt man, daß die Rechtseigenvektoren, also die Spalten
+in $X_1$ bzw. $X_2$ (falls einer der beiden zu einem Jordan-Tripel
+gehört) keinen “kalkülmässigen Einfluß” haben, entgegen den
+Linkseigenvektoren.
+Natürlich haben die Rechtseigenvektoren Einfluß auf das Gesamtverhalten,
+denn ändern sich die Rechtseigenvektoren, repräsentiert durch $X$, so
+ändern sich sich nach der Biorthogonalitätsbeziehung</p>
+<div class=math>
+$$
+    \left(\mathop{\rm row}\_{i=0}^{\ell-1} T^iY\right) {\mskip 3mu} B {\mskip 3mu}
+        \left(\mathop{\rm col}_{i=0}^{\ell-1} XT^i\right) = I_{k\ell\times k\ell},
+$$
+</div>
+<p>auch die Linkseigenvektoren, repräsentiert durch $Y$.
+Jedoch brauchen die Rechtseigenvektoren oder gar die Inverse von
+$\mathop{\rm col}(XT^i)$ nicht berechnet zu werden.
+Dies ist hier mit “kalkülmässig” unabhängig gemeint.</p>
+<p><strong>6. Corollar:</strong>  Voraussetzung: $\xi$, $c_1$, $c_2$ wie beim
+Hauptsatz.</p>
+<p>Behauptung: $\xi\to0$, $c_1\to1$, $c_2\to1$, falls
+$\displaystyle\max_{i=0}^\ell K_i \to 0$.</p>
+<p>D.h. die beidseitige Ungleichungskette entartet zu einer
+Gleichungskette, falls alle Lipschitzkonstanten $K_\rho$ gegen
+Null gehen, was insbesondere bei Quadraturproblemen auftritt.
+Eine Anfangswertaufgabe für Differentialgleichungen enthält mit
+$\dot y=f(t)$, $y(a)=0$, $y(b)=&gt;?$, das Quadraturproblem $\int_a^b f(t) dt$
+als Spezialfall.</p>
+<p>In Komponentenschreibweise liest sich der Hauptsatz wie folgt.</p>
+<p><strong>7. Hauptsatz:</strong>  Voraussetzung: Es sei</p>
+<div class=math>
+$$
+    \mathopen|h\mathclose| \lt  {1\over \left|P_1\right| D \left|R_1\right| K_\ell}
+$$
+</div>
+<p>Behauptung: (2) Für die maximale normmässige
+Abweichung  $\left|\hat u_n-u_n\right|$ gilt die
+beidseitige Abschätzung bzgl. der additiven Störglieder $r_n$,
+wie folgt</p>
+<div class=math>
+$$
+\eqalign{
+    c_1 \sup_{n=0}^N \left| P_1 C_1^n \pmatrix{r_0\cr \vdots\cr r_{\ell-1}\cr}
+        + P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1 r_{\nu+\ell} \right|
+    &\le \sup_{n=0}^N \left|\hat u_n-u_n\right| \cr
+    &\le c_2 \sup_{n=0}^N \left| P_1 C_1^n \pmatrix{r_0\cr \vdots\cr
+        r_{\ell-1}\cr} + P_1 \sum_{\nu=0}^{n-1} C_1^{n-1-\nu} R_1 r_{\nu+\ell}
+        \right| \cr
+    &\le c_3 N \sup_{n=0}^N \left|r_n\right| . \cr
+}
+$$
+</div>
+<p>(4) Die Abschätzung bei (3) ist invariant unter der Wahl eines
+Standard-Tripels, d.h. es gilt</p>
+<div class=math>
+$$
+\displaylines{
+    \sup_{n=0}^N \left| \hat X \hat T^n \left(\mathop{\rm row}\_{i=0}^{\ell-1}
+        \hat T^i \hat Y\right) B
+        \pmatrix{r_0\cr \vdots\cr r_{\ell-1}\cr}
+        + \hat X \sum_{\nu=0}^{n-1} \hat T^{n-1-\nu}\hat Y
+        r_{\nu+\ell} \right| \cr
+    {}= \sup_{n=0}^N \left| X T^n \left(\mathop{\rm row}\_{i=0}^{\ell-1}
+         T^i Y\right) B \pmatrix{r_0\cr \vdots\cr r_{\ell-1}\cr}
+        + X \sum_{\nu=0}^{n-1} T^{n-1-\nu} Y r_{\nu+\ell} \right| , \cr
+}
+$$
+</div>
+<p>für zwei Standard-Tripel $(X,T,Y)$ und $(\hat X,\hat T,\hat Y)$.</p>
+<p><strong>8. Bemerkung:</strong>  Zu (2): Man erkennt an der Komponentendarstellung,
+daß $r_n$ eingeht in das Stabilitätsfunktional, ohne von rechts “echt”
+mit $R_1$ (bzw. $Y$) multipliziert zu werden;
+$\nu=n-\ell$, für $\nu&gt;n-\ell$, also $n-1-\nu\le\ell-2$, man denke an
+$P_1C_1^{n-1-\nu}R_1=0$.
+M.a.W. für $\nu=n-\ell$ kann $r_n$ nicht in den Kernbereich von
+$P_1C_1^{n-1-\nu}R_1$ gelangen.
+Im Falle von Diskretisierungsverfahren, wo die $r_\nu$ die lokalen
+Diskretisierungsfehlervektoren darstellen, hat dies zur Konsequenz:
+Die Ordnung in $h$ der $r_\nu$ kann nie überschritten werden.
+Durch Summation kann selbstverständlich eine Reduktion der Ordnung anfallen.
+Ist beispielsweise $r_\nu={\cal O}(h^{p+1})$, so ist
+$\left|\bopo [C_1]^{-1} \boro \bfR\right| = {\cal O}(h^{p+1+\varepsilon})$
+mit $\varepsilon&gt;0$ unmöglich.
+Für ein Diskretisierungsverfahren ist dennoch ein Ordnungssprung größer 1
+möglich, falls gewisse Komponenten von $r_\nu\in\mathbb{C}^k$ bei der
+Ordnungsfindung unberücksichtigt bleiben.
+Dies ist z.B. bei Runge-Kutta-Verfahren der Fall.</p>
+<h2>5. Projektorstabilitätsfunktionale<a id=projektorstabfunkt></a></h2>
+<p>Im weiteren sei vorausgesetzt, daß die Eigenwerte von $C_1$ auf dem
+Einheitskreis nur aus der 1 bestehen, also nicht von der Form
+$e^{i\varphi}$ [$\varphi\ne0 \pmod{2\pi}$] sind, da andernfalls die
+typischen Projektoreigenschaften verloren gehen.
+Sei $E$ diejenige Matrix, die lediglich die spektralen Eigenschaften
+von $C_1$ zu dem (den) dominanten Eigenwert(en) $\mu=1$ trägt.
+$T$ sei die Transformationsmatrix von $C_1$ auf Jordannormalform, also</p>
+<div class=math>
+$$
+    C_1=TJT^{-1},\qquad J=\mathop{\rm diag}(1,\ldots,1,\hbox{weitere Jordanblöcke}).
+$$
+</div>
+<p>Die Matrix $E$ filtert aus dieser Darstellung nur den (die) Eigenwert(e)
+$\mu=1$ heraus, also</p>
+<div class=math>
+$$
+    E := T\hat JT^{-1},  \qquad \hat J := \mathop{\rm diag}(1,\ldots,1,0,\ldots,0).
+$$
+</div>
+<p>Es zeigt sich, daß $E$ nicht speziell von der Matrix $C_1$ abhängt.</p>
+<p>Die Eigenwerte $\mu=1$ sind ja gerade diejenigen Eigenwerte, die für
+den dominanten lokalen Fehler verantwortlich sind.
+Es gilt $\sum_{\nu=0}^N 1\to\infty$, falls $N\to\infty$, aber
+$\sum_{\nu=0}^\infty \mu^\nu&lt;C$, falls $\left|\mu\right|&lt;1$.
+Bei $\sum_{\nu=0}^N 1$ $(N\to\infty)$ verliert man gerade eine $h$-Potenz.
+Es war $N\mathopen|h\mathclose| = \mathopen|b-a\mathclose|$, und
+$N\to\infty \iff \mathopen|h\mathclose|\to0$.</p>
+<p>Die Matrix $E$ hat nun eine Reihe von Recheneigenschaften, die in
+nachstehendem Satz zusammengefaßt sind.
+$\mathbb{N}$ ist hier wie üblich die Menge der natürlichen Zahlen von eins an.</p>
+<p><strong>1. Satz:</strong>  (Projektorsatz) $E$ sei wie oben definiert.
+$S$ sei eine beliebige Matrix, ähnlich zu $C_1$, also $S=H^{-1}C_1H$.
+Dann gelten</p>
+<ol>
+<li>$E$ ist idempotent, d.h. $E^2=E$, also allgemein $E^i=E$, für alle
+$i\in\mathbb{N}$.
+$E$ ist damit ein Projektor.</li>
+<li>$E$ ist unabhängig von $C_1$.
+$E$ hängt nur ab von $V$, beim Standard-Tripel $(X,V,Y)$ zu $C_1$.</li>
+<li>$SE=E=ES$.
+$S^\nu E=E=ES^\nu$, $\forall\nu\in\mathbb{N}$.</li>
+<li>$S^n=E+(S-E)^n$, $\forall n\in\mathbb{N}$.</li>
+<li>$[E]^{-1}[S]=[S-E]$, also $\left|[E]^{-1}[S]\right| = 1+\left|S-E\right|$.</li>
+<li>$[S]^{-1}[E]=[S-E]^{-1}$, also
+$\left|[S]^{-1}[E]\right| = 1 +\left|S-E\right| + \cdots +
+\left|(S-E)^N\right|.$</li>
+<li>Es gilt</li>
+</ol>
+<div class=math>
+$$
+    [S-E]^{-1} \mathop{\rm diag}_{\nu=0}^N E = \mathop{\rm diag}_{\nu=0}^N E =
+        \left(\mathop{\rm diag}_{\nu=0}^N E\right) [S-E]^{-1}
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    [S-E] \mathop{\rm diag}_{\nu=0}^N E = \mathop{\rm diag}_{\nu=0}^N E =
+        \left(\mathop{\rm diag}_{\nu=0}^N E\right) [S-E], \qquad
+    [S]^{-1} = [S-E]^{-1} + [E]^{-1} - I.
+$$
+</div>
+<p><em>Beweis:</em>  Zu (1): $E^2=(T\hat JT^{-1})(T\hat JT^{-1})=T\hat J^2T^{-1}=
+T\hat JT^{-1}=E$.</p>
+<p>Zu (2): Liegt an der Ähnlichkeit von Standard-Tripeln.</p>
+<p>Zu (3): $SE=(TJT^{-1})(T\hat JT^{-1})=TJ\hat JT^{-1}=T\hat JT^{-1}=E$.
+Für $E=ES$ verfährt man analog.</p>
+<p>Zu (4): Aufgrund der Vertauschbarkeit von $S$ und $E$ nach (2) und der
+Projektoreigenschaft nach (1) rechnet man</p>
+<div class=math>
+$$
+    (S-E)^n = \sum_{\nu=0}^n {n\choose\nu} (-1)^\nu S^{n-\nu} E^\nu
+        = S^n + \sum_{\nu=1}^n {n\choose\nu} (-1)^\nu E
+        = S^n - E,
+$$
+</div>
+<p>wegen</p>
+<div class=math>
+$$
+    0 = (1-1)^n = \sum_{\nu=0}^n {n\choose\nu} (-1)^\nu
+    \qquad\hbox{und}\qquad {n\choose 0}=1.
+$$
+</div>
+<p>Zu (5): Berechne direkt anhand der Definition von $[X]$ das Matrixprodukt
+$[E]^{-1}[S]$ aus.
+Auf der ersten Subdiagonalen erscheint stets $E-S$ und auf allen
+darunterliegenden Diagonalen steht $E-ES,$ was nach Behauptung (3)
+gleich der Nullmatrix ist.</p>
+<p>Zu (6): Folgt sofort aus (5).
+Invertierung von $[E]^{-1}[S]$ liefert $[S]^{-1}[E]$.
+Die Invertierbarkeit ist aufgrund der Definition von $[X]$ gesichert.
+Die angegebenen Normen (Zeilensummennorm oder Spaltensummenorm) ergeben
+sich unmittelbar.</p>
+<p>Zu (7): Ist klar.
+    ☐</p>
+<p><strong>2. Beispiel:</strong>  Zu (5): Für das Produkt $[E]^{-1}[S]$ im Falle
+$N=3$ berechnet man</p>
+<div class=math>
+$$
+    \pmatrix{
+        I   & 0   & 0 & 0\cr
+        E   & I   & 0 & 0\cr
+        E^2 & E   & I & 0\cr
+        E^3 & E^2 & E & I\cr}
+    \pmatrix{
+        I  & 0  & 0  & 0\cr
+        -S & I  & 0  & 0\cr
+        0  & -S & I  & 0\cr
+        0  & 0  & -S & I\cr} =
+    \pmatrix{
+        I    & 0    & 0   & 0\cr
+        E-S  & I    & 0   & 0\cr
+        E-ES & E-S  & I   & 0\cr
+        E-ES & E-ES & E-S & I\cr}
+$$
+</div>
+<p>Es ist $E-ES=0$.</p>
+<p>Bei den Ausdrücken hinter $\sup(\cdot)$ steht immer eine endliche
+Menge, für welches natürlich stets das Maximum existiert.
+Warum schreibt man $\sup(\cdot)$ und nicht $\max(\cdot)$?
+Weil man später beim Konvergenzsatz zu $N\to\infty$ übergehen will
+und man dann zu $\limsup(\cdot)$ gelangt.</p>
+<p><strong>3. Satz:</strong>  Voraussetzungen: $\left|S^\nu\right| \le D$,
+$\forall\nu\in\mathbb{N}$, $S=XJY$, wobei $J$ die (bis auf Permutation eindeutige)
+Jordanmatrix ist.
+$X$ ist die Matrix, die die Rechtseigenvektoren trägt und $Y$ enthält in
+entsprechend umgekehrter Reihenfolge die Linkseigenvektoren, d.h. es gilt
+$SX=XJ$ und $YS=JY$.
+Weiter gilt $S=XJx^{-1}=Y^{-1}JY=XJY$.</p>
+<p>Behauptungen: (1) $\displaystyle \hat c_1 \left| [S]^{-1} \bfR \right| \le
+\left| \hat U-U \right| \le \hat c_2 \left| [S]^{-1} \bfR \right| \le
+\hat c_3 N \left|\bfR\right|$.</p>
+<p>(2) $\displaystyle \left|[S]^{-1}\bfR\right| \sim \left|[E]^{-1}\bfR\right|
+\sim \left|[J]^{-1} \ovbf Y \bfR\right|$.</p>
+<p>(3) Die Konstanten $\hat c_1$, $\hat c_2$ und $\hat c_3$ sind gegeben durch</p>
+<div class=math>
+$$
+    \hat c_1 = {c_1\over1+\left|S-E\right|},\qquad
+    \hat c_2 = c_2 \sum_{\nu=0}^\infty \left|(S-E)^\nu\right|,\qquad
+    \hat c_3 = \hat c_2 N \max\left(1,\left|E\right|\right).
+$$
+</div>
+<p>Die Werte $\hat c_1$ und $\hat c_2$ sind unabhängig von $N$,
+$\hat c_3$ hingegen nicht.
+$c_1, c_2$ wie beim Hauptsatz.</p>
+<p><em>Beweis:</em>  Man schätzt $\left|[E]^{-1}\bfR\right|$ und
+$\left|[S]^{-1}\bfR\right|$ gegeneinander ab.
+Es ist</p>
+<div class=math>
+$$
+    [E]^{-1} \bfR = [E]^{-1}[S] [S]^{-1}\bfR
+    = [S-E] \cdot [S]^{-1} \bfR.
+$$
+</div>
+<p>Durchmultiplikation mit $[S-E]^{-1}$ würde jetzt liefern
+$[S-E]^{-1} [E]^{-1} \bfR = [S]^{-1} \bfR$.
+Alternativ könnte man rechnen</p>
+<div class=math>
+$$
+    [S]^{-1}\bfR = [S]^{-1}[E] [E]^{-1} \bfR
+    = [S-E]^{-1} \cdot [E]^{-1}\bfR.
+$$
+</div>
+<p>Nach dem Projektorsatz sind
+$\left|[S-E]\right|$ und $\left|[S-E]^{-1}\right|$
+für alle $N$ beschränkt und damit sind beide Normen äquivalent.
+Die letzte Äquivalenz hat ihre Ursache in</p>
+<div class=math>
+$$
+    [S]^{-1} \bfR = \ovbf X [J]^{-1} \ovbf Y \bfR.
+$$
+</div>
+<p>    ☐</p>
+<p>In Komponentenschreibweise liest sich der obige Satz wie folgend.</p>
+<p><strong>4. Satz:</strong>  Voraussetzungen: $\left|S^\nu\right|\le D$,
+$\forall \nu\in\mathbb{N}$.
+$E$ ist wie oben und es gelten die restlichen Voraussetzungen des Hauptsatzes.</p>
+<p>Behauptungen: (1) Die Stabilitätsnormen</p>
+<div class=math>
+$$
+    \sup_{n=0}^N\left|\sum_{\nu=0}^n S^{n-\nu} r_\nu\right|
+    \qquad\hbox{und}\qquad
+    \sup_{n=0}^N\left|r_n + E \sum_{\nu=0}^{n-1} r_\nu\right|
+$$
+</div>
+<p>sind zueinander äquivalent.</p>
+<p>(2) Es gilt die zweiseitige Fehlerabschätzung</p>
+<div class=math>
+$$
+    \hat c_1\sup_{n=0}^N\left|r_n + E \sum_{\nu=0}^{n-1} r_\nu\right|
+    \le \sup_{n=0}^N \left|\hat u_n-u_n\right| \le
+    \hat c_2 \sup_{n=0}^N\left|r_n + E \sum_{\nu=0}^{n-1} r_\nu\right|
+    \le \hat c_3 \sup_{n=0}^N \left|r_n\right|.
+$$
+</div>
+<p><strong>5. Satz:</strong>  Voraussetzungen: $(P_1,C_1,R_1)$ sei das erste
+Begleitertripel, $(X,J,Y)$ sei das Jordan-Tripel zum <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a></p>
+<div class=math>
+$$
+    \rho(\mu) = A_\ell\mu^\ell + A_{\ell-1}\mu^{\ell-1} + \cdots + A_0 \in \mathbb{C}^{k\times k},
+$$
+</div>
+<p>$C_1^\nu\le D$, $\forall\nu\in\mathbb{N}$.
+Die Matrix $\hat J$ filtere aus $J$ nur die Jordanblöcke zum Eigenwert
+$\mu=1$ heraus.
+$J$ selber enthalte keine weiteren dominanten Eigenwerte, $J$ ist also stark
+$D$-stabil.
+Zwischen $C_1$ und $J$ besteht grundsätzlich der Zusammenhang</p>
+<div class=math>
+$$
+    C_1 \mathop{\rm col}_{i=0}^{\ell-1} XJ^i = \left(\mathop{\rm col}_{i=0}^{\ell-1} XJ^i\right) J.
+$$
+</div>
+<p>Nun sei $\hat C_1$ die entsprechend zu $\hat J$ ähnliche Matrix.
+$\hat C_1$ ist wie $\hat J$ Projektor.</p>
+<p>Behauptung: Das verkürzte Projektorstabilitätsfunktional ist äquivalent zum
+Projektorstabilitätsfunktional, welches seinerseits äquivalent ist
+zum ursprünglichen Stabilitätsfunktional, d.h. es gilt
+unabhängig von $N$, daß</p>
+<div class=math>
+$$
+    \left| [\hat C_1]^{-1} \boro \bfR \right|
+    \sim \left| \bopo [\hat C_1]^{-1} \boro \bfR \right|
+    \sim \left| [C_1]^{-1} \boro \bfR \right|
+    \sim \left| \bopo [C_1]^{-1} \boro \bfR \right|.
+$$
+</div>
+<p>Diese Äquivalenzen sind unabhängig von der Wahl der Standard-Tripel,
+d.h. es gilt genauso</p>
+<div class=math>
+$$
+    \left| [\hat J]^{-1} \ovbf Y \bfR \right|
+    \sim \left| \ovbf X [\hat J]^{-1} \ovbf Y \bfR \right|
+    \sim \left| [J]^{-1} \ovbf Y \bfR \right|
+    \sim \left| \ovbf X [J]^{-1} \ovbf Y \bfR \right|.
+$$
+</div>
+<p><em>Beweis:</em>  Die dritte Äquivalenz wurde schon im Hauptsatz postuliert und
+bewiesen, desgleichen die Invarianz vom Standard-Tripel.
+Für die weiteren gegenseitigen Äbschätzungen rechnet man</p>
+<div class=math>
+$$
+    \left| [\hat C_1]^{-1} \boro \bfR \right|
+    = \left| [\hat C_1]^{-1} [C_1] [C_1]^{-1} \boro \bfR \right|
+    = \left| [C_1-\hat C_1] [C_1]^{-1} \boro \bfR \right|
+$$
+</div>
+<p>Für die Rückabschätzung rechnet man</p>
+<div class=math>
+$$
+    \left| \bopo [C_1]^{-1} \boro \bfR \right| =
+    \left| \bopo [C_1]^{-1} [\hat C_1] [\hat C_1]^{-1} \boro \bfR \right| =
+    \left| \bopo [C_1-\hat C_1]^{-1} [\hat C_1]^{-1} \boro \bfR \right|.
+$$
+</div>
+<p>Die Beschränktheit der Normen von $[C_1-\hat C_1]$ und
+$[C_1-\hat C_1]^{-1}$, und zwar gänzlich unabhängig von $N$,
+wurde schon vorher gezeigt.
+An dieser Stelle benutzt man dann $\left|C_1^\nu\right|\le D$,
+$\forall\nu\in\mathbb{N}$.
+Die Beschränktheit von $\left|\bopo\right|$, unabhängig von $N$, ist
+ebenfalls klar.
+    ☐</p>
+<p>Wünscht man lediglich ein Konvergenzresultat, so beschränke man sich auf das
+diskrete Lemma von Gronwall, den Darstellungssatz und beim Abschätzungssatz
+genügt völlig die letzte, sehr leicht einzusehende Abschätzung.
+Schließlich beim Hauptsatz genügt lediglich (1), (2) und (3).
+Weitere Vereinfachungen ergeben sich, falls man sich auf lineare
+Matrixpolynome der Form $\rho(\mu)=I\mu-S$ beschränkt, also überall
+lediglich den Fall $\ell=1$ betrachtet.
+Die untersuchten Verfahrenstypen bleiben dabei die gleichen, man
+verliert also letztlich nichts an Allgemeinheit.
+Die Werte $\left|P_1\right|$, $\left|R_1\right|$ entfallen dann völlig.
+Die Beweise werden kürzer, aber ggf. muß $S$ in den Anwendungen
+auf Diskretisierungsprobleme unnötig groß gewählt werden.
+Allerdings kann häufig $S$ kleiner als $C_1$ ausfallen, jedoch spielt $C_1$
+für praktische Rechnungen nicht die entscheidende Rolle, vielmehr ist es $Y$.</p>
+<h2>6. Nichtäquidistante Gitter<a id=nichtaequidistant></a></h2>
+<p><strong>1.</strong> Aufgrund der Konsistenzbedingung $\rho(1)=0$ für jede Stufe
+eines zusammengesetzten Verfahrens, gilt $Sw=w$ ($S\in\mathbb{C}^{k\times k}$),
+mit $w=(1,\ldots,1)^\top \in\mathbb{C}^k$, wenn man das Verfahren in der Form
+$u_{n+1}=Su_n+h\varphi(u_n,u_{n+1})$ notiert.
+Bei zyklischer oder auch nicht-zyklischer Kombination mehrerer Verfahren
+gelangt man zu $u_{n+1}=S_\nu S_{\nu-1} \ldots S_2 S_1 u_n + \ldots{\mskip 3mu}$.
+Als notwendige und hinreichende Bedingung für Stabilität erhält man</p>
+<div class=math>
+$$
+    \left\|S_i S_{i+1} \ldots S_{j-1} S_j\right\| \hbox{ beschränkt,}\qquad
+    \forall i\gt j.
+$$
+</div>
+<p>Ein typischer Fall ist die Benutzung eines Grundverfahrens $u_{n+1}=Su_n+h\varphi$
+und Variation der Schrittweite $h$.
+Gilt die obige Stabilitätsbedingung, so spricht man auch von
+<em>schrittwechsel-stabil</em>.
+Die Stabilitätsbedingung in der obigen Form ist nicht einfach zu verifizieren.
+Hinreichende Kriterien sind allerdings viel einfacher zu handhaben, man
+fordert also mehr und zwar:</p>
+<ol>
+<li>Bei einem Schrittweitenwechsel sind sämtliche Matrizen $S_i$
+identisch, oder/und</li>
+<li>nach einem Schrittweitenwechsel wird ein Sonderverfahren mit einer
+Matrix $T$ nachgeschaltet, mit der Eigenschaft, daß $S_iT=T$ gilt,
+&quot;Matrix-fressende Eigenschaft&quot;.</li>
+</ol>
+<p>Den ersten Fall kann man so erreichen, daß man die $\alpha_{ij}$-Koeffizienten
+eines Verfahrens vorgibt und anschließend die $\beta_{ij}$-Koeffizienten
+berechnet.
+Das Verfahren ist offensichtlich stabil (die zu $\alpha_{ij}$ gehörende
+Matrix $S$ war ja stabil) und es konvergiert mit der gleichen Konvergenzordnung
+wie $S$, wenn man die $\beta_{ij}$ so wählt, daß eine ausreichend hohe
+Konsistenzordnung erreicht wird.
+Das ist aber stets möglich nach dem Dimensionssatz für die
+Konsistenzmatrix $C_{p+1,k}$.</p>
+<p><strong>2.</strong>
+Beim zweiten Fall absorbiert bildlich gesprochen die Matrix $T$ sämtliche
+vorhergehenden Matrizen.
+Dies lässt sich bewerkstelligen, wenn die Spaltenvektoren von $T$
+Rechsteigenvektoren von $S_i$ sind, zum Eigenwert 1.
+Da aber alle $S_i$ konsistent sind, gilt $S_i w = w$ $\forall i$.
+Damit hat $T$ die Gestalt</p>
+<div class=math>
+$$
+    T = (\varepsilon_1 w, \varepsilon_2 w, \ldots, \varepsilon_k w),
+    \qquad \varepsilon_1,\ldots,\varepsilon_k \in \mathbb{C}
+$$
+</div>
+<p>Aufgrund der Konsistenz von $T$ muß gelten $Tw=w$, also</p>
+<div class=math>
+$$
+    \varepsilon w = 1, \qquad
+    \varepsilon=(\varepsilon_1,\ldots,\varepsilon_k),
+$$
+</div>
+<p>im Falle von $w=(1,\ldots,1)$ also $\varepsilon_1+\cdots+\varepsilon_k=1$.</p>
+<p>Egal wie $w$ aussieht, $T$ ist ein Projektor, also $T^2=T$, oder was dasselbe
+ist: $\ker T$ und $\mathop{\rm Im} T$ sind zueinander komplementäre
+%
+Unterräume des $\mathbb{C}^k$ ($A_1\cap A_2=\emptyset$, $A_1+A_2=\mathbb{C}^k$).
+Offensichtlich ist aber nicht jeder konsistente Projektor von der Gestalt
+$T=(\varepsilon_1 w,\ldots,\varepsilon_k w)$.
+Dennoch zeigt sich, daß man bei einem stark stabilen, konsistenten Projektor
+nur einige Zeit warten muß, bis er die gewünschte Form annimmt, also man eine
+gewisse Potenz dieser Matrix zu bilden hat.
+Eine äquivalente Charakterisierung liefert</p>
+<p><strong>3. Satz:</strong>  Spektraldarstellung schrittwechsel-stabiler Matrizen.</p>
+<p>Voraussetzung: Es seien $T_\nu \in \mathbb{C}^{k\times k}$ ($\nu=1,\ldots,k-1$) mit</p>
+<div class=math>
+$$
+    T_1 = \pmatrix{
+        0&&&&\cr
+        &0&&&\cr
+        &&\ddots&&\cr
+        &&&0&\cr
+        &&&&1\cr
+    }, \quad
+    T_2 = \pmatrix{
+        0&1&&&\cr
+        &0&&&\cr
+        &&\ddots&&\cr
+        &&&0&\cr
+        &&&&1\cr
+    }, \quad \ldots, \quad
+    T_{k-1} = \pmatrix{
+        0&1&&&\cr
+        &0&1&&\cr
+        &&0&&\cr
+        &&&\ddots&\cr
+        &&&&1\cr
+    }.    % \in \mathbb{C}^k.
+$$
+</div>
+<p>Behauptung: Es gilt</p>
+<div class=math>
+$$
+    \left.
+    \eqalign{ &T=(\varepsilon_1 w,\ldots,\varepsilon_k w)\cr &\varepsilon w=1\cr}
+    \right\} \iff T\sim T_1 = T_\nu^\nu % (\nu=1,\ldots,k)
+$$
+</div>
+<p><em>Beweis:</em> “$\Rightarrow$”: Die Matrix $T=(\varepsilon_1 w,\ldots,\varepsilon_k w)$
+hat den Rang genau 1: Jeder Minor mit 2 oder mehr Zeilen verschwindet
+(Spalten Vielfaches voneinander oder Nullspalte); aus $w\ne0$ folgt $T\ne0$.
+Damit ist $T$ ähnlich zu einer der Matrizen $T_\nu$, $\nu=1,\ldots,k-1$.
+Da eine Projektoreigenschaft invariant unter einem Basiswechsel ist
+%
+($P^2=P$ $\Rightarrow$ $S^{-1}PSS^{-1}PS=S^{-1}PS$) muß $T$ ähnlich
+zu $T_1$ sein.</p>
+<p>“$\Leftarrow$”: Es sei $w$ Rechtseigenvektor von $T$ und $X$ sei die Matrix
+der Rechtsjordanvektoren und $Y$ sei die Matrix der Linksjordanvektoren, also
+$T=XT_1Y$, mit</p>
+<div class=math>
+$$
+    X=(*,\ldots,*,w), \qquad Y=\pmatrix{*\cr\vdots\cr*\cr v\cr}.
+$$
+</div>
+<p>Multiplikation von rechts mit $T_1$ filtert aus $X$ gerade $w$ heraus,
+Multiplikation von links mit $T_1$ filtert aus $Y$ gerade $v$ heraus, also</p>
+<div class=math>
+$$
+    XT_1=(0,\ldots,0,w), \qquad T_1Y=\pmatrix{0\cr\vdots\cr0\cr v\cr}.
+$$
+</div>
+<p>Offensichtlich hat $T=(XT_1)(T_1Y)$ dann die verlangte Gestalt
+$T=(v_1w,\ldots,v_kw)$ (dyadisches Produkt), mit $vw=1$ aufgrund der
+Biorthogonalitätsbeziehung $XY=YX=I$.
+    ☐</p>
+<p>Der Beweis zeigt gleichzeitig, daß $\varepsilon T=\varepsilon$, also
+$\varepsilon$ Linkseigenvektor von $T$ ist, was man natürlich auch so
+gesehen hätte.
+Die Beschränkung beim zweiten Fall auf ein einziges Sonderverfahren, ist
+nach dem ersten Fall unerheblich, wenn man z.B. immer das gleiche
+Sonderverfahren mehrmals anwendet.
+Wie man sieht, muß man $T_\nu$ nur sooft wiederholen, wie der Nilpotenzgrad
+von 0 angibt, also $\nu$-mal.
+Bei einem $k$-Schritt Adams-Moulton-Verfahren also $(k-1)$-mal und bei
+einem Runge-Kutta-Verfahren einmal.</p>
+<p><strong>4. Satz:</strong>  Die stark stabile Matrix $A\in\mathbb{C}^{n\times n}$ habe die
+Eigenwerte $\lambda_1=1$ und $\left|\lambda_i\right|&lt;1$ ($i=2,\ldots,n$).
+Es gelte $Tw=w$, $v_1T=v_1T$, $v_1w=1$, $v_1=\mathop{\rm row}(v_{1i})$ und es sei
+$T^\infty := (v_{11}w,\ldots,v_{1n}w)$.
+Dann gilt: $T^\nu\to T^\infty$ ($\nu\to\infty$).</p>
+<p><em>Beweis:</em>  Für $S:=T-T^\infty$ gilt wegen
+$TT^\infty=T^\infty=(T^\infty)^\nu=T^\infty T$ offensichtlich
+$S^\nu=T^\nu-T^\infty$ ($\nu\in\mathbb{N}$).
+Mit den Linkseigenvektoren $v_2,\ldots,v_n$ zu $\lambda_2,\ldots,\lambda_n$
+ergibt sich $v_iTT^\infty=v_iT^\infty=\lambda_iv_iT^\infty$, also
+$v_iT^\infty=0$, somit $v_i(T-T^\infty)=v_iS=\lambda_iv_i$, für
+$i=2,\ldots,n$.
+Weiter ist $v_1T^\infty=v_1=v_1T$, daher $v_1(T-T^\infty)=v_1S=0$, folglich
+hat $S$ die Eigenwerte $0,\lambda_2,\ldots,\lambda_n$, ergo $\rho(S)&lt;1$.
+    ☐</p>
+<p>Erneut muß $w$ nicht gleich $(1,\ldots,1)^\top$ sein.
+$v_1w=1$ lässt sich immer erreichen.
+Bei stark stabilen konsistenten Matrizen ist entweder $T\sim T_1\nu$, was
+äquivalent ist mit $T^\nu=(\varepsilon_1w,\ldots,\varepsilon_nw)$, oder aber
+zumindestens konvergiert eine Potenz von $T$ gegen diese Gestalt.
+Das Wiederholen eines stark stabilen Zykluses hat hierin seine Erklärung.</p>
+<h2>7. Die Eigenwerte gewisser tridiagonaler Matrizen<a id=tridiag></a></h2>
+<p>Sei</p>
+<div class=math>
+$$
+    A = \mathop{\rm tridiag}(c,a,b) := \pmatrix{
+        a & b      &        & \cr
+        c & \ddots & \ddots & \cr
+          & \ddots & \ddots & b\cr
+          &        &  c     & a\cr
+    } \in \mathbb{R}^{n\times n} ,
+$$
+</div>
+<p>und es sei $c\cdot b &gt; 0$.
+Dann ist $A$ diagonalisierbar mit den $n$ Eigenwerten</p>
+<div class=math>
+$$
+    \lambda_i = a + 2\sqrt{bc}{\mskip 3mu}\cos{i\pi\over n+1}, \qquad i=1,\ldots n.
+$$
+</div>
+<p>Sei</p>
+<div class=math>
+$$
+    E = \mathop{\rm tridiag}(1,0,1) = \pmatrix{
+        0 & 1      &        & \cr
+        1 & \ddots & \ddots & \cr
+          & \ddots & \ddots & 1\cr
+          &        & 1      & 0\cr
+    } \in \mathbb{R}^{n\times n}.
+$$
+</div>
+<p>$E$ ist diagonalisierbar mit den Eigenwerten</p>
+<div class=math>
+$$
+    \lambda_i = 2\cos{i\pi\over n+1},\qquad i=1,\ldots n.
+$$
+</div>
+<p>Weiter gelten</p>
+<div class=math>
+$$
+    B = \mathop{\rm tridiag}(-1,a,-1) = \pmatrix{
+        a & -1     &        & \cr
+       -1 & \ddots & \ddots & \cr
+          & \ddots & \ddots & -1\cr
+          &        & -1     & a\cr
+    } \in \mathbb{C}^{n\times n},\quad
+    \lambda_i=a-2\cos{i\pi\over n+1},\quad i=1,\ldots n.
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    T = \mathop{\rm tridiag}(-1,2,-1) = \pmatrix{
+        2 & -1     &        & \cr
+       -1 & \ddots & \ddots & \cr
+          & \ddots & \ddots & -1\cr
+          &        & -1     & 2\cr
+    } \in \mathbb{R}^{n\times n},\quad
+    \lambda_i=4\sin{i\pi\over 2(n+1)},\quad i=1,\ldots n.
+$$
+</div>
+<p>Mit $T$ gilt dann für $C:=1-\alpha T=\mathop{\rm tridiag}(\alpha,1-2\alpha,\alpha)$,
+also</p>
+<div class=math>
+$$
+    C = \pmatrix{
+        1-2\alpha & \alpha &        & \cr
+        \alpha    & \ddots & \ddots & \cr
+                  & \ddots & \ddots & \alpha\cr
+                  &        & \alpha & 1-2\alpha\cr
+    } \in \mathbb{R}^{n\times n},\quad
+    \lambda_i=1-4\alpha\sin{i\pi\over 2(n+1)},\quad i=1,\ldots n.
+$$
+</div>
+<h2>8. Verfahren für parabolische Gleichungen<a id=parabolisch></a></h2>
+<p>Parabolische, partielle Differentialgleichugen kann man durch Semidiskretisierung
+der Ortsvariablen auf ein i.a. vergleichsweise großes gewöhnliches
+Differentialgleichungssystem umformen.
+Dieses kann man dann mit den üblichen Verfahren numerisch lösen.
+Ein anderer Weg ist, vollständig zu diskretisieren.
+Dies bietet u.U. die Möglichkeit Verbindungen zwischen Orts- und
+Zeitdiskretisierungen zu nutzen.
+Dies soll hier kurz dargestellt werden.</p>
+<p>Betrachtet werde die inhomogene Wärmeleitungsgleichung</p>
+<div class=math>
+$$
+    u_t = \sigma u_{xx}+f(t,x,u), \qquad \sigma\gt 0 \hbox{ (Materialkonstante)}
+$$
+</div>
+<p>mit den Rand- und Anfangsdaten</p>
+<div class=math>
+$$
+\eqalign{
+    u(0,x) &= \eta(x),\cr
+    u(t,0) &= u(t,x_e),\cr
+}\quad
+\eqalign{
+    &\hbox{für alle}\quad x\in[0,x_e],\cr
+    &\hbox{für alle}\quad t\in[0,t_e].\cr
+}
+$$
+</div>
+<p>Die Differentialausdrücke für $u_t$ und $u_{xx}$ werden jetzt durch
+Differenzenausdrücke ersetzt und zwar
+<strong>1)</strong></p>
+<div class=math>
+$$
+\eqalign{
+    u_t &= {u(t+\tau)-u(t)\over\tau}+{\cal O}(\tau),
+        \qquad\hbox{Vorwärtsdifferenz}\cr
+    u_{xx} &= {u(x+h)-2u(x)+u(x-h)\over h^2}+{\cal O}(h),\qquad
+        \hbox{zentrale Differenz}\cr
+}
+$$
+</div>
+<p><strong>2)</strong></p>
+<div class=math>
+$$
+\eqalign{
+    u_t &= {u(t+\tau)-u(t-\tau)\over2\tau}+{\cal O}(\tau^2),\qquad
+        \hbox{zentrale Differenz}\cr
+    u_{xx} &= {u(x+h)-2u(x)+u(x-h)\over h^2}+{\cal O}(h),\qquad
+        \hbox{zentrale Differenz}\cr
+}
+$$
+</div>
+<p><strong>3)</strong></p>
+<div class=math>
+$$
+\eqalign{
+    u_t &= {u(t+\tau)-u(t)\over\tau}+{\cal O}(\tau),
+        \qquad\hbox{Vorwärtsdifferenz}\cr
+    u_{xx} &= {u(x+h)-\bigl(u(t+\tau,x)+u(t-\tau,x)\bigr)+u(x-h)\over h^2}
+        +{\cal O}(h^2).\cr
+}
+$$
+</div>
+<p><strong>4)</strong></p>
+<div class=math>
+$$
+\eqalign{
+    u_t &= {u(t+\tau)-u(t)\over\tau}+{\cal O}(\tau),
+        \qquad\hbox{Vorwärtsdifferenz}\cr
+    u_{xx} &= {u(t+\tau,x+h)-2u(t+\tau,x)+u(t+\tau,x-h)\over h^2}
+        +{\cal O}(h), \qquad\hbox{zentrale Differenz bei $(t+\tau,x)$}.\cr
+}
+$$
+</div>
+<p><strong>5)</strong>  Man wende die Trapezregel ($\vartheta={1\over2}$-Verfahren) an,
+wobei jedoch, wie oben dauernd geschehen, $f$ nicht mit in die Implizitheit
+mit hineinbezogen wird.</p>
+<div class=math>
+$$
+\eqalign{
+    u_t &= {u(t+\tau)-u(t)\over\tau}+{\cal O}(\tau),
+        \qquad\hbox{Vorwärtsdifferenz}\cr
+    u_{xx} &= \left({u(x+h)-2u+u(x-h)\over h^2}
+        +{u(t+\tau,x+h)-2u(t+\tau,x)+u(t+\tau,x-h)\over h^2}\right)\bigg/2
+        +{\cal O}(h^2),\fracstrut\cr
+       &\qquad\hbox{Mittelwert zweier zentraler Differenzen}.\cr
+}
+$$
+</div>
+<p>Hierbei wurden zur notationellen Vereinfachung die nicht weiter
+interessierenden Argumente unterdrückt.
+Stets ist ist $t$ bzw. $x$ gemeint, also z.B. $u(x+h)$ meint
+$u(t,x+h)$ und so fort.
+Diese Schreibweise von $u(t,*)=u(*)$ und $u(*,x)=u(x)$ betont die
+funktionalen Abhängighkeiten.
+$u$ ist immer eine Funktion zweier Veränderlicher.
+Vorauszusetzen ist natürlich $u\in C^4([0,t_e]\times[0,x_e])$.</p>
+<p>Es sei $N:=\lceil t_e/\tau\rceil$ die Anzahl der Zeitschritte und
+$M:=\lceil x_e/h\rceil$ sei die Anzahl der Ortsschritte.
+Weiter sei $t_i:=i\tau=0,\tau,2\tau,\ldots$, für $i=0,\ldots,N$, und
+$x_k:=kh=0,h,2h,\ldots$, für $k=0,\ldots,M$.
+Die Näherung für $u(t_i,x_k)$ werde mit $u^i_k$ bezeichnet.
+Entsprechend sei $f^i_k$ die Näherung für $f(t_i,x_k,u(t_i,x_k))$.
+Offensichtlich ist $t_N=t_e$ und $x_M=x_e$.</p>
+<p><strong>1)</strong>  Mit der Diskretisierung 1) erhält man jetzt das explizite
+Einschrittverfahren, wenn man $u_t$ und $u_{xx}$ entsprechend ersetzt.
+Durch Zusammenfassung ergibt sich</p>
+<div class=math>
+$$
+    u^{i+1}_k=\left(1-{2\sigma\tau\over h^2}\right)u^i_k
+        +{\sigma\tau\over h^2}\left(u^i_{k+1}+u^i_{k-1}\right)+\tau f^i_k,
+        \qquad i=0,\ldots,N-1.
+$$
+</div>
+<p><strong>2)</strong>  Einsetzen ergibt das explizite Zweischrittverfahren</p>
+<div class=math>
+$$
+    u^{i+1}_k=u^{i-1}_k+{2\sigma\tau\over h^2}\left(u^i_{k+1}-2u^i_k+u^i_{k-1}\right)
+        +2\tau f^i_k,\qquad i=1,\ldots,N-1.
+$$
+</div>
+<p>Der Wertevektor $u^1_k$ muß hierbei auf andere Weise erhalten werden, zum
+Beispiel durch das obige explizite Einschrittverfahren.</p>
+<p><strong>3)</strong>  Einsetzen liefert das implizite Zweischrittverfahren von
+DuFort/Frankel aus dem Jahre 1953:
+<em>{DuFort, E.C.}</em>{Frankel, S.P.}%</p>
+<div class=math>
+$$
+    (1+2\alpha)u^{i+1}_k=2\alpha\left(u^i_{k+1}+u^i_{k-1}\right)
+        +(1-2\alpha)u^{i-1}_k+2\tau f^i_k,\qquad i=1,\ldots,N-1.
+$$
+</div>
+<p><strong>4)</strong>  Einsetzen liefert das implizite Einschrittverfahren von
+Crank/Nicolson aus dem Jahre 1947:<em>{Crank, J.}</em>{Nicolson, P.}</p>
+<div class=math>
+$$
+    -{\sigma\tau\over h^2}u^{i+1}_{k+1}+\left(1+2\sigma\tau\over h^2\right)u^{i+1}_k
+        -{\sigma\tau\over h^2}u^{i+1}_{k-1}=u^i_k+\tau f^i_k,
+        \qquad i=0,\ldots,N-1.
+$$
+</div>
+<p><strong>5)</strong>  Einsetzen ergibt das implizite Einschrittverfahren von
+Crank/Nicolson (II).
+Dies entspricht also in etwa der Trapezregel:</p>
+<div class=math>
+$$
+    -{\alpha\over2}u^{i+1}_{k-1}+(1+\alpha)u^{i+1}_k-{\alpha\over2}u^{i+1}_{k+1}
+    ={\alpha\over2}u^i_{k-1}+(1-\alpha)u^i_k+{\alpha\over2}u^i_{k+1}+\tau f^i_k,
+        \qquad i=0,\ldots,N-1.
+$$
+</div>
+<p>Zur Abkürzung wurde oben benutzt $\alpha:=\sigma\tau/h^2$, welches auch
+im folgenden benutzt werden wird.
+Alle oben angegebenen Verfahren lassen sich in Matrixschreibweise notieren,
+anhand dessen man dann das Stabilitätsverhalten besser untersuchen kann,
+als in der Komponentenform.
+Zur Abkürzung sei daher im weiteren</p>
+<div class=math>
+$$
+    v^i := \pmatrix{u^i_1\cr \vdots\cr u^i_{M-1}\cr},\qquad
+    v^0 := \pmatrix{\eta(x_1)\cr \vdots\cr \eta(x_{M-1}\cr},\qquad
+    f^i := \pmatrix{f^i_1\cr \vdots\cr f^i_{M-1}\cr}
+$$
+</div>
+<p>und seien die Matrizen definiert</p>
+<div class=math>
+$$
+\displaylines{
+    A_1 := \mathop{\rm tridiag}(\alpha,1-2\alpha,\alpha),\quad
+    A_2 := \mathop{\rm tridiag}(1,-2,1),\quad
+    A_3 := \mathop{\rm tridiag}(1,0,1),\cr
+    A_4 := \mathop{\rm tridiag}(-\alpha,1+2\alpha,-\alpha),\quad
+    A_5 := \mathop{\rm tridiag}\left(-{\alpha\over2},1+\alpha,-{\alpha\over2}\right),\quad
+    B_5 := \mathop{\rm tridiag}\left({\alpha\over2},1-\alpha,{\alpha\over2}\right).
+        \fracstrut\cr
+}
+$$
+</div>
+<p>Mit diesen Vektoren $v^i$, $f^i$ und den Matrizen $A_\nu$, $B_5$ schreiben
+sich jetzt die alle oben angegebenen Verfahren, wie folgt.</p>
+<p><strong>1)</strong>  $v^{i+1}=A_1v^i+\tau f^i$, für $i=0,\ldots,N-1$.</p>
+<p><strong>2)</strong>  $v^{i+1}=2\alpha A_2v^i+v^{i-1}+2\tau f^i$, für $i=1,\ldots,N-1$.</p>
+<p><strong>3)</strong>  $(1+2\alpha)v^{i+1}=2\alpha A_3v^i+(1-2\alpha)v^{i-1}+2\tau f^i$,
+für $i=1,\ldots,N-1$.</p>
+<p><strong>4)</strong>  $A_4v^{i+1}=v^i+\tau f^i$, für $i=0,\ldots,N-1$.</p>
+<p><strong>5)</strong>  $A_5v^{i+1}=B_5v^i+\tau f^i$, für $i=0,\ldots,N-1$.</p>
+<p>Die Stabilität aller Verfahren ergibt sich damit aus den spektralen Daten
+der zum Verfahren gehörenden <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynome</a>.
+Von tridiagonlen Matrizen, der obigen Gestalt, nämlich Differenzenmatrizen,
+sind jedoch die Eigenwerte sämtlich angebbar.
+Es gilt:</p>
+<p><strong>1)</strong>  $A_1$ mit den Eigenwerten $\lambda_{1,i} := 1-4\alpha\sin^2{i\pi\over2M}$,
+für $i=1,\ldots,M-1$.</p>
+<p><strong>2)</strong>  $A_2$ mit den Eigenwerten $\lambda_{2,i} := 4\sin{i\pi\over2M} &gt; 0$,
+für $i=1,\ldots,M-1$.</p>
+<p><strong>3)</strong>  $A_3$ mit den Eigenwerten $\lambda_{3,i} := 2\cos{i\pi\over M}$,
+für $i=1,\ldots,M-1$.</p>
+<p><strong>4)</strong>  $A_4$ mit den Eigenwerten $\lambda_{4,i} := 1+4\alpha\sin^2{i\pi\over2M}$,
+für $i=1,\ldots,M-1$.</p>
+<p><strong>5)</strong>  Für $A_5$ rechnet man</p>
+<div class=math>
+$$
+    A_5=\mathop{\rm tridiag}\left(-{\alpha\over2},1+\alpha,-{\alpha\over2}\right)
+       ={1\over2}\left[2I+\alpha\mathop{\rm tridiag}(-1,2,-1)\right]
+$$
+</div>
+<p>und daher $\lambda_{5a,i} := {1\over2}\left(2+4\alpha\sin{i\pi\over2M}\right)$,
+und</p>
+<div class=math>
+$$
+    B_5=\mathop{\rm tridiag}\left({\alpha\over2},1-\alpha,{\alpha\over2}\right)
+       ={1\over2}\left[2I-\alpha\mathop{\rm tridiag}(-1,2,-1)\right]
+$$
+</div>
+<p>mit den Eigenwerten
+$\lambda_{5b,i} := {1\over2}\left(2-4\alpha\sin{i\pi\over2M}\right)$,
+für $i=1,\ldots,M-1$.</p>
+<p>Für die Stabilität ergeben sich nun unter Berücksichtigung der obigen
+Matrizen, die folgenden Aussagen.</p>
+<p><strong>1)</strong>  Das Matrixpolynom $I\mu-A_1$ hat die Eigenwerte
+$\mu_i=\lambda_{1,i}$.
+Diese sind genau dann betragsmässig kleiner eins, falls $\alpha\le1/2$.
+Wegen $\alpha=\sigma\tau/h^2$, führt dies auf die Begrenzung der
+Zeitschrittweite $\tau$ zu</p>
+<div class=math>
+$$
+    \tau\le{1\over2\sigma}h^2,
+$$
+</div>
+<p>insbesondere ist die Zeitdiskretisierung nicht unabhängig von der
+Ortsdiskretisierung.
+Eine sehr feine Ortsdiskretisierung führt somit automatisch auch zu einer
+sehr restringierten Zeitschrittweite, und dies obwohl vielleicht in der
+Zeit eine viel größere Schrittweite angemessener wäre.
+Dies ist ein typisches Phänomen für explizite Verfahren und ein Grund zur
+Betrachtung impliziter Verfahren.</p>
+<p><strong>2)</strong>  Für das Matrixpolynom $I\mu^2-2\alpha A_2\mu-I$ ergeben sich nach
+Durchmultiplikation mit $D$, wobei $D$ die Transformationsmatrix für $A_2$
+ist, also $A_2=D\mathop{\rm diag}(\lambda_{2,i})D^{-1}$, die Eigenwerte des
+Matrixpolynoms zu</p>
+<div class=math>
+$$
+    \det D\cdot\det\left(I\mu^2-2\alpha\mathop{\rm diag}(\lambda_{2,i})-I\right)
+    \cdot\det D^{-1}=0,
+$$
+</div>
+<p>also</p>
+<div class=math>
+$$
+    \mu_{i,1/2}=\lambda_{2,i}\pm\sqrt{\alpha^2\lambda_{2,i}^2+1},
+        \qquad i=1,\ldots,M-1.
+$$
+</div>
+<p>Der Spektralradius ist also für jedes $\alpha$ größer als 1.
+Das Verfahren ist demzufolge für alle $\tau$ und $h$ instabil und damit
+nicht global konvergent, insbesondere als Einzelverfahren nicht brauchbar.
+In der Kombination mit anderen Verfahren, z.B. im Rahmen eines zyklischen
+Verfahrens, könnte es u.U. konvergent gemacht werden.</p>
+<p><strong>3)</strong>  Das Matrixpolynom lautet
+$(1+2\alpha)I\mu^2-2\alpha A_3\mu-(1-2\alpha)I$.
+Sei $D$ die Transformationsmatrix auf Diagonalgestalt für die Matrix $A_3$.
+Damit erhält man die $2M-2$ Eigenwerte des Matrixpolynoms als Nullstellen
+der Gleichung</p>
+<div class=math>
+$$
+    \det D\cdot\det\left(1+2\alpha)I\mu^2
+    -2\alpha\cdot2\cos{i\pi\over M}\mu-(1-2\alpha)I\right)\cdot\det D^{-1}=0,
+$$
+</div>
+<p>also</p>
+<div class=math>
+$$
+    (1+2\alpha)\mu_i^2-4\alpha\mu_i\cos\varphi-(1-2\alpha)=0,
+$$
+</div>
+<p>mit $\varphi := i\pi/M$.
+Mit der Lösungsformel für quadratische Gleichungen der Form $ax^2+bx+c=0$,
+$a\ne0$, nämlich</p>
+<div class=math>
+$$
+    x_{1/2}={-b\pm\sqrt{b^2-4ac}\over2a},
+$$
+</div>
+<p>erhält man</p>
+<div class=math>
+$$
+    \mu_{i,1/2}={2\alpha\pm\sqrt{1-4\alpha^2\sin^2\varphi} \over 1+2\alpha}.
+$$
+</div>
+<p>Längere, aber elementare Rechnungen zeigen, daß die beiden Funktionen
+$\mu_{i,\nu}\colon(\alpha,\varphi)\mapsto\mu_{i,\nu}(\alpha,\varphi)$,
+$\nu=1,2$, auf dem Rechteck
+$\left[0,+\infty\right[ \times \left[0^\circ,180^\circ\right]$
+ihre Extrema annehmen für $\alpha=0$ oder $\varphi=0^\circ$
+bzw. $\varphi=180^\circ$.
+Hierbei sind eine Reihe von Fallunterscheidungen nötig ($\alpha\to\infty$,
+Radikand positiv oder negativ, $\ldots$).
+In der Tat also $\mathopen|\mu_{i,1/2}\mathclose| &lt; 1$, für alle $\alpha&gt;0$
+und alle $\varphi \in \left]0^\circ,180^\circ\right[$.
+Das Verfahren von DuFort/Frankel ist damit unbeschränkt stabil.</p>
+<p><strong>4)</strong>  Das Matrixpolynom $I\mu-A_4^{-1}$ hat die Eigenwerte
+$\mu_i=\lambda_{4,i}^{-1} &lt; 1$, für alle $\alpha$, da $\lambda_{4,i} &gt; 1$.
+Das Verfahren von Crank/Nicolson ist damit für alle $\tau$ und $h$
+stabil.
+Aufgrund der Konsistenz folgt damit die Konvergenz.</p>
+<p><strong>5)</strong>  Für das entsprechende Matrixpolynom korrespondierend zu
+$A_5\mu=B_5$, ergeben sich die Eigenwerte als Quotient der Eigenwerte von
+$A_5$ und $B_5$, also</p>
+<div class=math>
+$$
+    \mu_i = {1-2\alpha\sin(i\pi/2M) \over
+           1+2\alpha\sin(i\pi/2M) }.
+$$
+</div>
+<p>Damit ist auch dieses Verfahren unbeschränkt stabil, unabhängig also von
+den beiden Diskretisierungsgrößen $\tau$ und $h$.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Konvergenzresultate+f%C3%BCr+feste+Schrittweiten%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Konvergenzresultate+f%C3%BCr+feste+Schrittweiten&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten&amp;title=Konvergenzresultate+f%C3%BCr+feste+Schrittweiten" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Konvergenzresultate+f%C3%BCr+feste+Schrittweiten&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Konvergenzresultate+f%C3%BCr+feste+Schrittweiten%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#Konvergenzbeweis>Konvergenzbeweis</a>, <a href=/aux/tags/#Mehrschrittverfahren>Mehrschrittverfahren</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2024">Index for the year 2024.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 172.80 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

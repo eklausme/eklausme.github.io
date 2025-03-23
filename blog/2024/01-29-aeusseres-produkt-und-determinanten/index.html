@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Das äußere Produkt und Determinanten - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2024-01-30 14:20:00">30th January 2024</time>, 21 min read</p>
+<h1>Das äußere Produkt und Determinanten</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten">eklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten</a>.</p>
+<br>
+<ul>
+<li><a href="#aeusseresprodukt">1. Das äußere Produkt</a></li>
+<li><a href="#determinante">2. Definition einer Determinante</a></li>
+<li><a href="#eigenschaften">3. Eigenschaften einer Determinante</a></li>
+<li><a href="#laplace">4. Der Laplacesche Entwicklungssatz</a></li>
+<li><a href="#cauchybinet">5. Weitere Folgerungen aus dem Satz von Cauchy/Binet</a></li>
+</ul>
+<h2>1. Das äußere Produkt<a id=aeusseresprodukt></a></h2>
+<p>Es gibt eine Fülle von Möglichkeiten Determinanten einzuführen.
+Ein Weg ist, über das äußere Produkt zu gehen.
+Die folgenden Ausführungen erfolgen in enger Anlehnung an das Buch <a href="https://www.amazon.de/Matrizenrechnung-Wolfgang-Gr%C3%B6bner/dp/B0000BRB4J">Matrizenrechnung</a>
+von Wolfgang Gröbner (1966).</p>
+<p>Es sei $K$ ein beliebiger Körper.
+Jeden Vektor eines $n$-dimensionalen Vektorraumes über $K$ kann man
+darstellen als Linearkombination der Basisvektoren (im weiteren Einheiten
+genannt)</p>
+<div class=math>
+$$
+\eqalign{
+    a &= a_1\varepsilon_1+a_2\varepsilon_2+\cdots+a_n\varepsilon_n,\cr
+    b &= b_1\varepsilon_1+b_2\varepsilon_2+\cdots+b_n\varepsilon_n,\cr
+}
+\qquad a_i, b_i\in K.
+$$
+</div>
+<p>Das äußere Produkt (Zeichen $\land$) wird zunächst für die Einheiten
+erklärt:</p>
+<div class=math>
+$$
+    \varepsilon_i\land\varepsilon_k := \varepsilon_{ik} := \varepsilon_{ki}
+$$
+</div>
+<div class=math>
+$$
+    a\land b = \sum a_ib_k(\varepsilon_i\land\varepsilon_k)
+    = \sum a_ib_k\varepsilon_{ik} = \sum_{i\lt k} (a_ib_k - a_kb_i)\varepsilon_{ik}
+$$
+</div>
+<div class=math>
+$$
+    a\land b=-(b\land a)
+$$
+</div>
+<p>insbesondere</p>
+<div class=math>
+$$
+\displaylines{
+    a\land a=0, \qquad
+    (\lambda a)\land b = a\land(\lambda b) = \lambda\cdot(a\land b),\cr
+    a\land(b+c) = (a\land b)+(a\land c), \qquad
+    (b+c)\land a = (b\land a)+(c\land a).\cr
+}
+$$
+</div>
+<p>Im $\mathbb{C}^3$ kann dem äußeren Produkt eine anschauliche Bedeutung beigelegt
+werden.
+Identifiziert man</p>
+<div class=math>
+$$
+    \varepsilon_{12}=\varepsilon_3, \quad
+    \varepsilon_{23}=\varepsilon_1, \quad
+    \varepsilon_{31}=\varepsilon_2,
+$$
+</div>
+<p>liegen also die Einheiten höherer Stufe wieder im ursprünglichen
+Vektorraume, so gilt in diesem Falle für das äußere Produkt, welches man
+auch vektorielles Produkt nennt (Schreibweise: $a\times b$)</p>
+<div class=math>
+$$
+    a\land b = a\times b = (a_2b_3-a_3b_2)\varepsilon_1
+        +(a_3b_1-a_1b_3)\varepsilon_2+(a_1b_2-a_2b_1)\varepsilon_3.
+$$
+</div>
+<p>Die Verallgemeinerung auf das äußere Produkt von Vektoren höherer Stufe
+geschieht nach der Regel</p>
+<div class=math>
+$$
+    \varepsilon_{i_1}\land\varepsilon_{i_2}\land\cdots\land\varepsilon_{i_k}
+    := \varepsilon_{i_1i_2\ldots i_k},
+$$
+</div>
+<p>entsprechend</p>
+<div class=math>
+$$
+    \varepsilon_{i_1i_2\ldots i_k}\land\varepsilon_{j_1j_2\ldots j_\ell} =
+    \varepsilon_{i_1}\land\varepsilon_{i_2}\land\cdots\land\varepsilon_{i_k}
+       \: \land\: \varepsilon_{j_1}\land\varepsilon_{j_2}\land\cdots\land\varepsilon_{j_\ell}.
+$$
+</div>
+<p>Unter einem Vektor $k$-ter Stufe versteht man allgemein eine Linearform in
+den $n\choose k$ Einheiten $k$-ter Stufe.
+Summe, Differenz und inneres Produkt solcher Vektoren sind nach den üblichen
+Regeln der Algebra erklärt.
+Man darf also Vektoren derselben Stufe beliebig mit Skalaren multiplizieren
+und addieren.</p>
+<p><strong>1. Satz:</strong>  Sind $a_1,a_2,\ldots,a_k$ Vektoren 1-ter Stufe, so
+ändert sich das äußere Produkt nicht, wenn man zu einem dieser Vektoren,
+etwa $a_1$, ein lineares Kompositum der übrigen Vektoren addiert:</p>
+<div class=math>
+$$
+    a_1\land a_2\land\cdots\land a_k = (a_1+\lambda_2a_2+\cdots+\lambda_ka_k)
+        \land a_2\land\cdots\land a_k,\qquad\forall\lambda_2,\ldots,\lambda_k\in K.
+$$
+</div>
+<p>Der Beweis ergibt sich durch direktes Ausmultiplizieren der rechten Seite.
+Bis auf den ersten Summand verschwinden alle weiteren Summanden, da bei allen
+anderen Produkten, außer dem ersten, stets zwei gleiche Vektoren miteinander
+äußerlich multipliziert werden.</p>
+<p>$
+\def\multisub#1#2{{\textstyle\mskip-3mu{\scriptstyle1\atop\scriptstyle#2_1}{\scriptstyle2\atop\scriptstyle#2_2}{\scriptstyle\ldots\atop\scriptstyle\ldots}{\scriptstyle#1\atop\scriptstyle#2_#1}}}
+\def\multisup#1#2{{\textstyle\mskip-3mu{\scriptstyle#2_1\atop\scriptstyle1}{\scriptstyle#2_2\atop\scriptstyle2}{\scriptstyle\ldots\atop\scriptstyle\ldots}{\scriptstyle#2_{#1}\atop\scriptstyle#1}}}
+\def\multisubsup#1#2#3{{\textstyle\mskip-3mu{\scriptstyle#3_1\atop\scriptstyle#2_1}{\scriptstyle#3_2\atop\scriptstyle#2_2}{\scriptstyle\ldots\atop\scriptstyle\ldots}{\scriptstyle#3_{#1}\atop\scriptstyle#2_{#1}}}}
+\def\diag{\mathop{\rm diag}}
+\def\tridiag{\mathop{\rm tridiag}}
+\def\col{\mathop{\rm col}}
+\def\row{\mathop{\rm row}}
+\def\dcol{\mathop{\rm col\vphantom {dg}}}
+\def\drow{\mathop{\rm row\vphantom {dg}}}
+\def\rank{\mathop{\rm rank}}
+\def\grad{\mathop{\rm grad}}
+\def\adj#1{#1^*}
+\def\iadj#1{#1^*}
+\def\tr{\mathop{\rm tr}}
+\def\mapright#1{\mathop{\longrightarrow}\limits^{#1}}
+\def\fracstrut{}
+$</p>
+<h2>2. Definition einer Determinante<a id=determinante></a></h2>
+<p><strong>1.</strong> Während das Produkt von $k$ Vektoren erster Stufe insgesamt
+$n\choose k$ Komponenten hat, so hat insbesondere das Produkt von $n$
+Vektoren nur noch eine Komponente.
+Diese Komponente heißt eine Determinante.</p>
+<div class=math>
+$$
+    a_1\land a_2\land\cdots\land a_n = \sum a_{1i_1}a_{2i_2}\ldots a_{ni_n}
+        \varepsilon_{i_1}\land\varepsilon_{i_2}\land\cdots\varepsilon_{i_n}.
+$$
+</div>
+<p>Alle Glieder, welche das Produkt von zwei Einheiten mit gleichem Index
+enthalten, verschwinden.
+Für die Determinante schreibt man</p>
+<div class=math>
+$$
+    \left|A\right|=\left|a_{ik}\right|=\sum\pm a_{1i_1}a_{2i_2}\cdots a_{ni_n},
+$$
+</div>
+<p>wobei $\pm=(-1)^{i_1+\ldots+i_n}$.</p>
+<p><strong>2. Beispiel:</strong>  $n=2$: Es ist</p>
+<div class=math>
+$$
+    \left|\matrix{a_{11}&a_{12}\cr a_{21}&a_{22}\cr}\right| =
+    a_{11}a_{22} - a_{21}a_{12}.
+$$
+</div>
+<p>$n=3$: Hier berechnet man $\left|A\right|$ zu</p>
+<div class=math>
+$$
+    a_{11}a_{22}a_{33}+a_{12}a_{23}+a_{13}a_{21}a_{32}
+    -a_{31}a_{22}a_{13}-a_{32}a_{23}a_{11}-a_{33}a_{21}a_{12}.
+$$
+</div>
+<p>Aufgrund der hohen Anzahl der Summanden, nämlich $n!$ (jeder Summand ist
+$n$-faches Produkt), benutzt man zur eigentlichen Berechnung von
+Determinanten i.d.R. ab $n\ge3$ Determinantenregeln.</p>
+<p><strong>3.</strong> Mit Hilfe von Determinanten lassen sich auch die Produkte von weniger als
+$n$ Vektoren genauer ausschreiben.
+Das Produkt von</p>
+<div class=math>
+$$
+    a = a_1\varepsilon_1+a_2\varepsilon_2+\cdots+a_n\varepsilon_n,\qquad
+    b = b_1\varepsilon_1+b_2\varepsilon_2+\cdots+b_n\varepsilon_n,
+$$
+</div>
+<p>ist</p>
+<div class=math>
+$$
+    a\land b = \sum_{i\lt k} \left|a_i,b_k\right|\varepsilon_{ik},
+$$
+</div>
+<p>wo $\left|a_i,b_k\right|=\left|{a_i,a_k\atop b_i,b_k}\right|$ bedeutet.
+Für einen weiteren dritten Vektor</p>
+<div class=math>
+$$
+    c=c_1\varepsilon_1+c_2\varepsilon_2+\cdots+c_n\varepsilon_n,
+$$
+</div>
+<p>gilt</p>
+<div class=math>
+$$
+    a\land b\land c=\sum_{i\lt j\lt k}\left|a_i,b_j,c_k\right|\varepsilon_{ijk},
+$$
+</div>
+<p>mit</p>
+<div class=math>
+$$
+    \left|a_i,b_j,c_k\right|=\left|\matrix{
+        a_i & a_j & a_k\cr  b_i & b_j & b_k\cr  c_i & c_j & c_k\cr
+    }\right|
+$$
+</div>
+<h2>3. Eigenschaften einer Determinante<a id=eigenschaften></a></h2>
+<p><strong>1. Bemerkung:</strong>  Es gelten:</p>
+<p>(1) Die Determinante einer quadratischen Matrix $A=(a_{ik})$</p>
+<div class=math>
+$$
+    \left|A\right|=\left|a_{ik}\right|=\sum\pm a_{1i_1}a_{2i_2}\cdots a_{ni_n},
+$$
+</div>
+<p>ist eine homogene, lineare Funktion der Elemente einer jeden Zeile und einer
+jeden Spalte.</p>
+<p>(2) Eine Determinante ändert ihr Vorzeichen, wenn man zwei Zeilen oder zwei
+Spalten miteinander vertauscht.</p>
+<p>(3) Eigenschaft (1) und (2) sind für eine Determinante charakteristisch.
+Bis auf eine Normierung durch einen Skalar, gibt es keine weiteren
+multilinearen, alternierenden Formen dieser Art.</p>
+<p><strong>2. Satz:</strong>  Ist $\Phi\colon \mathop{\rm GL}(n,K)\rightarrow K^\times$ eine
+Abbildung mit $\Phi(AB)=\Phi(A)\Phi(B)$, für alle $A,B\in \mathop{\rm GL}(n,K)$, dann
+gibt es $\varphi\colon K^\times\rightarrow K^\times$, mit
+$\varphi(\alpha\beta)=\varphi(\alpha)\varphi(\beta)$, für alle
+$\alpha,\beta\in K^\times$ und es ist $\Phi(A)=\varphi(\det A)$, für alle
+$A\in \mathop{\rm GL}(n,K)$.</p>
+<p><em>Beweis:</em> siehe <a href="https://www.amazon.de/Lineare-analytische-Geometrie-Springer-Lehrbuch-2013-10-04/dp/B01K927GBO/">Max Koecher</a> (1985), S.119.
+    ☐</p>
+<p><strong>3.</strong> Siehe Wolfgang Gröbner (1966).
+Es seien $A=(a_{ik})$ und $B=(b_{ik})$ zwei $n$-zeilige quadratische
+Matrizen, $C=(c_{ik})=AB$ sei die Produktmatrix.
+Es ist $c_{ik}=\sum a_{ij}b_{jk}$.
+Die Zeilenvektoren von $C$ sind</p>
+<div class=math>
+$$
+    c_i = \sum_k c_{ik}\varepsilon_k = \sum_{j,k} a_{ij}b_{jk}\varepsilon_k
+        = \sum_j a_{ij}b_j,
+$$
+</div>
+<p>wobei $b_j=\sum b_{jk}\varepsilon_k$ die Zeilenvektoren von $B$ bedeuten.
+Nun ist</p>
+<div class=math>
+$$
+\eqalign{
+    c_1\land c_2\land\cdots\land c_n &= \left|C\right|\varepsilon_{12\ldots n}\cr
+    &= (a_{11}b_1+a_{12}b_2+\cdots+a_{1n}b_n)\land\cdots\land
+       (a_{n1}b_1+a_{n2}b_2+\cdots+a_{nn}b_n)\cr
+    &= \left|A\right| b_1\land b_2\land\cdots\land b_n
+     = \left|A\right| \left|B\right| \varepsilon_{12\ldots n}.
+}
+$$
+</div>
+<p>Durch Vergleich der ersten und letzten Zeile sieht man
+$\left|C\right| = \left|A\right| \left|B\right|$, also
+$\left|AB\right| = \left|A\right| \left|B\right|$.</p>
+<p><strong>4.</strong> Der oben abgeleitete Determinantenproduktsatz, wie auch letztlich das
+kanonische Skalarprodukt, ist ein Spezialfall der Formel von
+Cauchy/Binet, auch Determinantenproduktsatz für rechteckige Matrizen
+genannt. <a href="https://en.wikipedia.org/wiki/Augustin-Louis_Cauchy">Cauchy, Augustin Louis (1789--1857)</a>
+<a href="https://en.wikipedia.org/wiki/Jacques_Philippe_Marie_Binet">Binet, Jacques Philipe Marie (1786--1856)</a></p>
+<p>Es sei $A=(a_{ik})$ eine $m\times n$-Matrix, $B=(b_{k\ell})$ eine
+$n\times s$-Matrix.
+Ihr Produkt $AB=C=(c_{i\ell})$ ist eine $m\times s$-Matrix mit den
+Elementen</p>
+<div class=math>
+$$
+    c_{i\ell} = \sum_k a_{ik}b_{k\ell},\qquad i=1,\ldots,m,\quad \ell=1,\ldots,s.
+$$
+</div>
+<p>Jeder Zeilenvektor $c_i$ von $C$ ist</p>
+<div class=math>
+$$
+    c_i = \sum_\ell c_{i\ell}\varepsilon_\ell
+        = \sum_{k,\ell} a_{ik}b_{k\ell}\varepsilon_\ell
+        = \sum_k a_{ik}b_k,
+$$
+</div>
+<p>mit den Zeilenvektoren $b_k$ der Matrix $B$ zu
+$b_k = \sum_\ell b_{k\ell}\varepsilon_\ell$.
+Nun ist</p>
+<div class=math>
+$$
+\eqalign{
+    c_1\land c_2\land\cdots\land c_m
+    &= \sum_\ell C\multisup m\ell \varepsilon_{\ell_1\ell_2\ldots\ell_m}\cr
+    &= \sum_k A\multisup mk (b_{k_1}\land b_{k_2}\land\cdots\land b_{k_m})\cr
+    &= \sum_{k,\ell} A\multisup mk B\multisubsup mk\ell \varepsilon_{\ell_1\ell_2\ldots\ell_m},\cr
+}
+$$
+</div>
+<p>Durch Vergleich der Koeffizienten vor
+$\varepsilon_{\ell_1\ell_2\ldots\ell_m}$ findet man</p>
+<div class=math>
+$$
+    \sum_{k,\ell} A\multisup mk B\multisubsup mk\ell
+    = C\multisup m\ell % C_{12\ldots m}^{\ell_1\ell_2\ldots\ell_m}.
+$$
+</div>
+<p><strong>5.</strong> Diese Formel kann man noch etwas verallgemeinern, wenn man statt
+$c_1\land c_2\land\cdots\land c_m$ das äußere Produkt von irgend welchen
+$r$ Zeilenvektoren $c_{i_1}\land c_{i_2}\land\cdots\land c_{i_r}$ auf
+genau die gleiche Weise auswertet:</p>
+<div class=math>
+$$
+    \sum_{k,\ell} A\multisubsup rik B\multisubsup rk\ell
+    = C\multisubsup mi\ell
+$$
+</div>
+<p>In Worten: Jede $r$-zeilige Unterdeterminante der Produktmatrix ist darstellbar als
+Summe von Produkten $r$-reihiger Unterdeterminanten aus $A$ und $B$, die so
+kombiniert sind, daß jeweils die Spaltenindizes der ersten mit den
+Spaltenindizes der zweiten übereinstimmen, während die Zeilenindizes der
+ersten und die Spaltenindizes der zweiten mit den entsprechenden Indizes
+in der Produktmatrix übereinstimmen.</p>
+<p><strong>6.</strong> Man untersucht nun Spezialfälle der obigen Formel.
+Ist $r=m=s$ (also $C$ quadratisch), so hat man</p>
+<div class=math>
+$$
+    \left|C\right| = \sum_k A\multisup mk B\multisub mk
+$$
+</div>
+<p>Ist $n&lt;m$, so gilt $\left|C\right|=0$.
+Setzt man $B=A^\top$, dann ist einerseits</p>
+<div class=math>
+$$
+    c_{i\ell} = \sum_k a_{ik}a_{\ell k} = a_i\cdot a_\ell,
+$$
+</div>
+<p>mit den Zeilenvektoren $a_i$ der Matrix $A$.
+Andererseits ist $B\multisub mk = A\multisup mk$
+und zusammen mit</p>
+<div class=math>
+$$
+    a_{i_1}\land a_{i_2}\land\cdots\land a_{ir}
+    = \sum_k A\multisubsup rik \varepsilon_{k_1k_2\ldots k_r},
+$$
+</div>
+<p>ergibt sich</p>
+<div class=math>
+$$
+    \left|AA^\top\right| = \left|a_i\cdot a_k\right|
+    = \sum \left(A\multisup mk\right)^2
+    = \left|a_1\land a_2\land\cdots\land a_m\right|^2.
+    \tag{*}
+$$
+</div>
+<p>Eine Anwendung dieser Formel liefert mit $m=2$ und
+$A={a_1a_2\ldots a_m\choose b_1b_2\ldots b_m}$ die Formel von Lagrange,
+<a href="https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange">Lagrange, Joseph Louis (1736--1813)</a></p>
+<div class=math>
+$$
+    \left|a\times b\right| = \sum_{i\lt k} \left(a_ib_k-a_kb_i\right)^2
+    = \left(\sum a_i^2\right) \left(\sum b_k^2\right) - \left(\sum a_ib_k\right)^2
+    = \left|a\right|^2 \left|b\right|^2 - (ab)^2.
+$$
+</div>
+<p>Sind die $a_1,a_2,\ldots,a_m$ paarweise othogonal, also</p>
+<div class=math>
+$$
+    a_i\cdot a_k = \cases{0,& für $i\ne k$,\cr \left|a_i\right|^2,& für $i=k$,}
+$$
+</div>
+<p>so folgt unmittelbar aus $(*)$</p>
+<div class=math>
+$$
+    \left|a_1\land a_2\land\cdots\land a_m\right| =
+    \left|a_1\right|\cdot\left|a_2\right|\ldots\left|a_m\right|.
+$$
+</div>
+<p>In Worten: Der Betrag des äußeren Produktes von paarweise othogonalen
+Vektoren ist gleich dem Produkt ihrer Beträge.
+Dies ist die anschauliche Bedeutung des Spatproduktes.
+Das Volumen, welches von paarweise othogonalen Vektoren aufgespannt wird,
+ist gleich dem Produkt der Seitenlängen.</p>
+<h2>4. Der Laplacesche Entwicklungssatz<a id=laplace></a></h2>
+<p><strong>1.</strong> Siehe Wolfgang Gröbner (1966).
+Es seien $(i_1,\ldots,i_r)$ und $(i'_1,\ldots,i'_s)$ zueinander komplementäre
+Anordnungen, also $r+s=n$,</p>
+<div class=math>
+$$
+    i_1 \lt  i_2 \lt  \cdots \lt  i_r, \qquad i'_1 \lt  i'_2 \lt  \cdots \lt  i'_s,
+$$
+</div>
+<p>und $(i_1,\ldots,i_r, i'_1,\ldots,i'_s)$ ist eine Permutation von
+$(1,2,\ldots,n)$, also $s=n-r$.
+Komplementär geordnete Anordnungen $(i_1,\ldots,i_r, i'_1,\ldots,i'_s)$ brauchen</p>
+<div class=math>
+$$
+    (i_1-1)+(i_2-2)+\cdots+(i_r-r) = i_1+i_2+\cdots+i_r - {r\over2}(r+1)
+$$
+</div>
+<p>Transpositionen um die natürliche Anordnung $(1,\ldots,n)$ zu erreichen.</p>
+<p>Durch Zusammenfassen von Zeilenvektoren von $A$ rechnet man</p>
+<div class=math>
+$$
+\eqalignno{
+    \left|A\right| \varepsilon_{1\ldots n} &= a_1\land\cdots\land a_n \cr
+    &= (-1)^p \left(a_{i_1}\land\cdots\land a_{i_r}\right) \land
+         \left(a_{i'_1}\land\cdots\land a_{i'_{n-r}}\right) \cr
+    &= (-1)^p \left(\sum_k A\multisubsup rik \varepsilon_{k_1\ldots k_r}\right) \land
+         \left(\sum_k A\multisubsup {n-r}{i'}{k'} \varepsilon_{k'_1\ldots k'_{n-r}}\right) \cr
+    &= \sum_k (-1)^{m+p} A\multisubsup rik A\multisubsup {n-r}{i'}{k'}
+         \varepsilon_{1\ldots n}. \cr
+}
+$$
+</div>
+<p>mit</p>
+<div class=math>
+$$
+    p = i_1+\cdots+i_r - {r\over2}(r+1),\qquad
+    m = k_1+\cdots+i_r - {r\over2}(r+1),
+$$
+</div>
+<p>und es wurde benutzt</p>
+<div class=math>
+$$
+    \varepsilon_{k_1\ldots k_r}\land\varepsilon_{k'_1\ldots k'_{n-r}} =
+    \varepsilon_{k_1\ldots k_r k'_1\ldots k'_{n-r}} =
+    (-1)^m \varepsilon_{1\ldots n},
+$$
+</div>
+<p>oder allgemeiner</p>
+<div class=math>
+$$
+    \varepsilon_{k_1\ldots k_r}\land\varepsilon_{\nu_1\ldots\nu_{n-r}} =
+    \varepsilon_{k_1\ldots k_r\nu_1\ldots\nu_{n-r}} = \cases{
+        (-1)^m \varepsilon_{1\ldots n}, & falls $\nu_1=k'_1,\ldots,\nu_{n-r}=k'_{n-r}$,\cr
+        0, & sonst.\cr
+    }
+$$
+</div>
+<p>Zur Schreibvereinfachung definiert man das algebraische
+Komplement $\alpha\multisubsup rik$ zu</p>
+<div class=math>
+$$
+    \alpha\multisubsup rik := (-1)^{i_1+\cdots+i_r+k_1+\cdots+k_r}
+        A\multisubsup r{i'}{k'}.
+$$
+</div>
+<p>Statt algebraisches Komplement sagt man auch Adjunkte der Unterdeterminante
+$A\multisubsup rik$.
+Mit dieser Notation erhält man den</p>
+<p><strong>2. Satz:</strong>  Allgemeiner Laplacescher Entwicklungssatz.
+<a href="https://en.wikipedia.org/wiki/Pierre-Simon_Laplace">Laplace, Pierre Simon (1749--1827)</a>.
+Man erhält den Wert der $n$-reihigen Determinante $\left|A\right|$,
+entwickelt nach nach den Zeilen $i_1,i_2,\ldots,i_r$,
+($1\le i_1&lt;i_2&lt;\ldots&lt;i_r\le n$), indem man alle $r$-reihigen
+Unterdeterminanten dieser $r$ Zeilen bildet, sie mit ihren algebraischen
+Komplementen multipliziert und dann addiert:</p>
+<div class=math>
+$$
+\eqalignno{
+    \left|A\right| &= \sum_k A\multisubsup rik \alpha\multisubsup rik,\cr
+    \left|A\right| &= \sum_i A\multisubsup rik \alpha\multisubsup rik.\cr
+}
+$$
+</div>
+<p>Die Summen sind über alle $n\choose r$ Kombination $(k_1,\ldots,k_r)$,
+bzw. $(i_1,\ldots,i_r)$ zu erstrecken.</p>
+<p><strong>3.</strong> Nach dem oben hergeleiteten gilt offensichtlich leicht allgemeiner</p>
+<div class=math>
+$$
+    \sum_k A\multisubsup rik \alpha\multisubsup r\ell k = \cases{
+        \left|A\right|, & falls $i_\nu=\ell_\nu$,\cr
+        0, & sonst.\cr
+    }
+$$
+</div>
+<p>Für $r=1$ erhält man das übliche Entwickeln nach einer Zeile oder Spalte
+insbesondere</p>
+<div class=math>
+$$
+    \pmatrix{a_{11} & \ldots & a_{1n}\cr \vdots & \ddots & \vdots\cr a_{n1} & \ldots & a_{nn}\cr}
+    \pmatrix{\alpha_1^1 & \ldots & \alpha_n^1\cr \vdots & \ddots & \vdots\cr
+        \alpha_1^n & \ldots & \alpha_n^n\cr} =
+    \pmatrix{\left|A\right| && 0\cr &\ddots&\cr 0&&\left|A\right|\cr}.
+$$
+</div>
+<p>Wie üblich für $\xi_i^j$: $i$ Zeilenindex, $j$ Spaltenindex,
+für $(\alpha)$ also transponierte Matrix.
+Damit liegt eine explizite Beschreibung der inversen Matrix vor, also
+$\alpha_i^j / \left|A\right|$ für das $(j,i)$-Element der Inversen.</p>
+<p><strong>4. Satz:</strong> (Minor Inverser) Es sei $B=A^{-1}$, wobei $A$
+invertierbar sei.
+Jeden Minor der Inversen kann man ausdrücken durch die Adjunkte der
+Ursprungsmatrix:</p>
+<div class=math>
+$$
+    B\multisubsup rik = {\alpha\multisubsup rik\over\left|A\right|}
+    = {(-1)^m\over\left|A\right|} A\multisubsup {n-r}{i'}{k'},
+    \qquad m = i_1+\cdots+i_r + k_1+\cdots+k_r.
+$$
+</div>
+<p><em>Beweis:</em>  Nach Cauchy/Binet ist</p>
+<div class=math>
+$$
+    \sum_k A\multisubsup rik B\multisubsup rk\ell = \cases{
+        1, & falls $i_\nu=\ell_\nu$ $\forall\nu$,\cr
+        0, & sonst.\cr} \tag{*}
+$$
+</div>
+<p>Nach dem Laplaceschen Entwicklungssatz ist</p>
+<div class=math>
+$$
+    \sum_k A\multisubsup rik \alpha\multisubsup r\ell k = \cases{
+        \left|A\right|, & falls $i_\nu=\ell_\nu$ $\forall\nu$,\cr
+        0, & sonst.\cr}
+$$
+</div>
+<p>Es sind $(A\multisubsup rik)_k$ und $(\alpha\multisubsup rk\ell)_k$ beides
+Matrizen mit ${n\choose r}={n\choose n-r}$ Zeilen und Spalten.
+Nach $(*)$ ist $(B\multisubsup rk\ell)_k$ offensichtlich Inverse, genauso
+aber auch $\alpha\multisubsup rik / \left|A\right|$.
+Da Inversen eindeutig bestimmt sind, folgt Gleichheit.
+    ☐</p>
+<p><strong>5. Beispiel:</strong>  Sowohl für Cauchy/Binet, Laplaceschen
+Entwicklungssatz als auch Minoren Inverser.
+Es seien</p>
+<div class=math>
+$$
+    A = \pmatrix{
+        13 & 14 & 6 & 4\cr
+        8 & -1 & 13 & 9\cr
+        6 & 7 & 3 & 2\cr
+        9 & 5 & 16 & 11\cr
+    }, \qquad
+    A^{-1} = \pmatrix{
+        1 & 0 & -2 & 0\cr
+        -5 & 1 & 11 & -1\cr
+        287 & -67 & -630 & 65\cr
+        -416 & 97 & 913 & -94\cr
+    }.
+$$
+</div>
+<p>(1) Die Determinante von $A$ berechnet man z.B. so:</p>
+<div class=math>
+$$
+    \left|A\right| = A_{12}^{12} A_{34}^{34} - A_{12}^{13} A_{34}^{24}
+        + A_{12}^{14} A_{34}^{23} + A_{12}^{23} A_{34}^{14}
+        - A_{12}^{24} A_{34}^{13} + A_{12}^{34} A_{34}^{12}
+    = 1.
+$$
+</div>
+<p>Hierbei muß nicht wie bei dem Laplaceschen Entwicklungssatz nach einer
+Zeile (oder Spalte) immer ein Vorzeichenwechsel von einem Term zum nächsten
+stattfinden.</p>
+<p>(2) Es ist $AB=:C=I$. Also nach Cauchy/Binet wie oben $4\choose2$ Summanden</p>
+<div class=math>
+$$
+    C_{23}^{34} = \left|\matrix{0&0\cr 1&0\cr}\right| =
+    A_{23}^{12} B_{12}^{34} + A_{23}^{13} B_{13}^{34} + A_{23}^{14} B_{14}^{23}
+        + A_{23}^{23} B_{23}^{34} + A_{23}^{24} B_{24}^{34} + A_{23}^{34} B_{34}^{34}
+    = 0.
+$$
+</div>
+<p>(3) Für den Minor $B_{12}^{34}$ der Inversen $B$ rechnet man</p>
+<div class=math>
+$$
+    B_{12}^{34} = \left|\matrix{-2&0\cr 11&-1\cr}\right|
+    = {(-1)^{10}\over1} A_{12}^{34} = \left|\matrix{6&4\cr 13&9\cr}\right| = 2,
+$$
+</div>
+<p>genauso</p>
+<div class=math>
+$$
+    B_{23}^{24} = \left|\matrix{1&-1\cr 67&65\cr}\right|
+    = (-1)^{11} A_{13}^{14} = -\left|\matrix{13&4\cr 6&2\cr}\right| = -2.
+$$
+</div>
+<h2>5. Weitere Folgerungen aus dem Satz von Cauchy/Binet<a id=cauchybinet></a></h2>
+<p>Aufgrund seiner großen Bedeutung sei für den Determinantenmultiplikationssatz
+von Cauchy/Binet ein weiterer Beweis angegeben, der nicht Bezug nimmt
+auf das äußere Produkt.</p>
+<p><strong>1. Satz:</strong>  (Satz von Cauchy/Binet) Es sei $C=AB$.
+Dann gilt $C_{1\ldots r}^{1\ldots r} = \sum_i A\multisup ri B\multisub ri$.</p>
+<p><em>Beweis:</em> (für Cauchy/Binet)
+siehe Gantmacher, Felix R. (1908--1964), Gantmacher (1986).
+Man rechnet</p>
+<div class=math>
+$$
+\eqalignno{
+    \left|\matrix{
+        c_{11} & \ldots & c_{1r}\cr
+        \vdots & \ddots & \vdots\cr
+        c_{r1} & \ldots & c_{rr}\cr
+    }\right| &=
+    \left|\matrix{
+        \sum_{i_1=1}^n a_{1i_1}b_{i_11} & \ldots & \sum_{i_r=1}^n a_{1i_r}b_{i_rr}\cr
+        \vdots & \ddots & \vdots\cr
+        \sum_{i_1=1}^n a_{ri_1}b_{i_11} & \ldots & \sum_{i_r=1}^n a_{ri_r}b_{i_rr}\cr
+    }\right| &\cr &= \sum_{i_1,\ldots,i_r=1}^n \left|\matrix{
+        a_{1i_1}b_{i_11} & \ldots & a_{1i_r}b_{i_rr}\cr
+        \vdots & \ddots & \vdots\cr
+        a_{ri_1}b_{i_11} & \ldots & a_{ri_r}b_{i_rr}\cr
+    }\right| &\cr &= \sum_{i_1,\ldots,i_r=1}^n A\multisup ri b_{i_11}\ldots b_{i_rr}. &\cr
+}
+$$
+</div>
+<p>Unter allen $n^r$ Summanden sind nur $n(n-1)\ldots(n-r+1)={n\choose r}r!$
+Summanden von Interesse, bei denen die Minoren $A\multisup ri$ nicht zwei,
+drei, $\ldots$, $r$ gleiche Spalten enthalten.
+Von den ${n\choose r}r!$ sind aber wiederum nur $n\choose r$ echt verschieden,
+die restlichen sind nichts anderes als Vertauschungen zweier Spalten.
+Also rechnet man weiter</p>
+<div class=math>
+$$
+\eqalignno{
+    &\phantom{{}={}} \sum_{1\le i_1\lt \cdots\lt i_r\le n} \:  \sum_{(\nu_1,\ldots,\nu_r)\in{\rm Perm}(i_1,\ldots,i_r)}
+        \sigma(\nu_1,\ldots,\nu_r) A\multisup ri b_{\nu_11}\ldots b_{\nu_rr} \cr
+    &= \sum_{1\le i_1\lt \cdots\lt i_r\le n} A\multisup ri \sum \sigma(\nu_1,\ldots,\nu_r)
+        b_{\nu_11}\ldots b_{\nu_rr} \cr
+    &= \sum_{1\le i_1\lt \cdots\lt i_r\le n} A\multisup ri B\multisub ri . \cr
+}
+$$
+</div>
+<p>    ☐</p>
+<p><strong>2.</strong> Der Satz von Cauchy/Binet liest sich für mehr als
+zwei Matrizen wie folgt</p>
+<div class=math>
+$$
+\eqalignno{
+    (AB)_i^j &= \sum_k A_i^k B_k^j, \cr
+    (ABC)_i^j &= \sum_{k,\ell} A_i^k B_k^\ell C_\ell^j, \cr
+    (ABCD)_i^j &= \sum_{k,\ell,m} A_i^k B_k^\ell C_\ell^m D_m^j, \cr
+    (ABCDE)_i^j &= \sum_{k,\ell,m,p} A_i^k B_k^\ell C_\ell^m D_m^p E_p^j. \cr
+}
+$$
+</div>
+<p><strong>3.</strong> Es sei</p>
+<div class=math>
+$$
+    {\cal A}_p := (A\multisubsup pik)_{i_1\lt \cdots\lt i_p,{\mskip 3mu}k_1\lt \cdots\lt k_p}
+    \in \mathbb{C}[\textstyle{{n\choose p}\times{n\choose p}}]
+$$
+</div>
+<p>die ^{$p$-te assoziierte Matrix} zu $A$.</p>
+<p>Die Anordnungen seien in lexikographischer Reihenfolge durchlaufen.
+Beispielsweise erhält man für eine $4\times4$ Matrix $A$ die $6\times6$ Matrix</p>
+<div class=math>
+$$
+    {\cal A}_6 = \pmatrix{
+        A_{12}^{12} & A_{12}^{13} & \ldots & A_{12}^{34}\cr
+        \vdots      & \vdots      & \ddots & \vdots\cr
+        A_{34}^{12} & A_{34}^{13} & \ldots & A_{34}^{34}\cr
+    }
+$$
+</div>
+<p>Eine Umformulierung des Satzes von Cauchy/Binet ist:
+Aus $C=AB$ folgt ${\cal C}_p = {\cal A}_p {\cal B}_p$, $p=1,2,\ldots,n$.
+Insbesondere: Aus $B=A^{-1}$ folgt ${\cal B}_p = {\cal A}_p^{-1}$,
+$p=1,2,\ldots,n$.</p>
+<p><strong>4. Satz:</strong>  Es sei $A=(a_{ij})_{i,j=1}^n$ und</p>
+<div class=math>
+$$
+    \left|A-\lambda I\right| = (-\lambda)^n + c_{n-1}(-\lambda)^{n-1} +
+        c_{n-2}(-\lambda)^{n-2} + \cdots + c_1(-\lambda) + c_0.
+$$
+</div>
+<p>Dann gilt</p>
+<div class=math>
+$$
+    c_{n-1} = \sum_{1\le i\le n} a_{ii}, \qquad
+    c_{n-2} = \sum_{1\le i_1\lt i_2\le n} A_{i_1i_2}^{i_1i_2}, \qquad
+    c_{n-3} = \sum_{1\le i_1\lt i_2\lt i_3\le n} A_{i_1i_2i_3}^{i_1i_2i_3}, \quad
+    \ldots,\quad
+    c_0 = A_{1\ldots n}^{1\ldots n}=\left|A\right|.
+$$
+</div>
+<p><em>Beweis:</em> Siehe <a href="https://en.wikipedia.org/wiki/Felix_Gantmacher">Felix Ruvimovich Gantmacher (1908--1964)</a>,
+<a href="https://www.amazon.de/Matrizentheorie-Felix-R-Gantmacher/dp/3642712444/">Gantmacher, 1986, &quot;Matrizentheorie&quot;</a>,
+§3.7.
+Die Potenz $(-\lambda)^{n-p}$ tritt in denjenigen Termen von
+$\left|A-\lambda I\right|$ auf, die</p>
+<div class=math>
+$$
+    a_{k_1k_1}-\lambda, {\mskip 5mu} a_{k_2k_2}-\lambda, {\mskip 5mu} \ldots, {\mskip 5mu}
+    a_{k_{n-p}k_{n-p}}-\lambda, \qquad k_1\lt \cdots\lt k_{n-p}
+$$
+</div>
+<p>enthalten.
+Anwendung des allgemeinen Laplaceschen Entwicklungssatzes entwickelt nach
+$(k_1,\ldots,k_{n-p})$ liefert</p>
+<div class=math>
+$$
+    \left|A-\lambda I\right| = (a_{k_1k_1}-\lambda) (a_{k_2k_2}-\lambda) \ldots
+        (a_{k_{n-p}k_{n-p}}-\lambda) A_{i_1\ldots i_p}^{i_1\ldots i_p} + \hbox{Rest},
+$$
+</div>
+<p>wobei $(i_1,\ldots,i_p)$  die zu $(k_1,\ldots,k_{n-p})$ komplementäre
+Anordnung ist, also $\{k_1,\ldots,k_{n-p},{\mskip 3mu}i_1,\ldots,i_p\} = \{1,\ldots,n\}$.
+Bildet man alle möglichen ${n\choose n-p}={n\choose p}$ Kombinationen von
+$n-p$ Elementen $k_1&lt;\cdots&lt;k_{n-p}$, die besagte Diagonalelemente enthalten,
+so erhält man genau $n\choose p$ Minoren als Summe, die die Koeffizienten vor
+$(-\lambda)^{n-p}$ ausmachen.
+    ☐</p>
+<p><strong>5. Beispiel:</strong>  zu $c_{n-k}=\sum_i A\multisubsup kii$ im Falle $n=3$.
+Für</p>
+<div class=math>
+$$
+    \left|\matrix{
+        a_{11}-\lambda & a_{12} & a_{13}\cr
+        a_{21} & a_{22}-\lambda & a_{23}\cr
+        a_{31} & a_{32} & a_{33}-\lambda\cr
+    }\right|
+$$
+</div>
+<p>erhält man</p>
+<div class=math>
+$$
+\eqalignno{
+    &\phantom{=} (-\lambda)^3 + (a_{11}+a_{22}+a_{33})\lambda^2 + (a_{11}a_{22}-a_{21}a_{12}
+        a_{11}a_{33}-a_{31}a_{13}+a_{22}a_{33}-a_{32}a_{23})(-\lambda) +
+        \left|A\right| &\cr
+    &= (-\lambda)^3 + (A_1^1+A_2^2+A_3^3)\lambda^2 +
+        (A_{12}^{12}+A_{13}^{13}+A_{23}^{23})(-\lambda) + \left|A\right|. &\cr
+}
+$$
+</div>
+<p><strong>6.</strong> Eine direkte Folge ist der Vietascher Wurzelsatz.
+<a href="https://en.wikipedia.org/wiki/Fran%C3%A7ois_Vi%C3%A8te">Vieta (siehe  Viète), Fran\c cois Viéte (1540--1603)</a>.
+Entweder benutzt man eine Jordansche Normalform ($A=XJX^{-1}$) oder eine
+Schursche Normalform ($A=UT\adj U$).
+Das charakteristische Polynom bleibt bei einer Ähnlichkeitstransformation
+invariant, daher</p>
+<div class=math>
+$$
+    c_{n-k} = \sum_{i_1\lt \cdots\lt i_k} \lambda_{i_1}\ldots\lambda_{i_k}
+        = \sum_{i_1\lt \cdots\lt i_k} A\multisubsup kii.
+$$
+</div>
+<p>Es wird nicht behauptet, daß i.a. $\lambda_{i_1}\ldots\lambda_{i_k}=A\multisubsup kii$.
+Beispielsweise für eine invertierbare Begleitmatrix $C_1\in\mathbb{C}^{n\times n}$
+gilt $\lambda_1\ldots\lambda_k\ne (C_1)_{1\ldots k}^{1\ldots k}=0$,
+für $k&lt;n$.</p>
+<p><strong>7. Satz:</strong>  Bei zwei diagonalähnlichen Matrizen $A,B\in\mathbb{C}^{n\times n}$
+mögen sämtliche Eigenvektoren gleich sein.
+Dann gilt: $AB=BA$, d.h. $A$ und $B$ kommutieren.</p>
+<p><em>Beweis:</em> $X$ enthalte sämtliche Eigenvektoren, $D_1=\mathop{\rm diag}\lambda_i$,
+$D_2=\mathop{\rm diag}\mu_i$, $A=XD_1X^{-1}$, $B=XD_2X^{-1}$.
+Also $AB=XD_1X^{-1}XD_2X^{-1}=XD_1D_2X^{-1}=XD_2X^{-1}XD_1X^{-1}=BA$.
+    ☐</p>
+<p><strong>8. Satz:</strong>  Es gelte $AB=BA$.
+Dann gilt: $A$ und $B$ haben gemeinsame Eigenvektoren.</p>
+<p><em>Beweis:</em> Siehe <a href="https://en.wikipedia.org/wiki/James_H._Wilkinson">James H. Wilkinson (1919--1986)</a>,
+<a href="https://www.amazon.de/Algebraic-Eigenvalue-Problem-J-Wilkinson/dp/0198534183/">Wilkinson (1965) &quot;The Algebraic Eigenvalue Problem&quot;</a>,
+siehe Gantmacher, Felix R. (1908--1964), <a href="https://www.amazon.de/Matrizentheorie-Felix-R-Gantmacher/dp/3642712444/">Gantmacher (1986) &quot;Matrizentheorie&quot;</a>, §9.10.
+Für ein beliebiges Eigenelement $(\lambda,x)$ von $A$ gilt
+$AB^kx=\lambda B^kx$, $k=0,1,2,\ldots$
+In der Vektorfolge $x$, $Bx$, $B^2x$, $\ldots$ seien die ersten $p$ Vektoren
+linear unabhängig, also der $(p+1)$-te Vektor $B^px$ ist eine Linearkombination
+der $p$ vorhergehenden.
+Der Unterraum ${\cal S}:=\left&lt;x,Bx,\ldots,B^{p-1}x\right&gt;$ ist bzgl. $B$
+invariant, also $B{\cal S}\subseteq\cal S$, daher existiert ein Eigenvektor
+$y\in\cal S$ für $B|\cal S$, damit auch für $B$.
+$AB^kx=\lambda B^kx$ zeigt, daß $x$, $Bx$, $B^2x$, $\ldots$ Eigenvektoren zum
+selben Eigenwert $\lambda$ sind.
+Insbesondere jede Linearkombination dieser Vektoren ist Eigenvektor von $A$,
+also auch $y\in\cal S$.
+    ☐</p>
+<p><strong>9. Bemerkung:</strong>  Beim Beweis war wesentlich, daß $B$ einen Eigenvektor
+besitzt.
+Bei komplexen Matrizen ist dies aufgrund des Fundamentalsatzes der Algebra
+klar.
+Bei reellen Matrizen (über $\mathbb{R}$) braucht kein reeller Eigenwert zu
+existieren und somit auch kein Eigenvektor.
+Die Drehungsmatrix $T={\cos\alpha{\mskip 3mu}-\sin\alpha\choose\sin\alpha{\mskip 3mu}\cos\alpha}$
+hat für geeignetes $\alpha$ keinen reellen Eigenwert.
+Anschaulich ist dies ersichtlich, weil nicht jede Drehung streckt, staucht
+oder Fixpunkte hat.
+Algebraisch ist dies ersichtlich, weil $\det(A-\lambda I)=
+\lambda^2-2\lambda\cos\alpha+1=(\lambda-\cos\alpha)^2+(1-\cos^2\alpha)$
+nicht für jedes $\alpha$ über $\mathbb{R}$ zerfällt.
+Sehr wohl hat $T$ jedoch in $\mathbb{C}$ die beiden Eigenwerte
+$\lambda=\pm i\sin\alpha$.
+Der Satz bleibt richtig, wenn man im Reellen zusätzlich fordert, daß $B$
+nur reelle Eigenwerte hat, z.B. falls $B$ hermitesch ist.
+Der Satz bleibt auch richtig, wenn man voraussetzt:
+$A$ und $B$ enthalten $1\times1$ Jordanblöcke (lineare Elementarteiler).</p>
+<p><strong>10. Satz:</strong>  Es sei $A\in\mathbb{C}^{m\times n}$ und $B\in\mathbb{C}^{n\times m}$.
+Sind beide Matrizen quadratisch ($m=n$) so haben $AB$ und $BA$ dasselbe
+charakteristische Polynom und damit die gleichen Eigenwerte samt
+Multiplizitäten.
+Im Falle $m\ne n$ haben $AB$ und $BA$ die gleichen Eigenwerte samt Multiplizitäten
+außer, daß das Produkt der höheren Ordnung $\left|m-n\right|$ zusätzliche Nullen
+im Spektrum hat.</p>
+<p><em>Beweis:</em> siehe Wilkinson, J.H., Wilkinson (1965).
+Es ist</p>
+<div class=math>
+$$
+    \left|\matrix{ I&0\cr -B&\mu I\cr }\right|
+    \left|\matrix{ \mu I&A\cr B&\mu I\cr }\right| =
+    \left|\matrix{ \mu I&A\cr 0&\mu^2I-BA\cr }\right|
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \left|\matrix{ \mu I&-A\cr 0&I\cr }\right|
+    \underbrace{ \left|\matrix{\mu I&A\cr B&\mu I\cr}\right| }_{{}=:\alpha} =
+    \left|\matrix{ \mu^2I-AB&0\cr B&\mu I\cr }\right|.
+$$
+</div>
+<p>Also</p>
+<div class=math>
+$$
+    \mu^n \alpha = \mu^n \left|\mu^2I-BA\right| = \mu^n \left|\mu^2I-AB\right|.
+$$
+</div>
+<p>Für $\mu=0$ beachte man $\left|AB\right|=\left|BA\right|$.
+Der Fall $m\ne n$ wird genauso bewiesen.
+    ☐</p>
+<p>Den Beweis hätte man auch direkt über die Koeffizienten des charakteristischen
+Polynomes führen können.
+Nämlich mit</p>
+<div class=math>
+$$
+\eqalignno{
+    \left|AB-\lambda I\right| &= (-\lambda)^n+c_{n-1}(-\lambda)^{n-1}+
+        \cdots+c_1(-\lambda)+c_0,\cr
+    \left|BA-\lambda I\right| &= (-\lambda)^n+d_{n-1}(-\lambda)^{n-1}+
+        \cdots+d_1(-\lambda)+d_0,\cr
+}
+$$
+</div>
+<p>berechnet man die $c_i$ und $d_i$ zu</p>
+<div class=math>
+$$
+    c_{n-k} = \sum_i (AB)\multisubsup kii = \sum_{i,\ell} A_i^\ell B_\ell^i,
+    \qquad d_{n-k} = \sum_i (BA)_i^i = \sum_{i,\ell} B_i^\ell A_\ell^i.
+$$
+</div>
+<p>Vertauschung von $i$ und $\ell$ in einer der beiden Summen zeigt Gleichheit,
+einmal abgesehen von möglichen “Stellenverschiebungen”.
+Also $c_{n-k+\ell}=d_{n-k}$, was aber gerade Multiplikation des charakteristischen
+Polynomes mit $\lambda^\ell$ bedeutet.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Das+%C3%A4u%C3%9Fere+Produkt+und+Determinanten%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Das+%C3%A4u%C3%9Fere+Produkt+und+Determinanten&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten&amp;title=Das+%C3%A4u%C3%9Fere+Produkt+und+Determinanten" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Das+%C3%A4u%C3%9Fere+Produkt+und+Determinanten&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Das+%C3%A4u%C3%9Fere+Produkt+und+Determinanten%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/01-29-aeusseres-produkt-und-determinanten" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#Determinanten>Determinanten</a>, <a href=/aux/tags/#Cauchy>Cauchy</a>, <a href=/aux/tags/#Binet>Binet</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2024">Index for the year 2024.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 169.76 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

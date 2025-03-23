@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Korrektoriteration bei impliziten Verfahren zur numerischen Lösung von Differentialgleichungen">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Divergenz der Korrektoriteration: Theorie und Experimente - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2024-06-17 20:00:00">17th June 2024</time>, 19 min read</p>
+<h1>Divergenz der Korrektoriteration: Theorie und Experimente</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">eklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente</a>.</p>
+<br>
+<ul>
+<li><a href="#modnewton">1. Das modifizierte Newton-Verfahren und Spezialisierungen</a></li>
+<li><a href="#hugheshallett">2. Die Divergenzsätze von Hughes Hallett</a></li>
+<li><a href="#byrnehindmarsh">3. Die Experimente von Byrne/Hindmarsh/Jackson/Brown</a></li>
+</ul>
+<p>Einer der ganz zentralen Bestandteile eines Programmes, basierend auf
+Verfahren mit impliziten Stufen, ist die Auflösung der Implizitheit
+durch ein Iterationsverfahren zur Lösung von Gleichungssystemen.
+Diese Gleichungssysteme sind i.d.R. nichtlinear.
+Bei steifen Differentialgleichungen und bei linearen Mehrschrittformeln,
+als auch bei impliziten Runge-Kutta-Verfahren, ist der Aufwand, der hierfür
+getrieben wird, enorm und stellt den maßgeblichen Anteil an der
+Gesamtrechenzeit dar.
+Man ist jedoch nicht so sehr an der exakten Lösung der zahlreich auftauchenden
+nichtlinearen Gleichungssysteme interessiert, sondern an der zügigen
+Integration der Differentialgleichung.
+Die Gleichungssysteme sind hier nur ein Weg dorthin.
+Es stellt sich nun heraus, daß das zur Anwendung gelangende
+Newton-Kantorovich Iterationsverfahren unter gewissen Umständen nicht immer
+konvergiert.
+Diese Divergenz bleibt häufig unbemerkt und äußert sich lediglich in
+größeren globalen Fehlern.
+Da die Schaltentscheidung im Programm TENDLER, wie auch in anderen
+Programmen, während der Korrektoriteration gefällt wird, ist diesem Punkte
+in schaltfähigen Programmen besondere Aufmerksamkeit zu widmen.</p>
+<p>Zuerst wird das Newton Iterationsverfahren in Beziehung gesetzt zu
+bekannten Iterationsverfahren für lineare Gleichungssysteme und umgekehrt.
+Anschliessend erlauben die Ergebnisse von <a href="https://www.researchgate.net/publication/26534745_%27Multiparameter_Extrapolation_and_Deflation_Methods_for_Solving_Equation_Systems%27">Hughes Hallett (1984)</a> eine
+einfache Antwort darauf, ob überhaupt gewisse Modifikationen des
+Newton Iterationsverfahren konvergieren können.
+Die Erfahrungen von <a href="https://digital.library.unt.edu/ark:/67531/metadc282956/m2/1/high_res_d/metadc282956.pdf">Byrne/Hindmarsh/Jackson/Brown (1977)</a> zeigen anhand
+praktischer Beispiele, daß die Korrektoriteration tatsächlich wesentlichen
+Einfluß auch auf die Genauigkeit des Verfahrens haben und nicht nur auf die
+Effizienz.</p>
+<h2>1. Das modifizierte Newton-Verfahren und Spezialisierungen<a id=modnewton></a></h2>
+<p>Hier seien kurz die wichtigsten Iterationsarten zur Lösung linearer
+Gleichungsysteme angeschrieben.
+Später, bei einem Erklärungsversuch für auffallende Verhalten der
+Korrektoriterationen, werden die Untersuchungen wichtig werden.
+Bei der Erklärung des sehr großen globalen Fehlers bei den beiden
+Programmen GEAR und EPISODE, bei der Wahl einer Diagonalapproximation
+der Jacobimatrix, sind die Divergenzsätze von <a href="https://www.researchgate.net/publication/26534745_%27Multiparameter_Extrapolation_and_Deflation_Methods_for_Solving_Equation_Systems%27">Hughes Hallett (1984)</a> ein
+möglicher Ansatzpunkt.
+Eine Charakteristik der Erklärung ist, daß zwischen den beiden möglichen
+Interpretationen, modifizierten Newton-Verfahren und Iterationsverfahren für
+lineare Gleichungssysteme, hin und her gewechselt wird.</p>
+<p>Das gedämpfte modifizierte Newton-Verfahren lautet</p>
+<div class=math>
+$$
+    x^{\nu+1} = x^\nu - \omega W^{-1}\varphi(x^\nu,x^{(\nu+1)}),
+    \qquad\nu=1,2,\ldots
+$$
+</div>
+<p>zur Lösung des Nullstellenproblems $f(x)=0$, $x={\mskip 5mu}?$
+Hierbei ist die Matrix $W$ in der Regel eine Näherung für die
+Jacobimatrix $J=f'(x^\nu)$.
+Insbesondere hängt die Matrix $W$ häufig auch von den vorhergehenden
+Iterierten $x^1, x^2, \ldots{\mskip 3mu}$ ab, also $W=W(x^1,\ldots,x^\nu)$.
+Dies muß jedoch nicht unbedingt so sein.
+Um die Schreibweise handlich und übersichtlich zu halten, seien im
+weiteren gewisse Abhängigkeiten in der Schreibweise nicht gesondert
+erwähnt.
+Den Wert $f(x^\nu)$ bezeichnet man als das <em>Residuum</em> und die
+Differenz zweier aufeinander folgender Iterierten $x^{\nu+1}-x^\nu$
+wird <em>Pseudoresiduum</em> genannt.</p>
+<p>Die beiden Begriffe Residuum und Pseudoresiduum werden auch für die
+Beträge, bzw. Normen dieser Größen benutzt, also
+$|f(x^\nu)|$ und $|x^{\nu+1}-x^\nu|$.
+Wird also von genügend kleinem Residuum gesprochen, so ist damit natürlich
+die entsprechende Norm gemeint.</p>
+<p>Die beiden wichtigsten Spezialfälle dieser recht allgemeinen
+Iterationsklasse sollen jetzt kurz angegeben werden.
+Die Auffassung als Spezialisierung muß nicht immer vorgenommen werden.
+In anderem Zusammenhang kann es durchaus günstiger sein, anders
+vorzugehen.</p>
+<p>Es seien allgemein Zerlegungen der invertierbar vorausgesetzten Matrix $A$
+betrachtet: $A=L+D+R$, mit Subdiagonalmatrix $L$, Diagonalmatrix $D$
+und Superdiagonalmatrix $R$.
+Voraussetzung sei weiter, daß keine der Diagonalelemente der Diagonalmatrix
+$D$ verschwindet, also $\det D\ne0$.
+Eine andere Zerlegung, allgemeinere Zerlegung der Matrix $A$, sei $A=M-N$,
+mit invertierbarer Matrix $M$.
+Gegeben sei das Nullstellenproblem $Ax-b=0$, $x={\mskip 5mu}?$</p>
+<p>Zwei typische Vertreter für <a href="/blog/2023/06-06-theorem-of-stein-rosenberg">Iterationsarten</a> zur Lösung obiger Gleichung sind
+nun die Jacobi-Überrelaxation (JOR-Verfahren) und die sukzessive
+Überrelaxation (SOR-Verfahren).</p>
+<p>Die erstere der beiden Iterationen findet sich auch unter
+anderen Benennungen.</p>
+<p>Die Iterationsvorschrift für das JOR-Verfahren lautet nun</p>
+<div class=math>
+$$
+    x^{\nu+1} = x^\nu - \omega D^{-1}(Ax^\nu - b),
+    \qquad\nu=1,2,\ldots
+$$
+</div>
+<p>mit der Iterationsmatrix
+$J_\omega = D^{-1}(D-\omega A) = I - \omega D^{-1}A$.
+Hierbei ist $J_\omega$ die Matrix, die bei der Schreibweise auftritt</p>
+<div class=math>
+$$
+    x^{\nu+1} = J_\omega x^\nu + \omega D^{-1}b.
+$$
+</div>
+<p>Die weitere wichtige Spezialisierung für den Dämpfungs- bzw.<br>
+Verstärkungsfaktor $\omega$, nämlich $\omega=1$, liefert die
+gewöhnliche [Jacobi Iteration].
+<a href="https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi">Jacobi, Carl Gustav (1804--1851)</a>.</p>
+<p>Die Iterationsvorschrift für das SOR-Verfahren lautet</p>
+<div class=math>
+$$
+    x^{\nu+1} = x^\nu - \omega D^{-1}\left(Lx^{\nu+1} + (D+R)x^\nu - b\right),
+    \qquad\nu=1,2,\ldots
+$$
+</div>
+<p>mit der Iterationsmatrix</p>
+<div class=math>
+$$
+    R_\omega = (D+\omega L)^{-1}\bigl((1-\omega)D-\omega R\bigr)
+    = (I+\omega D^{-1}L)^{-1}\bigl((1-\omega)I-\omega D^{-1}R\bigr).
+$$
+</div>
+<p>Die weitere Spezialisierung $\omega=1$, liefert das Gauß-Seidel
+Iterationsverfahren.
+<a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">Gauß, Carl Friedrich (1777--1855)</a>,
+<a href="https://de.wikipedia.org/wiki/Philipp_Ludwig_von_Seidel">von Seidel, Philipp Ludwig (1821--1896)</a>.</p>
+<p>Nebenläufig sei erwähnt, daß die obige Form auch diejenige Gestalt hat,
+die sich für die Programmierung am besten eignet, wobei man die
+Vorkonditionierung mit der Inversen der Diagonalmatrix $D$ natürlich
+am Anfang der Rechnung und nur einmal durchführt.
+Wichtig ist zu vermerken, daß man bei der obigen Iterationsvorschrift für
+die einzelnen Komponenten von unteren Indices zu höheren Indices durchläuft,
+also $x_i^\nu, i=1,\ldots,n$.
+Die umgekehrte Reihenfolge für den Durchlaufsinn der Indices ist
+natürlich ebenso möglich;
+hier vertauschen sich dann lediglich die Rollen der Matrizen $L$ und $R$.</p>
+<p>Auch noch auf eine andere Art und Weise läßt sich das Gauß-Seidel
+Iterationsverfahren als modifiziertes Newton-Kantorovich Verfahren
+interpretieren.
+Mit der Zerlegung</p>
+<div class=math>
+$$
+    (L+D)x^{\nu+1} = b - Rx^\nu
+$$
+</div>
+<p>erhält man</p>
+<div class=math>
+$$
+\eqalign{
+    x^{\nu+1} &= (L+D)^{-1}(b-Rx^\nu)
+              = x^\nu - (L+D)^{-1}\bigl((L+D)x^\nu + Rx^\nu - b\bigr)\cr
+             &= x^\nu - (L+D)^{-1}(Ax^\nu - b).\cr
+}
+$$
+</div>
+<p>Die Iterationsmatrix $W=L+D$ läßt hier jetzt die Interpretationen zu
+als Näherung für die Jacobimatrix $J$ der Funktion $f$, mit $f(x)=Ax-b$.
+Hier ersieht man die Asymmetrie die zutage tritt.
+Der Subdiagonalgehalt der Matrix $J$ wird hier vollständig gewertet,
+während hingegen der Superdiagonalgehalt, also hier $R$, gar nicht auftritt.
+Dies ist nicht verwunderlich an sich, soll jedoch vermerkt werden.
+Bei anderer Reihenfolge des Durchlaufens der Komponenten $x_i^{\nu+1}$
+des Vektors $x^{\nu+1}$, hat man natürlich hier $W=D+R$, wie schon oben
+erwähnt.</p>
+<p>Die letzte Bemerkung gilt selbstverständlich ganz allgemein.
+Mit der oben angegebenen Zerlegung $A=M-N$ im Kopfe, ist</p>
+<div class=math>
+$$
+    x = x - M^{-1}(Ax-b)
+      = x - M^{-1}\bigl((M-N)x - b\bigr)
+      = M^{-1}Nx + M^{-1}b,
+$$
+</div>
+<p>also $Mx=Nx+b$.
+Für die Zerlegungsmatrizen $M$ und $N$ der wichtigsten Iterationsarten
+erhält man</p>
+<table>
+<thead>
+<tr>
+<th>Verfahren</th>
+<th>$M$-Matrix</th>
+<th>$N$-Matrix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JOR</td>
+<td>$M={1\over\omega}D$</td>
+<td>$N={1\over\omega}D-A$</td>
+</tr>
+<tr>
+<td>SOR</td>
+<td>$M=L+{1\over\omega}D$</td>
+<td>$N={1\over\omega}\bigl(-\omega R+(1-\omega)D\bigr)$</td>
+</tr>
+</tbody>
+</table>
+<p>Sowohl das JOR-Verfahren als auch das SOR-Verfahren lassen sich als
+konvergenzbeschleunigte Verfahren auffassen.
+In diesen beiden Fällen wird nur die einfachst denkbare
+Konvergenzbeschleunigung aus zwei Iterierten gewählt, man erhält also
+lediglich das gewichtete Zweiermitel der beiden letzten Iterierten,
+somit</p>
+<div class=math>
+$$
+    x^{\nu+1}\gets x^\nu + \omega(x^{\nu+1} - x^\nu)
+        = \omega x^{\nu+1} + (1-\omega)x^\nu.
+$$
+</div>
+<p>Dies ist natürlich nichts anderes als das Verfahren von Euler-Knopp.
+<a href="https://de.wikipedia.org/wiki/Leonhard_Euler">Euler, Leonhard (1707--1783)</a>,
+<a href="https://de.wikipedia.org/wiki/Konrad_Knopp">Knopp, Konrad Hermann Theodor (1882--1957)</a>.</p>
+<p>Allgemein arbeitet man mit der unendlichen Block-Dreiecksmatrix</p>
+<div class=math>
+$$
+    \mathbb{P} = \pmatrix{
+        B_{11} &        &        & 0\cr
+        B_{21} & B_{22}\cr
+        B_{31} & B_{32} & B_{33}\cr
+        \vdots & \vdots & \vdots & \ddots\cr
+    },
+$$
+</div>
+<p>wobei die Matrizen $B_{ij}\in\mathbb{R}^{n\times n}$ sind und $B_{ij}=\bf 0$,
+falls $j&gt;i$.
+Blockimplizite Verfahren werden hier nicht weiter betrachtet.
+Natürlich summieren sich die Zeilensummen von $\mathbb{P}$ stets auf eins auf,
+man hat also das Erfülltsein der Konsistenzbedingung</p>
+<div class=math>
+$$
+    \sum_{j=1}^i B_{ij} = I, \qquad\hbox{für alle } i=1,2,\ldots
+$$
+</div>
+<p>Man rechnet dann $\mathbb{P}\bf x$, mit $<strong>x</strong>=(x^0, x^1,\ldots)$.</p>
+<p>Diese Art der Konvergenzbeschleunigung hat nun eine Reihe von
+Bezeichnungen.
+Im folgenden werde der Bezeichnungsweise von <a href="ftp://ftp.inf.puc-rio.br/pub/docs/Publications/84_AI_Albrecht_SIAM.J.Numer.Anal.pdf">Albrecht/Klein (1984)</a>
+gefolgt.
+Autoren Prof. Dr. <a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=23871">Peter Albrecht</a> und Prof. Dr. <a href="https://www.escavador.com/sobre/2736520/marcelo-pinheiro-klein">Marcelo Pinheiro Klein</a>.
+Die zuletzt angeführte allgemeine Art der linearen Konvergenzbeschleunigung
+heiße $\mathbb{P}$-Extrapolation.
+Ist $G$ die grundlegende Iterationsmatrix, also $x^{\nu+1}=Gx^\nu+c$, so
+heiße das beschleunigte Verfahren</p>
+<div class=math>
+$$
+    x^{\nu+1}\gets Bx^{\nu+1} + (I-B)x^\nu
+        = \bigl(BG+(I-B)\bigr)x^\nu + Bc
+$$
+</div>
+<p>entsprechend $B$-Extrapolation.
+Reduziert sich die Matrix $B\in\mathbb{R}^{n\times n}$ zu einem Skalar
+$\gamma\in\mathbb{R}$, so werde einfach von $\gamma$-Extrapolation gesprochen.</p>
+<p>Wenn hier von beschleunigt gesprochen wird, so deutet dies lediglich die
+Veränderung der Iterationsvorschrift an, nicht jedoch ist damit
+automatisch gesagt, daß das neue Verfahren auch tatsächlich bei jeder
+Wahl der Extrapolationsparameter wirklich schneller konvergiert.
+Dies ist gerade eine der Aufgaben, nicht die einzige, durch geeignete Wahl
+der Parameter dies zu erzielen.
+Es ist durchaus zweckmässig und auch sinnvoll auf schnellere Konvergenz
+zu verzichten, dafür aber ein größeres Konvergenzgebiet zu erzielen
+und damit für eine wesentlich größere Klasse von Problemen die Garantie
+zu erhalten, daß das verwendete Iterationsverfahren überhaupt konvergiert.
+Man vgl. zu diesen Beschreibungen auch den Aufsatz von
+<a href="https://www.math.kent.edu/~varga/pub/paper_160.pdf">Varga/Eiermann/Niethammer (1987)</a> und natürlich die entsprechenden
+Monographien, beispielsweise von <a href="https://www.amazon.com/Matrix-Iterative-Analysis-Richard-Varga/dp/1013425561/">Varga (1962)</a> oder
+Birkhoff/Lynch (1984)](<a href="https://www.amazon.com/Numerical-Solution-Elliptic-Problems-Mathematics-6/dp/0898711975">https://www.amazon.com/Numerical-Solution-Elliptic-Problems-Mathematics-6/dp/0898711975</a>).
+Zu den Autoren: <a href="https://en.wikipedia.org/wiki/Richard_S._Varga">Richard Steven Varga (1928--2022)</a>,
+<a href="https://www.researchgate.net/profile/Michael-Eiermann">Michael Eiermann</a>,
+<a href="https://www.math.kit.edu/ianm3/~scherer/media/niethammer-nachruf-2023.pdf">Wilhelm Niethammer (1933--2023)</a>,
+<a href="https://en.wikipedia.org/wiki/Garrett_Birkhoff">Garrett Birkhoff (1911--1996)</a>,
+<a href="https://www.wikidata.org/wiki/Q102121642">Robert E. Lynch (*1932)</a>.</p>
+<h2>2. Die Divergenzsätze von Hughes Hallett<a id=hugheshallett></a></h2>
+<p>Es ist nun von Wichtigkeit in Erfahrung zu bringen, unter welchen
+Umständen man durch $B$-Extrapolation <em>überhaupt</em> Konvergenz
+erzielen kann.
+Aussagen hierzu liefert u.a. <a href="https://www.researchgate.net/publication/26534745_%27Multiparameter_Extrapolation_and_Deflation_Methods_for_Solving_Equation_Systems%27">Hughes Hallett (1984)</a>,
+<a href="https://en.wikipedia.org/wiki/Andrew_Hughes_Hallett">Andrew Jonathan Hughes Hallett (1947--2019)</a>.
+Eine einfache Strukturaussage macht zuerst</p>
+<p><strong>1. Lemma:</strong>  $A$-Extrapolation der $B$-Extrapolation (direkt hintereinander)
+liefert eine $AB$-Extrapolation.
+Insbesondere für kommutierende Matrizen $A$ und $B$ sind $AB$- und
+$BA$-Extrapolation dasselbe.</p>
+<p>Von generellem Interesse ist das folgende Lemma, welches aber auch
+bei einem späteren Satz die Schlüsselrolle spielen wird.</p>
+<p><strong>2. Lemma:</strong>  (1) Die $\gamma$-Extrapolation konvergiert für gewisse $\gamma&gt;0$
+genau dann, wenn sämtliche Realteile der Eigenwerte der Iterationsmatrix
+$G$ kleiner als eins sind, es muß also gelten $\mathop{\rm Re}\nolimits \lambda_i&lt;1$,
+für alle $i=1,\ldots,n$ und den $\lambda_i$ aus dem Spektrum $\sigma(G)$.
+{\parskip=0pt plus 2pt\parindent=20pt\par}
+(2) Analog konvergiert die $\gamma$-Extrapolation für $\gamma&lt;0$ genau
+dann, wenn $\mathop{\rm Re}\nolimits \lambda_i&gt;1$, für alle $i=1,\ldots,n$.</p>
+<p>Eines der wesentlichen Ergebnisse von Hughes Hallett ist nun der
+folgende Satz.</p>
+<p><strong>3. Proposition:</strong>  Für eine beliebige Iterationsmatrix $G$ läßt sich
+<em>nicht</em> immer eine reelle Diagonalmatrix $R$ finden, so, daß die
+$R$-Extrapolation konvergent ist.</p>
+<p>Der Beweis benutzt das oben angegebene Lemma.
+Die Beweisführung konzentriert sich nun darauf zu zeigen, daß die
+Eigenwerte von $R(I-G)$ nicht stets in der linken Halbebene
+$\mathbb{C}^{{}-{}}$ liegen können.
+Dies wiederum legt es nahe, bekannte Sätze aus der Stabilitätstheorie
+zu benutzen, wie z.B. die Sätze von Liénard-Chipart und
+<a href="/blog/2024/02-10-stabilitaet-und-polynome">Hurwitz</a>.
+<a href="https://en.wikipedia.org/wiki/Adolf_Hurwitz">Hurwitz, Adolf (1859--1919)</a>,
+<a href="https://en.wikipedia.org/wiki/Alfred-Marie_Li%C3%A9nard">Liénard, Alfred-Marie (1869--1958)</a>,
+Chipart, A.H..</p>
+<p><em>Beweis:</em> (zum Diagonalextrapolationssatz von Hughes Hallett)
+Sei $G$ Grunditerationsmatrix.
+Die $R$-Extrapolation hat als Iterationsmatrix $RG+I-G = I+R(G-I)$,
+also hat die $\gamma$-Extrapolation der $R$-Extrapolation die Iterationsmatrix
+$I+\gamma R(G-I)$.
+Nach dem Lemma muß also gelten: Die Realteile der Eigenwerte von $R(G-I)$
+müssen in der linken komplexen Halbebene $\mathop{\rm Re}\nolimits  z&lt;0$ liegen ($R\gets\gamma R$).
+Das charakteristische Polynom</p>
+<div class=math>
+$$
+    \left|R(G-I)-\lambda I\right| = a_0\lambda^n + a_1\lambda^{n-1} +
+        \cdots + a_{n-1}\lambda + a_n
+$$
+</div>
+<p>hat die Koeffizienten</p>
+<div class=math>
+$$
+\eqalign{
+    a_1 &= - \sum_{1\le i\le n} \left(R(G-I)\right)_i^i = - \sum_{1\le i\le n} r_i (G-I)_i^i, \cr
+    a_2 &= + \sum_{i_1\lt i_2} \left(R(G-I)\right)_{i_1i_2}^{i_1i_2} =
+        + \sum_{i_1\lt i_2} r_{i_1} r_{i_2} (G-I)_{i_1i_2}^{i_1i_2}, \cr
+    a_3 &= - \sum_{i_1\lt i_2\lt i_3} r_{i_1} r_{i_2} r_{i_3} (G-I)_{i_1i_2i_3}^{i_1i_2i_3}, \cr
+    \vdots & \qquad\qquad\vdots\cr
+    a_n &= (-1)^n r_1 r_2 \ldots r_n \left|G-I\right|.
+}
+$$
+</div>
+<p>Nach dem Stabilitätskriterium von Liénard/Chipart ist aber
+abwechselnde Positivität geeigneter $a_i$ vonnöten.
+Dies lässt sich durchbrechen, falls $(G-I)_i^i=0$ $\forall i$, oder
+$(G-I)_{i_1i_2}^{i_1i_2}=0$ $\forall i_1&lt;i_2$, oder
+$(G-I)_{i_1i_2i_3}^{i_1i_2i_3}=0$ $\forall i_1&lt;i_2&lt;i_3$, oder
+$\ldots$ $\left|G-I\right|=0$ ist.
+    ☐</p>
+<p>Es ist nun leicht möglich auf den nichtlinearen Fall zu verallgemeinern.
+Benutzt man das Verfahren $x^{\nu+1}=g(x^\nu)$ so ist ganz
+entsprechend wie im linearen Falle, die $R$-Extrapolation</p>
+<div class=math>
+$$
+    x^{\nu+1} = Rg(x^\nu) + (I-R)x^\nu.
+$$
+</div>
+<p><a href="https://www.researchgate.net/publication/26534745_%27Multiparameter_Extrapolation_and_Deflation_Methods_for_Solving_Equation_Systems%27">Hughes Hallett (1984)</a> zeigt nun ganz analog:</p>
+<p><strong>4. Satz:</strong>  (1) Für die oben angegebene $R$-Extrapolation ist es
+nicht immer möglich eine reelle Diagonalmatrix $R$ zu finden, der Gestalt,
+daß das resultierende Verfahren dann konvergent ist.</p>
+<p>(2) Dennoch ist es grundsätzlich möglich eine Nichtdiagonalmatrix zu finden,
+so, daß das Verfahren für einen Startwert, der nahe genug an der gewünschten
+Lösung liegt, konvergiert.</p>
+<p>(3) Weiterhin ist es möglich eine Folge von Matrizen zu bestimmen, derart,
+daß das Verfahren für beliebige Funktionen $g({}\cdot{},{}\cdot{})$
+konvergiert.</p>
+<p>Der Beweis wird durch eine Linearisierung auf den vorhergehenden Satz
+zurückgespielt.</p>
+<p>Es sind nun diese Ergebnisse mit den Vorbereitungen von oben,
+die ein zusätzliches Licht auf das Konvergenzversagen des modifizierten
+Newton-Verfahrens werfen.
+Dies komplementiert auch die Beobachtungen von
+<a href="https://epubs.siam.org/doi/epdf/10.1137/0901005">Shampine (1980)</a>,
+welcher nicht generelle Konvergenzunmöglichkeiten in Erwägung zog, sondern
+seine Überlegungen auf den Konvergenztest fokussierte.
+<a href="https://www.researchgate.net/profile/Lawrence-Shampine">Lawrence F. Shampine</a>.</p>
+<p><a href="https://epubs.siam.org/doi/epdf/10.1137/0901005">Shampine (1980)</a> zitiert als experimentelle
+Stütze den Aufsatz von <a href="https://digital.library.unt.edu/ark:/67531/metadc282956/m2/1/high_res_d/metadc282956.pdf">Byrne/Hindmarsh/Jackson/Brown (1977)</a>,
+in dem deutlich wird, daß das modifizierte Newton-Verfahren in den beiden
+Programmen GEAR und EPISODE, bei Verwendung der Richtungsableitung der
+Funktion $f$ als Näherung für die Diagonalelemente der Jacobimatrix $J$,
+nicht mehr zufriedenstellend arbeitet.
+Autoren: <a href="https://dl.acm.org/profile/81408591860">Byrne, George D.</a>,
+<a href="https://history.siam.org/pdfs2/Hindmarsh_returned_%20SIAM_copy.pdf">Hindmarsh, Alan C. (*1942)</a>,
+<a href="https://www.cs.toronto.edu/~krj/">Jackson, Kenneth R.</a>,
+Brown, H. Gordon.
+Shampine (1980)](<a href="https://epubs.siam.org/doi/epdf/10.1137/0901005">https://epubs.siam.org/doi/epdf/10.1137/0901005</a> schreibt:</p>
+<blockquote>
+<p>Regardless of the Jacobian approximation, if the convergence test is
+reliable, the codes should deliver a good solution to the problem.
+Of course the <em>efficiency</em> is affected, but the <em>accuracy</em>
+of the results should not be. … it appears that the convergence
+test is unreliable, and that the potential unreliability can sometimes
+be exhibited as the result of a very poor approximate Jacobian.</p>
+</blockquote>
+<p>Hierbei ist zu beachten, daß die Programme meistens maximal dreimal
+iterieren und damit lediglich drei Tests zur Erkennung von Divergenz
+durchgeführt werden.
+In dem Programm SYMPOL,
+zur Lösung von polynomialen nichtlinearen Gleichungssytemen, beispielsweise,
+wird bis zu 25-mal iteriert.
+In dem <a href="https://dl.acm.org/doi/pdf/10.1145/355887.355898">Programm BRENTM</a> zur Lösung allgemeiner nichtlinearer
+Gleichungssysteme wird maximal 50-mal iteriert.
+Das Programm COLNEW iteriert pro Gitter nicht mehr
+als 40-mal.</p>
+<h2>3. Die Experimente von Byrne/Hindmarsh/Jackson/Brown<a id=byrnehindmarsh></a></h2>
+<p>Das an anderer Stelle angegebene zweidimensionale
+Differentialgleichungsproblem P3 von
+<a href="https://digital.library.unt.edu/ark:/67531/metadc282956/m2/1/high_res_d/metadc282956.pdf">Byrne/Hindmarsh/Jackson/Brown (1977)</a>,
+welches seinen Ursprung in der chemischen Kinetik hat, wurde nun
+von Byrne, Hindmarsh, Jackson und Brown mit den verschiedensten
+Parametereinstellungen der beiden Programme GEAR und EPISODE ausgetestet.
+Die dabei gewonnenen Erfahrungen und Ergebnisse sind für die weitere
+Analyse sehr wertvoll.
+Daher soll dieses Beispiel kurz näher untersucht und interpretiert werden.
+Die folgenden Daten wurden gemessen bei dem Problem P3.</p>
+<table>
+<thead>
+<tr>
+<th>$\varepsilon$</th>
+<th>code</th>
+<th><em>T</em></th>
+<th></th>
+<th>$\Vert y-Y\Vert$</th>
+<th></th>
+<th>nst</th>
+<th>${\rm nfe\over nst}$</th>
+<th>nfe</th>
+<th>nje</th>
+<th>${\rm nst\over nje}$</th>
+<th>$J$-CPU</th>
+<th>$%T$</th>
+<th>$f$-CPU</th>
+<th>%<em>T</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$10^{-3}$</td>
+<td>E21</td>
+<td>2.33</td>
+<td></td>
+<td>1.89</td>
+<td></td>
+<td>4428</td>
+<td>1.8</td>
+<td>7979</td>
+<td>859</td>
+<td>5.2</td>
+<td>0.0904</td>
+<td>4</td>
+<td>0.389</td>
+<td>17</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E22</td>
+<td>2.37</td>
+<td></td>
+<td>3.70</td>
+<td></td>
+<td>4418</td>
+<td>1.8</td>
+<td>7884</td>
+<td>845</td>
+<td>5.2</td>
+<td>0.159</td>
+<td>7</td>
+<td>0.384</td>
+<td>16</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E23</td>
+<td>1.92</td>
+<td></td>
+<td>1120</td>
+<td></td>
+<td>4337</td>
+<td>1.7</td>
+<td>7350</td>
+<td>893</td>
+<td>4.9</td>
+<td>0</td>
+<td>0</td>
+<td>0.358</td>
+<td>19</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G13</td>
+<td>2.74</td>
+<td></td>
+<td>2520</td>
+<td></td>
+<td>11681</td>
+<td>1.1</td>
+<td>13087</td>
+<td>1362</td>
+<td>8.6</td>
+<td>0</td>
+<td>0</td>
+<td>0.638</td>
+<td>23</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G21</td>
+<td>2.25</td>
+<td></td>
+<td>1.67</td>
+<td></td>
+<td>5619</td>
+<td>1.6</td>
+<td>9145</td>
+<td>751</td>
+<td>7.5</td>
+<td>0.0790</td>
+<td>4</td>
+<td>0.446</td>
+<td>20</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G22</td>
+<td>2.30</td>
+<td></td>
+<td>1.44</td>
+<td></td>
+<td>5573</td>
+<td>1.7</td>
+<td>9390</td>
+<td>754</td>
+<td>7.4</td>
+<td>0.142</td>
+<td>6</td>
+<td>0.458</td>
+<td>20</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G23</td>
+<td>1.45</td>
+<td></td>
+<td>11400</td>
+<td></td>
+<td>4532</td>
+<td>1.5</td>
+<td>6578</td>
+<td>662</td>
+<td>6.8</td>
+<td>0</td>
+<td>0</td>
+<td>0.321</td>
+<td>22</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$10^{-6}$</td>
+<td>E21</td>
+<td>5.18</td>
+<td></td>
+<td>9.22</td>
+<td></td>
+<td>10507</td>
+<td>1.6</td>
+<td>16594</td>
+<td>1263</td>
+<td>8.3</td>
+<td>0.133</td>
+<td>3</td>
+<td>0.809</td>
+<td>16</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E22</td>
+<td>5.33</td>
+<td></td>
+<td>22.2</td>
+<td></td>
+<td>10610</td>
+<td>1.6</td>
+<td>16903</td>
+<td>1337</td>
+<td>7.9</td>
+<td>0.251</td>
+<td>5</td>
+<td>0.824</td>
+<td>15</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E23</td>
+<td>5.67</td>
+<td></td>
+<td>2190</td>
+<td></td>
+<td>13075</td>
+<td>1.6</td>
+<td>21099</td>
+<td>2715</td>
+<td>4.8</td>
+<td>0</td>
+<td>0</td>
+<td>1.03</td>
+<td>18</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G21</td>
+<td>5.75</td>
+<td></td>
+<td>5.32</td>
+<td></td>
+<td>14992</td>
+<td>1.5</td>
+<td>22919</td>
+<td>1579</td>
+<td>9.5</td>
+<td>0.166</td>
+<td>3</td>
+<td>1.12</td>
+<td>19</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G22</td>
+<td>5.95</td>
+<td></td>
+<td>4.68</td>
+<td></td>
+<td>14984</td>
+<td>1.6</td>
+<td>23229</td>
+<td>1571</td>
+<td>9.5</td>
+<td>0.295</td>
+<td>5</td>
+<td>1.13</td>
+<td>19</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G23</td>
+<td>4.77</td>
+<td></td>
+<td>3360</td>
+<td></td>
+<td>15187</td>
+<td>1.5</td>
+<td>22304</td>
+<td>2129</td>
+<td>7.1</td>
+<td>0</td>
+<td>0</td>
+<td>1.09</td>
+<td>23</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$10^{-9}$</td>
+<td>E21</td>
+<td>16.9</td>
+<td></td>
+<td>74.2</td>
+<td></td>
+<td>31282</td>
+<td>1.3</td>
+<td>41622</td>
+<td>2465</td>
+<td>12.7</td>
+<td>0.259</td>
+<td>2</td>
+<td>2.03</td>
+<td>12</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E22</td>
+<td>17.1</td>
+<td></td>
+<td>50.3</td>
+<td></td>
+<td>31413</td>
+<td>1.3</td>
+<td>41794</td>
+<td>2532</td>
+<td>12.4</td>
+<td>0.476</td>
+<td>3</td>
+<td>2.04</td>
+<td>12</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>E23</td>
+<td>18.7</td>
+<td></td>
+<td>4310</td>
+<td></td>
+<td>39078</td>
+<td>1.4</td>
+<td>55623</td>
+<td>6304</td>
+<td>6.2</td>
+<td>0</td>
+<td>0</td>
+<td>2.71</td>
+<td>14</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G21</td>
+<td>16.7</td>
+<td></td>
+<td>24.4</td>
+<td></td>
+<td>41058</td>
+<td>1.4</td>
+<td>56423</td>
+<td>3581</td>
+<td>11.5</td>
+<td>0.377</td>
+<td>2</td>
+<td>2.75</td>
+<td>16</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G22</td>
+<td>17.4</td>
+<td></td>
+<td>26.8</td>
+<td></td>
+<td>40963</td>
+<td>1.4</td>
+<td>56513</td>
+<td>3613</td>
+<td>11.3</td>
+<td>0.679</td>
+<td>4</td>
+<td>2.76</td>
+<td>16</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>G23</td>
+<td>14.4</td>
+<td></td>
+<td>3840</td>
+<td></td>
+<td>42199</td>
+<td>1.4</td>
+<td>56990</td>
+<td>4358</td>
+<td>9.7</td>
+<td>0</td>
+<td>0</td>
+<td>2.78</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+<p>Dabei bezeichnet $T$ die Gesamtrechenzeit auf einer Rechenanlage vom
+Typ ^{IBM 370/195} in doppelter Genauigkeit.
+Der Eintrag <em>code</em> bezeichnet
+welches Programm, mit welcher Parametereinstellung benutzt wurde.
+Hierbei deuten die beiden letzten Ziffern den Wert von <code>mf</code> an.
+Beispielsweise wurde bei E21 das Programm EPISODE mit der
+Parametereinstellung <code>mf=21</code> benutzt.
+Der durch beiderseitige Einrahmung hervorgehobene Eintrag
+$\|y-Y\|$ kennzeichnet den globalen Fehler, der begangen wurde.
+<em>nstep</em> gibt die Anzahl der Schritte an zur Vollendung der Integration.
+<em>nfe</em> gibt die Anzahl der Funktionsauswertungen an, und
+der Bruch $\hbox{nfe}\over\hbox{nst}$ gibt an, wieviele Funktionsauswertungen pro
+Schritt getätigt wurden.
+Schließlich wird durch <em>nje</em> die Anzahl der Jacobimatrixauswertungen
+angezeigt.
+Der Bruch $\hbox{nst}\over\hbox{nje}$ zeigt an, über wieviele Schritte im Mittel die
+Jacobimatrix konstant gelassen wurde.
+$J$-CPU bedeutet, wieviel Rechenzeit verbraucht wurde zur Ausführung des
+Unterprogrammes <code>pset</code> und aller Routinen, die dieses Unterprogramm selbst
+aufruft.
+Die sich hieran direkt anschließende Spalte $%T$ gibt den prozentualen
+Anteil an der Gesamtrechenzeit wieder.
+&quot;$f$-CPU&quot; offenbart die Gesamtrechenzeit, die zur Funktionsauswertung benötigt
+wurde, allerdings ohne die Zeit zur numerischen Approximation der
+Jacobimatrix.
+Die sich ebenfalls direkt rechts daneben anschließende letzte Spalte
+gibt den prozentualen Anteil am Gesamtrechenzeitbedarf an.</p>
+<p>Der Eingabeparameter <code>mf</code> besteht stets aus zwei Ziffern.
+Die erste Ziffer ist immer aus $\{1,2\}$, wobei 1 das Adams-Verfahren
+anwählt und 2 die BDF anzeigt.
+Die zweite Ziffer ist immer aus $\{0,1,2,3,4,5\}$.
+Für die obige Tabelle sind nur wichtig die Ziffern 1, 2 und 3.
+Zur Vollständigkeit seien jedoch alle Ziffern kurz erläutert.
+Es sei erwähnt, daß die beiden letzten Ziffern 4 und 5 noch nicht in den
+beiden Programmen GEAR und EPISODE zur Verfügung standen, sondern erst
+in der späteren Version <a href="https://computing.llnl.gov/projects/odepack/software">LSODE</a> und den entsprechenden Modifikationen
+dieses Programmes.
+Dennoch, da an anderer Stelle, nämlich bei der Beschreibung von <a href="https://www.netlib.org/alliant/ode/prog/lsoda.f">LSODA</a> und
+<a href="https://www.netlib.org/alliant/ode/prog/lsodar.f">LSODAR</a>, kurz nocheinmal diese unterschiedlichen Paramtereinstellungen zur
+Sprache kommen, seien hier sämtliche Einstellungen aufgelistet.</p>
+<p><strong>0:</strong> Fixpunktiteration. Es wird keine Jacobimatrix ausgewertet und
+vom Benutzer muß auch keine Routine hierfür bereitgestellt werden.</p>
+<p><strong>1:</strong> Modifiziertes Newton Verfahren mit einer vollen Jacobimatrix.
+Diese Matrix muß vom Benutzer durch ein separat programmiertes
+Unterprogramm dem Programm zur Verfügung gestellt werden.
+Ob diese Matrix tatsächlich die passende Jacobimatrix $J$ zur
+Funktion $f$ ist, wird nicht überprüft.</p>
+<p><strong>2:</strong> Wie 1, jedoch wird die Jacobimatrix intern durch numerische
+Differentiation berechnet.
+Diese Einstellung ist für den Benutzer wesentlich bequemer und einfacher.
+Bei großen Differentialgleichungen ist diese Einstellung jedoch
+i.a. nicht so effizient, wie diejenige bei 1.</p>
+<p><strong>3:</strong> Diagonalapproximation der Jacobimatrix.
+Diese Paramter-Einstellung ist sehr speicherplatzökonomisch.
+Bei der Diagonalapproximation handelt es sich nicht wirklich um eine
+Diagonal_approximation_, sondern es wird lediglich eine
+gewichtete Richtungsableitung der Funktion $f$ zur Newton Iteration
+herangezogen.</p>
+<p><strong>4:</strong> Modifiziertes Newton-Verfahren mit einer vom Benutzer
+bereitgestellten Bandmatrix.
+Diese Matrix muß wie bei der Parameter-Einstellung 1 durch ein
+getrenntes Unterprogramm bereitgestellt werden, und wie bei 1 wird
+diese Matrix nicht überprüft.</p>
+<p><strong>5:</strong> Wie 4, nur wird hier die Bandmatrix durch numerische
+Differentiation ermittelt.
+Dies ist erneut für den Benutzer die bequemste und einfachste Art die
+Jacobimatrix zu spezifizieren.</p>
+<p>Die Interpretation der oben angegebenen Tabelle ist nun wie folgt.
+Durchschnittlich werden von GEAR über alle Parametereinstellungen
+betrachtet, durchschnittlich 1.5 Funktionsauswertungen pro Schritt
+durchgeführt (Standardabweichung unter 0.2), und für EPISODE ergibt sich
+hier der Wert 1.6 (Standardabweichung ebenfalls unter 0.2).
+Dies heißt, daß beide Programme zu einem großem Teil im $PEC$-Modus
+arbeiten.
+Ferner bedeutet dies, daß eine Konvergenzrate sehr häufig nicht gebildet
+werden kann und somit die Konvergenzrate aus einem vergangenen
+Schritt genommen wird, bei dem Konvergenztest in beiden Programmen.</p>
+<p>Der Rechenzeitanteil der Funktionsauswertungen an der Gesamtrechenzeit
+liegt bei dem Programm GEAR bei durchschnittlich 20% (Standardabweichung
+unter 3%) und für EPISODE bei durchschnittlich 15% (Standardabweichung
+ebenso unter 3%).
+Diese Zahlen sind für ein Mehrschrittverfahren mit variabler
+Schrittweite und variabler Ordnung nicht ungewöhnlich.
+Für das Programm TENDLER ergeben sich Zahlen ähnlicher Größenordnung.</p>
+<p>Für die Strategien bei der Neuauswertung der Jacobimatrix $J$ ergibt sich
+das folgende Bild.
+Das Programm GEAR wartet im Mittel ungefähr 9 Schritte, bevor die
+Jacobimatrix neu ausgewertet wird (Standardabweichung unter 2 Schritten),
+während hingegen das Programm EPISODE im Mittel rund 8 Schritte wartet
+(Standardabweichung: ca. 3 Schritte).
+Erwartungsgemäß wird bei schärferer Genauigkeitsanforderung $\varepsilon$
+länger gezögert, bis eine Neuauswertung vorgenommen wird, da ja die
+gewählten Schrittweiten naturgemäß kleiner sind und damit die
+Iterationsmatrix $W=I-h\gamma J$ sich nicht so stark ändert.
+Die Neuberechnung der Jacobimatrix $J$ wird ja entscheidend im
+Hindmarsh-Test gesteuert und beeinfußt, weniger durch Konvergenzversagen.</p>
+<p>Auffällig an den angegebenen Daten in der Tabelle sind nun die
+eingerahmten globalen Fehler $\|y-Y\|$.
+Bei der Wahl des Eingabesteuerungsparameters <code>mf=23</code> für beide
+Programme, also GEAR und sowohl auch EPISODE, ergeben sich deutlich
+auffallende, ungewöhnlich große Fehler.
+Für die Wahl <code>mf=13</code> für das Programm GEAR gelten die Bemerkungen analog.
+Hierzu bemerken Byrne, Hindmarsh, Jackson und Brown:</p>
+<blockquote>
+<p><code>mf=23</code> does not control the error well for this problem for either code.</p>
+</blockquote>
+<p>Im Lichte der oben vorbereiteten Bemerkungen ist dies nicht mehr so
+überraschend.
+Es sind diese Gründe, die bewogen ein Iterationsverfahren mit
+Diagonalapproximation der Jacobimatrix nicht in das Programm
+TENDLER mit aufzunehmen.
+Insbesondere wird beim Schalten nicht zwischen modifizierter
+Newton-Kantorovich Iteration und Newton-Jacobi Iteration hin und her
+gewechselt, sondern lediglich zwischen modifiziertem
+Newton-Kantorovich Iteration und Picard Iteration.</p>
+<p>Denkbar wäre, die Diagonalelemente von $J$ weiterzubenutzen, bei einem
+Wechsel der Iterationsart, also Verwendung des modifizierten
+Newton-Jacobi Verfahrens, siehe <a href="https://www.amazon.com/Numerical-Analysis-Classics-Applied-Mathematics/dp/0898712505">Ortega (1972)</a>.
+<a href="https://www.researchgate.net/publication/303335517_Type-insensitive_ode_codes_based_on_implicit_aa-stable_formulas">Lawrence Shampine (1982)</a> schlägt dies ebenso vor.
+Er bemerkt hierzu:</p>
+<blockquote>
+<p>We propose using simple iteration until the first
+Jacobian is formed and thereafter using Jacobi-iteration.</p>
+</blockquote>
+<p>Autoren: <a href="https://www.researchgate.net/profile/Lawrence-Shampine">Lawrence F. Shampine</a>,
+<a href="https://www.encyclopedia.com/arts/culture-magazines/ortega-james-m">James M. Ortega (*1932)</a>.</p>
+<p>Dennoch, die $n$ Divisionen, $n$ Multiplikationen und $n$ Additionen
+und die zusätzlichen Speicherstellen sind zu bedenken.
+Das Programm LSODA bietet dem Benutzer nicht mehr an, entgegen den
+Offerierungen beim Programm LSODE, die Jacobimatrix durch eine
+Diagonalapproximation zu ersetzen.
+Bei einfach auszuwertenden Funktionen ist es vorteilhafter
+Picard Iteration zu verwenden, als ältere Informationen aus den
+Diagonalelementen der Jacobimatrix, ja sogar letztlich nur ältere
+Informationen aus mehr oder minder guten Näherungen für diese
+Diagonalelemente.
+In dem Programm von <em>{Suleiman, M.B.}</em>{Hall, George}Suleiman/Hall (1985)
+wird insoweit besonderer Gebrauch von den Diagonalelementen der
+Jacobimatrix $J$ gemacht, als daß die Spur der Jacobimatrix mit zum Schalten
+herangezogen wird.
+Das Programm TENDLER benutzt diese Informationen nicht.
+Bei Diagonaldominanz ergibt sich offensichtlich sofort ein Vorteil, bei
+der Benutzung des modifizierten Newton-Jacobi Verfahrens.</p>
+<p>Es ist der zusätzliche Speicherbedarf und die Unsicherheit des Vorteils,
+die bewogen keinen Gebrauch der modifizierten Newton-Jacobi Iteration
+zu machen.
+Vom Speicherplatz sind zyklische lineare Verfahren einstufigen linearen
+Verfahren in linearen Termen der Dimension der Differentialgleichung
+_unterlegen:, da ja für jede Stufe eine geeignete Differenzentabelle
+bereit gehalten werden muß.
+Beispielsweise beträgt der lineare Anteil des Speichers für die drei
+Programme LSODA, STINT und TENDLER:</p>
+<table>
+<thead>
+<tr>
+<th>TENDLER</th>
+<th>STINT</th>
+<th>LSODA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$37n$ bzw. $42n$</td>
+<td>$41n$</td>
+<td>$11n$</td>
+</tr>
+</tbody>
+</table>
+<p>Angeführt ist hier jeweils der Speicherplatzbedarf, falls die
+Höchstordnung auf 5 begrenzt wird.
+Dies liegt daran, daß die Programme LSODE, LSODA und LSODAR im steifen Modus
+maximal die BDF5 verwenden können.
+Die BDF6 wird aufgrund ihres kleinen Widlund-Winkels nicht in diesen
+Programmen benutzt.
+Die BDF$i$ ($i&gt;6$) sind nicht $D$-stabil.
+Die zyklischen Verfahren von J.M. Tendler sind hingegen bis zur Ordnung 7
+einsetzbar.
+Das Programm TENDLER lässt sich leicht dahingehend modifizieren, daß
+nur noch $37n$ Speicherzellen benutzt werden.
+Allerdings sind dann unter gewissen Umständen, während der
+Schrittweiten- und Ordnungssteuerung, Doppelberechnungen durchzuführen.
+Diese Doppelberechnungen müssen im Programm STINT auf jeden Fall
+durchgeführt werden.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Divergenz+der+Korrektoriteration%3A+Theorie+und+Experimente%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Divergenz+der+Korrektoriteration%3A+Theorie+und+Experimente&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente&amp;title=Divergenz+der+Korrektoriteration%3A+Theorie+und+Experimente" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Divergenz+der+Korrektoriteration%3A+Theorie+und+Experimente&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Divergenz+der+Korrektoriteration%3A+Theorie+und+Experimente%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#Hughes+Hallett>Hughes Hallett</a>, <a href=/aux/tags/#Shampine>Shampine</a>, <a href=/aux/tags/#Korrektoriteration>Korrektoriteration</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2024">Index for the year 2024.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 172.95 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

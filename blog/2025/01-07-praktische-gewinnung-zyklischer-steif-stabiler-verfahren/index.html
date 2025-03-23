@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Praktische Gewinnung zyklischer, steif-stabiler Verfahren - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2025-01-07 13:50:00">7th January 2025</time>, 48 min read</p>
+<h1>Praktische Gewinnung zyklischer, steif-stabiler Verfahren</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">eklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren</a>.</p>
+<br>
+<ul>
+<li><a href="#DefStabEig">1. Definition von Stabilitätseigenschaften</a></li>
+<li><a href="#Schreibweise">2. Schreibweise zusammengesetzter Mehrschrittformeln</a></li>
+<li><a href="#StabPoly">3. Stabilität und Polynome</a></li>
+<li><a href="#Verschaerfung">4. Verschärfung von Stabilitätsdefinitionen</a></li>
+<li><a href="#Konstruktion">5. Konstruktive Herleitung steif-stabiler zyklischer Formeln</a></li>
+<li><a href="#Basisformeln">6. Basisformeln der Tendlerschen Zyklen</a></li>
+<li><a href="#Aequilibrierung">7. Äquilibrierung von Formeln</a></li>
+</ul>
+<p>In diesem Text werden die theoretischen Grundlagen, die u.a. zu den
+zyklischen Verfahren von Tendler (1973) führten, angeschnitten.
+Es werden die Begriffe $A[\alpha]$- und $S[\delta]$-Stabilität
+eingeführt.
+Die naheliegenden weiteren Definitionen von $A_\infty^r[\alpha]$-
+und $S_\infty^r[\delta]$-Stabilität werden ebenso diskutiert.
+Diese Definitionen weichen gelegentlich von den Definitionen ab, wie sie in
+der Literatur zu finden sind.
+Die Begriffe $A_\infty^r[\alpha]$- und $S_\infty^0[\delta]$-Stabilität werden
+hier nur so benutzt, wie sie an dieser Stelle erklärt werden.
+Diese Stabilitätsmerkmale ermöglichen einen Vergleich verschiedener
+Verfahren gleicher Ordnung und damit eine Abschätzung über ihre
+Brauchbarkeit bei einem Einsatz in einem Programmpaket.
+Dennoch setzen diese Stabilitätsdefinitionen gewisse idealisierte
+Bedingungen voraus.
+Aus diesem Grunde ist es ratsam, ihnen nicht unangemessen großes Gewicht
+beizumessen.
+Erfüllt also ein Verfahren diese Eigenschaft besonders “gut”, so heißt dies
+nicht automatisch, daß es sich in einem Rechenprogramm auch immer “gut”
+verhalten würde.</p>
+<p>Schließlich wird dargelegt, wie die neuen zyklischen Formeln generiert
+wurden.
+Das letzte ist von Interesse, wenn versucht werden sollte, die von
+J.M. Tendler gefundenen Formeln weiter zu verbessern.
+Von seinen prinzipiellen Grundbestandteilen her sind die Tendlerschen
+Zyklen vergleichsweise einfach aufgebaut, nämlich als lineares
+Komposituum linear unabhängiger Mehrschrittformeln.
+Dennoch ist die tatsächliche Erzeugung, insbesondere die systematische
+Generierung nicht ganz einfach.
+Es handelt sich hier nicht um einen einfach erlernbaren Kalkül, sondern um
+einen iterativen Suchvorgang.</p>
+<p>Bibliographisch: Tendler, Joel Marvin: &quot;A Stiffly Stable
+Integration Process Using Cyclic Composite Methods&quot;,
+Ph.D. Diss., Syracuse University, Syracuse, New York,
+26.Feb.1973, <em>viii</em>+<em>iv</em>+172 S.</p>
+<h2>1. Definition von Stabilitätseigenschaften<a id=DefStabEig></a></h2>
+<blockquote>
+<p>$\ldots$ wird sich diese Störung allerdings erst später einstellen,
+aber auf alle Fälle wird die Integration nach ausreichend
+vielen Schritten gründlich verpfuscht.
+Man nennt diese Erscheinung <em>numerische Instabilität</em>.
+Sie ist nicht etwa eine Folge der Akkumulation von Rundungsfehlern,
+denn die Formel beschreibt den Integrationsprozeß unter der Annahme,
+daß vollständig exakt gerechnet wird.</p>
+<p><a href="https://de.wikipedia.org/wiki/Eduard_Stiefel">Eduard Stiefel</a> (1968)</p>
+</blockquote>
+<p>Ausschließlich Differentialgleichungen vom Typ</p>
+<div class=math>
+$$
+    \dot y = f(t,y), \quad\hbox{mit dem Anfangswert}\quad
+    y(t_0) = y_0
+$$
+</div>
+<p>werden hier betrachtet.
+Es sei für diesen und alle weiteren Abschnitte
+angenommen, daß $f$ und damit $y$ so oft differenzierbar sind, wie
+es für die jeweilige Betrachtung nötig ist.
+Es wird nun $t_n=t_0+nh$ gesetzt, und $y_n$ bezeichnet die berechneten
+Näherung für $y(t_n)$, für $n=m\ell+j$ und $j=1,\ldots,\ell$, die durch
+die folgenden $\ell$ Mehrschrittformeln bestimmt wurden</p>
+<div class=math>
+$$
+    \sum_{j=-k+1}^{\ell} \left(
+      \alpha_{ij}y_{m\ell+j}  -  h\beta_{ij}\dot y_{m\ell+j}
+    \right) = 0, \qquad i=1,\ldots,\ell,
+$$
+</div>
+<p>wobei $\dot y_i = f(t_i,y_i)$ ist.</p>
+<p>Ausführlich aufgeschrieben lautet der obige Ausdruck z.B. für ein
+dreistufiges Verfahren mit drei Startwerten, also $\ell=3$, und $k=3$, wie
+untenstehend.
+Hier und im weiteren wird häufig die Abkürzung $z_i=hf_i=h\dot y_i$
+benutzt.</p>
+<div class=math>
+$$
+\eqalignno{
+      &
+    \alpha_{1,-2}y_{3m-2}+\alpha_{1,-1}y_{3m-1}+\alpha_{10}y_{3m}+
+    \alpha_{11}y_{3m+1}+\alpha_{12}y_{3m+2}+\alpha_{13}y_{3m+3}
+      \cr = &
+    \beta_{1,-2}z_{3m-2}+\beta_{1,-1}z_{3m-1}+\beta_{10}z_{3m}+
+    \beta_{11}z_{3m+1}+\beta_{12}z_{3m+2}+\beta_{13}z_{3m+3} \cr
+    &
+    \alpha_{2,-2}y_{3m-2}+\alpha_{2,-1}y_{3m-1}+\alpha_{20}y_{3m}+
+    \alpha_{21}y_{3m+1}+\alpha_{22}y_{3m+2}+\alpha_{23}y_{3m+3}
+      \cr = &
+    \beta_{2,-2}z_{3m-2}+\beta_{2,-1}z_{3m-1}+\beta_{20}z_{3m}+
+    \beta_{21}z_{3m+1}+\beta_{22}z_{3m+2}+\beta_{23}z_{3m+3} \cr
+      &
+    \alpha_{3,-2}y_{3m-2}+\alpha_{3,-1}y_{3m-1}+\alpha_{30}y_{3m}+
+    \alpha_{31}y_{3m+1}+\alpha_{32}y_{3m+2}+\alpha_{33}y_{3m+3}
+      \cr = &
+    \beta_{3,-2}z_{3m-2}+\beta_{3,-1}z_{3m-1}+\beta_{30}y_{3m}+
+    \beta_{31}z_{3m+1}+\beta_{32}z_{3m+2}+\beta_{33}z_{3m+3}.\cr
+}   % Ende eqalign
+$$
+</div>
+<p>Der obige Ausdruck wird zyklisch, falls gilt</p>
+<div class=math>
+$$
+    \alpha_{ij} = 0 \quad\land\quad \beta_{ij} = 0 \qquad
+          (1\le i \lt  j \le \ell).
+$$
+</div>
+<p>Gälte $\alpha_{ij}\ne0$ oder $\beta_{ij}\ne0$ für ein $i&lt;j$, so wäre das
+zusammengesetzte Verfahren blockimplizit.
+Der Aufwand zur “Beseitigung” der Implizitheit der Formeln wäre dann größer
+als bei (einstufigen) linearen Mehrschrittformeln.</p>
+<p>Bei zyklischen Verfahren ist der Aufwand zur Berechnung der Näherungen nicht
+größer als wie bei Mehrschrittverfahren.
+Andererseits hat man jedoch nun die Möglichkeit, da nicht alle Stufen gleich
+gewählt werden müssen, Stabilitätseigenschaften zu erreichen die u.U. den
+Stufen überlegen sind.
+Die Stufen müssen untereinander nicht verschieden sein.
+Einige oder auch alle dürfen übereinstimmen.
+Praktische Ergebnisse deuten auf den merkwürdigen Umstand hin, daß die
+dreifache Wiederholung der BDF2 als zyklisches Verfahren entsprechend
+programmiert, gegenüber der dreifachen Anwendung von 3 Schritten mit der BDF2
+mit einem Programm konzipiert für einstufige Verfahren, Vorteile bieten kann.</p>
+<p>Während bis jetzt noch jede Stufe des Zykluses $2(k+i)$ Parameter, d.h. noch
+nicht bestimmte Koeffizienten, enthält, sei noch zusätzlich angenommen,
+um die die Anzahl der der Bedingungen zu reduzieren, daß gelte</p>
+<div class=math>
+$$
+    \alpha_{ij} = 0  \quad\land\quad \beta_{ij} = 0
+        \qquad (-k+i\gt j,\quad i=1,\ldots,\ell).  \tag{LMSV}
+$$
+</div>
+<p>D.h., daß jede Stufe ein lineares $k$-Schrittverfahren ist.
+Es verbleiben jetzt noch $2(k+1)$ Parameter.
+Aus Vereinfachungsgründen wird nun verlangt, daß jede Stufe die
+gleiche Konsistenzordnung $p=k$ hat.
+Berücksichtigt man die Konsistenzbedingungen, so verbleiben noch $k+1$ Parameter.
+Diese werden dazu benutzt die gewünschten Stabilitätseigenschaften des
+Verfahrens zu erreichen.</p>
+<p>Zur Untersuchung des Lösungsverhaltens der Differenzengleichung, welche
+man zur numerischen Lösung von Differentialgleichungen einsetzt,
+betrachtet man die sehr spezielle Testgleichung</p>
+<div class=math>
+$$
+    \dot y = \lambda y,   \qquad y(t_0) = y_0.
+$$
+</div>
+<p>Da man durch Linearisierung viele Differentialgleichung zumindestens in
+einer kleinen Umgebung auf diese obige Form zurückführen kann, liefert
+die Untersuchung dieser speziellen Gleichung einen ersten Eindruck was man
+wohl im allgemeineren Falle zu erwarten hat.
+Desweiteren kann man damit gewisse Ineffizienzen von Programmen verstehen
+und erklären.
+Zur Wiederholung seien in sehr salopper Form die beiden bekanntesten
+Stabilitätsdefinitionen angegeben:</p>
+<p>Eine Formel heißt <em>stabil</em>, wenn die sämtlichen berechneten
+Lösungen für $H=0$ nicht unbeschränkt wachsen können; $H=h\lambda$.</p>
+<p>Die Formel heißt <em>$A$-stabil</em>, wenn sämtliche berechneten Lösungen
+eine Nullfolge bilden, für alle $H\in\mathbb{C}^-$.
+Ausführlicher</p>
+<p><strong>1. Definition:</strong>  nach <a href="https://de.wikipedia.org/wiki/Germund_Dahlquist">Germund Dahlquist</a>, <a href="https://doi.org/10.1007/BF01963532">Dahlquist (1963)</a>.
+Ein lineares $k$-Schrittverfahren heißt $A$-stabil, falls alle Lösungen von</p>
+<div class=math>
+$$
+    \sum_{i=0}^k \alpha_i y_{n+i} = \sum_{i=0}^k \beta_i f_{n+i}
+$$
+</div>
+<p>gegen Null gehen ($n\to\infty$), wenn das Verfahren mit fester
+Schrittweite $h$ auf Differentialgleichungen der Form $\dot y=\lambda y$
+angewendet wird, mit einer festen komplexen Konstante $\lambda$, mit
+negativen Realteil.</p>
+<p>Die Beschränkung auf lineare $k$-Schrittverfahren ist unwesentlich.
+Die Beschäftigung mit <em>zyklischen</em> linearen Verfahren hat zu einem nicht
+unmaßgeblichen Teil ihren Ursprung in der <a href="https://de.wikipedia.org/wiki/Zweite_Dahlquist-Barriere">zweiten Dahlquist-Barriere</a>.
+Diese besagt, daß $A$-stabile, lineare Mehrschrittformeln keine beliebig
+hohe Ordnung erreichen können: maximal die Ordnung zwei.
+Durch die drastische Einschränkung der Vielfalt $A$-stabiler, linearer
+Mehrschrittverfahren werden zwei Erweiterungen nahegelegt:
+Abschwächung des Begriffes der $A$-Stabilität und Hinzufügung größerer
+Klassen von Verfahren.
+Zur Quantifizierung von Stabilitätseigenschaften einerseits und zur
+Abschwächung der $A$-Stabilität andererseits dienen die nachstehenden
+Definitionen.</p>
+<p><strong>2. Definition:</strong>  Bezeichne ${\cal S}[\delta]$ eine
+zusammenhängende und offene Teilmenge der komplexen Ebene mit dem Ursprung
+als Randpunkt, die mindestens einen unendlich großen Teil der linken
+Halbebene enthält mit Elementen $z$ der Form</p>
+<div class=math>
+$$
+    \mathop{\rm Re}\nolimits  z \lt  -\delta \le 0, \qquad \delta\ge0
+$$
+</div>
+<p>Nun heißt ein Verfahren $S[\delta]$-stabil, falls so eine
+Menge ${\cal S}[\delta]$ existiert derart, daß wenn man das Verfahren auf
+die lineare und zeitinvariante Differentialgleichung $\dot y=\lambda y$
+anwendet, die mit dem Verfahren berechneten Lösungen $y_n$ gegen Null
+streben, wenn $n\to\infty$, für eine feste positive Schrittweite $h$, falls
+immer $\lambda h=H \in {\cal S}[\delta]$.
+Existiert kein unendlich großer Bereich der linken Halbebene, so werde von
+<em>nicht</em> $S[\delta]$-stabil gesprochen.
+Im Falle der Existenz heißt das betragsmässig kleinste $\delta$ die
+<em>Widlund-Distanz</em>, nach <a href="https://en.wikipedia.org/wiki/Olof_B._Widlund">Olof B. Widlund</a>.</p>
+<p>Diese Definition hat eine sehr anschauliche Interpretation, wenn man
+das Gebiet ${\cal S}[\delta]$ aufzeichnet.
+Von besonderem Interesse ist hier das betragsmässig kleinstmögliche $\delta$.
+Nur von diesem kleinstmöglichen $\delta$ wird im weiteren überhaupt
+noch die Rede sein.
+Gleiche Anschaulichkeit hat auch die folgende Definition.</p>
+<p><strong>3. Definition:</strong>  Sei ${\cal A}[\alpha]$ eine
+zusammenhängende und offene Teilmenge der komplexen Zahlenebene mit
+Elementen $z$ der Form</p>
+<div class=math>
+$$
+    \mathopen|\arg \{-z\}\mathclose| \lt  \alpha \le 90^\circ, \qquad \alpha\gt 0.
+$$
+</div>
+<p>Jetzt heißt das Verfahren $A[\alpha]$-stabil, wenn es w.o. eine
+derartige Menge ${\cal A}[\alpha]$ gibt derart, daß die berechneten
+Näherungen dieses Verfahren gegen Null streben, für $n\to\infty$, wenn man
+das Verfahren auf die Differentialgleichung $\dot y = \lambda y$ anwendet.
+Diese Abklingeigenschaft soll immer dann gelten, wenn
+$\lambda h=H \in {\cal A}[\alpha]$ gilt, für feste positive Schrittweite $h$.
+Für $\alpha\notin\left[0,90^\circ\right]$ werde von <em>nicht</em>
+$A[\alpha]$-stabil gesprochen.
+Im Falle der Existenz nennt man den größtmöglichen Winkel $\alpha$ auch den
+<em>Widlund-$\alpha$-Winkel</em>, ebenfalls nach
+<a href="https://en.wikipedia.org/wiki/Olof_B._Widlund">Olof B. Widlund</a>.</p>
+<p>In sinnfälliger Verallgemeinerung nennt man ein Verfahren $A[0]$-stabil,
+wenn es ein $\alpha$ gibt, sodaß das Verfahren $A[\alpha]$-stabil ist.
+${\cal A}[0]$ ist in $\mathbb{C}$ nicht offen.
+Wie die obige Definition kann man diese Eigenschaft wiederum
+sehr anschaulich deuten.
+Hier gilt je größer der Winkel $\alpha$, desto besser.
+Bei der vorherigen Definition galt je kleiner $\delta$, desto günstiger.
+Durch ein größeres $\alpha$, bzw. kleineres $\delta$, werden
+die entsprechenden Mengen ${\cal A}[\alpha]$,
+bzw. ${\cal S}[\delta]$, “größer”.</p>
+<p>Bei den beiden
+Defintionen beachte man, daß ${\cal S}[\delta]$ die Menge
+bezeichnet und $S[\delta]$ die dazugehörige Eigenschaft.
+Entsprechend gilt dies für ${\cal A}[\alpha]$ und $A[\alpha]$.
+Man stellt schnell fest, daß ein Verfahren stets $A[\alpha]$-stabil ist,
+für ein gewisses $\alpha(\delta)$, wenn es $S[\delta]$-stabil ist.
+Die Umkehrung ist nicht notwendig richtig.
+Bei den noch folgenden Eigenschaften
+$A_{\infty}[\alpha]$ und $S_{\infty}[\delta]$ wird dies jedoch der Fall sein.
+Ist $\delta = 0$ oder $\alpha = 90^\circ$, so ist dies das gleiche wie
+$A$-Stabilität.
+Beide Werte führen zur selben Menge, nämlich der gesamten linken komplexen
+Halbebene ohne die imaginäre Achse.</p>
+<p><strong>4. Beispiele:</strong>  (1) Die impliziten BDF der Ordnung
+$p=1$ bis $p=6$ erfüllen
+mit gewissen $\alpha$ und $\delta$ die obigen Stabilitätseigenschaften.</p>
+<p>(2) Sämtliche zyklischen Verfahren von Tendler (1973), oder <a href="https://dl.acm.org/doi/pdf/10.1145/356502.356495">Tendler/Bickart/Picel (1978)</a> sind ebenfalls
+Beispiele für Verfahren, die $A[\alpha]$- bzw. $S[\delta]$-stabil sind.
+Zusätzlich sind die Formeln von Tendler auch $A_\infty^0[\alpha]$- und
+$S_\infty^0[\delta]$-stabil.
+(Definition folgt.)</p>
+<p>(3) Genauso sind auch alle zyklischen Formeln von
+<a href="https://www.researchgate.net/profile/Peter-Tischer-2">Peter E. Tischer</a> (1983) und
+Tischer/Sacks-Davis (1983) alle
+$A[\alpha]$- bzw. $S[\delta]$-stabil, sogar $A_\infty^0[\alpha]$- und
+$S_\infty^0[\delta]$-stabil.</p>
+<p>(4) Die 10 blockimpliziten Verfahren von
+<a href="https://doi.org/10.1007/BF01951938">Bickart/Picel (1973)</a>
+sind alle $A[\alpha]$- und $S[\delta]$-stabil, sogar $A_\infty^0[\alpha]$-
+und $S_\infty^0[\delta]$-stabil.</p>
+<p>(5) Explizite Verfahren mit konstanter Schrittweite erfüllen die
+obigen Eigenschaften nicht.
+Das explizite Euler-Verfahren mit konstanter Schrittweite ist also
+weder $A[\alpha]$- noch $S[\delta]$-stabil und zwar für
+kein $\alpha$ und kein $\delta$.</p>
+<p>Bibliographisch: Tischer, Peter E.: &quot;The Cyclic Use of Linear Multistep
+Formulas for the Solution of Stiff Differential Equations&quot;, Ph.D. Thesis,
+Department of Computer Science, Monash University, Clayton, Victoria,
+Australia, August 1983, <em>x</em>+180 S.</p>
+<p>Tischer, Peter E. und Sacks-Davis, Ron: &quot;<a href="https://doi.org/10.1137/0904051">A New Class of
+Cyclic Multistep Formulae for Stiff Systems</a>&quot;,
+SIAM Journal on Scientific and Statistical Computing,
+Vol 4, No 4, December 1983, pp.733—747.</p>
+<p>Bickart, Theodore A. und Picel, Zdenek:
+&quot;<a href="https://doi.org/10.1007/BF01951938">High Order Stiffly Stable Composite Multistep Methods for Numerical
+Integration of Stiff Differential Equations</a>&quot;, BIT, Vol 13, 1973,
+pp.272—286</p>
+<h2>2. Schreibweise zusammengesetzter Mehrschrittformeln<a id=Schreibweise></a></h2>
+<p><strong>1.</strong> Wann nun ein Verfahren diese Eigenschaften hat, wird durch sein
+<a href="https://de.wikipedia.org/wiki/Charakteristisches_Polynom">charakteristisches Polynom</a> bestimmt.
+Dieses Polynom in <em>zwei</em> komplexen Veränderlichen erhält man nun wie folgt.</p>
+<p>Den gesamten $\ell$-stufigen Zyklus</p>
+<div class=math>
+$$
+    \sum_{j=-k+1}^{\ell} \left[
+        \alpha_{ij}y_{m\ell+j}  -  h\beta_{ij}\dot y_{m\ell+j}
+    \right]
+    = 0,\qquad\hbox{für}\quad i=1,\ldots,\ell,
+$$
+</div>
+<p>kann man als eine einzige Matrixdifferenzengleichung notieren, nämlich</p>
+<div class=math>
+$$
+    \sum_{i=0}^\kappa \left[
+    A_i Y_{m+i}  -  h B_i \dot Y_{m+i} \right] = 0,
+    % \eqno \hbox{(Matrix)}
+$$
+</div>
+<p>mit $\kappa=\lceil k/\ell \rceil$.
+$\kappa$ ist hierbei die kleinste ganze Zahl, die größer oder
+gleich $k/\ell$ ist.
+Die insgesamt $\kappa+1$ Matrizen $A_i$, $B_i$ haben die Größe $\ell\times\ell$.
+Es genügen genau dann zwei Matrizen $A_1$ und $A_0$, bzw. $B_1$ und $B_0$,
+wenn $\kappa=1$ ist, also $k\le\ell$.</p>
+<p>Vergrößert man die Dimensionen der Matrizen $A_i$ und $B_i$ mit Hilfe von
+sogenannten Trivialstufen ($1=1$ Stufen), so läßt sich natürlich die Anzahl
+der Matrizen verringern, z.B. auf genau zwei, also $A_0$ und $A_1$,
+bzw. $B_0$ und $B_1$.
+Bei den zyklischen Verfahren von J.M. Tendler ist stets $\kappa\le2$,
+d.h. man kommt mit jeweils höchstens drei Matrizen zur Beschreibung der
+Matrixdifferenzengleichung aus.</p>
+<p><strong>2.</strong> Die Matrizen $A_i$ und $B_i$, für $i=0,\ldots,\kappa$ lauten:</p>
+<div class=math>
+$$
+    A_\kappa = \pmatrix{
+        \alpha_{11}    & \ldots & \alpha_{1\ell}\cr
+             \vdots    & \ddots & \vdots\cr
+        \alpha_{\ell1} & \ldots & \alpha_{\ell\ell}\cr
+    }, \quad
+    B_\kappa = \pmatrix{
+        \beta_{11}    & \ldots & \beta_{1\ell}\cr
+        \vdots        & \ddots & \vdots\cr
+        \beta_{\ell1} & \ldots & \beta_{\ell\ell}\cr
+    }, \quad
+    Y_{m+\kappa} = \pmatrix{y_{m\ell+1}\cr \vdots\cr y_{m\ell+\ell}},
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    A_{\kappa-1} = \pmatrix{
+        \alpha_{1,-\ell+1}    & \ldots & \alpha_{10}\cr
+        \vdots                & \ddots & \vdots\cr
+        \alpha_{\ell,-\ell+1} & \ldots & \alpha_{\ell0}\cr
+    }, \quad
+    B_{\kappa-1} = \pmatrix{
+        \beta_{1,-\ell+1}    & \ldots & \beta_{10}\cr
+        \vdots               & \ddots & \vdots\cr
+        \beta_{\ell,-\ell+1} & \ldots & \beta_{\ell0}\cr
+    }, \quad
+    Y_{m+\kappa-1} = \pmatrix{y_{m\ell-\ell+1}\cr \vdots\cr y_{m\ell}},
+$$
+</div>
+<p>beziehungsweise</p>
+<div class=math>
+$$
+    A_{\kappa-2} = \pmatrix{
+        \alpha_{1,-2\ell+1}    & \ldots & \alpha_{1,-\ell}\cr
+        \vdots                 & \ddots & \vdots\cr
+        \alpha_{\ell,-2\ell+1} & \ldots & \alpha_{\ell,-\ell}\cr
+    }, \quad
+    B_{\kappa-2} = \pmatrix{
+        \beta_{1,-2\ell+1}    & \ldots & \beta_{1,-\ell}\cr
+        \vdots                & \ddots & \vdots\cr
+        \beta_{\ell,-2\ell+1} & \ldots & \beta_{\ell,-\ell}\cr
+    }, \quad
+    Y_{m+\kappa-2} = \pmatrix{y_{m\ell-2\ell+1}\cr \vdots\cr y_{m\ell-\ell}\cr}
+$$
+</div>
+<p>und so weiter bis zu den Matrizen $A_0$, $B_0$ und Vektoren $Y_m$.
+Allgemein also</p>
+<div class=math>
+$$
+    A_i = \pmatrix{
+        \alpha_{1,(i-\kappa)\ell+1}    & \ldots & \alpha_{1,(i-\kappa)\ell+\ell}\cr
+        \vdots                         & \ddots & \vdots\cr
+        \alpha_{\ell,(i-\kappa)\ell+1} & \ldots & \alpha_{\ell,(i-\kappa)\ell+\ell}\cr
+    }, \qquad
+    Y_{m+i} = \pmatrix{y_{(m+i-\kappa)\ell+1}\cr \vdots\cr y_{(m+i-\kappa)\ell+\ell}\cr},
+    \qquad
+    \dot Y_{m+i} = \pmatrix{f_{(m+i-\kappa)\ell+1}\cr \vdots\cr f_{(m+i-\kappa)\ell+\ell}\cr}
+$$
+</div>
+<p>für $i=0,\ldots,\kappa$.
+Die $B_i$ analog wie die $A_i$.</p>
+<p><strong>3.</strong> Bei einer vektorwertigen Funktion mit $n$ Komponenten hat man die
+oben angegebenen Matrizen zu ersetzen durch</p>
+<div class=math>
+$$
+    A_i\gets A_i\otimes I_n \in \mathbb{R}^{n\ell\times n\ell}, \qquad
+    B_i\gets B_i\otimes I_n \in \mathbb{R}^{n\ell\times n\ell}.
+$$
+</div>
+<p>Hierbei ist $I_n$ die $n\times n$-Einheitsmatrix und $\otimes$ bezeichnet
+das <a href="https://de.wikipedia.org/wiki/Kronecker-Produkt">Kroneckerprodukt</a>,
+nach <a href="https://de.wikipedia.org/wiki/Leopold_Kronecker">Leopold Kronecker (1823—1891)</a>.
+In den meisten Fällen kann man auf diese gesonderte Notierung verzichten,
+u.a. weil gilt $\left|A\otimes I_n\right| = \left|A\right|$.</p>
+<p><strong>4. Beispiele:</strong>  (1) Im Falle einstufiger Zyklen, also $\ell=1$,
+reduziert sich die obige Matrixdifferenzengleichung zu der gewöhnlichen
+skalaren Differenzengleichung für lineare Mehrschrittverfahren, mit
+$A_i=\alpha_i$, $B_i=\beta_i$ und $Y_i=y_i$.</p>
+<p>(2) Das lineare zweistufige zyklische $A_\infty^0$-stabile Verfahren der
+Ordnung 4, also $k=4$, $p=4$ und $\ell=2$, von
+Tischer (1983) und <a href="https://doi.org/10.1137/0904051">Tischer/Sacks-Davis (1983)</a>,
+soll in der obigen Schreibweise angegeben werden.
+Die zu den Werten</p>
+<div class=math>
+$$
+\left( \begin{array}{cccccc|cccccc}
+y_{2n-3} & y_{2n-2} & y_{2n-1} & y_{2n} & y_{2n+1} & \hbox{---} & z_{2n-3} & z_{2n-2} & z_{2n-1} & z_{2n} & z_{2n+1} & \hbox{---}\cr
+y_{2n-3} & y_{2n-2} & y_{2n-1} & y_{2n} & y_{2n+1} & y_{2n+2}   & z_{2n-3} & z_{2n-2} & z_{2n-1} & z_{2n} & z_{2n+1} & z_{2n+2}\cr
+\end{array} \right)
+$$
+</div>
+<p>gehörigen Koeffizienten lauten</p>
+<div class=math>
+$$
+\left( \begin{array}{cccccc|cccccc}
+0.6 & -2.7 & 4.7  & -3.5 &    1 & 0 &  0.9 & -4.1 &   7.1 & -5.6 &  1.7 & 0\cr
+0   & 0    & -0.3 &  1.2 & -2.0 & 1 & -2.6 & 11.9 & -20.9 & 17.9 & -7.6 & 1.7\cr
+\end{array} \right)
+$$
+</div>
+<p>wobei alle Koeffizienten auf eine Stelle hinter dem Komma gerundet worden
+sind, also der “Konsistenzschnelltest” $\rho(1)=0$ hier immer $\pm0.1$
+ergibt.</p>
+<p>In der Schreibweise als Matrixdifferenzengleichung w.o. ergibt sich
+nun unmittelbar</p>
+<div class=math>
+$$
+\begin{array}{cccccc}
+     & \pmatrix{0.6 & -2.7\cr 0 & 0\cr}\pmatrix{y_{2n-3}\cr y_{2n-2}\cr}
+    &+&\pmatrix{4.7 & -3.5\cr -0.3 & 1.2\cr}\pmatrix{y_{2n-1}\cr y_{2n}\cr}
+    &+&\pmatrix{1 & 0\cr -2.0 & 1\cr}\pmatrix{y_{2n+1}\cr y_{2n+2}\cr}\cr
+    \cr %\noalign{\phantom{:}}
+    =& \pmatrix{0.9 & -4.1\cr -2.6 & 11.9\cr}\pmatrix{z_{2n-3}\cr z_{2n-2}\cr}
+    &+&\pmatrix{7.1 & -5.6\cr -20.9 & 17.9\cr}\pmatrix{z_{2n-1}\cr z_{2n}\cr}
+    &+&\pmatrix{1.7 & 0\cr -7.6 & 1.7\cr}\pmatrix{z_{2n+1}\cr z_{2n+2}\cr}\cr
+\end{array}
+$$
+</div>
+<p>Eine typische Eigenschaft der Formeln von
+Tischer (1983) und
+<a href="https://doi.org/10.1137/0904051">Tischer/Sacks-Davis (1983)</a>
+ist die relativ geringe Äquilibrierung der $\beta_{ij}$-Werte.
+Bei diesem Verfahren beträgt sie über 1:20.
+Für die Ordnung $p=8$ hat man sogar Verhältnisse von 1:130.
+Maßgeblich betrifft dies stets die <em>letzte</em> Stufe der immer zweistufigen
+Zyklen.</p>
+<p>Die Formeln von Tendler (1973) besitzen diese
+Eigenschaften nicht.
+Bei gewöhnlichen Quadratur- und Kubaturformeln für $y=\int_a^b f(x) dx$
+ist bekannt, daß diese Eigenschaft unerwünscht ist.</p>
+<p>(3) Das zweistufige, zyklische Verfahren DH3 von Donelson/Hansen (1971)</p>
+<p>Donelson III, John und Hansen, Eldon:
+&quot;<a href="https://doi.org/10.1137/0708018">Cyclic Composite Multistep Predictor-Corrector Methods</a>&quot;,
+SIAM Journal on Numerical Analysis, Vol 8, 1971, pp.137—157</p>
+<div class=math>
+$$
+\begin{array}{r|rr}
+p=5 & 1 & 2\cr
+\hline
+-2 &    0 &    0\cr
+-1 &  -57 &   31\cr
+ 0 &   24 &  -12\cr
+ 1 &   33 &  -39\cr
+ 2 &    0 &   20\cr
+\hline
+-2 &   -1 &    0\cr
+-1 &   24 &  -10\cr
+ 0 &   57 &  -39\cr
+ 1 &   10 &   12\cr
+ 2 &    0 &    7\cr
+\end{array}
+$$
+</div>
+<p>Die Stabilität definierenden Matrizen sind:</p>
+<div class=math>
+$$
+    \eqalign{
+        A_0 &= \pmatrix{0&0\cr 0&0\cr},\cr &\cr
+        A_1 &= \pmatrix{-57&24\cr 31&-12\cr},\cr &\cr
+        A_2 &= \pmatrix{33&0\cr -39&20\cr},\cr } \qquad
+    \eqalign{
+        B_0 &= \pmatrix{0&-1\cr 0&0\cr},\cr &\cr
+        B_1 &= \pmatrix{24&57\cr -10&-39,\cr}\cr &\cr
+        B_2 &= \pmatrix{10&0\cr 12&7\cr},\cr }
+$$
+</div>
+<p>Die charakteristische Gleichung ist</p>
+<div class=math>
+$$
+    \det\left(A_0+A_1\mu+A_2\mu^2\right) = -660(\mu-1)(\mu+1/11)\mu^2.
+$$
+</div>
+<p>Keinesfalls müssen zyklische Verfahren nur zweistufig sein.
+Die Stufenzahl eines zyklischen Verfahrens unterliegt keiner Schranke,
+außer, daß diese Anzahl nicht unendlich ist und daß diese Anzahl dabei fest ist.
+Gleichzeitig erkennt man, daß eine formale Übertragung
+$\det Q(\mu,H)={\cal O}(H^{p+1})$ ($\mu=e^H$) scheitert, weil z.B. für DH3
+gilt</p>
+<div class=math>
+$$
+    \det Q(\mu,H) = -720H - 3060H^2 - 5838H^3 - 7090H^4 - 6303H^5
+        - {52985\over12}H^6 + {\cal O}(H^7) \ne {\cal O}(H^6),
+$$
+</div>
+<p>nach Substitution von $\mu=e^H$.</p>
+<p><strong>5.</strong> Es ist natürlich ebenso möglich die Linearisierung des obigen
+Matrixpolynoms zu betrachten, jedoch werden dann die Dimensionen der
+Matrizen größer, falls $\kappa&gt;1$, also $k&gt;\ell$ ist.
+Das Verfahren schreibt sich dann in der Form $z_{n+1}=Az_n+h\varphi_n$, oder
+$Lz_{n+1}=Uz_n+h\varphi_n$.</p>
+<h2>3. Stabilität und Polynome<a id=StabPoly></a></h2>
+<p><strong>1.</strong> Das charakteristische Polynom lautet</p>
+<div class=math>
+$$
+    \det Q(\mu,H) = \det\Biggl\{\sum_{i=0}^\kappa (A_i  -  H B_i) \mu^i
+        \Biggr\}. % \eqno \hbox{(char.Pol.)}
+$$
+</div>
+<p>Man beweist jetzt, daß das verwendete Verfahren genau dann $A[\alpha]$-stabil
+bzw. $S[\delta]$-stabil ist, wenn die sämtlichen Nullstellen $\mu$ von
+$\det Q(\mu,H)=0$, alle betragsmässig kleiner eins sind, für alle
+$H \in {\cal A}[\alpha]$, bzw. alle $H \in {\cal S}[\delta]$.
+Die Eigenschaft eines Polynomes $Q(\mu,H)$ für ein spezielles $H_0$
+sämtliche Wurzeln in der offenen Einheitskreisscheibe zu haben, nennt man
+<em>absolut-stabil</em>.
+${\cal A}[\alpha]$ und ${\cal S}[\delta]$ sind also Mengen der absoluten
+Stabilität.</p>
+<p>Äquivalent hierzu ist, daß das Verfahren genau dann $A[\alpha]$-stabil ist,
+bzw. $S[\delta]$-stabil ist, falls alle Nullstellen $H$ von $\det Q(\mu,H)=0$
+im Komplement von ${\cal A}[\alpha]$, bzw. im Komplement von
+${\cal S}[\delta]$, liegen, für alle $\mu$ aus dem Komplement der offenen
+Einheitskreisscheibe.
+Man erhält somit den folgenden Test.</p>
+<p><strong>2. Test A:</strong> Ein Verfahren ist genau dann $A[\alpha]$-stabil,
+bzw. $S[\delta]$-stabil, falls</p>
+<ol>
+<li>die Nullstellen $\mu$ von $\det Q(\mu,H_0)$ für ein festgehaltenes
+beliebiges $H_0 \in {\cal A}[\alpha]$, bzw. $H_0 \in {\cal S}[\delta]$,
+sämtlich betragsmässig kleiner 1 sind und gleichzeitig</li>
+<li>die Kurve der Punkte $H$, die
+$\det Q(\mu,H)|_{\mathopen|\mu\mathclose|=1} = 0$ erfüllen, im
+Komplement von ${\cal A}[\alpha]$, bzw. im Komplement von
+${\cal S}[\delta]$ liegen.</li>
+</ol>
+<p>Leider sind Verfahren, die die obigen beiden Eigenschaften
+erfüllen, noch nicht wirklich gut zur Integration von steifen
+Differentialgleichungen geeignet.
+Dies liegt u.a. daran, daß wenn $\mathopen|H\mathclose|$ $(\mathop{\rm Re}\nolimits  H&lt;0)$ immer
+größer wird, die Nullstellen $\mu$ von $\det Q(\mu,H)=0$ betragsmässig gegen
+eins streben könnten.
+Integriert man jedoch $\dot y = \lambda y$ ($\mathop{\rm Re}\nolimits \lambda&lt;0$) so würde dies
+heißen, daß es eine Lösung gibt mit $\mathopen|y_{n+1}/y_n\mathclose| \to 1$.
+Diese Eigenschaft spiegelt sicherlich nicht das wahre Verhalten der Lösung
+wider.
+Diese Eigenheit hat z.B. die Trapezregel</p>
+<div class=math>
+$$
+    y_{m+1} = y_m + (h/2)(f_{m+1} + f_m).
+$$
+</div>
+<p>Aus diesem Grunde sind Verfahren günstiger bei denen die Nullstellen $\mu$
+bei $\mathop{\rm Re}\nolimits  H=-\infty$ von $\det Q(\mu,H)=0$ in der offenen Einheitskreisscheibe
+liegen, also keinerlei Wurzeln des Betrages eins auftauchen.
+Damit hätte man die Trapezregel als zwar $A$-stabiles Verfahren, letztlich
+ausgesondert.
+Um diesen Wunsch zu präzisieren und um handliche Begriffe bereitzustellen,
+seien diese Anforderungen nun nomenklaturmässig genauer festgelegt.</p>
+<h2>4. Verschärfung von Stabilitätsdefinitionen<a id=Verschaerfung></a></h2>
+<blockquote>
+<p>Suppose, for example, that it is known that the planetary system is
+stable “in the past”. If it captures a new body, say, a speck of
+dust arriving from “infinity”, then the newly formed system of
+bodies looses its stability: with probability one, either a collision
+occurs, or one of the bodies escapes again at infinity. Moreover,
+it is by no means necessary that the speck of dust is the one that
+leaves the Solar system: Jupiter, or even the Sun may equally well
+leave.</p>
+<p>V.I. Arnold, V.V. Kozlov, A.I. Neishtadt (1988),
+<a href="https://www.amazon.de/Mathematical-Aspects-Classical-Celestial-Mechanics-ebook/dp/B0D1ZL41WL?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&amp;crid=1ZD2GSE27YL7U&amp;dib=eyJ2IjoiMSJ9.XgBb1JYfOPiTx7OrnhES3FW_ZmFL3gfOcvXQKPf6MeM2fZSWGxkt6bBUHcBBJgRjTL2MkfJELlOtodjGHHkCaLH_hHcEjZhBJoV9Lz-nmLK5QD2KHecGdVCUtYXFvVIAdiDeiVwXUWGzXNIepjpc90A1i9isdGcXR8vVf44i-W584fDx3VPQwC5h828HlXfER6a3CtJ1u9V8u0wTGSASmTrmsySv6eB8XI3j-dBLg-E.dDwyo6NY0NYA5GIKAWlBopNNW7CLONQWNubGwJCRjXs&amp;dib_tag=se&amp;keywords=Mathematical+Aspects+of+Classical+and+Celestial+Mechanics&amp;nsdOptOutParam=true&amp;qid=1736099699&amp;sprefix=mathematical+aspects+of+classical+and+celestial+mechanics%2Caps%2C89&amp;sr=8-1">Mathematical Aspects of Classical and Celestial Mechanics</a></p>
+</blockquote>
+<p>Bibliographisch:
+<a href="https://en.wikipedia.org/wiki/Vladimir_Arnold">Vladimir Arnold</a> (1937—2010),
+<a href="https://en.wikipedia.org/wiki/Valery_Vasilevich_Kozlov">Valery Vislevich Kozlov</a> (*1950),
+<a href="https://scholar.google.co.uk/citations?user=ZG4SF0sAAAAJ&amp;hl=en">Anatoly Neishtadt</a>.</p>
+<p>Es liegt nun nahe, die Begriffe $A[\alpha]$-Stabilität und
+$S[\delta]$-Stabilität zu verfeinern.
+Hierzu wird das Verhalten der Differenzengleichung für $\mathop{\rm Re}\nolimits  H\to-\infty$
+mit in die Nomenklatur integriert.
+Dies führt jetzt zur</p>
+<p><strong>1. Definition:</strong>
+(1) Ein $S[\delta]$-stabiles Matrixpolynom $Q(\mu,H)$ mit der Eigenschaft,
+daß die sämtlichen Nullstellen $\mu$ für $\mathop{\rm Re}\nolimits  H\to-\infty$ in der offenen,
+Kreisscheibe $\{z\in\mathbb{C}: \mathopen|z\mathclose|&lt;r\}$ liegen, nennt man
+$S_\infty^r[\delta]$-stabil.
+Für $r=1$ sagt man abkürzend nur $S_\infty[\delta]$-stabil.</p>
+<p>(2) Analog definiert man $A_\infty^r[\alpha]$-Stabilität als Erweiterung
+der $A[\alpha]$-Stabilität.
+Erneut bezeichnet $A_\infty[\alpha]$-Stabilität die Abkürzung für
+$A_\infty^1[\alpha]$-Stabilität.</p>
+<p>(3) Für $r=0$ ist $r\to0$ gemeint, also: Die sämtlichen Nullstellen $\mu$
+für $\mathop{\rm Re}\nolimits  H\to-\infty$ verschwinden.
+Hierfür schreibt man $A_\infty^0[\alpha]$- bzw. $S_\infty^0[\delta]$-stabil.</p>
+<p>(4) Der Wert $r$ bei der $S_\infty^r[\delta]$-
+bzw. $A_\infty^r[\alpha]$-Stabilität heißt Widlund-Endradius.
+I.a. wird ein kleinstmöglicher Wert angegeben und von <em>dem</em>
+Widlund-Endradius gesprochen.</p>
+<p>Hat ein Verfahren das Matrixpolynom $Q(\mu,H)$, so vererbt sich der
+entsprechende Name auf das Verfahren.
+Genauso hätte man auch die $A[\alpha]$- bzw. $S[\delta]$-Stabilität
+einführen können.
+Die Werte $\alpha$ und $\delta$ bei den Stabilitätsdefinitionen werden
+in der Schreibweise unterdrückt, wenn die Wert $\alpha=90^\circ$,
+bzw. $\delta=0$ betragen, genau w.o. auch.</p>
+<p>Die Definition von $A_\infty^0$-Stabilität verallgemeinert offensichtlich
+den Begriff der <a href="https://en.wikipedia.org/wiki/L-stability">L-Stabilität</a> für Einschrittverfahren.</p>
+<p>Offensichtlich ist jedes $A_\infty^{r_1}[\alpha]$-stabiles Polynom auch
+$A_\infty^{r_2}[\alpha]$-stabil, falls $r_1&lt;r_2$, nicht jedoch immer
+umgekehrt.
+Gleiches gilt für die entsprechend andere Stabilitätseigenschaft, also
+jedes $S_\infty^{r_1}[\delta]$-stabile Polynom ist natürlich auch
+$S_\infty^{r_2}[\delta]$-stabil, falls $r_1&lt;r_2$.
+Insbesondere ist jedes $A_\infty^0[\alpha]$-stabile Polynom auch
+$A_\infty[\alpha]$- und $A[\alpha]$-stabil.</p>
+<p>I.d.R. wird man ein kleinstmögliches $r$ bei größtmöglichen $\alpha$,
+bzw. ein kleinstmögliches $r$ bei kleinstmöglichem $\delta$, anstreben.</p>
+<p>Welche der Eigenschaften insgesamt am günstigsten ist, kann allgemein nicht
+gesagt werden.
+Man hat hier einen Zielkonflikt.
+Dies hängt auch von der zu lösenden Differentialgleichung ab.
+Weiß man im voraus, daß beispielsweise die zu lösende lineare
+Differentialgleichung $\dot y=Ay$ eine Jacobimatrix $A$ mit nur negativen
+reellen Eigenwerten hat, so ist ein großer Widlund-$\alpha$-Winkel unerheblich.
+Aber selbst einer beliebigen festen Matrix anzusehen, ob sie nur reelle
+Eigenwerte hat, ist keine triviale Aufgabe.</p>
+<p><strong>2. Beispiele:</strong>  (1) Die BDF der Ordnung
+$p=1$ bis $p=6$, die Formeln von Peter Tischer aller Ordnungen und
+auch die Formeln von Tendler aller Ordnungen sind $A_\infty^0[\alpha]$-
+und $S_\infty^0[\delta]$-stabile Verfahren.
+Aber auch die blockimpliziten Verfahren von
+Bickart/Picel (1973)
+sind $A_\infty^0[\alpha]$- und $S_\infty^0[\delta]$-stabile Verfahren.</p>
+<p>(2) Liniger/Gagnebin (1974)
+zeigten u.a., daß</p>
+<div class=math>
+$$
+    (40-\xi)y_{n+3}-(60-\xi)y_{n+2}+(24-3\xi)y_{n+1}-(4-\xi)y_n=24h\dot y_{n+3}
+$$
+</div>
+<p>$A_\infty^0=S_\infty^0$-stabil ist für $0\le\xi\le16$.
+Der lokale Fehler ist hierbei</p>
+<div class=math>
+$$
+    -(4+\xi)h^3y^{(3)}(t) + {\cal O}(h^4).
+$$
+</div>
+<p>Für $\xi=-4$ erhält man die BDF3, welche $A_\infty^0[86.03^\circ]$- und
+$S_\infty^0[0.083]$-stabil ist.</p>
+<p><a href="https://de.wikipedia.org/wiki/Werner_Liniger">Werner Liniger (1927—2017)</a> und Gagnebin, Thierry:
+&quot;<a href="https://doi.org/10.1007/978-1-4684-2100-2_17">Construction of a Family of Second Order, $A$-Stable $k$-Step Formulas
+Depending on the Maximum Number, $2k-2$, of Parameters</a>&quot;,
+in &quot;<a href="https://doi.org/10.1007/978-1-4684-2100-2">Stiff Differential Systems</a>&quot;, Editor Ralph A. Willoughby,
+Plenum Press, New York and London, 1974, pp.217—227</p>
+<p>(3) Für ein nicht-triviales Beispiel, wo diese Eigenschaften erfüllt, aber
+auch möglicherweise nicht erfüllt sind, kann man wie folgt vorgehen.
+Kombiniert man in zyklischer Reihenfolge $i$-mal das explizite und
+$j$-mal das implizite Eulerverfahren, so erhält man sofort für die
+Nullstelle $\mu$ von $\det Q(\mu,H)$ die Gleichung</p>
+<div class=math>
+$$
+    \mu = {(1+H)^i\over (1-H)^j},
+$$
+</div>
+<p>der man augenblicklich ansieht, daß für betragsmässig große $H$ mit
+negativem Realteil, die Nullstelle $\mu$ sich wie untenstehend verhält:</p>
+<div class=math>
+$$
+    \mathopen|\mu\mathclose| \stackrel{\mathop{\rm Re}\nolimits H\to-\infty}{\longrightarrow} %\mapright^{\mathop{\rm Re}\nolimits H\to-\infty}
+    \cases{\infty,& falls $i\gt j$;\cr
+           1,     & falls $i=j$;\cr 0,& falls $i\lt j$.\cr}
+$$
+</div>
+<p>Interessant hierbei ist, daß eine Kombination impliziter Verfahren mit
+expliziten Verfahren dennoch $A_\infty^0[\alpha]$-stabil,
+bzw. $S_\infty^0[\delta]$-stabil sein kann.
+Bei partiellen Differentialgleichungen, wo die Implizitheit von
+Formeln häufig noch schwerlastiger auf die gesamte Rechenzeit einwirken,
+werden sogar tatsächlich Kombinationen von expliziten und impliziten
+Verfahren verwendet, beispielsweise beim
+<a href="http://www.cfd.tu-berlin.de/Lehre/tfd_skript/node27.html">leapfrog-DuFort/Frankel-Verfahren</a>, oder beim
+odd-even-hopscotch-Verfahren.</p>
+<p>Schwächt man noch weiter ab, daß also nicht mehr konstante Schrittweiten
+zu nehmen sind, sondern auch variable Schrittweiten, so kann man sogar
+alleine mit expliziten Verfahren prinzipiell auskommen.
+Der Hinweis auf das Prinzipielle deswegen, weil die resultierenden
+Verfahren nicht notwendig auch im praktischen Gebrauch gut einsetzbar sind.</p>
+<p>Beim expliziten Eulerverfahren liegen die Verhältnisse besonders
+durchsichtig vor.
+Hier ist</p>
+<div class=math>
+$$
+    \mu = (1+H_1)(1+H_2)\cdots(1+H_\nu)
+$$
+</div>
+<p>und offensichtlicherweise kann man durch ein geeignet gewähltes $H_i$, mit
+$1\le i\le\nu$ das obige Produkt zum Verschwinden bringen.
+Bei vektorwertigen Differentialgleichungen liegen die Verhältnisse nicht
+mehr so einfach.
+<a href="https://www.genealogy.math.ndsu.nodak.edu/id.php?id=95282">John (Jack) D. Lambert</a> in <a href="https://doi.org/10.1016/0898-1221(86)90238-5">Lambert (1986)</a>
+äußert sich hier in größerem Umfange zu dieser Problematik.
+<a href="https://de.wikipedia.org/wiki/Hans_J%C3%B6rg_Stetter">Hans Jörg Stetter</a> reißt dieses Thema kurz in seinem
+Buch &quot;<a href="https://doi.org/10.1007/978-3-642-65471-8">Analysis of Discretization Methods for Ordinary Differential Equations</a>&quot; von 1973 an, in dem Abschnitt über die Stabilitätsbereiche zyklischer Verfahren.</p>
+<p><strong>3.</strong> Weiteren Aufschluß über die Stabiltät eines linearen Verfahrens erhält
+man, wenn man versucht zu quantifizieren, wie schnell die vom Verfahren
+gelieferten Näherungswerte abklingen.
+Für genügend rasch abfallende Lösungen ist die folgende Stabilitätsmenge
+von Interesse:</p>
+<div class=math>
+$$
+    {\cal Y}_r := \left\{{\mskip 3mu} H\in\mathbb{C}: \det Q(\mu,H)=0 \: \land\: 
+        \mathopen|\mu\mathclose|\lt r {\mskip 3mu}\right\}.
+$$
+</div>
+<p>Dies sind also diejenigen Zahlen $H$, sodaß $\det Q(\mu,H)$ verschwindet,
+dabei $\mu$ aber stets aus der offenen Kreisscheibe $D_r$ ist.
+Weiter werden jetzt die Mengen ${\cal A}[\alpha]$ und ${\cal S}[\delta]$
+verallgemeinert zu Mengen, die den Radius $r$ mit berücksichtigen.
+Hier ist insbesondere natürlich $0&lt;r&lt;1$ von Interesse.
+Es seien also die Mengen betrachtet</p>
+<div class=math>
+$$
+    {\cal A}_r[\alpha] := \left\{{\mskip 3mu} H\in\mathbb{C}^-:
+        \left|\arg(-H)\right| \lt  \alpha \le90^\circ \hbox{ und }
+        H\in{\cal Y}_r {\mskip 3mu}\right\}
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    {\cal S}_r[\delta] := \left\{{\mskip 3mu} H\in\mathbb{C}^-:\mathop{\rm Re}\nolimits  H\lt \delta\le0
+        \hbox{ und } H\in{\cal Y}_r {\mskip 3mu}\right\}.
+$$
+</div>
+<p>Zur Zeichnung des Randes $\partial{\cal Y}_r$ löst man
+genügend oft das verallgemeinerte Eigenwertproblem in $H$ zu</p>
+<div class=math>
+$$
+    (A_1\mu+A_0){\bf x} = H(B_1\mu+B_0){\bf x}, \qquad \mu = r e^{i\varphi}.
+$$
+</div>
+<p>Mit $\varphi$ durchläuft man dann eine diskrete Teilmenge von
+$[0^\circ,180^\circ]$, zum Beispiel
+$\varphi = 0^\circ, 20^\circ, \ldots, 160^\circ, 180^\circ$.
+Mit $r$ wandert man von $r=1$ beispielsweise in $(-1/10)$ Schritten
+nach $r=0.1$.
+Damit erhält man also die Höhenlinien der “Funktion” $H(r)$,
+bzw. von $H(\mu)$.
+Die “Funktion” $H(r)$ ist implizit definiert.
+Die Betragsfunktion $\left|\cdot\right|$ wähle dann unter den
+mehreren möglichen “Funktionswerten”, den betragsmässig größten
+aus, ordnet also letztlich jedem $re^{i\varphi}$ eine komplexe Zahl $H$ zu.
+Das bivariable Polynom $\det Q(\mu,H)$ ist natürlich algebraisch.
+Lösungsäste algebraischer Funktionen haben höchstens algebraische
+Singularitäten.
+$\partial{\cal Y}_r$ kann aus mehreren Zusammenhangskomponenten bestehen,
+insbesondere für kleiner werdende $r$ ziehen sich die “kreisförmigen”
+Komponenten immer mehr zu den Nullstellenpunkten von $\det Q(\mu,0)=0$ zusammen.</p>
+<p>Ein mehr geometrisch-anschaulich motivierter Ansatz geht von der Betrachtung
+von $\mu(H)$ aus.
+Dann löst man das verallgemeinerte Eigenwertproblem in $\mu$ zu</p>
+<div class=math>
+$$
+    \left[ (A_1-HB_1)\mu + (A_0-HB_0) \right] {\bf x} = {\bf 0},
+$$
+</div>
+<p>auf einem Gitter von $\mathbb{C}$ für genügend viele $H$ und zeichnet entweder
+nur die betragsmässig größten $\mu$, oder zeichnet mehrere Schichten ein.
+Eine räumliche Veranschaulichung dieses Sachverhaltes findet man in
+Wanner (1987).</p>
+<p>Wanner, Gerhard: &quot;Order Stars and Stability&quot;, in
+&quot;The State of the Art in Numerical Analysis&quot;,
+Proceedings of the joint IMA/SIAM conference held at the
+University of Birmingham, 14–18 April 1986,
+Edited by A. Iserles and M.J.R. Powell,
+Clarendon Press, Oxford, 1987, 451—471</p>
+<p>Für das verallgemeinerte Eigenwertproblem empfehlen sich die Unterprogramme
+<code>cqzhes()</code>, <code>cqzval()</code> und <code>cqzvec()</code> von
+<a href="https://dl.acm.org/doi/pdf/10.1145/356502.356500">Burton S. Garbow (1978)</a>, und
+<a href="http://dx.doi.org/10.1145/2701.356113">Garbow (1984)</a>, welche eine Implementierung des
+<a href="https://en.wikipedia.org/wiki/Schur_decomposition#Generalized_Schur_decomposition"><em>QZ</em>-Algorithmuses</a> von <a href="https://www.jstor.org/stable/2156353">Moler/Stewart (1973)</a>
+darstellen.
+Aufgrund der Reellität der Matrixkoeffizienten, also</p>
+<div class=math>
+$$
+    \overline{\sum A_i}=\sum A_i, \hbox{ und wegen }
+    \overline{e^{i\varphi}} = e^{-i\varphi},
+$$
+</div>
+<p>ist das Stabilitätsgebiet stets
+achsensymmetrisch zur reellen Achse $\mathbb{R}\subset\mathbb{C}$.
+Die Eigenvektoren mittels <code>cqzvec()</code> werden für obige Stabilitätsüberlegungen nicht benötigt.</p>
+<p>Bibliographisch:
+<a href="https://en.wikipedia.org/wiki/Cleve_Moler">Cleve Moler</a> und
+<a href="https://history.siam.org/oralhistories/stewart.htm">G.W. &quot;Pete&quot; Stewart</a>.
+Verfahrensbeschreibung: <a href="https://www.researchgate.net/publication/235012188_An_Algorithm_for_the_Generalized_Matrix_Eigenvalue_Problem_Ax_Lambda_Bx">An Algorithm for the Generalized Matrix Eigenvalue Problem Ax = Lambda Bx</a>.
+Ferner <a href="https://www.researchgate.net/scientific-contributions/Burton-S-Garbow-60801016">Burton S. Garbow</a>.</p>
+<p><strong>4.</strong> Bei dem, wie schon oben angegebenen charakteristischen Polynom</p>
+<div class=math>
+$$
+    \det Q(\mu,H) = \det\left\{\sum_{i=0}^\kappa (A_i - H B_i) \mu^i\right\},
+$$
+</div>
+<p>erhält man für immer mehr dominierendes $H$ schließlich im Grenzfalle
+das Polynom $\det Q(\mu,\infty)$ zu</p>
+<div class=math>
+$$
+    \det Q(\mu,\infty) = \det\left\{ \sum_{i=0}^\kappa B_i\mu^i \right\},
+$$
+</div>
+<p>in etwas nachlässiger, aber sehr suggestiver Schreibweise.
+Es ist hier interessant zu vermerken, daß jetzt $A_{\infty}[\alpha]$- und
+$S_{\infty}[\delta]$-Stabilität zueinander äquivalent sind, für geignete
+$\alpha$ und $\delta$.
+Dies ist ein weitergehendes Ergebnis, als man es von
+der $A[\alpha]$- und $S[\delta]$-Stabilität her kannte.</p>
+<p><strong>5.</strong> Um nun zu überprüfen ob ein Verfahren sogar
+$A_{\infty}[\alpha]$-stabil, bzw. $S_{\infty}[\delta]$-stabil
+ist, erweitert man die 1.te Bedingung im Test A zu einer neuen Bedingung (1)
+und erhält damit den</p>
+<p><strong>6. Test B:</strong> Ein Verfahren ist $A_\infty^r[\alpha]$-stabil,
+bzw. $S_\infty^r[\delta]$-stabil genau dann, wenn:</p>
+<ol>
+<li>die Nullstellen von $\det Q(\mu,\infty)$ liegen in der offenen
+Einheitskreisscheibe und</li>
+<li>die Kurve der Punkte $H$, die
+$\det Q(\mu,H)|_{\mathopen|\mu\mathclose|=r} = 0$ erfüllen, im
+Komplement von ${\cal A}[\alpha]$, bzw. im Komplement von
+${\cal S}[\delta]$ liegen.</li>
+</ol>
+<p><strong>7.</strong> Eine Möglichkeit die Bedingung (1) bei Test B zu erfüllen ist, wie es
+u.a. <a href="https://dblp.org/rec/conf/ifip/Gear68.html">Gear (1968)</a> vorgeschlagen hat,
+daß man alle Nullstellen $\mu$ von $\det Q(\mu,\infty)=0$ zu Null setzt.
+Dies ist z.B. der Fall, wenn man fordert:</p>
+<div class=math>
+$$
+    \beta_{ij} = 0\quad (j\le0), \qquad \beta_{ii}\ne0.  \tag {NULL}
+$$
+</div>
+<p>Eine einfache, notwendige und hinreichende Bedingung wird später angegeben.
+Von der Sicht des Speicherplatzes, des Rechenbedarfs und der
+programmiermässigen Einfachheit, sind diese Nullen besonders vorteilhaft
+einsetzbar.
+Diese Vorteile werden in dem Programm TENDLER genutzt.
+Das Programm ODIOUS kann diese Vorteile natürlich nicht nutzen, aufgrund
+$B_i\ne0$, für $i=0,\ldots,\kappa$.</p>
+<p>Zusammen mit der Bedingung (LMSV) ergibt nun die Bedingung (NULL), daß</p>
+<div class=math>
+$$
+    \det Q(\mu,\infty) = \pm\mu^{\kappa\ell} \prod_{i=1}^{\ell} \beta_{ii}.
+$$
+</div>
+<p>Nun enthält jede Stufe des Zykluses der Ordnung $p=k$, die der Bedingung
+(LMSV) und (Null) genügt, noch $\min\{i,k+1\}$ Parameter.
+Jede Stufe kann aber noch skaliert werden, ohne die Stabilitätseigenschaften
+zu verändern, d.h. von jeder Stufe muß man noch einen freien
+Parameter abziehen.
+Es bleiben dann $\min\{i-1,k\}$ völlig frei bestimmbare
+Parameter für die $i$-te Stufe, also ist</p>
+<div class=math>
+$$
+\eqalignno{
+   {\ell(\ell-1)\over2}, &\qquad\hbox{falls}\quad\ell\le k+1\cr
+   {k\left[ 2\ell - (k+1)\right]\over2}, &\qquad\hbox{falls}\quad\ell\ge k+1.\cr}
+$$
+</div>
+<p>Wählt man die $\beta_{ij}$ für $0&lt;j&lt;i$, alle zu Null, so erhält man
+wieder die BDF.
+In diesem Sinne kann man die zyklischen Formeln von J.M. Tendler als
+echte Verallgemeinerung der einstufigen BDF auffassen.
+In der Tat unterscheiden sich die Formeln auch nicht allzu sehr in
+ihren Eigenschaften und in ihren Ergebnissen, die sie liefern, insbesondere
+ist bei den zyklischen Verfahren von Tendler die erste Stufe auch
+immer gleich der entsprechenden BDF.</p>
+<p><strong>8.</strong> Die sämtlichen bisherigen Stabilitätsdefinitionen gehören zur “Begriffswelt”
+der absoluten Stabilität, nicht jedoch zur relativen Stabilität.
+Für den Begriff der relativen Stabilität benötigt man die folgenden
+Überlegungen.
+Sei</p>
+<div class=math>
+$$
+    L(t,y,h) = \sum_{\nu=0}^m \sum_{i=0}^k \alpha_{i\nu} h^\nu y^{(\nu)}(t+ih).
+$$
+</div>
+<p>Dann ist</p>
+<div class=math>
+$$
+    \det Q(\mu,H) = \sum_{\scriptstyle{0\le\nu\le m}\atop\scriptstyle{0\le i\le k}}
+        \alpha_{i\nu} H^\nu \mu^i
+    = \sum_{0\le i\le k} a_i(H)\mu^i
+    = a_k(H) (\mu-\xi_1(H))\cdot\ldots\cdot(\mu-\xi_k(H)).
+$$
+</div>
+<p>Sei $\mu=1$ einfache Nullstelle von</p>
+<div class=math>
+$$
+    \rho_0 = \sum_{0\le i\le k} \alpha_{i0} \mu^i.
+$$
+</div>
+<p>Da dann $\mu=1$ separiert ist, folgt aufgrund der <a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">stetigen Abhängigkeit</a> der
+Wurzeln für genügend kleine $h$</p>
+<div class=math>
+$$
+    \mathopen|e^H - \xi_\nu(H)\mathclose| \ge C, \qquad \nu=2,\ldots,k,
+$$
+</div>
+<p>das ist die Fortpflanzung der Separiertheit für genügend kleine $h$.
+Jetzt muß aber</p>
+<div class=math>
+$$
+    \xi_1(H) = e^H + {\cal O}(H^{p+1}) = e^H + {\cal O}(h^{p+1})
+$$
+</div>
+<p>gelten, damit $Q(\mu,H)={\cal O}(h^{p+1})$ für $\mu=e^H$, aufgrund der
+Konsistenz von $L$.</p>
+<p><strong>9. Definition:</strong>  Ein Matrixpolynom</p>
+<div class=math>
+$$
+    Q(\mu,H) = \sum_{\scriptstyle{0\le\nu\le m}\atop\scriptstyle{1\le i\le k}}
+        A_{i\nu} H^\nu \mu^i
+$$
+</div>
+<p>heißt konsistent mit mindestens der Konsistenzordnung $p$
+genau dann, wenn die formale Ersetzung der Skalare $\mu^i$ ($i=0,\ldots,k$)
+durch die Vektoren</p>
+<div class=math>
+$$
+    \pmatrix{1\cr \vdots\cr \mu^{\ell-1}\cr},\quad\ldots\quad
+    \pmatrix{\mu^{i\ell}\cr \vdots\cr \mu^{i\ell+\ell-1}\cr},\quad\ldots\quad
+    \pmatrix{\mu^{k\ell}\cr \vdots\cr \mu^{k\ell+\ell-1}\cr}
+$$
+</div>
+<p>($\mu=e^H$) dann liefert</p>
+<div class=math>
+$$
+    Q(\mu,H) = \pmatrix{{\cal O}(H^{p_1+1})\cr \vdots\cr {\cal O}(H^{p_\ell+1})\cr},
+    \qquad (p\ge p_i).
+$$
+</div>
+<p>Das Matrixpolynom $Q(\mu,H)$ ist konsistent mit der genauen Ordnung
+$\min_{i=1}^\ell p_i$.
+Gilt $p_i\ge1$ ($\forall i$), so heißt das Matrixpolynom konsistent.
+Möchte man die besondere Form</p>
+<div class=math>
+$$
+    [\mu^{i\ell},\ldots,\mu^{i\ell+\ell-1}], \qquad (\mu=e^H)
+$$
+</div>
+<p>besonders betonen, so spricht man von polynomial-konsistent.</p>
+<p>Die obige Definition verallgemeinert $\rho(e^h)-h\sigma(e^h)={\cal O}(h^{p+1})$
+auf $\ell$-Mehrstufigkeit mit $m$-facher Ableitung für äquidistante Gitter.
+Die Konsistenz nach obiger Festlegung ist eine Eigenschaft des Matrixpolynomes.
+Sie vererbt sich sinngemäß auf das Verfahren, welches dem Matrixpolynom
+i.d.R. zugrunde liegt.</p>
+<p>Zur besseren Unterscheidung zwischen absoluter und relativer Stabilität seien
+beide einander gegenübergestellt.</p>
+<p><strong>10. Definition:</strong>  (10.1) Ein Matrixpolynom $Q\mu,H)$ heißt
+absolut-stabil
+für ein $H_0$ genau dann, wenn für die sämtlichen Nullstellen $\mu$ von
+$\det Q(\mu,H_0)=0$ gilt: $\mathopen|\mu\mathclose|&lt;1$.</p>
+<p>(10.2) Die Menge ${\cal Y}_1$ derjenigen $H$, für die das
+Matrixpolynom $Q(\mu,H)$ absolut-stabil ist, also</p>
+<div class=math>
+$$
+    {\cal Y}_1 = \{H\in\mathbb{C}: \det Q(\mu,H)=0\: \land\: \mathopen|\mu\mathclose|\lt 1\}
+$$
+</div>
+<p>heißt <em>Menge der absoluten Stabilität</em>.</p>
+<p>Offensichtlich gilt: Enthält ${\cal Y}_1$ die offene, linke komplexe
+Halbebene $\mathbb{C}^-$, so ist das Verfahren $A$-stabil.</p>
+<p><strong>11. Definition:</strong>  (11.1) Ein konsistentes Matrixpolynom $Q(\mu,H)$,
+für welches $\mu=1$ einfache Nullstelle von $\det Q(\mu,0)=0$ ist, heißt
+relativ-stabil für ein $H_0$ genau dann, wenn gilt</p>
+<div class=math>
+$$
+    \mathopen|\mu_i(H)\mathclose| \lt  \mathopen|\mu_1(H)\mathclose|
+        \quad(i\ge2), \qquad \mu_1(0)=1.
+$$
+</div>
+<p>$\mu_1(H)$ ist also die zu $\mu_1(0)=1$ gehörende Nullstelle, wobei
+$Q(\mu_i(H),H)=0$ ($i\ge1$).
+Hat $\det Q(\mu,H)$ in $\mu$ nur den Grad 1, so sei das Matrixpolynom
+$Q(\mu,H)$ relativ-stabil.</p>
+<p>(11.2) Die Menge $\cal Z$ derjenigen $H$, für die das Matrixpolynom $Q(\mu,H)$
+relativ-stabil ist, also</p>
+<div class=math>
+$$
+    {\cal Z} = \{H\in\mathbb{C}: \det Q(\mu,H)=0\: \land\: 
+        \mathopen|\mu_i\mathclose|\lt \mathopen|\mu_1\mathclose|\: (i\gt 2)\}
+$$
+</div>
+<p>heißt <em>Menge der relativen Stabilität</em>.</p>
+<p>Im Falle eines linearen Differentialgleichungssystems $\dot y=Ay\in\mathbb{R}^n$
+mit diagonalähnlicher Matrix $A$ entstehen bei Transformation $n$ skalare
+Differentialgleichungen.
+Eigenwerte von $A$ mit stark negativen Realteil, also $\mathop{\rm Re}\nolimits \lambda\ll0$,
+führen zu schnell abklingenden Lösungen.
+In diesem Falle zu forden, daß die Nebenwurzeln $\mu_i(H)$ die Hauptwurzel
+$\mu_1(H)$ nicht betragsmässig übersteigen ist nur wichtig, wenn man an sehr
+hoher relativer Genauigkeit interessiert ist, sonst allerdings nicht.
+Wesentlicher ist in diesem Falle die absolute Stabilität.
+Man ist an Exponentialtermen nur so lange interessiert, wie sie einen im Rahmen
+der Rechengenauigkeit signifikanten Einfluß auf das Gesamtergebnis besitzen.
+Spielen stark abklingende Terme keine Rolle mehr, so genügt absolute
+Stabilität.
+Dies motiviert die</p>
+<p><strong>12. Definition:</strong>  (12.1) Ein konsistentes Matrixpolynom $Q\mu,H)$
+heißt $LR$-$S[\delta]$-stabil genau dann, wenn es $S[\delta]$-stabil ist
+und das um den Ursprung angeordnete Rechteck</p>
+<div class=math>
+$$
+    {\cal R} = \{H\in\mathbb{C}: a_1\le\mathop{\rm Re}\nolimits  H\le a_2\: \land\: 
+        b_1\le\mathop{\rm Im} H\le b_2\}
+$$
+</div>
+<p>mit $a_1&lt;0&lt;a_2$, $b_1&lt;0&lt;b_2$ Teilmenge der Menge der relativen Stabilität ist.</p>
+<p>(12.2) Analog definiert man $LR$-$S_\infty^r[\delta]$- und
+$LR$-$A_\infty^r[\alpha]$-Stabilität.</p>
+<p>$LR$ soll an lokal-relativ erinnern.
+Die Festlegung auf ein Rechteck ist nicht wesentlich.
+Genauso gut hätte man eine Kreisscheibe, eine elliptische Scheibe, ein
+Hexagon, etc. nehmen können, solange es um den Ursprung angeordnet ist.
+Je umfassender $\cal R$ ist, desto günstiger.
+Die Begrenzung in $b_1$ und $b_2$ rührt daher, daß Exponentialterme mit stark
+imaginären Anteil, aber geringen negativen Realteil als Exponent, noch mehr
+Eigenschaften benötigen als relative Stabilität.
+Für Differentialgleichungen mit periodischen
+Lösungen sind <a href="https://doi.org/10.1007/3-540-30666-8">gesonderte Formeln</a> besser geeignet.</p>
+<p>Abweichend von der Definition in <a href="https://books.google.de/books/about/Numerical_Initial_Value_Problems_in_Ordi.html?id=e9QQAQAAIAAJ&amp;redir_esc=y">Gear (1968)</a>
+und auch abweichend von der Definition in
+<a href="https://www.amazon.de/Gew%C3%B6hnliche-Differentialgleichungen-Einf%C3%BChrung-Theorie-Hochschultext/dp/3540152881">Werner/Arndt (1986)</a>,
+aber völlig sinnentsprechend wie in <a href="https://dl.acm.org/doi/pdf/10.1145/356502.356495">Tendler/Bickart/Picel (1978)</a>,
+in <a href="https://doi.org/10.1007/BF01951938">Bickart/Picel (1973)</a> und in <a href="https://www.amazon.de/numerische-Behandlung-gew%C3%B6hnlicher-Differentialgleichungen-Ber%C3%BCcksichtigung/dp/3112728440">Albrecht (1979)</a>,
+sei wie folgt definiert.</p>
+<p><strong>13. Definition:</strong>  Ein konsistentes Matrixpolynom $Q(\mu,H)$,
+welches einer oder mehrerer der Bedingungen der
+$A[\alpha]$-, $S[\delta]$-, oder $LR$-$A[\alpha]$-,
+$LR$-$S[\delta]$-Stabilität genügt, heißt steif-stabil.</p>
+<p>Bibliographisch:
+<a href="https://en.wikipedia.org/wiki/C._William_Gear">C. William Gear</a> (1935—2022),
+<a href="https://www.researchgate.net/profile/Theodore-Bickart/research">Theodore A. Bickart (1936—2023)</a>, <a href="https://www.legacy.com/us/obituaries/coloradocommunitymedia/name/theodore-bickart-obituary?id=53536695">obituary</a>,
+<a href="https://de.wikipedia.org/wiki/Helmut_Werner_%28Mathematiker%29">Werner, Helmut (1931--1985)</a>,
+<a href="https://www.mathgenealogy.org/id.php?id=35442">Arndt, Herbert</a>,
+<a href="https://en.wikipedia.org/wiki/C._William_Gear">Gear, Charles William (1935--2022)</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=23871">Peter Albrecht</a>.</p>
+<p>Bickart, Theodore A. und Picel, Zdenek:
+&quot;<a href="https://doi.org/10.1007/BF01951938">High Order Stiffly Stable Composite Multistep Methods for Numerical
+Integration of Stiff Differential Equations</a>&quot;, BIT, Vol 13, 1973,
+pp.272—286</p>
+<h2>5. Konstruktive Herleitung steif-stabiler zyklischer Formeln<a id=Konstruktion></a></h2>
+<blockquote>
+<p>A computer program for plotting both the Lambda and Zeta Loci was
+presented and described.
+Using an interactive version of this program new and efficient
+cyclic composite linear multistep methods of orders three through
+seven were obtained. $\ldots$<br>
+The test for stiff stability of a composite linear multistep method
+presented herein is entirely graphical. $\ldots$<br>
+Interactive communication was via a teletypewriter, the only device
+available for this purpose at the computer facility used.</p>
+<p>J.M. Tendler (1973)</p>
+</blockquote>
+<p><strong>1.</strong> In diesem Abschnitt wird darauf eingegangen, wie die in dem Programm
+TENDLER verwendeten Formeln, von Tendler (1973)
+entwickelt wurden.
+Neben der schon mehrfach erwähnten Dissertation von J.M. Tendler, findet man
+eine Darstellung der Parametrisierung von Verfahren in dem Aufsatz von
+<a href="https://doi.org/10.1137/0708018">Donelson/Hansen (1971)</a>.
+U.a. weitere Hinweise zur Konstruktion generell zyklischer Verfahren und
+auch steif-stabiler zyklischer Verfahren, einschließlich entsprechender
+Parametrisierungen, findet man in dem Buch von
+<a href="https://www.amazon.de/numerische-Behandlung-gew%C3%B6hnlicher-Differentialgleichungen-Ber%C3%BCcksichtigung/dp/3112728440">Albrecht (1979)</a>.</p>
+<p>Die beiden Aufsätze von <a href="https://wwwzb.fz-juelich.de/verlagextern1/index.asp?Msg=list&amp;Jahr=1977&amp;PageNo=4">Mihelčić (1977)</a>,
+<a href="http://dx.doi.org/10.1007/BF02251950">Mihelčić (1978)</a>,
+die Veröffentlichung von <a href="http://dx.doi.org/10.1002/zamm.19810610609">Mihelčić/Wingerath (1981)</a>,
+und die Disserattion von Tischer (1983), die Arbeit
+Tischer/Sacks-Davis (1983)](<a href="https://doi.org/10.1137/0904051">https://doi.org/10.1137/0904051</a>)
+bzw. <a href="https://doi.org/10.1145/214408.214417">Tischer/Gupta (1985)</a>,
+liefern ebenfalls Aufschluß über die Gewinnung zyklischer, steif-stabiler
+Verfahren.
+<a href="https://doi.org/10.1145/214408.214417">Tischer/Gupta (1985)</a> äußern sich
+dort mehr zu den Erfahrungen mit den von Tischer (1983)2 und
+Tischer/Sacks-Davis (1983)3 gewonnen Formeln, wobei auch weitere
+zyklische Formeln in die Bewertung mit eingeschlossen werden.</p>
+<p>Die Dissertation von Tischer (1983) und die Arbeit von <a href="https://doi.org/10.1137/0904051">Tischer/Sacks-Davis (1983)</a> geben sogar
+zweistufige $A_\infty^0$-stabile zyklische Verfahren an bis zur Ordnung
+$p\le4$.
+Über der Ordnung $p&gt;4$ sind die weiterhin zweistufigen Zyklen noch
+$A_\infty^0[\alpha]$-stabil, mit $\alpha$=$86^\circ$, $76^\circ$,
+$57^\circ$, und $22^\circ$.
+Die Formeln erfüllen sogar noch zahlreiche weitere wünschenswerte
+Eigenschaften, allerdings haben sie auch gewisse Nachteile.</p>
+<p>Bibliographisch. <a href="https://hrcak.srce.hr/file/413565">Matija (Miško) Mihelčić</a> (1935—2011),
+<a href="https://www.researchgate.net/profile/Peter-Tischer-2">Peter E. Tischer</a>.</p>
+<p>Matija Mihelčić: &quot;<a href="https://wwwzb.fz-juelich.de/verlagextern1/index.asp?Msg=list&amp;Jahr=1977&amp;PageNo=4">Fast $A$-stabile Donelson-Hansensche
+zyklische Verfahren zur numerischen Integration von
+'stiff'-Differentialgleichungssystemen</a>&quot;,
+Angewandte Informatik, 1977, Vol 19, Heft 7, pp.299—305</p>
+<p>Matija Mihelčić: &quot;<a href="http://dx.doi.org/10.1007/BF02251950">$A(\alpha)$-Stable Composite
+Multistep Methods of Order 5</a>&quot;, Computing, Vol 20, 1978,
+pp.267—272</p>
+<p>Matija Mihelčić und K. Wingerath: &quot;<a href="http://dx.doi.org/10.1002/zamm.19810610609">$A(\alpha)$-stable
+Cyclic Composite Multistep Methods of Orders 6 and 7 for Numerical
+Integration of Stiff Ordinary Differential Equations</a>&quot;, ZAMM, Band 61,
+1981, pp.261—264</p>
+<p>Tischer, Peter E.: &quot;The Cyclic Use of Linear Multistep
+Formulas for the Solution of Stiff Differential Equations&quot;, Ph.D. Thesis,
+Department of Computer Science, Monash University, Clayton, Victoria,
+Australia, August 1983, <em>x</em>+180 S.</p>
+<p>Tischer, Peter E. und Sacks-Davis, Ron: &quot;<a href="https://doi.org/10.1137/0904051">A New Class of
+Cyclic Multistep Formulae for Stiff Systems</a>&quot;,
+SIAM Journal on Scientific and Statistical Computing,
+Vol 4, No 4, December 1983, pp.733—747.</p>
+<p><strong>2.</strong> Für die gestellte Aufgabe zur Gewinnung neuerer und besserer
+Verfahren für die Integration steifer Differentialgleichungen ging
+Tendler (1973) wie folgt vor:
+Man entwerfe zyklische Formeln der Konvergenzordnung 1 bis 6, die Ordnung
+für Ordnung bessere Stabilitätseigenschaften besitzen als die BDF.
+Falls möglich sollten sogar Verfahren mit einer Ordnung höher als 6
+entwickelt werden.
+Als Vergleichsmaßstab wurde der Widlund-$\alpha$-Winkel gewählt.
+Andere Kriterien spielten keine Rolle.</p>
+<p>Die Bedingungen (Null) und (LMSV) an die Koeffizienten $\alpha_{ij}$
+und $\beta_{ij}$, sorgen dafür, daß der Zyklus stets die folgende Form
+hat</p>
+<div class=math>
+$$
+    \underbrace{
+        \begin{array}{cccccc}
+            *&*&*&*& & \cr
+             &*&*&*&*& \cr
+             & &*&*&*&*
+        \end{array}
+    }_{ \displaystyle\alpha_{ij} }
+    \qquad \quad
+    \underbrace{
+        \begin{array}{cccccc}
+            0&0&0&*& & \cr
+             &0&0&*&*& \cr
+             & &0&*&*&*
+        \end{array}
+    }_{ \displaystyle\beta_{ij} }
+$$
+</div>
+<p>Die BDF erster und zweiter Ordnung</p>
+<div class=math>
+$$
+\eqalign{
+     y_{n+1}  &= y_n + h\dot y_{n+1}, \cr
+     3y_{n+1} &= 4y_n - y_{n-1} + 2h\dot y_{n+1} }
+$$
+</div>
+<p>sind beide $A_{\infty}^0[\alpha]$-stabil mit optimalen Widlund-Winkel von
+$\alpha=90^\circ$ und optimaler Widlund-Distanz $\delta=0$, sodaß damit
+eine weitere Verbesserung nicht mehr möglich ist, wenn man wie gesagt nur
+den Widlund-$\alpha$-Winkel als Vergleichsmaßstab nimmt.
+Diese beiden Verfahren werden daher auch für $p=1$ und entsprechend
+für $p=2$ in dem Programm TENDLER verwendet.</p>
+<p>Die $i$ Parameter in der $i$-ten Stufe deuten darauf hin, daß $i$ linear
+unabhängige Formeln in geeigneter Kombination ausreichen, um ein neues
+Verfahren zu konstruieren.
+Für die Ordnungen $p=3$ und höher, wurde daher wie
+folgt die Suche nach besseren Formeln durchgeführt:</p>
+<ol>
+<li>Im ersten Schritt wurden zyklische Formeln gewonnen,
+die die Bedingung (LMSV) und (Null) erfüllen und</li>
+<li>im zweiten Schritt wurde der Widlund-$\alpha$-Winkel numerisch
+berechnet und mit dem entsprechenden Winkel für die BDF verglichen.</li>
+<li>War dann der Winkel größer und damit besser, wurde die Suche abgebrochen,
+andernfalls wurden die Parameter weiter variiert und der erste Schritt,
+ggf. mit einer anderen Stufenzahl $\ell$, erneut durchgeführt.</li>
+</ol>
+<p>Beim ersten Schritt ging man wie folgt vor.
+Zuerst wurde eine Folge von $k+1$ linear unabhängigen Mehrschrittformeln
+aufgestellt, sodaß die $\beta$-Koeffizienten eine Diagonalmatrix bilden.
+Wegen der linearen Unabhängigkeit ist dies immer zu erreichen.
+Diese Diagonalform erleichtert das Generieren von Zyklen mit der Eigenschaft</p>
+<div class=math>
+$$
+    \beta_{ij}=0 \quad (j\le0), \qquad \beta_{ii}\ne0.
+$$
+</div>
+<p>Da nur Linearkombinationen von diesen Mehrschrittformeln gebildet werden,
+ist das Erfülltsein von (LMSV) ebenfalls sofort klar.
+Dann wurde für jedes $i=1,\ldots,\ell$ eine Linearkombination dieser Formeln
+berechnet um daraus die $i$-te Stufe des Zykluses zu bilden.
+Die Stufenzahl $\ell$ wurde versucht so klein wie möglich zu halten.</p>
+<p>Um das Vorgehen zu illustrieren ein längeres Beispiel.</p>
+<p><strong>3. Beispiel:</strong>  Es seien die $k+1=4$ linear unabhängigen
+Mehrschrittformeln $F1$ bis $F4$ der Konsistenzordnung 3 betrachtet:</p>
+<div class=math>
+$$
+    \matrix{F1:\cr F2:\cr F3:\cr F4:\cr}\qquad
+    \pmatrix{ -2 &  9 & -18 & 11 & 0 & 0 & 0 & -6\cr
+               1 & -6 &   3 &  2 & 0 & 0 & -6 & 0\cr
+              -2 & -3 &   6 & -1 & 0 & -6 & 0 & 0\cr
+             -11 & 18 &  -9 &  2 & -6 & 0 & 0 & 0
+            }
+    \pmatrix{ y_{n+i-3}\cr
+              y_{n+i-2}\cr
+              y_{n+i-1}\cr
+              y_{n+i}\cr
+              h\dot y_{n+i-3}\cr
+              h\dot y_{n+i-2}\cr
+              h\dot y_{n+i-1}\cr
+              h\dot y_{n+i}
+            }
+       =
+    \pmatrix{ 0\cr 0\cr 0\cr 0 }.
+$$
+</div>
+<p>Jede Zeile der Matrix ist dabei das entsprechende Mehrschrittverfahren,
+also die erste Zeile ist F1, die zweite ist F2 und so fort.
+Das Verfahren $F1$ ist implizit, während hingegen $F2$, $F3$ und $F4$
+explizite Verfahren sind.
+Wie so häufig gilt auch hier, daß die einzelnen Stufen instabil sind, mit
+Ausnahme der ersten, welche gerade die BDF3 ist, mit den Nullstellen 1 und
+$0.3\overline{18}\pm 0.284i$.
+Die Nullstellen der zweiten “Zeile” liegen bei 1, $-2.686$ und $0.186$.
+Die dritte “Zeile” hat die Nullstellen 1, $5.372$ und $-0.372$ und
+schließlich die letzte vierte Zeile hat die Nullstellen 1 und
+$1.75\pm 1.561i$.
+Diese Instabilität der Stufen bzw. von Komponenten der Stufen, überträgt
+sich nicht automatisch auf den Gesamtzyklus.
+Die Stabilität des Gesamtzyklus wird getrennt überprüft.</p>
+<p>Von diesem Arsenal an Formeln wurde nun der
+Zyklus für das Verfahren dritter Ordnung, wie folgt aufgebaut:
+Jede Stufe wurde als Linearkombination der
+$F1$ bis $F4$ erhalten, d.h. die $i$-te Stufe ist gleich</p>
+<div class=math>
+$$
+    c_{i1}F1 + c_{i2}F2 + c_{i3}F3 + c_{i4}F4.
+$$
+</div>
+<p>Um nun die Bedingung (NULL) zu erfüllen, muß offensichtlich $c_{ij}=0$
+für $j&gt;i$ gelten.
+Der Widlund-$\alpha$-Winkel wurde jetzt für die Werte maximiert:</p>
+<div class=math>
+$$
+%\newcommand{\md}[2]{\mathchoice{\textstyle\nicefrac{#1}{#2}}{\nicefrac{#1}{#2}}{\nicefrac{#1}{#2}}{\nicefrac{#1}{#2}}}
+\def\md#1{#1}
+\begin{array}{lllll}
+  \ell=3: & i=1: & c_{11}=1,  &                   & \cr
+          & i=2: & c_{21}=1,  & c_{22}=0,   & \cr
+          & i=3: & c_{31}=\md{1/3}, & c_{32}=-\md{2/3}, & c_{33}=-\md{2/3}.\cr
+\end{array}
+$$
+</div>
+<p>Der so gebildete Zyklus der Ordnung $p=3$ kann daher wie folgt geschrieben
+werden:</p>
+<div class=math>
+$$
+\begin{array}{ccccccccccccccccc}
+-2y_{m\ell-2}&+&9y_{m\ell-1}&-&18y_{m\ell}&+&11y_{m\ell+1}&&&&%
+    &=& 6h\dot y_{m\ell+1},\cr
+&-&2y_{m\ell-1}&+&9y_{m\ell}&-&18y_{m\ell+1}&+&11y_{m\ell+2}&&%
+    &=&&& 6h\dot y_{m\ell+2},\cr
+&&&&&&9y_{m\ell+1}&-&12y_{m\ell+2}&+&3y_{m\ell+3}%
+    &=& h\bigl(-4\dot y_{m\ell+1}&-&4\dot y_{m\ell+2}+2\dot y_{m\ell+3}\bigr).\cr
+\end{array}
+$$
+</div>
+<p>Weil der Widlund-$\alpha$-Winkel grösser und damit besser als der
+entsprechende Winkel für BDF3 ausgefallen war, wurde der Zyklus akzeptiert.
+Die Formeln der Konvergenzordnung $p=4$ bis $p=7$ wurden auf genau die oben
+beschriebene Art und Weise erhalten.
+Daß bei diesem Beispiel die ersten beiden Stufen gleich sind, nämlich
+hier gleich BDF3, ist mehr oder minder Zufall.
+Mit der Bedingung $c_{ij}=0$ für $i&gt;j$ hat dies nichts zu tun.
+Beim zyklischen Verfahren sechster Ordnung sind auch tatsächlich
+alle Stufen untereinander verschieden.
+Bei allen anderen Verfahren hingegen, außer eben bei $p=6$, sind die
+ersten beiden Stufen gleich und zwar gleich der entsprechenden BDF.</p>
+<p><strong>4.</strong> Es waren 3 Stufen nötig für die
+Verfahren 3.ter und 4.ter Ordnung und 4 Stufen für die Formeln 5.ter, 6.ter
+und 7.ter Ordnung.
+Die genauen Zahlenwerte für die Koeffizienten aller Zyklen werden später
+in einem Schema angegeben.
+Es sei angemerkt, daß immer die ersten beiden
+Stufen des $i$-ten Zykluses mit BDF$i$ beginnen.
+Dies gilt bei allen Verfahren, außer bei der Ordnung $p=6$.
+Dort ist es nur die 1.te Stufe.</p>
+<p><strong>5.</strong> Zum Vergleich seien einmal die Werte für den
+Widlund-$\alpha$-Winkel für die neuen zyklischen Mehrschrittverfahren,
+die in dem Programm TENDLER verwendet werden, mit denen der BDF in der
+untenstehenden Tabelle gegenübergestellt.
+Auch findet man die entsprechenden Werte für die Formeln, die in der Dissertation
+Tischer (1983),
+bzw. <a href="https://doi.org/10.1137/0904051">Tischer/Sacks-Davis (1983)</a>
+entwickelt haben, unter der Spalte ODIOUS.
+BP73 bezeichnet hier die blockimpliziten Verfahren von
+<a href="https://doi.org/10.1007/BF01951938">Bickart/Picel (1973)</a>.
+Die BDF$i$, für alle $i\ge7$, sind nicht $D$-stabil, also natürlich erst
+recht nicht $A[\alpha]$- bzw. $S[\delta]$-stabil.
+Einen Beweis und alternative Beweisansätze findet man in dem Buch von
+<a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a>
+oder hier <a href="https://doi.org/10.1137/0720090">Hairer/Wanner (1983): On the Instability of the BDF Formulas</a>.</p>
+<p>Zyklische Verfahren <em>über</em> der Ordnung $p=7$ werden in dem Programm
+TENDLER nicht verwendet.
+Die Programme LSODE, LSODA und LSODAR benutzen die BDF lediglich bis zur
+Ordnung $p=5$.
+Rechts daneben ist auch eine Gegenüberstellung der $\delta$-Werte bei
+der $S_{\infty}[\delta]$-Stabilität.</p>
+<p>Widlund-$\alpha$-Winkel</p>
+<table>
+<thead>
+<tr>
+<th><em>p</em></th>
+<th>TENDLER</th>
+<th>BDF</th>
+<th>ODIOUS</th>
+<th>BP73</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>90.00</td>
+<td>90.00</td>
+<td>90.00</td>
+<td>90.0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>90.00</td>
+<td>90.00</td>
+<td>90.00</td>
+<td>90.0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>89.43</td>
+<td>86.03</td>
+<td>90.00</td>
+<td>88.9</td>
+</tr>
+<tr>
+<td>4</td>
+<td>80.88</td>
+<td>73.35</td>
+<td>90.00</td>
+<td>87.7</td>
+</tr>
+<tr>
+<td>5</td>
+<td>77.48</td>
+<td>51.84</td>
+<td>86.64</td>
+<td>85.5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>63.25</td>
+<td>17.84</td>
+<td>76.32</td>
+<td>82.7</td>
+</tr>
+<tr>
+<td>7</td>
+<td>33.53</td>
+<td>*</td>
+<td>57.66</td>
+<td>79.5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>*</td>
+<td>*</td>
+<td>22.15</td>
+<td>76.0</td>
+</tr>
+<tr>
+<td>9</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>72.5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>69.6</td>
+</tr>
+</tbody>
+</table>
+<p>Widlund-Distanz $\delta$</p>
+<table>
+<thead>
+<tr>
+<th><em>p</em></th>
+<th align="left">TENDLER</th>
+<th align="left">BDF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="left">0.0048</td>
+<td align="left">0.083</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="left">0.24</td>
+<td align="left">0.67</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="left">1.4</td>
+<td align="left">2.3</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="left">2.9</td>
+<td align="left">6.1</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="left">10.2</td>
+<td align="left">*</td>
+</tr>
+</tbody>
+</table>
+<p>Die Widlund-Winkel der BDF können exakt bestimmt werden:
+<a href="http://dx.doi.org/10.1007/s10543-019-00796-x">Gander/Wanner (2020): Exact BDF stability angles with maple</a>
+und
+<a href="https://doi.org/10.1007/s10543-019-00768-1">Akrivis/Katsoprinakis (2019): Maximum angles of $A(\vartheta)$-stability of backward difference formulae</a>, <a href="https://www.cs.uoi.gr/~akrivis/AK2a.pdf">PDF</a>.</p>
+<p><strong>6.</strong> Die besseren Stabilitätseigenschaften, die sich durch den größeren
+Widlund-$\alpha$-Winkel bemerkbar machen, erlauben nun einem Programm,
+welches die hergeleiteten Formeln benutzt, früher die Schrittweite zu
+erhöhen, da sie nicht durch Stabilitätsbeschränkungen verkleinert
+werden muß.
+Insbesondere für Differentialgleichungen, bei denen die
+Eigenwerte der Jacobimatrix nahe der imaginären Achse sind, sollten
+besser integriert werden können.</p>
+<p>Das Suchverfahren nach steif-stabilen zyklischen Formeln wird beschrieben in
+der Dissertation von Tendler (1973).
+Dort wird auch ein Programm zur Berechnung des Widlund-$\alpha$-Winkels
+angegeben, basierend auf einem Polynomlöser.
+Das hier beschriebene Suchverfahren hängt von einem Programm zur Berechnung
+des Widlund-Winkels ab.</p>
+<p>Man beachte, daß alle Verfahren interaktiv gefunden wurden:
+“Probieren-gucken”, “probieren-gucken”, $\ldots$<br>
+Wenn also hier von “maximiert” gesprochen wird, ist damit gemeint,
+daß durch Suchen, nicht jedoch kalkülmässig, in geschlossener Form,
+eine Maximierung stattgefunden hat.
+Sieht man einmal von grundsätzlichen Einstellungen ab, so kann man diesem
+pragmatischen Ansatz seine Bedeutung nicht absprechen.</p>
+<p>Es wurde auch versucht ein Verfahren der Konvergenzordnung $p=8$ zu
+erhalten, welches steif-stabil ist, doch gelang dies nicht.
+Dies führt Tendler (1973) darauf zurück, daß eben
+nur interaktiv gesucht wurde.
+Eine andere Möglichkeit wird darin gesehen, daß die Begrenzung der Anzahl
+der Stufen auf $\ell=4$ zu restriktiv gewesen sei.</p>
+<p>Testläufe haben ergeben, daß die Auffindung von zyklischen Verfahren mit
+mehr als 4 Stufen durchaus sinnvoll sein kann.
+Oder m.a.W., die Erfahrungen mit dem Programm TENDLER deuten darauf hin,
+daß Zyklen mit mehr als 4 Stufen nicht krass den praktischen Bedürfnissen
+widerstreben.
+Ob diese Erfahrung grundsätzlich für geeignete vielstufige Zyklen sich
+bestätigen könnte, kann selbstverständlich nicht pauschal postuliert werden.
+Ein Einbau solcher Formeln in das Programm TENDLER zumindestens wäre völlig
+unproblematisch.
+Da jede Stufe Element einer ringzyklischen Liste ist, macht es keinen
+Aufwand hier eine weiteres Ringelement einzufügen.
+Zudem ist die Konstante 4 als Programmkonstante <code>MAXYRING</code> abgelegt.</p>
+<p>Außer Konstantenänderungen sind keine Änderungen nötig,
+insbesondere keine algorithmischen, vorausgesetzt es handelt sich um echte
+Verallgemeinerungen der BDF, wie es beispielsweise die Tendlerschen Zyklen
+darstellen.
+Man beachte hierzu die Ausführungen bzgl. der Prädiktorformeln.
+Zu berücksichtigen ist jedoch, daß der Speicherplatzbedarf dann größer wird,
+allerdings nur in linearen Termen der Dimension $n$ der
+Differentialgleichung.
+Dies nur, falls die Ordnung 7 übersteigt.
+Dies liegt an der Notwendigkeit zur Bildung rückwärtsgenommener Differenzen
+bis zur Ordnung $p+1$ in dem Programm TENDLER.</p>
+<h2>6. Basisformeln der Tendlerschen Zyklen<a id=Basisformeln></a></h2>
+<p><strong>1.</strong> Die Bestandteile der zyklischen Formeln von Tendler (1973) lauten:</p>
+<div class=math>
+$$
+\begin{array}{c|c}
+p & i=1,\ldots,\ell\cr
+\hline
+j & \alpha_{ij}\cr
+\hline
+j & \beta_{ij}\cr
+\end{array}
+$$
+</div>
+<p>Die in jeder Tabelle ganz rechts stehende Formel, ist immer die BDF.
+Die restlichen Formeln sind explizite Verfahren.
+Alle unten aufgeführten Formeln benötigen $k$ Startwerte und besitzen
+die Konsistenzordnung $p=k$.
+Die im folgenden angegebenen Basisformeln sind also ersteinmal nur für die
+Konstruktion von Zyklen der Konvergenzordnung $p=k$ geeignet.
+Wünscht man andere Konvergenzordnungen, bei anderer Schrittzahl, so gelten
+die Überlegungen jedoch entsprechend.
+Berücksichtigt man den Effekt der annullierten Dominanz, so sind die
+angegebenen Basisformeln auch für zyklische Verfahren der Konvergenzordnung
+$p=k+1$ geeignet.
+Unter den Verfahren befindet sich stets der entsprechende,
+gänzlich unskalierte Fehlerfaktor, der berechnet wurde nach der Vorschrift</p>
+<div class=math>
+$$
+    c_{p+1} := {1\over(p+1)!} C_{p+2,k} \pmatrix{\alpha\cr \beta\cr}.
+$$
+</div>
+<p>Die Basisformeln im einzelnen.</p>
+<div class=math>
+$$
+\def\x#1/#2.{\displaystyle{#1\over #2}}
+\def\y#1/#2.{\displaystyle{-{#1\over #2}}}
+\begin{array}{r|rrrr}
+p=3 & 1 & 2 & 3 & 4\cr
+\hline
+-2 & -11 &  -2 &  1 &  -2\cr
+-1 &  18 &  -3 & -6 &   9\cr
+ 0 &  -9 &   6 &  3 & -18\cr
+ 1 &   2 &  -1 &  2 &  11\cr
+\hline
+-2 &   6 &   0 &  0 &   0\cr
+-1 &   0 &   6 &  0 &   0\cr
+ 0 &   0 &   0 &  6 &   0\cr
+ 1 &   0 &   0 &  0 &   6\cr
+\hline
+c_{i,4} & \x3/2. & \y1/2. & \x1/2. & \y3/2.\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrr}
+p=4 & 1 & 2 & 3 & 4 & 5\cr
+\hline
+-3 & -25 &  -3 &   1 &  -1 &   3\cr
+-2 &  48 & -10 &  -8 &   6 & -16\cr
+-1 & -36 &  18 &   0 & -18 &  36\cr
+ 0 &  16 &  -6 &   8 &  10 & -48\cr
+ 1 &  -3 &   1 &  -1 &   3 &  25\cr
+\hline
+-3 &  12 &   0 &   0 &   0 &   0\cr
+-2 &   0 &  12 &   0 &   0 &   0\cr
+ 1 &   0 &   0 &  12 &   0 &   0\cr
+ 0 &   0 &   0 &   0 &  12 &   0\cr
+ 1 &   0 &   0 &   0 &   0 &  12\cr
+\hline
+c_{i,5} & \y12/5. & \x3/5. & \y2/5. & \x3/5. & \y12/5.\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrrr}
+p=5 & 1 & 2 & 3 & 4 & 5 & 6\cr
+\hline
+-4 & -137 &  -12 &    3 &   -2 &    3 &  -12\cr
+-3 &  300 &  -65 &  -30 &   15 &  -20 &   75\cr
+-2 & -300 &  120 &  -20 &  -60 &   60 & -200\cr
+-1 &  200 &  -60 &   60 &   20 & -120 &  300\cr
+ 0 &  -75 &   20 &  -15 &   30 &   65 & -300\cr
+ 1 &   12 &   -3 &    2 &   -3 &   12 &  137\cr
+\hline
+-4 &   60 &    0 &    0 &    0 &    0 &    0\cr
+-3 &    0 &   60 &    0 &    0 &    0 &    0\cr
+-2 &    0 &    0 &   60 &    0 &    0 &    0\cr
+ 1 &    0 &    0 &    0 &   60 &    0 &    0\cr
+ 0 &    0 &    0 &    0 &    0 &   60 &    0\cr
+ 1 &    0 &    0 &    0 &    0 &    0 &   60\cr
+\hline
+c_{i,6} & 10 & -2 & 1 & -1 & 2 & -10\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrrrr}
+p=6 & 1 & 2 & 3 & 4 & 5 & 6 & 7\cr
+\hline
+-5 & -147 &  -10 &    2 &   -1 &    1 &   -2 &   10\cr
+-4 &  360 &  -77 &  -24 &    9 &   -8 &   15 &  -72\cr
+-3 & -450 &  150 &  -35 &  -45 &   30 &  -50 &  225\cr
+-2 &  400 & -100 &   80 &    0 &  -80 &  100 & -400\cr
+-1 & -225 &   50 &  -30 &   45 &   35 & -150 &  450\cr
+ 0 &   72 &  -15 &    8 &   -9 &   24 &   77 & -360\cr
+ 1 &  -10 &    2 &   -1 &    1 &   -2 &   10 &  147\cr
+\hline
+-5 &   60 &    0 &    0 &    0 &    0 &    0 &    0\cr
+-4 &    0 &   60 &    0 &    0 &    0 &    0 &    0\cr
+-3 &    0 &    0 &   60 &    0 &    0 &    0 &    0\cr
+-2 &    0 &    0 &    0 &   60 &    0 &    0 &    0\cr
+-1 &    0 &    0 &    0 &    0 &   60 &    0 &    0\cr
+ 0 &    0 &    0 &    0 &    0 &    0 &   60 &    0\cr
+ 1 &    0 &    0 &    0 &    0 &    0 &    0 &   60\cr
+\hline
+c_{i,7} & \y60/7. & \x10/7. & \y4/7. & \x3/7. & \y4/7. & \x10/7. & \y60/7.\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrrrrr}
+p=7 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\cr
+\hline
+-6 & -1089 &   -60 &    10 &    -4 &     3 &    -4 &    10 &   -60\cr
+-5 &  2940 &  -609 &  -140 &    42 &   -28 &    35 &   -84 &   490\cr
+-4 & -4410 &  1260 &  -329 &  -252 &   126 &  -140 &   315 & -1764\cr
+-3 &  4900 & -1050 &   700 &  -105 &  -420 &   350 &  -700 &  3675\cr
+-2 & -3675 &   700 &  -350 &   420 &   105 &  -700 &  1050 & -4900\cr
+-1 &  1764 &  -315 &   140 &  -126 &   252 &   329 & -1260 &  4410\cr
+ 0 &  -490 &    84 &   -35 &    28 &   -42 &   140 &   609 & -2940\cr
+ 1 &    60 &   -10 &     4 &    -3 &     4 &   -10 &    60 &  1089\cr
+\hline
+-6 &   420 &     0 &     0 &     0 &     0 &     0 &     0 &     0\cr
+-5 &     0 &   420 &     0 &     0 &     0 &     0 &     0 &     0\cr
+-4 &     0 &     0 &   420 &     0 &     0 &     0 &     0 &     0\cr
+-3 &     0 &     0 &     0 &   420 &     0 &     0 &     0 &     0\cr
+-2 &     0 &     0 &     0 &     0 &   420 &     0 &     0 &     0\cr
+-1 &     0 &     0 &     0 &     0 &     0 &   420 &     0 &     0\cr
+ 0 &     0 &     0 &     0 &     0 &     0 &     0 &   420 &     0\cr
+ 1 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &   420\cr
+\hline
+c_{i,8} & \x105/2. & \y15/2. & \x5/2. & \y3/2. & \x3/2. & \y5/2. & \x15/2. & \y105/2.\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrrrrrr}
+p=8 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\cr
+\hline
+-7 &  -2283 &   -105 &     15 &     -5 &      3 &     -3 &      5 &    -15 &    105\cr
+-6 &   6720 &  -1338 &   -240 &     60 &    -32 &     30 &    -48 &    140 &    960\cr
+-5 & -11760 &   2940 &   -798 &   -420 &    168 &   -140 &    210 &   -588 &   3920\cr
+-4 &  15680 &  -2940 &   1680 &   -378 &   -672 &    420 &   -560 &   1470 &  -9408\cr
+-3 & -14700 &   2450 &  -1050 &   1050 &      0 &  -1050 &   1050 &  -2450 &  14700\cr
+-2 &   9408 &  -1470 &    560 &   -420 &    672 &    378 &  -1680 &   2940 & -15680\cr
+-1 &  -3920 &    588 &   -210 &    140 &   -168 &    420 &    798 &  -2940 &  11760\cr
+ 0 &    960 &   -140 &     48 &    -30 &     32 &    -60 &    240 &   1338 &  -6720\cr
+ 1 &   -105 &     15 &     -5 &      3 &     -3 &      5 &    -15 &    105 &   2283\cr
+\hline
+-7 &    840 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-6 &      0 &    840 &      0 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-5 &      0 &      0 &    840 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-4 &      0 &      0 &      0 &    840 &      0 &      0 &      0 &      0 &      0\cr
+-3 &      0 &      0 &      0 &      0 &    840 &      0 &      0 &      0 &      0\cr
+-2 &      0 &      0 &      0 &      0 &      0 &    840 &      0 &      0 &      0\cr
+-1 &      0 &      0 &      0 &      0 &      0 &      0 &    840 &      0 &      0\cr
+ 0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &    840 &      0\cr
+ 1 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &    840\cr
+\hline
+c_{i,9} & \y280/3. & \x35/3. & \y10/3. & \x5/3. & \y4/3. & \x4/3. & \y10/3. & \x35/3. & \y280/3.\cr
+\end{array}
+$$
+</div>
+<div class=math>
+$$
+\begin{array}{r|rrrrrrrrrr}
+p=9 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\cr
+\hline
+-8 &  -7129 &   -280 &     35 &    -10 &      5 &     -4 &      5 &    -10 &     35 &   -280\cr
+-7 &  22680 &  -4329 &   -630 &    135 &    -60 &     45 &    -54 &    105 &   -360 &   2835\cr
+-6 & -45360 &  10080 &  -2754 &  -1080 &    360 &   -240 &    270 &   -504 &   1680 & -12960\cr
+-5 &  70560 & -11760 &   5880 &  -1554 &  -1680 &    840 &   -840 &   1470 &  -4704 &  35280\cr
+-4 & -79380 &  11760 &  -4410 &   3780 &   -504 &  -2520 &   1890 &  -2940 &   8820 & -63504\cr
+-3 &  63504 &  -8820 &   2940 &  -1890 &   2520 &    504 &  -3780 &   4410 & -11760 &  79380\cr
+-2 & -35280 &   4704 &  -1470 &    840 &   -840 &   1680 &   1554 &  -5880 &  11760 & -70560\cr
+-1 &  12960 &  -1680 &    504 &   -270 &    240 &   -360 &   1080 &   2754 & -10080 &  45360\cr
+ 0 &  -2835 &    360 &   -105 &     54 &    -45 &     60 &   -135 &    630 &   4329 & -22680\cr
+ 1 &    280 &    -35 &     10 &     -5 &      4 &     -5 &     10 &    -35 &    280 &   7129\cr
+\hline
+-8 &   2520 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-7 &      0 &   2520 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-6 &      0 &      0 &   2520 &      0 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-5 &      0 &      0 &      0 &   2520 &      0 &      0 &      0 &      0 &      0 &      0\cr
+-4 &      0 &      0 &      0 &      0 &   2520 &      0 &      0 &      0 &      0 &      0\cr
+-3 &      0 &      0 &      0 &      0 &      0 &   2520 &      0 &      0 &      0 &      0\cr
+-2 &      0 &      0 &      0 &      0 &      0 &      0 &   2520 &      0 &      0 &      0\cr
+-1 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &   2520 &      0 &      0\cr
+ 0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &   2520 &      0\cr
+ 1 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &      0 &   2520\cr
+\hline
+c_{i,10} & 252 & -28 & 7 & -3 & 2 & -2 & 3 & -7 & 28 & -252\cr
+\end{array}
+$$
+</div>
+<p><strong>2.</strong> Die Werte zur Bildung der Linearkombination der zyklischen
+Formeln von Tendler lauten in der Reihenfolge $p=3,4,5$ und $p=6,7$ wie folgend:</p>
+<div class=math>
+$$
+\displaylines{
+    \pmatrix{1&&\cr 1&0&\cr 1/3&-2/3&-2/3\cr},\qquad
+    \pmatrix{1&&\cr 1&0&\cr 4&-4&5\cr},\qquad
+    \pmatrix{1&&&\cr 1&0&&\cr 10&0&-1&\cr 10&-51/2&-31&1/2\cr}, \cr
+    \pmatrix{1&&&\cr 20&-1&&\cr 20&-1&7&\cr 20&-78&-68&3\cr},\qquad
+    \pmatrix{1&&&\cr 1&0&&\cr 20/7&-31/7&-10/5&\cr 10&-20&-5&2\cr}. \cr
+}
+$$
+</div>
+<h2>7. Äquilibrierung von Formeln<a id=Aequilibrierung></a></h2>
+<p>Es folgt die Definition von Äquilibrierungsmaßen für eine
+konsistente Formel $F$ der Form</p>
+<div class=math>
+$$
+    F = (\alpha,{\mskip 3mu}\beta)
+      = (\alpha_0,\ldots,\alpha_\kappa, {\mskip 5mu}\beta_0,\ldots,\beta_\kappa).
+$$
+</div>
+<p><strong>1. Definition:</strong>  Eine Formel $F$ hat</p>
+<p>(1) Gaußsches-$\alpha$-Äquilibrierungsmaß</p>
+<div class=math>
+$$
+    \mu_\alpha^G := {1\over\alpha_\kappa^2}\sum_{i=0}^\kappa\left(\alpha_i^2+
+        \beta_i^2\right)={1\over\alpha_\kappa^2}\lVert F\rVert_2^2,
+$$
+</div>
+<p>(2) Gaußsches-$\beta$-Äquilibrierungsmaß
+$\mu_\beta^G := \lVert F\rVert_2^2/\beta_\kappa^2$,</p>
+<p>(3) Gauß-Henrici-Äquilibrierungsmaß
+$\mu_H^G := \lVert F\rVert_2^2 / (\sigma(1))^2$,</p>
+<p>(4) Tschebyscheff-$\alpha$-Äquilibrierungsmaß</p>
+<div class=math>
+$$
+    \mu_\alpha^T := {1\over\lVert alpha_\kappa\rVert}\max_{i=0}^\kappa
+    \left(|\alpha_i|,|\beta_i|\right) =
+    {1\over\lVert \alpha_\kappa\rVert}\lVert F\rVert_\infty,
+$$
+</div>
+<p>(5) Tschebyscheff-$\beta$-Äquilibrierungsmaß
+$\mu_\beta^T := \lVert F\rVert_\infty / \lVert\beta_\kappa\rVert$,</p>
+<p>(6) Tschebyscheff-Henrici-Äquilibrierungsmaß
+$\mu_H^T := \lVert F\rVert_\infty / \lVert\sigma(1)\rVert$.</p>
+<p>Sollten Zyklen mit geringem Äquilibrierungsmaß in den führenden
+Koeffizienten stark flukturieren, so kann man daran denken, bei der Suche
+nach günstigen Formeln die folgende
+<em>Deviation der führenden Koeffizienten</em>
+klein zu halten.
+Sei $\gamma:=\beta_{ii}/\alpha_{ii}$.
+Es gibt $({\ell\atop2})$ zyklusinterne Deviationen.
+Man begrenzt dann beispielsweise die Gaußsche Deviation der Koeffizienten,
+nämlich $\sum_{i&lt;j}(\gamma_i-\gamma_j)^2$.</p>
+<p><strong>2. Beispiel:</strong>  Sei $\ell=3$.
+Es gibt ${\ell\choose2} = {3\choose2}=3$ Deviationen.
+Man fordert Beschränktheit, oder in besonderen Situationen auch Minimalität,
+durch</p>
+<div class=math>
+$$
+    (\gamma_3-\gamma_2)^2+(\gamma_3-\gamma_1)^2+(\gamma_2-\gamma_1)^2
+    \cases{\to\min&\cr \le\rm const&\cr}
+$$
+</div>
+<p>Es sollen nun einige Eigenschaften der Äquilibrierungsmaße hergeleitet werden.
+Es handelt sich hier um direkt aus der Definition herleitbare Aussagen.</p>
+<p><strong>3. Satz:</strong>  Es gelten</p>
+<p>(1) $\mu_\beta^T\ge1$, $\mu_\alpha^T\ge1$.
+Die Ungleichungen sind scharf, beispielsweise für die beiden Euler-Verfahren</p>
+<div class=math>
+$$
+    F=(-1,1,{\mskip 5mu}1,0) \qquad\hbox{und}\qquad F=(-1,1,{\mskip 5mu}0,1).
+$$
+</div>
+<p>(2) $\mu_\alpha^G&gt;1$, $\mu_\beta^G&gt;1$.</p>
+<p>(3) $\mu_H^T$ und $\mu_H^G$ sind stets definiert für $D$-stabile Verfahren,
+wegen $\rho'(1)=\sigma(1)\ne0$, da 1 keine mehrfache Nullstelle sein darf.</p>
+<p>Die $\alpha$-Äquilibrierungsmaße treten vornehmlich im Zusammenhang mit
+expliziten gewöhnlichen Differentialgleichungen der Form
+$\dot y=f(t,y)$ auf.
+Die $\beta$-Äquilibrierungsmaße treten bei DAE auf, die man mit linearen
+Mehrschrittverfahren löst, und die Henrici-Äquilibrierungsmaße treten
+gehäuft im Zusammenhang mit Einbein-Verfahren auf.
+Man ist grundsätzlich, ersteinmal ohne Einschränkungen, an möglichst kleinen
+Äquilibrierungsmaßen interessiert.
+Bei Quadraturformeln ist aus Erfahrung bekannt, daß große Äquilibrierungsmaße
+ungünstig sind, da diese Quadraturformeln zu Oszillationen neigen.
+Jedoch bedeuten kleine Äquilibrierungsmaße nicht auch automatisch kleine
+Fehlerkonstanten.
+Gegenbeispiele anhand numerisch gewonnener Formeln sind bekannt.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Praktische+Gewinnung+zyklischer%2C+steif-stabiler+Verfahren%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Praktische+Gewinnung+zyklischer%2C+steif-stabiler+Verfahren&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren&amp;title=Praktische+Gewinnung+zyklischer%2C+steif-stabiler+Verfahren" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Praktische+Gewinnung+zyklischer%2C+steif-stabiler+Verfahren&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Praktische+Gewinnung+zyklischer%2C+steif-stabiler+Verfahren%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#Gew%C3%B6hnliche+Differentialgleichungen>Gewöhnliche Differentialgleichungen</a>, <a href=/aux/tags/#zyklische+Verfahren>zyklische Verfahren</a>, <a href=/aux/tags/#Stabilit%C3%A4t>Stabilität</a>, <a href=/aux/tags/#%C3%84quilibrierung>Äquilibrierung</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2025">Index for the year 2025.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 175.78 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

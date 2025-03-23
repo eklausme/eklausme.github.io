@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Using Odroid as IP Router - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+	<link href="/jscss/prism.css" rel=stylesheet>
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2017-04-14 21:00:33">14th April 2017</time>, 18 min read</p>
+<h1>Using Odroid as IP Router</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router">eklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router</a>.</p>
+<br>
+<p>I purchased an <a href="https://en.wikipedia.org/wiki/ODROID">Odroid</a>-XU4 for ca. 80 EUR including power-supply and case from <a href="https://www.pollin.de/">Pollin</a>. The original manufacturer is <a href="https://www.hardkernel.com/">hardkernel</a>. I intended to use this small <a href="https://en.wikipedia.org/wiki/ARM_architecture">ARM</a> computer as a router and firewall. In the past I had used routers from multiple vendors, e.g., <a href="https://en.wikipedia.org/wiki/Linksys">Linksys</a>/Cisco, <a href="https://en.wikipedia.org/wiki/TP-Link">TP-Link</a>, AVM/<a href="https://en.wikipedia.org/wiki/Fritz!Box">FritzBox</a>, <a href="https://en.wikipedia.org/wiki/Netgear">Netgear</a>, and so on. There is a rule of thumb with all these devices: Usually you have to reboot them once or twice a month, otherwise they misbehave somehow. At least three of these device went completely <a href="/pdf/shuttle_primary_computer_system.pdf">catatonic</a>. Now I had enough of this, I also wanted a command line interface to the router, ideally a real Linux system with <code>bash</code>, <code>cron</code>, <code>gcc</code>, etc. Although I already own an <a href="https://en.wikipedia.org/wiki/Next_Unit_of_Computing">Intel NUC</a> and I am very happy with this computer, an Intel NUC is a little bit too expensive to be used as just a <a href="https://en.wikipedia.org/wiki/Router_(computing)">router</a>.</p>
+<iframe width=560 height=315 src=https://www.youtube.com/embed/wtqfC9v0xB0 frameborder=0 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>I recommend to additionally purchase a RTC backup battery. The Odroid has a realtime clock, but loses all date and time information once powered off. This way the log of the computer is garbled.</p>
+<!--more-->
+<h2><strong>1. Installing Arch Linux on Odroid</strong></h2>
+<p>I followed the description in <a href="https://archlinuxarm.org/platforms/armv7/samsung/odroid-xu4">archlinux|ARM</a>. Below statements are just copied verbatim from that link.</p>
+<pre class="line-numbers"><code class="language-bash">dd if=/dev/zero of=/dev/sdX bs=1M count=8
+fdisk /dev/sdX
+mkfs.ext4 /dev/sdX1
+mkdir root
+mount /dev/sdX1 root
+wget https://os.archlinuxarm.org/os/ArchLinuxARM-odroid-xu3-latest.tar.gz
+bsdtar -xpf ArchLinuxARM-odroid-xu3-latest.tar.gz -C root
+cd root/boot
+sh sd_fusing.sh /dev/sdX
+cd ../..
+umount root
+</code></pre>
+<p>All commands above proceed quickly. Only downloading the almost 300MB big Arch Linux image file takes some time according your internet speed.</p>
+<p>Once Arch Linux is installed the computer looks like this.</p>
+<pre class="line-numbers"><code class="language-bash">$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+dev             931M     0  931M   0% /dev
+run             997M  1.4M  996M   1% /run
+/dev/mmcblk1p1   30G  2.2G   26G   8% /
+tmpfs           997M     0  997M   0% /dev/shm
+tmpfs           997M     0  997M   0% /sys/fs/cgroup
+tmpfs           997M  4.0K  997M   1% /tmp
+. . .
+</code></pre>
+<p>Here is information from cpuinfo:</p>
+<pre class="line-numbers" data-line="4,14,24,34,44,54,64,74,82"><code class="language-bash">$ cat /proc/cpuinfo
+processor       : 0
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 78.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 3
+
+processor       : 1
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 78.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 3
+
+processor       : 2
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 78.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 3
+
+processor       : 3
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 78.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 3
+
+processor       : 4
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 120.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x2
+CPU part        : 0xc0f
+CPU revision    : 3
+
+processor       : 5
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 120.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x2
+CPU part        : 0xc0f
+CPU revision    : 3
+
+processor       : 6
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 120.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x2
+CPU part        : 0xc0f
+CPU revision    : 3
+
+processor       : 7
+model name      : ARMv7 Processor rev 3 (v7l)
+BogoMIPS        : 120.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x2
+CPU part        : 0xc0f
+CPU revision    : 3
+
+Hardware        : SAMSUNG EXYNOS (Flattened Device Tree)
+Revision        : 0100
+Serial          : 0000000000000000
+</code></pre>
+<p>One can clearly see that the Samsung Exynos processor 5422 has 8 cores, and uses this <a href="https://en.wikipedia.org/wiki/ARM_big.LITTLE">ARM big.LITTLE</a> architecture, where there are two different core types:</p>
+<ol>
+<li>The slow one, 1.5 GHz quad-core Cortex-A7</li>
+<li>The fast one, 2.1 GHz quad-core Cortex-A15</li>
+</ol>
+<p>See also <a href="https://lwn.net/Articles/501501/">A big.LITTLE scheduler update</a> as referenced in <a href="https://magazine.odroid.com/wp-content/uploads/ODROID-Magazine-201702.pdf#page=12">ODROID-Magazine February 2017</a>:</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /sys/devices/system/cpu/cpu0/cpufreq/affected_cpus
+0 1 2 3
+$ cat /sys/devices/system/cpu/cpu7/cpufreq/affected_cpus
+4 5 6 7
+</code></pre>
+<p>Output from <code>lstopo</code>.
+<img src="/img/odroid-lstopo.jpg" alt=""></p>
+<p>For further information see <a href="https://magazine.odroid.com/wp-content/uploads/odroid-xu4-user-manual.pdf">Odroid-XU4 user manual</a>. For a thorough performance test see <a href="https://www.phoronix.com/scan.php?page=article&amp;item=odroid-xu4-arm">ODROID-XU4: Much Better Performance Than The Raspberry Pi Plus USB3 &amp; Gigabit Ethernet @ $60</a> in <a href="https://www.phoronix.com">Phoronix</a>.</p>
+<h2><strong>2. Network Cards</strong></h2>
+<p>The Odroid has two network cards, named <code>eth0</code> and <code>ethusb0</code>. <code>ethusb0</code> is directly connected to the cable modem, and gets its IP address per DHCP from the cable modem. <code>eth0</code> has a static IP address. I used <code>systemd-networkd</code> for this.</p>
+<pre class="line-numbers"><code class="language-bash">$ ls -l /etc/systemd/network
+total 12K
+-rw-r--r-- 1 root root 95 Apr  1 22:15 10-ethusb0.link
+-rw-r--r-- 1 root root 55 Feb  1 02:24 eth0.network
+-rw-r--r-- 1 root root 41 Apr  2 13:52 ethusb0.network
+</code></pre>
+<p>I wanted a fixed device name for the network card using USB, i.e., gigabit-USB-dongle, so I used the MAC address of this card to give it a fixed name, here <code>ethusb0</code>:</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /etc/systemd/network/10-ethusb0.link 
+[Match]
+MACAddress=74:da:38:9f:c8:fa
+
+[Link]
+Description=USB to Ethernet Adapter
+Name=ethusb0
+</code></pre>
+<p>The built-in gigabit ethernet card gets a fixed IP address but does not use any gateway!</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /etc/systemd/network/eth0.network 
+[Match]
+Name=eth0
+
+[Network]
+Address=192.168.178.1/24
+</code></pre>
+<p>I do not know how the card gets its name <code>eth0</code>. Probably I should add an entry in <code>/etc/systemd/network</code> using the MAC address.</p>
+<p>The network card connected to the cable modem, gets its IP address via DHCP.</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /etc/systemd/network/ethusb0.network 
+[Match]
+Name=ethusb0
+
+[Network]
+DHCP=yes
+</code></pre>
+<p>Once connected to the &quot;real&quot; internet, this will lead to the following routing table:</p>
+<pre class="line-numbers"><code class="language-text">$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         ip-95-222-192-1 0.0.0.0         UG    1024   0        0 ethusb0
+95.222.192.0    0.0.0.0         255.255.248.0   U     0      0        0 ethusb0
+ip-95-222-192-1 0.0.0.0         255.255.255.255 UH    1024   0        0 ethusb0
+192.168.178.0   0.0.0.0         255.255.255.0   U     0      0        0 eth0
+
+$ ifconfig
+eth0: flags=4163  mtu 1500
+        inet 192.168.178.1  netmask 255.255.255.0  broadcast 192.168.178.255
+        inet6 fe80::21e:6ff:fe31:a552  prefixlen 64  scopeid 0x20
+        ether 00:1e:06:31:a5:52  txqueuelen 1000  (Ethernet)
+        RX packets 5097790  bytes 515594426 (491.7 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 11049724  bytes 2851984084 (2.6 GiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+ethusb0: flags=4163  mtu 1500
+        inet 95.222.195.135  netmask 255.255.248.0  broadcast 95.222.199.255
+        inet6 fe80::76da:38ff:fe9f:c8fa  prefixlen 64  scopeid 0x20
+        ether 74:da:38:9f:c8:fa  txqueuelen 1000  (Ethernet)
+        RX packets 12352839  bytes 2937916965 (2.7 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 5128371  bytes 566073980 (539.8 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+</code></pre>
+<p>Below two photographs show the connections.</p>
+<p><img src="/img/IMG_20170406_162632.jpg" alt="Photo"></p>
+<p>The Odroid-XU4 has a red light, indicating that it has power. A blue light blinks, if the kernel is up and running.</p>
+<p><img src="/img/IMG_20170406_162701.jpg" alt="Photo"></p>
+<h2><strong>3. Forwarding</strong></h2>
+<p>Enabling IP forwarding in the Linux kernel, see e.g., <a href="https://www.ducea.com/2006/08/01/how-to-enable-ip-forwarding-in-linux/">IP forwarding</a>.</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /etc/sysctl.d/network.conf
+net.ipv4.ip_forward = 1
+</code></pre>
+<p>It is important to have the extension <code>.conf</code> for entries under <code>/etc/sysctl.d</code>, as <code>systemd</code> only applies setting for <code>/etc/sysctl.d/*.conf</code> files.</p>
+<p>The essential part of this forwarding is that IP packets may <a href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt">hop</a> from one ethernet card to another card. Setting <code>ip_forward=0</code> would disallow this, i.e., not good for a router.</p>
+<h2><strong>4. iptables</strong></h2>
+<p>For a tutorial see <a href="https://www.frozentux.net/iptables-tutorial/iptables-tutorial.html">Iptables Tutorial</a> by <a href="https://www.frozentux.net/personal/about/">Oskar Andreasson</a>.</p>
+<p>Adding masquerading to both cards would make the router complete. But I additionally needed the following:</p>
+<ol>
+<li>Ports 80+443 should be directed to another server</li>
+<li>I need to <code>ssh</code> to two other machines in my network, here 24+118</li>
+<li>I want to <code>ssh</code> to the Odroid from outside but not via port 22. Within my network I want to <code>ssh</code> and <code>rsync</code> to the Odroid without fuzz, i.e., using port 22</li>
+<li>Block access to ports 53 (DNS), 67+68 (bootp), and 5355 (LLMNR = Link Local Multicast Name Resolution)</li>
+</ol>
+<p>So I needed to NAT port 80 to my web-server, NAT = network translation. For the two other ssh-machines I arbitrary chose ports 8022 and 9022, which then direct to port 22 on the respective machines. Internet traffic coming from outside, i.e., coming from <code>ethusb0</code>, for port 22 on the Odroid is redirected to some unused port, here 15001, essentially quiescing port 22 for the outside world. &quot;Secret&quot; port 7022 is NAT'ed to port 22 internally. So sshd on Odroid has its port on 22, as usual, so all ssh/rsync traffic within my network does not need any ssh-config trickery or explicit port specification.</p>
+<pre class="line-numbers" data-line="3,14,18"><code class="language-text">$ iptables-save 
+# Generated by iptables-save v1.6.0 on Thu Apr  6 22:55:46 2017
+*nat
+:PREROUTING ACCEPT [39276:4616181]
+:INPUT ACCEPT [14683:1093947]
+:OUTPUT ACCEPT [11747:870197]
+:POSTROUTING ACCEPT [0:0]
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 8022 -j DNAT --to-destination 192.168.178.118:22
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 9022 -j DNAT --to-destination 192.168.178.24:22
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.168.178.24
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 443 -j DNAT --to-destination 192.168.178.24
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 7022 -j DNAT --to-destination 192.168.178.1:22
+-A PREROUTING -i ethusb0 -p tcp -m tcp --dport 22 -j DNAT --to-destination 127.0.0.1:15001
+-A POSTROUTING -o ethusb0 -j MASQUERADE
+COMMIT
+# Completed on Thu Apr  6 22:55:46 2017
+# Generated by iptables-save v1.6.0 on Thu Apr  6 22:55:46 2017
+*filter
+:INPUT ACCEPT [97:7702]
+:FORWARD ACCEPT [95:13175]
+:OUTPUT ACCEPT [59:7201]
+-A INPUT -i ethusb0 -p tcp -m tcp --dport 53 -j DROP
+-A INPUT -i ethusb0 -p udp -m udp --dport 53:68 -j DROP
+-A INPUT -i ethusb0 -p tcp -m tcp --dport 5335 -j DROP
+-A INPUT -i ethusb0 -p udp -m udp --dport 5335 -j DROP
+COMMIT
+</code></pre>
+<p>Above output of <code>iptables-save</code> is later stored in <code>/etc/iptables/iptables/iptables.rules</code>.</p>
+<p>Using <code>MASQUERADE</code> for <code>ethusb0</code> is clear: Outgoing traffic to the &quot;real&quot; internet must be hidden, as the internal IP addresses make no sense in the &quot;real&quot; internet.</p>
+<p>Remark: <code>--to-destination 127.0.0.1:15001</code> is really <code>-j DROP</code>, but is not allowed in table <code>nat</code>.</p>
+<p><code>iptables</code> uses tables and chains. In above output <code>*nat</code> designates the table &quot;nat&quot;. Similarly, <code>*filter</code> designates the table &quot;filter&quot;. If you want to type in the single commands, the first rule would be, for example:</p>
+<pre class="line-numbers"><code class="language-bash">iptables -t nat -A PREROUTING -i ethusb0 -p tcp -m tcp --dport 8022 -j DNAT --to-destination 192.168.178.118:22
+</code></pre>
+<p>In the same vein:</p>
+<pre class="line-numbers"><code class="language-bash">iptables -t filter -A INPUT -i ethusb0 -p tcp -m tcp --dport 53 -j DROP
+</code></pre>
+<p>Leaving port 22 open to the outside can be a nuisance, see appendix below.</p>
+<p>Finally enabling <code>iptables</code> in <code>systemd</code>.</p>
+<pre><code class="language-bash">$ systemctl enable iptables
+
+$ systemctl start iptables
+
+$ systemctl status iptables
+  iptables.service - Packet Filtering Framework
+   Loaded: loaded (/usr/lib/systemd/system/iptables.service; enabled; vendor preset: disabled)
+   Active: active (exited) since Mon 2017-04-03 22:01:12 CEST; 15s ago
+  Process: 600 ExecStart=/usr/bin/iptables-restore /etc/iptables/iptables.rules (code=exited, status=0/SUCCESS)
+ Main PID: 600 (code=exited, status=0/SUCCESS)
+
+Apr 03 22:01:12 odroid systemd[1]: Starting Packet Filtering Framework...
+Apr 03 22:01:12 odroid systemd[1]: Started Packet Filtering Framework.
+</code></pre>
+<p>If you feel shaky about fingering with <code>iptables</code>, then write a script, which deletes all firewall rules, like</p>
+<pre class="line-numbers"><code class="language-bash">iptables -t nat -F
+iptables -F
+</code></pre>
+<p>which runs periodically via <code>cron</code>. This way you can get back in to your machine, once you messed up the firewall rules.</p>
+<h2><strong>5. DNS</strong></h2>
+<p>I use <code>dnsmasq</code> as DNS server, see <a href="https://archlinuxarm.org/packages/armv7h/dnsmasq">dnsmasq Arch ARM package</a>. I also used <code>dnsmasq</code> first on my laptop to test the Odroid acting as DHCP client on <code>ethusb0</code>.</p>
+<p>Important entries in <code>/etc/dnsmasq.conf</code> are:</p>
+<pre><code class="language-bash">address=/klm.no-ip.org/192.168.178.24
+address=/klm.ddns.net/192.168.178.24
+address=/edh.ddns.net/192.168.178.24
+address=/klmport.no-ip.org/192.168.178.24
+address=/borussia.no-ip.org/192.168.178.118
+address=/www.eklausmeier.tk/192.168.178.24
+
+address=/2o7.net/127.0.0.1
+address=/adbrite.com/127.0.0.1
+address=/adimg.uimserv.net/127.0.0.1
+address=/adition.net/127.0.0.1
+address=/adition.com/127.0.0.1
+address=/ads.t-online.de/127.0.0.1
+address=/adtech.de/127.0.0.1
+address=/doubleclick.net/127.0.0.1
+address=/ivwbox.de/127.0.0.1
+address=/intellitxt.com/127.0.0.1
+address=/kontera.com/127.0.0.1
+address=/nuggad.net/127.0.0.1
+address=/tfag.de/127.0.0.1
+address=/tribalfusion.com/127.0.0.1
+address=/quality-channel.de/127.0.0.1
+address=/vibrantmedia.com/127.0.0.1
+</code></pre>
+<p>The first block gives special values to my <a href="/blog/2014/07-01-microsoft-brought-down-no-ip-org-with-federal-court-order/">No-IP</a> addresses. The second block is a simple <a href="/blog/2015/10-15-suppressing-advertisement-on-web-pages-a-k-a-ad-blocking/">ad-blocker</a>.</p>
+<p>If you use <code>dnsmasq</code>, then you have to disable <code>systemd-resolved</code>:</p>
+<pre class="line-numbers"><code class="language-bash">systemctl disable systemd-resolved
+systemctl stop systemd-resolved
+</code></pre>
+<h2><strong>6. Speed Test</strong></h2>
+<p>I made multiple speed tests. They showed the router is working as expected.</p>
+<pre data-line="8"><code class="language-text">$ speedtest
+Retrieving speedtest.net configuration...
+Testing from Unitymedia (95.222.195.135)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by LWLcom GmbH (Frankfurt) [15.28 km]: 18.666 ms
+Testing download speed....................
+Download: 97.78 Mbit/s
+Testing upload speed......................
+Upload: 5.31 Mbit/s
+</code></pre>
+<p>In above example I used Arch package <code>community/speedtest-cli</code>, see <a href="https://www.archlinux.org/packages/community/any/speedtest-cli/">speedtest-cli Arch package</a>.</p>
+<p>Here is another example.</p>
+<pre data-line="8"><code class="language-text">$ speedtest
+Retrieving speedtest.net configuration...
+Testing from Unitymedia (95.222.195.135)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by 23media GmbH (Frankfurt) [15.25 km]: 12.446 ms
+Testing download speed....................
+Download: 105.46 Mbit/s
+Testing upload speed......................
+Upload: 5.11 Mbit/s
+</code></pre>
+<p>So speed is sufficient for the internet if you have for example 100 MBit/s. The network interface on the Odroid, though, is limited to max. 800 MBit/s. Below is a test with iperf3:</p>
+<pre><code class="language-bash">$ iperf3 -c R
+Connecting to host R, port 5201
+[  5] local 192.168.178.5 port 38814 connected to 192.168.178.20 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  89.3 MBytes   746 Mbits/sec    0    115 KBytes       
+[  5]   1.00-2.00   sec  88.1 MBytes   742 Mbits/sec    0    141 KBytes       
+[  5]   2.00-3.00   sec   100 MBytes   839 Mbits/sec    0    410 KBytes       
+[  5]   3.00-4.00   sec   102 MBytes   852 Mbits/sec    0    410 KBytes       
+[  5]   4.00-5.00   sec   102 MBytes   853 Mbits/sec    0    431 KBytes       
+[  5]   5.00-6.00   sec   102 MBytes   860 Mbits/sec    0    431 KBytes       
+[  5]   6.00-7.00   sec   101 MBytes   851 Mbits/sec    0    452 KBytes       
+[  5]   7.00-8.00   sec   102 MBytes   852 Mbits/sec    0    452 KBytes       
+[  5]   8.00-9.00   sec   102 MBytes   855 Mbits/sec    0    452 KBytes       
+[  5]   9.00-10.01  sec   103 MBytes   855 Mbits/sec    0    452 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.01  sec   991 MBytes   830 Mbits/sec    0             sender
+[  5]   0.00-10.04  sec   990 MBytes   827 Mbits/sec                  receiver
+
+iperf Done.
+</code></pre>
+<h2><strong>7. Problems</strong></h2>
+<p><strong>a)</strong> As I forgot to purchase a backup battery, the Odroid loses its date and time, whenever the machine reboots. Once internet is available I use the following commands to get current date and time:</p>
+<pre class="line-numbers"><code class="language-bash">ntpdate ptbtime2.ptb.de
+sleep 1
+ntpdate ptbtime2.ptb.de
+hwclock --systohc
+</code></pre>
+<p>I ask the NTP server twice, so the drift is not that huge.</p>
+<p>Better than this is to automate it via <a href="https://wiki.archlinux.org/index.php/Systemd/Timers">systemd-timers</a>.</p>
+<p>Create a file <code>/etc/systemd/system/date-fetch.timer</code> as</p>
+<pre class="line-numbers"><code class="language-bash">[Unit]
+Description=&quot;Runs periodic time synchronisation using a custom script&quot;
+
+[Timer]
+OnBootSec=45sec
+OnUnitActiveSec=1w
+
+[Install]
+WantedBy=timers.target
+</code></pre>
+<p>The corresponding &quot;service&quot; is:</p>
+<pre class="line-numbers"><code class="language-bash">$ cat /etc/systemd/system/multi-user.target.wants/date-fetch.service
+[Unit]
+Description=&quot;Runs periodic time synchronisation using a custom script&quot;
+
+[Timer]
+OnBootSec=45sec
+OnUnitActiveSec=1w
+
+[Install]
+WantedBy=timers.target
+
+odroid /etc/systemd/system% cat date-fetch.service 
+[Unit]
+Description=&quot;Fetch the current date only under certain circumstances&quot;
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5sec
+ExecStart=/usr/local/bin/date-fetch
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>The final bash-script <code>/usr/local/bin/date-fetch</code> is as follows:</p>
+<pre class="line-numbers"><code class="language-bash">#!/bin/bash
+# Set date via NTP if internet is available
+# Gordian Edenhofer, 11-Apr-2017
+
+set -eu
+
+if [[ -n &quot;$(ip addr show ethusb0 | sed -n 's/.*inet \([0-9\.]*\).*/\1/gp')&quot; ]]; then
+        ntpdate ptbtime2.ptb.de
+        hwclock -w
+
+        # Cleanly exit since an IP address has been assigned to the network interface
+        # and the above commands completed without a failure (ensured by `set -e`)
+        exit 0
+else
+        # Return a failure exit code since an IP has not yet been assigned
+        exit 1
+fi
+</code></pre>
+<p><strong>b)</strong> I refrained from using <code>systemd-timesyncd</code> as this may quickly flood your log if the Odroid is not connected to the internet. It is not uncommon that my ISP has an outage, albeit seldom.</p>
+<p><strong>c)</strong> <del datetime="2018-12-15T19:11:47+00:00">Rebooting the Odroid via &quot;<code>shutdown -r now</code>&quot; does not always work. Many times I have to disconnect the power cord, then connect again.</del> I had difficulties with
+<code>shutdown -r now</code>, but they are now long gone.</p>
+<p><strong>d)</strong> When I am within my own network, I cannot <code>http/https/ssh</code> to internal servers using the <em>external</em> IP address.</p>
+<p><strong>e)</strong> It is not clear whether the Odroid is fully up to the task for functioning as a router, as exemplified by these kernel messages, time will tell:</p>
+<pre><code class="language-text">Apr 05 17:50:30 odroid kernel: INFO: rcu_preempt detected stalls on CPUs/tasks:
+Apr 05 17:50:30 odroid kernel:         1-...: (53937 GPs behind) idle=b1a/0/0 softirq=890/890 fqs=0 
+Apr 05 17:50:30 odroid kernel:         2-...: (116479 GPs behind) idle=8f4/0/0 softirq=645/645 fqs=0 
+Apr 05 17:50:30 odroid kernel:         3-...: (116479 GPs behind) idle=ed4/0/0 softirq=484/484 fqs=0 
+Apr 05 17:50:30 odroid kernel:         (detected by 0, t=4207 jiffies, g=1365668, c=1365667, q=217)
+Apr 05 17:50:30 odroid kernel: Task dump for CPU 1:
+Apr 05 17:50:30 odroid kernel: swapper/1       R  running task        0     0      1 0x00000000
+Apr 05 17:50:30 odroid kernel: [] (__schedule) from [] (rcu_idle_enter+0x60/0x64)
+Apr 05 17:50:30 odroid kernel: [] (rcu_idle_enter) from [] (cpu_startup_entry+0x198/0x218)
+Apr 05 17:50:30 odroid kernel: [] (cpu_startup_entry) from [] (0x401015ac)
+Apr 05 17:50:30 odroid kernel: Task dump for CPU 2:
+Apr 05 17:50:30 odroid kernel: swapper/2       R  running task        0     0      1 0x00000000
+Apr 05 17:50:30 odroid kernel: [] (__schedule) from [] (rcu_idle_enter+0x60/0x64)
+Apr 05 17:50:30 odroid kernel: [] (rcu_idle_enter) from [] (cpu_startup_entry+0x198/0x218)
+Apr 05 17:50:30 odroid kernel: [] (cpu_startup_entry) from [] (0x401015ac)
+Apr 05 17:50:30 odroid kernel: Task dump for CPU 3:
+Apr 05 17:50:30 odroid kernel: swapper/3       R  running task        0     0      1 0x00000000
+Apr 05 17:50:30 odroid kernel: [] (__schedule) from [] (rcu_idle_enter+0x60/0x64)
+Apr 05 17:50:30 odroid kernel: [] (rcu_idle_enter) from [] (cpu_startup_entry+0x198/0x218)
+Apr 05 17:50:30 odroid kernel: [] (cpu_startup_entry) from [] (0x401015ac)
+Apr 05 17:50:30 odroid kernel: rcu_preempt kthread starved for 4228 jiffies! g1365668 c1365667 f0x0 RCU_GP_WAIT_FQS(3) -&gt;state=0x1
+Apr 05 17:50:30 odroid kernel: rcu_preempt     S    0     7      2 0x00000000
+Apr 05 17:50:30 odroid kernel: [] (__schedule) from [] (schedule+0x4c/0xac)
+Apr 05 17:50:30 odroid kernel: [] (schedule) from [] (schedule_timeout+0x1f8/0x34c)
+Apr 05 17:50:30 odroid kernel: [] (schedule_timeout) from [] (rcu_gp_kthread+0x5e4/0x948)
+Apr 05 17:50:30 odroid kernel: [] (rcu_gp_kthread) from [] (kthread+0xec/0x104)
+Apr 05 17:50:30 odroid kernel: [] (kthread) from [] (ret_from_fork+0x14/0x3c)
+</code></pre>
+<p>It is obvious that these problems stem from the &quot;little&quot; cores in the CPU:</p>
+<pre><code class="language-text">$ journalctl | grep -C5 stalls | grep &quot;for CPU&quot;
+Apr 04 18:55:29 odroid kernel: Task dump for CPU 3:
+Apr 04 20:27:36 odroid kernel: Task dump for CPU 1:
+Apr 05 01:49:18 odroid kernel: Task dump for CPU 1:
+Apr 05 08:54:50 odroid kernel: Task dump for CPU 1:
+Apr 05 17:50:30 odroid kernel: Task dump for CPU 1:
+Apr 07 00:00:25 odroid kernel: Task dump for CPU 3:
+Apr 08 00:41:53 odroid kernel: Task dump for CPU 1:
+Apr 08 12:36:29 odroid kernel: Task dump for CPU 1:
+Apr 09 16:48:46 odroid kernel: Task dump for CPU 1:
+Apr 10 01:24:28 odroid kernel: Task dump for CPU 1:
+Apr 10 20:23:02 odroid kernel: Task dump for CPU 1:
+Apr 12 00:00:27 odroid kernel: Task dump for CPU 3:
+</code></pre>
+<p>Adding <code>CPUAffinity=0-3</code> to <code>/etc/systemd/system/multi-user.target.wants/sshd.service</code>, and similarly adding <code>CPUAffinity=4-7</code> to <code>/etc/systemd/system/multi-user.target.wants/iptables.service</code> and <code>/etc/systemd/system/multi-user.target.wants/systemd-networkd.service</code> does not remedy above problem.</p>
+<h2><strong>Appendix</strong></h2>
+<p>Excerpt from <code>lastb</code>: Kinky people trying to login to the Odroid-XU4 by brute force.</p>
+<pre><code class="language-text">xbmc     ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+xbmc     ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+xbian    ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+xbian    ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+wwwrun   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+wwwrun   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+workshop ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+workshop ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+windowse ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+windowse ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webpop   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webpop   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webmaste ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webmaste ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webmaste ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webadmin ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+webadmin ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+vyatta   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+vyatta   ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+visitor  ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+visitor  ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+virus    ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+virus    ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+vagrant  ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+vagrant  ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+uucp     ssh:notty    185.86.77.119    Tue Apr  4 20:37 - 20:37  (00:00)
+uucp     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+users    ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+users    ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+username ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+user     ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+username ssh:notty    185.86.77.119    Tue Apr  4 20:36 - 20:36  (00:00)
+</code></pre>
+<p>Similarly, <code>journalctl | grep &quot;Received disc&quot;</code>:</p>
+<pre><code class="language-text">Apr 04 22:57:30 odroid sshd[2812]: Received disconnect from 221.194.44.224 port 54372:11:  [preauth]
+Apr 04 23:00:42 odroid sshd[2815]: Received disconnect from 221.194.44.211 port 44199:11:  [preauth]
+Apr 04 23:11:58 odroid sshd[2818]: Received disconnect from 221.194.47.208 port 36286:11:  [preauth]
+Apr 04 23:12:17 odroid sshd[2820]: Received disconnect from 221.194.47.224 port 37452:11:  [preauth]
+Apr 04 23:16:59 odroid sshd[2824]: Received disconnect from 121.18.238.104 port 52330:11:  [preauth]
+Apr 04 23:18:51 odroid sshd[2827]: Received disconnect from 221.194.44.211 port 33700:11:  [preauth]
+Apr 04 23:26:47 odroid sshd[2830]: Received disconnect from 221.194.47.249 port 35392:11:  [preauth]
+Apr 04 23:45:05 odroid sshd[2836]: Received disconnect from 121.18.238.98 port 49376:11:  [preauth]
+Apr 04 23:45:54 odroid sshd[2838]: Received disconnect from 221.194.47.208 port 57745:11:  [preauth]
+Apr 04 23:54:31 odroid sshd[2841]: Received disconnect from 221.194.44.211 port 50781:11:  [preauth]
+Apr 05 00:04:00 odroid sshd[2932]: Received disconnect from 221.194.47.249 port 43806:11:  [preauth]
+Apr 05 00:15:29 odroid sshd[2964]: Received disconnect from 121.18.238.104 port 47782:11:  [preauth]
+Apr 05 00:17:31 odroid sshd[2966]: Received disconnect from 221.194.47.208 port 53492:11:  [preauth]
+</code></pre>
+<p>Even after a few hours leaving port 22 open to the public, your log is full of this silliness.</p>
+<p>Now that port 22 is blocked, <code>iptables</code> shows you how many times people attack you:</p>
+<pre class="line-numbers"><code class="language-bash">$ iptables -t nat -t nat -L -n -v
+. . .
+  225  9840 DNAT       tcp  --  ethusb0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 to:127.0.0.1:15001
+</code></pre>
+<p>I.e., 225 times <code>iptables</code> routed port 22 to nirvana.</p>
+<p>Similarly, DNS request from outside.</p>
+<pre class="line-numbers"><code class="language-bash">$ iptables -L -n -v
+. . .
+ 2173  792K DROP       udp  --  ethusb0 *       0.0.0.0/0            0.0.0.0/0            udp dpts:53:68
+</code></pre>
+<p>I.e., 2173 times people from the &quot;real&quot; internet asked the Odroid about DNS within a few hours. I guess these people did not have the best intentions.</p>
+<p>Comment from Paul Alesius, 29-Apr-2017:</p>
+<blockquote>	
+Great comprehensive post.
+I am experiencing similar issues with the scheduling as you mention in section 7.e) and the CPU affinity is an interesting observation. The kernel is unable to use swap and I’ve tried different kernel configurations with no success, I believe disabling swapping should fix it. Strangely, by writing a small program that uses memory beyond RAM, it does seem to start consuming swap, but the kernel fails to use swap automatically. It might work by disabling big.LITTLE support in the kernel, but I haven’t tried this. Let me know if you fix it somehow.
+<p>On point 7.c) and shutdown -r now, I believe this is due to the eMMC requiring a special reset procedure, example: <a href="https://lists.denx.de/pipermail/u-boot/2015-January/200880.html">https://lists.denx.de/pipermail/u-boot/2015-January/200880.html</a>
+I don’t believe this board is stable enough to remain up for more than a month or two, heavy read/write/network ends up killing mine (an USB connected 2.5″ drive is specially problematic), but works fine otherwise when mostly idle.</p>
+</blockquote>
+<p>Reply from me, 29-Apr-2017: Thank you for your detailed comment. Indeed, I do not use swap, but not for your mentioned reasons, but rather because I never intended to run anything “large” on the Odroid.</p>
+<p>Added 21-May-2017: Deleted text on <code>MASQUERADE</code> from nat-table.</p>
+<pre class="line-numbers"><code class="language-bash">-A POSTROUTING -o eth0 -j MASQUERADE
+</code></pre>
+<p>Above rule maps real internet to Odroid IP address in the inner internet. It doesn't do any harm but hides all outer internet addresses.
+<strike>Using <code>MASQUERADE</code> for <code>eth0</code> was not initially clear to me, but makes sense in retrospect: Ingoing traffic from the &quot;real&quot; internet makes no sense in the internal network, so must be replaced by an internal IP address.</strike></p>
+<p>Added 06-Aug-2017: The router has stood the test of time. All these &quot;stalls on CPUs/tasks&quot; warnings are still there but apparently do not harm. The router works reliably and flawless.</p>
+<p>Added 16-Nov-2017: Warnings on &quot;stalls on CPUs/tasks&quot; are completely gone with Linux kernel &gt;= <code>linux-odroid-xu3 (4.9.47-4)</code>.</p>
+<p>Added 10-Jan-2019: I previously added ca. 3000 iptables rules for blocking IP address ranges which attacked me on port 22 (ssh). That many rules will deteriorate your network performance significantly. My download speed went down from 100 MBit/s to 20 MBit/s.</p>
+<p>Added 05-Jun-2021: Decommissioning the Odroid as WiFi-router. Now the nuc will take over this duty. The Odroid proved to be very reliable. There is no failure or dissatisfaction with the router that lead to the decommissioning. It is just that the nuc is running anyway, so can take over this task, and the Odroid can be powered down to save some electricity, round about 7W.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Using+Odroid+as+IP+Router%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Using+Odroid+as+IP+Router&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router&amp;title=Using+Odroid+as+IP+Router" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Using+Odroid+as+IP+Router&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Using+Odroid+as+IP+Router%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2017/04-14-using-odroid-as-ip-router" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#Linux>Linux</a>, <a href=/aux/categories/#network>network</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#iptables>iptables</a>, <a href=/aux/tags/#Odroid>Odroid</a>, <a href=/aux/tags/#router>router</a>, <a href=/aux/tags/#firewall>firewall</a>, <a href=/aux/tags/#sysctl>sysctl</a>, <a href=/aux/tags/#NAT>NAT</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2017">Index for the year 2017.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>Linux:</i></p>
+	<ol>
+		<li><a href="/blog/2013/01-11-opengl-program-earth-with-moon-rotating-around-sun">2013-01-11: OpenGL Program: Earth with Moon Rotating around Sun</a></li>
+		<li><a href="/blog/2013/01-29-inotify-tools-inotifywait">2013-01-29: inotify-tools: inotifywait</a></li>
+		<li><a href="/blog/2013/02-12-ext3-vs-ext4">2013-02-12: ext3 vs. ext4</a></li>
+		<li><a href="/blog/2013/02-17-jpilot-dump">2013-02-17: jpilot-dump + jpilot-merge</a></li>
+		<li><a href="/blog/2013/02-24-dead-keys-and-compose-key">2013-02-24: Dead Keys and Compose Key</a></li>
+		<li><a href="/blog/2013/02-27-enhancements-to-j-pilot">2013-02-27: Possible Enhancements to J-Pilot</a></li>
+		<li><a href="/blog/2013/03-21-linux-3-8-4-compile-times">2013-03-21: linux-3.8.4: Compile times</a></li>
+		<li><a href="/blog/2013/04-21-counting-to-ten-on-linux">2013-04-21: Counting to Ten on Linux</a></li>
+		<li><a href="/blog/2013/04-30-linux-3-9-compile-times">2013-04-30: linux-3.9: Compile times</a></li>
+		<li><a href="/blog/2013/05-05-phoronix-nvidia-vs-nouveau-drivers-on-ubuntu-13-04">2013-05-05: Phoronix: NVIDIA vs. Nouveau Drivers On Ubuntu 13.04</a></li>
+		<li><a href="/blog/2013/05-06-john-raff-dmitry-sandalov-access-google-translate-from-a-terminal">2013-05-06: John Raff / Dmitry Sandalov: Access Google translate from a terminal</a></li>
+		<li><a href="/blog/2013/05-15-porting-source-to-linux-valves-lessons-learned">2013-05-15: Porting Source to Linux - Valve's Lessons Learned</a></li>
+		<li><a href="/blog/2013/05-16-cuda-without-x">2013-05-16: CUDA without X Window System</a></li>
+		<li><a href="/blog/2013/05-29-how-to-use-truetype-fonts-in-xterm-or-uxterm">2013-05-29: How to use TrueType Fonts in xterm or uxterm</a></li>
+		<li><a href="/blog/2013/06-09-mainframe-rehosting-cost-reduction-hardware-sizing-tools-and-methodology">2013-06-09: Mainframe Rehosting: Cost Reduction, Hardware Sizing, Tools, and Methodology</a></li>
+		<li><a href="/blog/2013/08-25-copy-directories-with-symbolic-links-via-ssh">2013-08-25: Copy Directories with Symbolic Links via ssh</a></li>
+		<li><a href="/blog/2013/09-08-inhibit-annoying-message-of-the-day-in-ubuntu">2013-09-08: Inhibit Annoying Message of the Day in Ubuntu</a></li>
+		<li><a href="/blog/2013/09-12-dramatic-faster-sorting-in-linux-using-nsort">2013-09-12: Dramatic Faster Sorting in Linux Using Nsort</a></li>
+		<li><a href="/blog/2013/09-29-re-installing-grub-when-ms-windows-destroyed-it">2013-09-29: Re-installing Grub when MS Windows Destroyed It</a></li>
+		<li><a href="/blog/2013/10-02-force-rsync-not-to-use-timestamps">2013-10-02: Force rsync Not To Use Timestamps</a></li>
+		<li><a href="/blog/2013/11-30-working-with-system-v-ipc-queues">2013-11-30: Working with System V IPC queues</a></li>
+		<li><a href="/blog/2013/12-12-linux-commands-expect-and-kibitz">2013-12-12: Linux commands: expect and kibitz</a></li>
+		<li><a href="/blog/2013/12-21-what-is-generally-better-64-bit-or-32-bit">2013-12-21: What is generally better: 64-bit or 32-bit?</a></li>
+		<li><a href="/blog/2014/01-07-plotting-power-consumption-of-my-desktop-pc">2014-01-07: Plotting Power Consumption of my Desktop PC</a></li>
+		<li><a href="/blog/2014/01-10-working-with-system-v-ipc-queues-in-perl-and-php">2014-01-10: Working with System V IPC queues in Perl and PHP</a></li>
+		<li><a href="/blog/2014/01-13-changing-euid-effective-user-id">2014-01-13: Changing euid (effective user ID)</a></li>
+		<li><a href="/blog/2014/01-15-ignoring-security-certificate-errors-in-google-chrome">2014-01-15: Ignoring Security Certificate Errors in Google Chrome</a></li>
+		<li><a href="/blog/2014/02-09-scheduling-cron-jobs-on-business-days">2014-02-09: Scheduling Cron Jobs on Business Days</a></li>
+		<li><a href="/blog/2014/03-23-enabling-power-aware-applications-on-linux-using-cyrogenic-module">2014-03-23: Enabling Power-Aware Applications on Linux Using Cyrogenic Module</a></li>
+		<li><a href="/blog/2014/04-01-youtube-video-to-mp3">2014-04-01: Youtube video to mp3</a></li>
+		<li><a href="/blog/2014/04-14-syncing-with-j-pilot-via-bluetooth">2014-04-14: Syncing with J-Pilot via Bluetooth</a></li>
+		<li><a href="/blog/2014/04-26-installing-ubuntu-14-04-server-edition">2014-04-26: Installing Ubuntu 14.04 Server Edition</a></li>
+		<li><a href="/blog/2014/05-15-patching-faulty-edid-information">2014-05-15: Patching Faulty EDID Information</a></li>
+		<li><a href="/blog/2014/05-30-installing-missing-debian-packages-for-google-chrome">2014-05-30: Installing Missing Debian Packages for Google Chrome</a></li>
+		<li><a href="/blog/2014/06-01-setting-up-luksdm-crypt-for-external-usb-drive">2014-06-01: Setting-Up LUKS/dm-crypt for External USB-Drive</a></li>
+		<li><a href="/blog/2014/07-07-creating-user-account-with-empty-password-on-linux">2014-07-07: Creating User Account With Empty Password on Linux</a></li>
+		<li><a href="/blog/2014/07-12-hdmi-audio-on-intel-nuc">2014-07-12: HDMI Audio on Intel NUC</a></li>
+		<li><a href="/blog/2014/08-08-google-chrome-became-a-performance-hog">2014-08-08: Google Chrome Became a Performance Hog</a></li>
+		<li><a href="/blog/2014/09-16-the-cost-of-installing-wine">2014-09-16: The Cost of Installing wine</a></li>
+		<li><a href="/blog/2014/10-27-effect-of-optimizer-in-gcc-on-intelamd-and-power8">2014-10-27: Effect of Optimizer in gcc on Intel/AMD and Power8</a></li>
+		<li><a href="/blog/2015/01-17-setting-up-slurm-on-multiple-machines">2015-01-17: Setting up SLURM on Multiple Machines</a></li>
+		<li><a href="/blog/2015/03-06-testing-file-size-limits">2015-03-06: Testing file-size limits</a></li>
+		<li><a href="/blog/2015/10-05-linux-pam-and-etcshells">2015-10-05: Linux pam and /etc/shells</a></li>
+		<li><a href="/blog/2015/11-07-nginx-413-request-entity-too-large-file-upload-issue">2015-11-07: nginx: 413 Request Entity Too Large - File Upload Issue</a></li>
+		<li><a href="/blog/2016/02-03-performance-comparison-mmap-versus-read-versus-fread">2016-02-03: Performance Comparison of mmap() versus read() versus fread()</a></li>
+		<li><a href="/blog/2016/05-02-no-youtube-videos-on-google-chrome-v50">2016-05-02: No YouTube Videos on Google Chrome v50</a></li>
+		<li><a href="/blog/2016/09-28-libreoffice-impress-becoming-very-slow-after-copypaste">2016-09-28: LibreOffice Impress Becoming Very Slow After Copy/Paste</a></li>
+		<li><a href="/blog/2016/10-04-setting-keyboard-language-in-icewm">2016-10-04: Setting Keyboard-Language in IceWM</a></li>
+		<li><a href="/blog/2016/10-18-running-bacman-in-parallel">2016-10-18: Running bacman in parallel</a></li>
+		<li><a href="/blog/2016/10-26-bluetooth-headphones-in-arch-linux">2016-10-26: Bluetooth Headphones in Arch Linux</a></li>
+		<li><a href="/blog/2016/12-14-slurmd-confused-of-pid-file">2016-12-14: slurmd confused of pid-file</a></li>
+		<li><a href="/blog/2017/01-30-downgrading-pulseaudio-with-downgrade-sh">2017-01-30: Downgrading PulseAudio with downgrade.sh</a></li>
+		<li><a href="/blog/2017/02-13-switching-from-ext4-to-btrfs">2017-02-13: Switching from ext4 to btrfs</a></li>
+		<li><a href="/blog/2017/03-15-make-usb-stick-bootable">2017-03-15: Make USB Stick Bootable</a></li>
+		<li><a href="/blog/2017/03-20-wiping-disks">2017-03-20: Wiping Disks</a></li>
+		<li><a href="/blog/2017/04-19-browsing-linux-kernel-source-with-grokbit">2017-04-19: Browsing Linux Kernel Source with Grokbit</a></li>
+		<li><a href="/blog/2018/02-13-unix-sort-issue">2018-02-13: Unix sort Issue</a></li>
+		<li><a href="/blog/2018/03-14-set-up-lets-encrypt-for-hiawatha-web-server">2018-03-14: Set-Up "Let's Encrypt" for Hiawatha Web-Server</a></li>
+		<li><a href="/blog/2018/04-17-remote-unlocking-of-encrypted-disks">2018-04-17: Remote Unlocking of Encrypted Disks</a></li>
+		<li><a href="/blog/2018/05-03-instant-messaging-client-pidgin-and-skype-lync">2018-05-03: Instant Messaging Client Pidgin and Skype / Lync</a></li>
+		<li><a href="/blog/2018/05-17-using-scooter-software-beyond-compare">2018-05-17: Using Scooter Software Beyond Compare</a></li>
+		<li><a href="/blog/2018/06-15-balking-arm-archlinux-update">2018-06-15: Balking ARM ArchLinux Update</a></li>
+		<li><a href="/blog/2020/01-05-slurmctld-showing-nodes-as-drain">2020-01-05: slurmctld showing nodes as 'drain'</a></li>
+		<li><a href="/blog/2020/03-26-sharing-terminal-screen-using-tmux">2020-03-26: Sharing Terminal Screen Using Tmux</a></li>
+		<li><a href="/blog/2020/07-14-blocking-ip-addresses-with-ipset">2020-07-14: Blocking IP addresses with ipset</a></li>
+		<li><a href="/blog/2020/08-29-configure-boot-settings-in-uefi">2020-08-29: Configure boot settings in UEFI</a></li>
+		<li><a href="/blog/2021/01-23-dumpe2fs-when-was-my-hard-drive-first-formatted">2021-01-23: dumpe2fs: When was my hard-drive first formatted?</a></li>
+		<li><a href="/blog/2021/02-21-ssh-as-socks-server">2021-02-21: ssh as SOCKS server</a></li>
+		<li><a href="/blog/2021/02-28-analysis-and-usage-of-sshguard">2021-02-28: Analysis And Usage of SSHGuard</a></li>
+		<li><a href="/blog/2021/03-02-testing-j-pilot-feature-gtk3-branch">2021-03-02: Testing J-Pilot feature-gtk3 branch</a></li>
+		<li><a href="/blog/2021/03-15-add-disjoint-ip-addresses-to-sshguard-blacklist">2021-03-15: Add Disjoint IP Addresses To SSHGuard Blacklist</a></li>
+		<li><a href="/blog/2021/06-05-using-nuc-as-wlan-router">2021-06-05: Using NUC as WLAN Router</a></li>
+		<li><a href="/blog/2021/10-04-installing-ibm-cobol-for-linux-on-arch-linux">2021-10-04: Installing IBM COBOL for Linux on Arch Linux</a></li>
+		<li><a href="/blog/2021/10-26-copy-directories-to-ftp-server">2021-10-26: Copy Directories to FTP-Server</a></li>
+		<li><a href="/blog/2022/05-02-copy-archlinux-to-ssd">2022-05-02: Copy Arch Linux to SSD</a></li>
+		<li><a href="/blog/2022/05-06-multi-tenancy-ms-teams">2022-05-06: Multi Tenancy MS-Teams</a></li>
+		<li><a href="/blog/2022/12-10-updating-aur-package">2022-12-10: Updating AUR Package</a></li>
+		<li><a href="/blog/2023/03-30-sqlite3-sqldiff-command">2023-03-30: SQLite3 sqldiff command</a></li>
+		<li><a href="/blog/2023/08-07-cpio-command-cheat-sheet">2023-08-07: cpio command cheat sheet</a></li>
+		<li><a href="/blog/2023/08-13-installing-openlitespeed-on-arch-linux">2023-08-13: Installing OpenLiteSpeed on Arch Linux</a></li>
+		<li><a href="/blog/2023/11-29-linux-on-android-devices">2023-11-29: Linux on Android Devices</a></li>
+		<li><a href="/blog/2024/02-19-letsencrypt-certbot-usage-with-nginx">2024-02-19: Let's Encrypt Certbot Usage with NGINX</a></li>
+		<li><a href="/blog/2024/03-02-installing-ibm-cobol-for-linux-on-arch-linux-p2">2024-03-02: Installing IBM COBOL for Linux on Arch Linux #2</a></li>
+		<li><a href="/blog/2024/04-10-location-of-core-files-in-arch-linux">2024-04-10: Location of core files in Arch Linux</a></li>
+		<li><a href="/blog/2024/04-13-installing-and-configuring-the-h2o-web-server">2024-04-13: Installing and Configuring the H2O Web-Server</a></li>
+		<li><a href="/blog/2024/08-25-replacing-sshguard-with-20-lines-of-perl-code">2024-08-25: Replacing SSHGuard with 20 Lines of Perl Code</a></li>
+		<li><a href="/blog/2024/10-26-unix-process-substitution">2024-10-26: UNIX Process Substitution</a></li>
+		<li><a href="/blog/2024/11-19-snd-hda-intel-no-codecs-initialized">2024-11-19: snd_hda_intel: no codecs initialized</a></li>
+		<li><a href="/blog/2025/03-06-building-j-pilot-and-pilot-link-on-linux">2025-03-06: Building J-Pilot and Pilot-Link on Linux</a></li>
+	</ol>
+	<p><i>network:</i></p>
+	<ol>
+		<li><a href="/blog/2013/03-05-fon-and-telekom-partner-together">2013-03-05: Fon and Deutsche Telekom Partner Together in Germany</a></li>
+		<li><a href="/blog/2013/06-14-cisco-cablemodem-signal-to-noise-ratio">2013-06-14: Cisco Cablemodem Signal to Noise Ratio</a></li>
+		<li><a href="/blog/2013/06-15-positive-erfahrungen-mit-unitymedia">2013-06-15: Positive Erfahrungen mit Unitymedia</a></li>
+		<li><a href="/blog/2013/08-25-copy-directories-with-symbolic-links-via-ssh">2013-08-25: Copy Directories with Symbolic Links via ssh</a></li>
+		<li><a href="/blog/2013/10-03-patrick-pichette-on-google-fiber">2013-10-03: Patrick Pichette on Google Fiber</a></li>
+		<li><a href="/blog/2013/12-08-surfing-the-internet-with-100-mbits">2013-12-08: Surfing the internet with 100 MBit/s</a></li>
+		<li><a href="/blog/2016/12-31-cablesurf-channel-stats">2016-12-31: Cablesurf Channel Statistics</a></li>
+		<li><a href="/blog/2018/03-03-towards-web-based-delta-synchronization-for-cloud-storage-systems">2018-03-03: Towards web-based delta synchronization for cloud storage systems</a></li>
+		<li><a href="/blog/2018/10-06-blocking-network-attackers">2018-10-06: Blocking Network Attackers</a></li>
+		<li><a href="/blog/2019/07-06-updating-ip-address-in-dynu">2019-07-06: Updating IP Address in Dynu</a></li>
+		<li><a href="/blog/2020/02-29-aggressive-vodafone-router">2020-02-29: Aggressive Vodafone Router</a></li>
+		<li><a href="/blog/2020/03-04-surfing-the-internet-with-1-gbit-s">2020-03-04: Surfing the internet with 1 GBit/s</a></li>
+		<li><a href="/blog/2020/06-02-automated-rebooting-of-auerswald-communication-system">2020-06-02: Automated Rebooting of Auerswald Communication System</a></li>
+		<li><a href="/blog/2020/07-14-blocking-ip-addresses-with-ipset">2020-07-14: Blocking IP addresses with ipset</a></li>
+		<li><a href="/blog/2021/01-16-unitymedia-und-sip-voip">2021-01-16: Unitymedia und SIP VoIP</a></li>
+		<li><a href="/blog/2021/02-21-ssh-as-socks-server">2021-02-21: ssh as SOCKS server</a></li>
+		<li><a href="/blog/2021/02-28-analysis-and-usage-of-sshguard">2021-02-28: Analysis And Usage of SSHGuard</a></li>
+		<li><a href="/blog/2021/03-15-add-disjoint-ip-addresses-to-sshguard-blacklist">2021-03-15: Add Disjoint IP Addresses To SSHGuard Blacklist</a></li>
+		<li><a href="/blog/2021/06-05-using-nuc-as-wlan-router">2021-06-05: Using NUC as WLAN Router</a></li>
+		<li><a href="/blog/2022/06-14-eklausmeier-go-ip-down">2022-06-14: eklausmeier.goip.de down</a></li>
+		<li><a href="/blog/2022/06-16-breaking-vodafone-router">2022-06-16: Breaking Vodafone Router</a></li>
+		<li><a href="/blog/2024/01-08-vodafone-internet-outage">2024-01-08: Vodafone Internet Outage</a></li>
+		<li><a href="/blog/2024/08-25-replacing-sshguard-with-20-lines-of-perl-code">2024-08-25: Replacing SSHGuard with 20 Lines of Perl Code</a></li>
+		<li><a href="/blog/2024/10-14-vodafone-internet-outage-p2">2024-10-14: Vodafone Internet Outage #2</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 146.11 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script src="/jscss/prism.js"></script>
+
+
+</body>
+</html>

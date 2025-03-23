@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Konsistenzordnung linearer Mehrschrittverfahren zur Lösung gewöhnlicher Differentialgleichungen">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2024-07-01 22:15:00">1st July 2024</time>, 57 min read</p>
+<h1>Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">eklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln</a>.</p>
+<br>
+<ul>
+<li><a href="#konsistenz">1. Konsistenz, Konsistenzordnung und Fehlerkonstanten</a></li>
+<li><a href="#DAE">2. Die Anwendung linearer Mehrschrittverfahren bei DAE</a></li>
+<li><a href="#konsistenzordnung">3. Mehrere Charakterisierungen der Konsistenzordnung</a></li>
+<li><a href="#dahlquistbarriere1">4. Die erste Dahlquist-Barriere</a></li>
+<li><a href="#dahlquistbarriere2">5. Die zweite Dahlquist-Barriere</a></li>
+<li><a href="#annulliertedominanz">6. Annullierte Dominanz und Totalannullation</a></li>
+<li><a href="#aeussereprodukt">7. Das $n$-dimensionale äußere Produkt für $n-1$ Vektoren</a></li>
+<li><a href="#fehlerkonstanten">8. Äußeres Produkt und Fehlerkonstanten</a></li>
+<li><a href="#rechenregeln">9. Rechenregeln für Fehlerkonstanten</a></li>
+</ul>
+<p>Bei zusammengesetzten Verfahren, also Verfahren mit mehr als einer Stufe,
+besitzt ersteinmal jede Stufe für sich eine eigene Fehlerkonstante im
+herkömmlichen Sinne.
+Dennoch zeigt z.B. die zyklische Hintereinanderausführung des
+impliziten und expliziten Euler-Verfahrens, daß das Einzelverhalten der
+Stufen nicht unbedingt auch das Gesamtverhalten des Zykluses wiedergibt.
+Das implizite Euler-Verfahren für sich alleine betrachtet hat die
+Konvergenzordnung 1, ebenso hat das explizite Euler-Verfahren für sich
+alleine betrachtet die Konvergenzordnung 1.
+Das zusammengesetzte Verfahren hat allerdings schon die Konvergenzordnung 2.
+Es ist nun naheliegend zu fragen, ob noch höhere Konvergenzordnungssprünge
+möglich sind.
+Desweiteren wird man für diesen Sprung der Konvergenzordnung eine
+Erklärung wünschen.</p>
+<p>Allerdings wird man nicht in so unstetigen Übergängen denken wollen.
+Bei den klassischen Verfahren, wie linearen Mehrschrittformeln oder
+<a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge-Kutta-Verfahren</a>,
+ist bekannt, daß ein sehr genaues Verfahren der
+Ordnung $p$, sich ähnlich verhält wie ein sehr ungenaues Verfahren der
+eins höheren Ordnung $p+1$.
+Man erwartet also vielmehr einen gleitenden Übergang zwischen Verfahren.
+Paradebeispiel ist hierfür übrigens das $\vartheta$-Verfahren</p>
+<div class=math>
+$$
+    y_{n+1}-y_n = h(\vartheta f_{n+1}+(1-\vartheta)f_n),\qquad n=0,1,\ldots
+$$
+</div>
+<p>Für $\vartheta=1/2$ erhält man die implizite Trapezregel mit der Ordnung 2
+und in allen anderen Fällen nur Verfahren der Ordnung 1, insbesondere für
+$\vartheta=0$ ein explizites Verfahren.
+Es zeigt sich nun, daß der primäre dominante lokale Fehler eine erste
+Auskunft gibt über das Fehlerverhalten.
+Verschwindet der primäre dominante lokale Fehler, liegt also der Fall
+der annullierten Dominanz vor, so gibt der sekundäre dominante lokale
+Fehler ein weiteres Bild über das Fehlerverhalten.</p>
+<p>Zuerst erscheint zur Klarstellung der Bezeichnungen, die Festlegung
+des Konsistenzbegriffes.
+Anschliessend werden eine Reihe von zueinander äquivalenten
+Beschreibungsmöglichkeiten für hohe Konsistenzordnung gegeben.
+Diese Beschreibungen sind direkt anwendbar zur Berechnung neuer Verfahren.
+Eine Reihe von Fehlerkonstanten werden miteinander verglichen und
+Gemeinsamkeiten deutlich gemacht.</p>
+<h2>1. Konsistenz, Konsistenzordnung und Fehlerkonstanten<a id=konsistenz></a></h2>
+<p>Es sei</p>
+<div class=math>
+$$
+    \alpha_0y_n+\alpha_1y_{n+1}+\cdots+\alpha_ky_{n+k} =
+    h\left(\beta_0f_n+\beta_1f_{n+1}+\cdots+\beta_kf_{n+k}\right),
+    \qquad\alpha_k\ne0,
+$$
+</div>
+<p>ein lineares $k$-Schrittverfahren.
+An die Koeffizienten des linearen $k$-Schrittverfahrens sind gewisse
+Einschränkungen zu stellen, damit die Lösungen, die durch das
+$k$-Schrittverfahren berechnet werden, auch etwas mit der Lösung der
+Differentialgleichung zu tun haben.
+Man unterscheidet zweierlei Bedingungsarten: einmal Konsistenzbedingungen
+und zum anderen Stabilitätsbedingungen.
+Es zeigt sich nachher, daß die Stabilitätsbedingung die einschränkendere
+Bedingung ist.
+Die Konsistenzbedingungen führen auf lineare Gleichungssyteme.
+Die Stabilitätsbedingungen führen auf nicht-lineare und Gleichungs- und
+Ungleichungssysteme.</p>
+<p>Die Konsistenzbedingungen sind:</p>
+<div class=math>
+$$
+    C_{p,k}\cdot\pmatrix{\alpha\cr \beta\cr}
+    = \pmatrix{A{\mskip 3mu}|{\mskip 3mu}B\cr} \pmatrix{\alpha\cr \beta\cr} = 0.
+$$
+</div>
+<p>Die Konsistenzmatrix $C_{p,k}$ für lineare $k$-Schrittverfahren der
+Konsistenzordnung $p$ lautet im Verein mit dem Koeffizientenvektor
+des Verfahrens und der entsprechenden Bedingung</p>
+<div class=math>
+$$
+\left( \begin{array}{ccccc|ccccc}
+1&   1&   1&   1& \ldots&   1&& 0&        0&        0&        0& \ldots&         0\cr
+0&   1&   2&   3& \ldots&   k&&-1&       -1&       -1&       -1& \ldots&        -1\cr
+0& 1^2& 2^2& 3^2& \ldots& k^2&& 0& -2\cdot1& -2\cdot2& -2\cdot3& \ldots& -2\cdot k\cr
+0& 1^3& 2^3& 3^3& \ldots& k^3&& 0& -3\cdot1^2& -3\cdot2^2& -3\cdot3^2& \ldots& -3\cdot k^2\cr
+\vdots & \vdots & \vdots & \vdots & \ddots&\vdots    && \vdots & \vdots & \vdots & \vdots & \ddots&\vdots\cr
+0& 1^p& 2^p& 3^p& \ldots& k^p&& 0& -p1^{p-1}& -p2^{p-1} & -p3^{p-1}& \ldots& -pk^{p-1}\cr
+\end{array} \right)
+    \cdot
+    \pmatrix{\alpha_0\cr \alpha_1\cr \vdots\cr \alpha_{k-1}\cr \alpha_k\cr
+             \beta_0\cr  \beta_1\cr  \vdots\cr \beta_{k-1}\cr   \beta_k\cr}
+    =
+    \pmatrix{0\cr 0\cr 0\cr 0\cr \vdots\cr 0\cr}.
+$$
+</div>
+<p>Beispielsweise lautet die Konsistenzmatrix $C_{p,k}$ bei spezieller
+Wahl von $p$ und $k$, wie folgt:</p>
+<p><strong>1. Beispiel:</strong>
+Konsistenzmatrix $C_{p+1,k}$ für $p=3$ und $k=3$:</p>
+<div class=math>
+$$
+C_{4,3} = \pmatrix{
+    1 & 1 &  1 &  1 &  0 &  0 &  0  & 0\cr
+    0 & 1 &  2 &  3 & -1 & -1 &  -1 & -1\cr
+    0 & 1 &  4 &  9 &  0 & -2 &  -4 & -6\cr
+    0 & 1 &  8 & 27 &  0 & -3 & -12 & -27\cr
+    0 & 1 & 16 & 81 &  0 & -4 & -32 & -108\cr
+}
+$$
+</div>
+<p>und für $p=5$, $k=5$ lautet $C_{p+1,k}$ mithin</p>
+<div class=math>
+$$
+C_{6,5} = \pmatrix{
+    1 & 1 &  1 &   1 &   1  &     1 &  0 &  0 &    0 &     0 &     0 & 0\cr
+    0 & 1 &  2 &   3 &   4  &     5 & -1 & -1 &   -1 &    -1 &    -1 & -1\cr
+    0 & 1 &  4 &   9 &  16  &    25 &  0 & -2 &   -4 &    -6 &    -8 & -10\cr
+    0 & 1 &  8 &  27 &  64  &   125 &  0 & -3 &  -12 &   -27 &   -48 & -75\cr
+    0 & 1 & 16 &  81 &  256 &   625 &  0 & -4 &  -32 &  -108 &  -256 & -500\cr
+    0 & 1 & 32 & 243 & 1024 &  3125 &  0 & -5 &  -80 &  -405 &  -773 & -3125\cr
+    0 & 1 & 64 & 729 & 4096 & 15625 &  0 & -6 & -192 & -1458 & -6144 & -18750\cr
+}
+$$
+</div>
+<p><strong>2.</strong> Ein lineares $k$-Schrittverfahren mit mindestens der Konsistenzordnung $p$
+muß also im Kern der Matrix $C_{p,k}\in\mathbb{Z}^{(p+1)\times(2k+2)}$ liegen,
+also</p>
+<div class=math>
+$$
+    \pmatrix{\alpha\cr \beta\cr}\in\ker C_{p,k}.
+$$
+</div>
+<p>Erweitert man die Matrix $C_{p,k}$ in offensichtlicher Weise unten um eine
+weitere Zeile und damit zur Matrix $C_{p+1,k}\in\mathbb{Z}^{(p+2)\times(2k+2)}$,
+und ist dann das
+Matrix-Vektor Produkt nicht mehr der Nullvektor, so hat das
+Verfahren die genaue Konsistenzordnung $p$, und die von Null verschiedene
+Komponente des Ergebnises ist ein unskalierter Fehlerfaktor $c_{p+1}$.
+Wenn auf die Unskalierung besonders hingewiesen werden soll auch
+$\lambda c_{p+1}$, mit $\lambda\in\{\alpha_k,\beta_k,\sigma(1),\ldots\}$.
+Man hat also</p>
+<div class=math>
+$$
+    C_{p+1,k}\pmatrix{\alpha\cr\beta\cr}=\pmatrix{0\cr\vdots\cr0\cr c_{p+1}\cr}.
+$$
+</div>
+<p>Den Wert $c_{p+1}$ teilt man jetzt noch durch $(p+1)!$, aus später
+ersichtlichen Gründen, die mit einer Taylorentwicklung zu tun haben.</p>
+<p>Übliche Skalierungsgrößen sind nun $\alpha_k$ oder $\sum_{i=0}^k \beta_i$.
+Skaliert man mit der letztgenannten Summe, so heiße der resultierende
+Faktor auch Henrici's Fehlerkonstante.
+Sie tritt in natürlichster Art und Weise auf bei der Behandlung von
+differential-algebraischen Gleichungen, die man mit Verfahren löst,
+wie man sie bei gewöhnlichen Differentialgleichungen einsetzt.</p>
+<p>Bibliographisch: <a href="https://en.wikipedia.org/wiki/Peter_Henrici_(mathematician)">Henrici, Peter Karl Eugen (1923--1987)</a>.</p>
+<p><strong>3.</strong> Die Minus-Zeichen in der Konsistenzmatrix
+$C_{p,k}\in\mathbb{Z}^{(p+1)\times(k+1)(m+1)}$
+(bisher $m=1$) tauchen nicht mehr auf, wenn man statt</p>
+<div class=math>
+$$
+    \sum \alpha_i y_{n+i} = h \sum \beta_i \dot y_{n+i}
+$$
+</div>
+<p>einfach</p>
+<div class=math>
+$$
+    \sum \alpha_i y_{n+i} + h\beta_i \dot y_{n+i} + h^2\gamma_i \ddot y_{n+i} = 0
+$$
+</div>
+<p>schreibt (oben für $m=2$).</p>
+<p><strong>4.</strong> Bei Diskretisierungen zur Lösung von Gleichungen der From
+$F(t,y,\dot y)=0$, hier insbesondere linearen Mehrschrittverfahren,
+wird man unmittelbar dazu geführt, die Gleichung</p>
+<div class=math>
+$$
+    {1\over h}\sum_{i=0}^k\alpha_iy_i = \sum_{i=0}^k\beta_i\dot y_i
+$$
+</div>
+<p>wie folgt zu interpretieren.
+Die linke Summe stellt eine Näherung für die Ableitung $\dot y$ an einer
+hier nicht weiter interessierenden Zwischenstelle dar.
+Die rechte Summe ist genau dann ein gewichtetes Mittel der Werte
+$\dot y_i$, wenn sich die $\beta_i$-Summanden genau zu eins aufsummieren.
+Das letzte kann man aber stets erreichen durch geeignete
+Vormultiplikation der obigen Gleichung mit dem Kehrwert der Summe
+$\sum_{i=0}^k\beta_i$.
+Aufgrund der sofort offensichtlichen Linearität der Konsistenzbedingungen,
+erscheint die entsprechende Summe dann auch in dem Fehlerfaktor
+$c_{p+1}$.</p>
+<p>Genauso ist aber auch</p>
+<div class=math>
+$$
+    \sum_{i=0}^{k-1} \beta_i \dot y_{n+i} + \sum_{i=0}^k \alpha_i y_{n+i}
+    = \dot y_{n+k}
+$$
+</div>
+<p>interpretierbar als Näherung eben an der Stelle $t_{n+k}$.</p>
+<p><strong>5.</strong> Es gibt mehrere weitere Möglichkeiten die Fehlerkonstante von Henrici
+abzuleiten.</p>
+<p>Insbesondere durch Überlegungen bzgl. des Einflußes der lokalen
+Fehler auf den globalen Fehler.
+Dies sind die Überlegungen, wie man sie in den Aufsätzen von
+<a href="https://www.researchgate.net/publication/243095661_Analysis_of_Fixed-Stepsize_Methods">Skeel (1976)</a> und <a href="https://doi.org/10.1007/BF01389876">Albrecht (1985)</a>
+findet.
+In dem letztgenannten Aufsatz werden diese Überlegungen in allgemeinster
+Form unter Berücksichtigung von mehrfachen Eigenwerten $\mu=1$ durchgeführt.
+Ähnliche Erwägungen werden in der Dissertation von
+<a href="https://search.worldcat.org/title/219969663">Tischer (1983)</a> durchgeführt.
+U.a. findet man eine Darstellung und Ableitung der
+Fehlerkonstanten von Henrici in dem Buche von
+<a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a>
+und natürlich in dem Buche von <a href="https://doi.org/10.1002/zamm.19660460521">Henrici (1962)</a> selber.
+Die Fehlerkonstante von Henrici ist nicht originär von Henrici erfunden
+worden.
+Sie taucht ebenfalls bei zahlreichen anderen Autoren auf, wie z.B. bei
+<a href="https://doi.org/10.1137/0109004">Hull/Newberry (1961)</a>.</p>
+<p>Bibliographisch: <a href="https://en.wikipedia.org/wiki/Peter_Henrici_(mathematician)">Henrici, Peter Karl Eugen (1923--1987)</a>,
+<a href="https://de.wikipedia.org/wiki/Ernst_Hairer">Hairer, Ernst (*1949)</a>,
+<a href="https://de.wikipedia.org/wiki/Gerhard_Wanner_(Mathematiker)">Wanner, Gerhard (*1942)</a>,
+<a href="https://de.wikipedia.org/wiki/Syvert_Paul_N%C3%B8rsett">Nørsett, Syvert Paul</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=17245">Thomas E. Hull</a>,
+<a href="https://epubs.siam.org/authored-by/Newbery/A+C+R">A.C.R. Newberry</a>,
+<a href="https://www.mathgenealogy.org/id.php?id=41538">Robert David Skeel</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=23871">Peter Albrecht</a>.</p>
+<p><a href="https://www.researchgate.net/profile/Peter-Tischer-2/research">Peter E. Tischer</a>:
+&quot;The Cyclic Use of Linear Multistep
+Formulas for the Solution of Stiff Differential Equations&quot;, Ph.D. Thesis,
+Department of Computer Science, Monash University, Clayton, Victoria,
+Australia, August 1983, <em>x</em>+180 pages.</p>
+<p>Bei linearen Verfahren, die der starken Wurzelbedingung genügen, ergibt
+sich die Fehlerkonstante $C_A$ zu</p>
+<div class=math>
+$$
+    C_A = {v{\mskip 3mu}\gamma\over vA_1w}, \qquad
+    \left\{\eqalign{v{\mskip 3mu}(A_0+A_1)&=0,\quad v\ne0\cr
+    (A_0+A_1)w&=0.\quad w\ne 0\cr}\right.
+$$
+</div>
+<p>Hierbei ist also $v$ der Linkseigenvektor zum <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a> $A_1\mu+A_0$ zum
+Eigenwert $\mu=1$ und $w$ ist der Rechtseigenvektor zum gleichen
+Matrixpolynom und gleichem Eigenwert.
+Um eine eindeutige Konstante zu erhalten, wird der letzte Vektor $w$
+noch normiert z.B. durch die Norm</p>
+<div class=math>
+$$
+    \left\|w\right\| = {1\over s}\sqrt{w_1^2+\cdots+w_s^2}.
+$$
+</div>
+<p>Das starke Wurzelkriterium garantiert, daß $vA_1w$ nicht
+verschwindet.
+Genauer: die Tatsache, daß $\mu=1$ einziger Eigenwert inklusive Multiplizität
+ist, garantiert das Nichtverschwinden.</p>
+<h2>2. Die Anwendung linearer Mehrschrittverfahren bei DAE<a id=DAE></a></h2>
+<p><strong>1.</strong> Um mit Einbein-Verfahren differential-algebraische Gleichungen der Form</p>
+<div class=math>
+$$
+\eqalign{
+    F(t,\dot x, x, y) &= 0,\cr
+    G(t,x,y) &= 0,\cr
+}
+$$
+</div>
+<p>zu lösen, rechnet man</p>
+<div class=math>
+$$
+\eqalign{
+    F(\tau_n,{1\over h_n}\rho_nx_n, \sigma_nx_n,\sigma_ny_n) &= 0,\cr
+    G(t_n,x_n,y_n) &= 0.\cr
+}
+$$
+</div>
+<p>Die differential-algebraische Gleichung enthalte vermittels $G$ eindeutig
+als rein algebraische Restriktionen identifizierbare Gleichungen.
+Das Einbein-Verfahren für gewöhnliche Differentialgleichungen der
+Form $\dot x=f(t,x)$, ist gegeben durch</p>
+<div class=math>
+$$
+    {1\over h_n}\sum_{\nu=0}^k \alpha_{\nu,n}x_{n-k+\nu} -
+    f\left(\tau_n,{\mskip 3mu}\sum_{\nu=0}^k \beta_{\nu,n}x_{n-k+\nu}\right)=0,
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \tau_n=\sum_{\nu=0}^k \beta_{\nu,n} t_{n-k+\nu}
+    \qquad\hbox{wobei}\quad
+    \sum_{\nu=0}^k\beta_{\nu,n}=1,\enspace\forall n
+$$
+</div>
+<p>Die Operatoren $\rho_n$ und $\sigma_n$ sind wie üblich</p>
+<div class=math>
+$$
+    \rho_n z_n   = \sum_{\nu=0}^k \alpha_{\nu,n} z_{n-k+\nu},\qquad
+    \sigma_n z_n = \sum_{\nu=0}^k \beta_{\nu,n} z_{n-k+\nu}.
+$$
+</div>
+<p>Ebenfalls mögliche Diskretisierungen des Gleichungspaares
+$F(t,\dot x,x,y)=G(t,x,y)=0$ sind</p>
+<div class=math>
+$$
+\eqalign{
+    F(\tau_n,{1\over h}\rho_nx_n, \sigma_nx_n,\sigma_ny_n) &= 0,\cr
+    G(\tau_n,\sigma_nx_n,\sigma_ny_n) &= 0,\cr
+}
+$$
+</div>
+<p>was sich besonders dann anbietet, falls bei einer
+differential-algebraischen Gleichung, die Trennung zwischen “reiner”
+Differentialgleichung und rein algebraischen Restriktionen, nicht klar
+zutage tritt.
+Dies ist beispielsweise bei dem Problem P9 der Fall.</p>
+<p><strong>2.</strong> Für lineare Mehrschrittverfahren der Form</p>
+<div class=math>
+$$
+    {1\over h_n}\left(\sum_{\nu=0}^k \alpha_{\nu,n}x_{n-k+\nu}\right) -
+    \sum_{\nu=0}^k \beta_{\nu,n}\dot x_{n-k+\nu} = 0, \qquad
+    n=k,k+1,\ldots,
+$$
+</div>
+<p>stets mit der Normierung $\sum_{\nu=0}^k\beta_{\nu,n}=1$, gewinnt man
+eine Diskretisierung für die Gleichung $F(t,\dot x,x,y)=G(t,x,y)=0$, wie
+folgt.
+Man fügt temporär eine zusätzliche Variable $w:=\dot x$ dem System
+$F=G=0$ hinzu und erhält dann nach Diskretisierung, unter
+Beachtung von $w_n:=\dot x_n$, das vergrößerte System</p>
+<div class=math>
+$$
+\eqalign{
+    F(t_n,w_n,x_n,y_n) &= 0,\cr
+    G(t_n,x_n,y_n) &= 0,\cr
+    {1\over h_n}\rho_nx_n - \sigma_nw_n &= 0,\cr
+}
+$$
+</div>
+<p>mit den Unbekannten $x_n$, $y_n$ und $w_n$.
+Die letzte Gleichung ist allerdings sehr leicht nach $w_n$ aufzulösen.
+Man erhält</p>
+<div class=math>
+$$
+    w_n = {1\over\beta_{k,n}}\left({1\over h_n}\rho_nx_n-\sigma'_nw_n\right),
+$$
+</div>
+<p>mit</p>
+<div class=math>
+$$
+    \sigma'_n = \sum_{\nu=0}^{k-1} \beta_{\nu,n}w_{n-k+\nu}.
+$$
+</div>
+<p>Der Operator $\sigma'_n$ wirkt also lediglich auf schon zurückliegende
+berechnete Werte.
+Einsetzen des so aufgelösten $w_n$, führt auf</p>
+<div class=math>
+$$
+\eqalign{
+  F(t_n,{1\over\beta_{k,n}}\left({1\over h_n}\rho_nx_n-\sigma'_nw_n\right),
+      x_n,y_n) &= 0,\cr
+  G(t_n,x_n,y_n) &= 0,\cr
+}
+$$
+</div>
+<p>zur Bestimmung von $(x_n,{\mskip 3mu}y_n)$.</p>
+<p><strong>3.</strong> Prinzipiell sind auch explizite Operatoren $(\rho_n,\sigma_n$) denkbar.
+Entsprechend erhält man dann</p>
+<div class=math>
+$$
+\eqalign{
+    F (t_{n-1}, {1\over\beta_{k-1,n}}\left({1\over h_n}\rho_nx_n-
+        \sigma''_nw_n\right),x_{n-1}, y_{n-1}) &= 0,\cr
+    G (t_{n-1}, x_{n-1}, y_{n-1}) &= 0,\cr
+}
+$$
+</div>
+<p>wobei $\sigma''_n$ noch einen Term weniger enthält.
+Der Vorteil der leichteren Auflösbarkeit oder gar der Vermeidung von
+Nichtlinearitäten solcher Diskretisierungen, ist jedoch im Falle von
+differential-algebraischen Gleichungen nicht mehr vorhanden.
+Es muß in jedem Falle in jedem Zeitschritt ein i.d.R. nicht-lineares
+Gleichungssystem gelöst werden.</p>
+<p>Zu dieser Diskretisierung schreibt <a href="https://doi.org/10.1109/TCS.1979.1084697">Liniger (1979)</a>:</p>
+<blockquote>
+<p>although to the author's knowledge, thus far such methods have not
+been used practically …</p>
+</blockquote>
+<p>Der Einsatz von linearen Mehrschrittverfahren und Einbein-Verfahren,
+und die Ableitung von Diskretisierungen bei differential-algebraischen
+Gleichungen, wird bei <a href="https://doi.org/10.1109/TCS.1979.1084697">Liniger (1979)</a> untersucht.
+Insbesondere Fragen der Konsistenzordnung der Diskretisierung findet man
+bei <a href="https://doi.org/10.1109/TCS.1979.1084697">Liniger (1979)</a>.
+Stabilitätsuntersuchungen sind für differential-algebraische Gleichungen
+schwieriger und werden daher auch dort nicht behandelt.
+Einen Konvergenzbeweis für die BDF findet man bei
+<a href="https://www.researchgate.net/publication/230873101_Numerical_Solution_of_Nonlinear_Differential_Equations_with_Algebraic_Constraints_I_Convergence_Results_for_Backward_Differentiation_Formulas">Petzold/Lötstedt (1986a)</a>.
+Eine gute übergreifende Darstellung bietet
+<a href="https://books.google.de/books/about/Differential_algebraic_Equations_and_The.html?id=Dw6oAAAAIAAJ&amp;redir_esc=y">Griepentrog/März (1986)</a>.</p>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Werner_Liniger">Werner Liniger (1927--2017)</a>,
+<a href="https://en.wikipedia.org/wiki/Linda_Petzold">Linda Ruth Petzold (*1954)</a>,
+<a href="https://de.wikipedia.org/wiki/Eberhard_Griepentrog">Eberhard Griepentrog (1933--2023)</a>,
+<a href="https://de.wikipedia.org/wiki/Roswitha_M%C3%A4rz">Roswitha März (*1940)</a>,
+<a href="https://www.uu.se/en/contact-and-organisation/staff?query=XX2387">Per Lötstedt</a>.</p>
+<h2>3. Mehrere Charakterisierungen der Konsistenzordnung<a id=konsistenzordnung></a></h2>
+<p>An dieser Stelle sollen eine Reihe von gleichwertigen Charakterisierungen
+angegeben werden, die garantieren, daß ein lineares Mehrschrittverfahren
+der Form</p>
+<div class=math>
+$$
+    \sum_{i=0}^k \alpha_iy_{n+i} = h\sum_{i=0}^k \beta_if_{n+i},
+$$
+</div>
+<p>mindestens die Konsistenzordnung $p$ hat.
+Unter Umständen hat das Verfahren sogar eine noch höhere Ordnung.</p>
+<p><strong>1.</strong> Es sei</p>
+<div class=math>
+$$
+    L(y,t_0,h) = \sum_{i=0}^k \left(\alpha_i y(t_0+ih)
+        - h\beta_i\dot y(t_0+ih)\right).
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \rho(\mu) := \sum_{i=0}^k \alpha_i\mu^i,\qquad\hbox{ferner}\qquad
+    \sigma(\mu) := \sum_{i=0}^k \beta_i\mu^i.
+$$
+</div>
+<p><strong>2. Satz:</strong>
+Nun sind die folgenden 9 Aussagen paarweise zueinander äquivalent.</p>
+<p><strong>(1)</strong> $C_{p,k}{\alpha\choose\beta}= {\bf0}$,
+also $(\alpha,\beta)^\top\in\ker C_{p,k}$.</p>
+<p><strong>(2)</strong> $\sum_{i=0}^k \alpha_i i^q = q\sum_{i=0}^k \beta_i i^{q-1}$,
+für $q=0,1,\ldots,p$.</p>
+<p><strong>(3)</strong> $\rho(e^h)-h\sigma(e^h)={\cal O}(h^{p+1})$, für $h\to 0$.</p>
+<p><strong>(4)</strong> $\zeta=1$ ist mindestens $p$-fache Nullstelle der Funktion</p>
+<div class=math>
+$$
+    h\mapsto{\rho(\zeta)\over\ln\zeta}-\sigma(\zeta),
+$$
+</div>
+<p>also
+$\rho(\zeta)/\ln\zeta=\sigma(\zeta)+{\cal O}\bigl((\zeta-1)^p\bigr)$,
+für $\zeta\to 1$.</p>
+<p><strong>(5)</strong> $L(f,t,h)={\cal O}(h^{p+1}),\quad\forall f\in C^{p+2}(G,\mathbb{R}{})$.</p>
+<p><strong>(6)</strong> Die Monome bis zum Grade $p$ liegen im Kern des $h=1$ Schnittes
+von $L$, also $L(t^i,t_0,1)=0$, für $i=0,1,\ldots,p$.</p>
+<p><strong>(7)</strong> $L(f,t_0,h)={\cal O}(h^{p+1})$, für die spezielle Funktion
+$t\mapsto f(t)=e^t$.</p>
+<p><strong>(8)</strong> $y(t_0+kh)-y_k={\cal O}(h^{p+1})$, falls man die Startwerte
+als exakte Werte wählt.</p>
+<p><strong>(9)</strong> $L(y,t_0,h)=c_{p+1}h^{p+1}y^{(p+1)}(t_0)+{\cal O}(h^{p+2})$ mit
+$c_{p+1}=\sum_{i=0}^k\bigl(\alpha_ii^{p+1}-(p+1)\beta_ii^p\bigr)/(p+1)!$.</p>
+<p>Diese Liste liesse sich fortsetzen.
+Einige der Nummern sind lediglich Umformulierungen anderer Nummern.
+Dennoch ist es gelegentlich nützlich eine der möglichen Formeln in der
+oben zitierten Form parat zu haben.
+Die Bedingung der Konsistenz und die Konsistenzordnung ist
+unabhängig von der Entwicklungsstelle der Taylorentwicklung.
+Zur praktischen Berechnung von Mehrschrittformeln, die zuerst nicht
+unbedingt stabil sein müssen, wählt man häufig (1), für den Beweis der
+Dahlquistbarriere werden (3) und (4) herangezogen.
+Einzelne Eigenschaften der obigen Angaben tragen in der Literatur häufig
+auch gesonderte Namen.
+Für die Beweise sei beispielsweise verwiesen auf
+<a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a>
+oder auch <a href="https://www.amazon.de/Gew%C3%B6hnliche-Differentialgleichungen-Einf%C3%BChrung-Theorie-Hochschultext/dp/3540152881?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91">Werner/Arndt (1986)</a>.</p>
+<p>Wählt man, wie bei (8) die Startwerte exakt, also $y_0=y(t_0)$,
+$y_1=y(t_0+h)$ und so fort bis $y_{k-1}=y(t_0+(k-1)h)$, so gilt für den
+dann entstehenden Fehler zwischen dem nun durch die Formel bestimmten
+Wert $y_k$ und dem exakten Wert $y(t_0+kh)$, die Beziehung</p>
+<div class=math>
+$$
+    y(t_0+kh)-y_k = {1\over\alpha_k}W^{-1}L(y,t_0,h).
+$$
+</div>
+<p>Hierbei ist $W=I-h\gamma J$, $\gamma=\beta_k/\alpha_k$ und $J$ ist die
+Jacobimatrix von $f$, deren Zeilen ausgewertet wurden an Stellen
+auf der Strecke zwischen $y(t_k)$ und $y_k$.
+Insbesondere gilt nicht notwendig $J=f_y(y_k)$, jedoch gilt dies
+näherungsweise.
+Im Falle steifer Differentialgleichungen und differential-algebraischer
+Gleichungen wird auch tatsächlich $W^{-1}L(y,t_0,h)$, bzw. eine Näherung
+hiervon, zum Gebrauch als Fehlerkonstante empfohlen, man vgl. hier
+<a href="https://www.researchgate.net/publication/245924401_DifferentialAlgebraic_Equations_are_not_ODE%27S">Petzold (1982)</a>
+und die dort angeführte Literatur.
+Im Falle von expliziten Formeln, also $\beta_k=0$, ist natürlich $W=I$.</p>
+<h2>4. Die erste Dahlquist-Barriere<a id=dahlquistbarriere1></a></h2>
+<blockquote>
+<p>You know, I am a multistep-man … and don't tell anybody,
+but the first program I wrote for the first Swedish computer was
+a Runge-Kutta code …<br>
+(<a href="https://mathshistory.st-andrews.ac.uk/Biographies/Dahlquist/">G. Dahlquist</a>, 1982, after some glasses of wine;
+printed with permission),
+<a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a></p>
+</blockquote>
+<blockquote>
+<p>Das Bemerkenswerte am Hopfschen Problem ist, daß eine einfach
+zu formulierende algebraische Frage eine einfache algebraische
+Antwort findet, daß indessen zur Lösung nichttriviale Methoden
+der Topologie erforderlich sind; hier erscheint zum ersten Mal
+der “topologische Stachel im Fleisch der Algebra”, der bis auf
+den heutigen Tag von vielen Algebraikern als so schmerzhaft
+empfunden wird.
+<br> <a href="https://link.springer.com/book/10.1007/978-3-642-96783-2">R. Remmert, M. Koecher (1983)</a></p>
+</blockquote>
+<p>Bibliographisch:
+<a href="https://de.wikipedia.org/wiki/Ernst_Hairer">Hairer, Ernst (*1949)</a>,
+<a href="https://de.wikipedia.org/wiki/Gerhard_Wanner_(Mathematiker)">Wanner, Gerhard (*1942)</a>,
+<a href="https://de.wikipedia.org/wiki/Syvert_Paul_N%C3%B8rsett">Nørsett, Syvert Paul</a>,
+<a href="https://de.wikipedia.org/wiki/Reinhold_Remmert">Remmert, Reinhold (1930--2016)</a>,
+<a href="https://de.wikipedia.org/wiki/Max_Koecher">Koecher, Max (1924--1990)</a>,</p>
+<p>Der Kern der Konsistenzmatrix $C_{p,k}$ hat eine Fülle von sehr speziellen
+Eigenschaften, die hier zusammengestellt werden sollen.
+Anhand des sehr strukturierten Aufbaus dieser Matrix sind einige dieser
+Eigenschaften nicht verwunderlich.
+Insbesondere einige Symmetrieeigenschaften der Matrix übertragen sich
+auf den Kern.
+Nimmt man als Nebenbedingung noch das Erfülltsein der Wurzelbedingung hinzu,
+so gelten weitreichende Konsequenzen, hier die beiden Dahlquist-Barrieren.
+Diese beiden Barrieren sind auch eine der Gründe für das verstärkte
+Interesse an zusammengesetzten Verfahren.</p>
+<p><strong>1. Definition:</strong>  Ein lineares $k$-Schrittverfahren
+heißt <em>symmetrisch</em>, falls</p>
+<div class=math>
+$$
+    \alpha_i=-\alpha_{k-i}\qquad\hbox{und}\qquad\beta_i=\beta_{k-i}
+        \qquad\hbox{für alle}\quad i=0,\ldots,k.
+$$
+</div>
+<p><strong>2. Beispiel:</strong>  Das Milne-Simpson-Verfahren
+$y_{n+1}-y_{n-1}=h\cdot(f_{n+1}+4f_n+f_{n-1})/3$ ist symmetrisch, während
+hingegen alle Adams-Verfahren, implizit oder explizit, nicht symmetrisch
+sind.
+Die Nullstellen des charakteristischen Polynoms $\rho$ des
+Milne-Simpson-Verfahren liegen bei $(+1)$ und bei $(-1)$.</p>
+<p>Für symmetrische lineare Mehrschrittverfahren gilt
+$\rho(\mu)=-\mu^k\rho(1/\mu)$, aufgrund der obigen Definition.
+Mit $\mu$ ist auch gleichzeitig $1/\mu$ Nullstelle von $\rho$.</p>
+<p>Für ein stabiles lineares Mehrschrittverfahren liegen somit alle Wurzeln
+auf dem Einheitskreis und sind einfach.
+An solchen Verfahren ist man eher weniger interessiert, da bei
+Schrittweiten $h\ne0$, diese Wurzeln vom Betrage $1$ aus dem Einheitskreis
+nach aussen wandern.
+Allerdings hängt bei Schrittweiten $h\ne0$ dieses Verhalten stark vom
+Prädiktor ab.
+In der Kombination als Picard-Prädiktor-Korrektor-Verfahren oder als
+Stufen zyklischer Verfahren haben jedoch symmetrische lineare
+Mehrschrittverfahren gegenüber anderen Verfahren keine Nachteile.</p>
+<p>Ein Verfahren der Konsistenzordnung $p$ liefert für eine
+Differentialgleichung mit Polynomen des Grades $p$ als Lösung, unter
+völliger Vernachlässigung von Rundungsfehlern, die exakte Lösung.
+Ist das Verfahren zusätzlich noch stabil, so konvergiert das Verfahren.</p>
+<p><strong>3. Satz:</strong>  Es gilt</p>
+<ol>
+<li>Es existiert kein lineares $k$-Schrittverfahren der
+Konsistenzordnung $2k+1$.</li>
+<li>Es gibt genau ein explizites $k$-Schrittverfahren der
+Konsistenzordnung $2k-1$.
+Aus $\beta_k=0$ folgt also automatisch $p\le2k-1$.</li>
+<li>Es gibt genau ein implizites lineares $k$-Schrittverfahren der
+Konsistenzordnung $2k$.</li>
+<li>Dieses eindeutig bestimmte implizite lineare $k$-Schrittverfahren
+der maximalen Konsistenzordnung $2k$, ist symmetrisch.</li>
+<li>Symmetrische lineare Mehrschrittverfahren haben immer eine
+gerade Konsistenzordnung.
+Dies heißt, hat man von einem symmetrischen Mehrschrittverfahren die
+Konsistenzordnung $2\nu-1$ nachgewiesen, so hat das Verfahren auch schon
+automatisch die eins höhere Konsistenzordnung $2\nu$.</li>
+<li>Zu vorgegebenen Polynomgraden $k_\alpha$ und $k_\beta$, mit
+$k_\beta\le k_\alpha$, kann man Polynome $\rho$ und $\sigma$ finden,
+mit $\mathop{\rm grad}\rho=k_\alpha$ und $\mathop{\rm grad}\sigma=k_\beta$, die ein lineares
+$k=k_\alpha$-Schrittverfahren festlegen und zwar mit der
+Konsistenzordnung $1+k_\alpha+k_\beta$.</li>
+<li>Der Rang der Konsistenzmatrix $C_{p,k}$ ist für alle $p$ und $k$
+maximal.
+Es gilt also</li>
+</ol>
+<div class=math>
+$$
+        \mathop{\rm rank} C_{p,k}=\min(p+1,k+1),\qquad\forall p,k\in\mathbb{N}.
+    $$
+</div>
+<p>Es war $C_{p,k}\in\mathbb{Z}^{(p+1)\times(2k+2)}$ und mit dem ^{Dimensionssatz
+für lineare Gleichungssysteme} ergibt sich daher
+$\dim\ker C_{p,k}=(2k+2)-\min(p+1,k+1)$.
+<br>
+Den führenden Koeffizienten $\alpha_k$ kann man als Normierungsfaktor
+auffassen, und damit gibt es genau eine $2k-p$ parameterabhängige
+Schar von linearen $k$-Schrittverfahren, falls $p\ge k$.
+Von dieser Schar ist aber nach der ersten Dahlquist-Barriere nur ein
+kleiner Teil als einstufiges Verfahren konvergent.</p>
+<p>Es zeigt sich, daß die maximal erreichbare Konsistenzordnung eines
+linearen Mehrschrittverfahrens der Form
+$\sum_{i=0}^k (\alpha_i y_{n+i} - h\beta_i f_{n+i})$ durch die
+Wurzelbedingung an $\rho$, begrenzt ist.
+Ist das charakteristische Polynom $\rho$ stabil, so ist dies gleichzeitig
+ein Hemmschuh für die maximal erreichbare Konsistenzordnung,
+d.h. Konsistenzordnung und Stabilität beissen sich gegeneinander, oder
+in noch anderer Formulierung, mehr geometrischer Sprechweise:</p>
+<p>Die Menge aller derjenigen Vektoren</p>
+<div class=math>
+$$
+    \left(\alpha_0,\ldots,\alpha_\kappa,\beta_0,\ldots,\beta_\kappa\right)
+    \in\mathbb{R}^{2\kappa+2},
+$$
+</div>
+<p>welche zu einem stabilen Polynom
+$\rho(\mu)=\sum_{i=0}^\kappa \alpha_i\mu^i$ führen, beschreibbar durch
+Ungleichungen vom Routh-Hurwitz-Typ,
+<em>{Routh, E.J.}</em>{Hurwitz, Adolf (1859--1919}
+stellt einen nicht-linearen Kegel im $\mathbb{R}^{2\kappa+2}$ dar.
+Die lineare Untermannigfaltigkeit beschrieben durch
+$C_{p,\kappa}{\alpha\choose\beta}=0$ schneidet den nicht-linearen
+Kegel überhaupt nicht für $p&gt;\kappa+2$ und berührt ihn für
+$p=\kappa+1+{1\over2}\left[1+(-1)^\kappa\right]$.
+Es gilt der</p>
+<p><strong>4. Satz:</strong>  (^{Erste Dahlquist-Barriere}) Das lineare $k$-Schrittverfahren sei
+wenigstens konsistent der Ordnung $1$ und das charakteristische
+Polynom $\rho$ erfülle die Wurzelbedingung.</p>
+<p><strong>(a)</strong> Dann unterliegt die Konsistenzordnung und damit gleichzeitig einhergehend
+die Konvergenzordnung $p$, einer Schranke nach oben wie folgt</p>
+<div class=math>
+$$
+    p\le\cases{
+        k+2, & falls $k$ gerade ist;\cr
+        k+1, & falls $k$ ungerade ist;\cr
+        k,   & falls $\beta_k/\alpha_k\le0$, insbesondere falls das Verfahren explizit ist.\cr
+    }
+$$
+</div>
+<p><strong>(b)</strong> Weiterhin gilt: Stabile lineare Mehrschrittverfahren der maximalen
+Konsistenzordnung $k+2$ ($k$ also gerade) sind symmetrisch.
+Bei einem solchen linearen $k$-Schrittverfahren mit geradem $k$,
+besitzt $\rho$, also wie oben bemerkt, die Wurzeln
+$(+1)$, $(-1)$ und $(k-2)/2$ Paare verschiedener unimodularer Wurzeln.
+Zu jedem $\rho$ mit dieser Eigenschaft der Wurzeln, existiert genau ein
+einziges $\sigma$, sodaß $(\rho,\sigma)$ ein lineares
+$k$-Schrittverfahren der maximalen Konsistenzordnung $k+2$ ist.</p>
+<p><strong>5.</strong> Wegen dem großen Interesse, dem man diesem Satz beimißt, findet man den
+sehr schönen, funktionentheoretischen Beweisgang in mehreren ($\ge8$)
+Büchern.
+Verwiesen sei hier lediglich auf die schon mehrfach zitierten
+beiden Bücher von <a href="https://www.amazon.de/Gew%C3%B6hnliche-Differentialgleichungen-Einf%C3%BChrung-Theorie-Hochschultext/dp/3540152881/">Werner/Arndt (1986)</a>
+und <a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a>
+sowie <a href="https://link.springer.com/book/10.1007/978-3-662-09406-8">Werner/Schaback (1972)</a>.
+Man vgl. auch die Bücher von <a href="https://books.google.de/books/about/Numerical_Initial_Value_Problems_in_Ordi.html?id=e9QQAQAAIAAJ&amp;redir_esc=y">Gear (1971c)</a>,
+<a href="https://doi.org/10.1002/zamm.19660460521">Henrici (1962)</a>
+und <a href="https://link.springer.com/book/10.1007/978-3-642-65471-8">Stetter (1973)</a> (unvollständiger Beweis).</p>
+<p>Darüberhinaus ist der Satz erweitert worden, um für eine noch größere
+Klasse von Verfahren seine entsprechende Gültigkeit zu behalten, man
+vgl. hier Jeltsch/Nevanlinna (1986).
+Eine Kurzübersicht über Ordnungsbeschränkungen findet man in dem
+Tagungsaufsatz von Wanner (1987).
+G. Dahlquist bewies diesen Satz 1956.</p>
+<p>Bibliographisch:
+<a href="https://www.genealogy.math.ndsu.nodak.edu/id.php?id=26337">Jeltsch, Rolf</a>,
+<a href="https://www.mathgenealogy.org/id.php?id=60820">Nevanlinna, Olavi</a>,
+<a href="https://de.wikipedia.org/wiki/Ernst_Hairer">Hairer, Ernst (*1949)</a>,
+<a href="https://de.wikipedia.org/wiki/Gerhard_Wanner_(Mathematiker)">Wanner, Gerhard (*1942)</a>,
+<a href="https://de.wikipedia.org/wiki/Syvert_Paul_N%C3%B8rsett">Nørsett, Syvert Paul</a>,
+<a href="https://mathshistory.st-andrews.ac.uk/Biographies/Dahlquist/">Dahlquist, Germund</a>,
+<a href="https://en.wikipedia.org/wiki/Hans_J%C3%B6rg_Stetter">Stetter, Hans Jörg (*1930)</a>,
+<a href="https://num.math.uni-goettingen.de/schaback/lebenslauf.html">Schaback, Robert (*1945)</a>,
+<a href="https://de.wikipedia.org/wiki/Helmut_Werner_%28Mathematiker%29">Werner, Helmut (1931--1985)</a>,
+<a href="https://www.mathgenealogy.org/id.php?id=35442">Arndt, Herbert</a>,
+<a href="https://en.wikipedia.org/wiki/C._William_Gear">Gear, Charles William (1935--2022)</a>,
+<a href="https://en.wikipedia.org/wiki/Peter_Henrici_(mathematician)">Henrici, Peter Karl Eugen (1923--1987)</a>.</p>
+<p><strong>6.</strong> Konsequenzen dieser ersten Dahlquist-Barriere sind:</p>
+<p><strong>6.1.</strong> Es gibt kein stabiles
+lineares $3$-Schrittverfahren mit der Konsistenzordnung 6.
+Es gibt allerdings mehrere lineare zyklische Mehrschrittformeln der
+Konvergenzordnung 6 mit nur 3 Startwerten, nämlich die Verfahren
+DH2 und DH3.<em>{Donelson III, John}</em>{Hansen, Eldon}
+Allerdings erhält man die Lösungswerte stets im “3er-Pack”.
+Die letzte Stufe dieser beiden dreistufigen Zyklen benutzt für sich alleine
+nur 3 Startwerte, davon stammen zwei aus dem aktuellen Zyklus, insgesamt
+jedoch hat man dann 6 Lösungswerte mit äquidistanten Gitterabstand
+vorliegen.</p>
+<p><strong>6.2</strong> Die Adams-Moulton-Verfahren</p>
+<div class=math>
+$$
+    y_{n+1}-y_n=h\sum_{i=0}^\kappa \beta_i f_{n+i-\kappa}
+$$
+</div>
+<p>haben die Konsistenzordnung $\kappa$ und die Konvergenzordnung $\kappa+1$, welches
+für ungerade $\kappa$ von keinem anderem konvergenten linearen
+einstufigen Mehrschrittverfahren überboten werden kann.</p>
+<p>Als ein Beispiel für die Verallgemeinerungen, sei der Satz von
+Reimer aus dem Jahre 1968 angegeben, ohne Beweis.
+Während die erste Dahlquist-Barriere lediglich für lineare
+Mehrschrittverfahren galt, verallgemeinerte der Satz von Reimer,
+12 Jahre später nach der ersten Dahlquist-Barriere, den Sachverhalt auf
+lineare Verfahren mit beliebig vielen Ableitungen.</p>
+<p>Bibliographisch: <a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=22856">Reimer, Manfred</a>.</p>
+<p><strong>7. Satz:</strong>  (Satz von Reimer über den maximalen Grad stabiler Differenzenformeln.)
+Die lineare Differenzenform</p>
+<div class=math>
+$$
+    L(h,y,\ldots,y^{(m)}) :=
+        \sum_{\nu=0}^\kappa \sum_{\mu=0}^m h^\mu \alpha_\nu^{(\mu)} y_\nu^{(\mu)},
+    \qquad\hbox{mit}\quad\kappa\ge1, m\ge1
+$$
+</div>
+<p>und der Normierung $\alpha_\kappa^{(0)}=1$ habe den Grad $p$ und sei stabil.
+Dann gilt</p>
+<div class=math>
+$$
+    p \le N+{1\over2}\left[1+(-1)^{N+1}\right],
+    \qquad\hbox{mit}\quad N=(\kappa+1)m.
+$$
+</div>
+<p>Die Schranke wird für jedes Paar $(\kappa,m)\in\mathbb{N}^2$ angenommen.
+Weiterhin wird der maximal mögliche Grad $p=N+1$ genau dann erreicht,
+wenn $N=(\kappa+1)m$ ungerade ist und das Verfahren symmetrisch ist.</p>
+<p><em>Beweis:</em> siehe <a href="https://www.amazon.de/Grundlagen-Numerischen-Mathematik-Bd-Naturwissenschaften/dp/3400004162">Reimer (1982)</a>.
+    ☐</p>
+<p><strong>8.</strong> Die hier häufig auftauchenden BDF$i$ haben das folgende Stabilitätsverhalten.
+Die BDF$i$ ist ein lineares $i$-Schrittverfahren der Konsistenzordnung $i$
+und definiert durch die Formeln</p>
+<div class=math>
+$$
+    \sum_{\nu=1}^i {1\over\nu}\nabla^\nu y_{n+1} = hf_{n+1},\qquad
+        n=0,\ldots .
+$$
+</div>
+<p><strong>9. Satz:</strong>  Die BDF$i$ sind stabil für $i\in\{1,\ldots,6\}$ und
+instabil für alle $i\ge7$.</p>
+<p>Den funktionentheoretischen Beweis findet man in dem Buche von
+<a href="https://www.amazon.de/Solving-Ordinary-Differential-Equations-Computational/dp/3540566708">Hairer/Wanner/Nørsett (1987)</a>.
+Die Tatsache, daß die BDF$i$ für alle $i\ge7$ instabil sind, wurde zuerst
+1972 von C.W. Cryer bewiesen.
+Drei Jahre später erschien ein alternativer Beweis von D.M. Creedon und
+J.J.H. Miller (alle BIT).
+Der Satz gilt <em>nicht</em> für zusammengesetzte Verfahren, wo die BDF$i$ als
+Stufen auftauchen, wie z.B. das zyklische Verfahren siebenter
+Ordnung von <a href="https://search.worldcat.org/title/634642355">Tendler (1973)</a> deutlich macht.
+Man siehe auch <a href="https://dl.acm.org/doi/pdf/10.1145/356502.356495">Tendler/Bickart/Picel (1978)</a>.</p>
+<p>Bibliographisch: <a href="https://www.mathgenealogy.org/id.php?id=26331">Colin Walker Cryer</a>,
+<a href="https://www.researchgate.net/profile/Theodore-Bickart/research">Theodore A. Bickart (1936--2023)</a>, <a href="https://www.legacy.com/us/obituaries/coloradocommunitymedia/name/theodore-bickart-obituary?id=53536695">obituary</a>.</p>
+<p><a href="https://www.researchgate.net/profile/Joel-Tendler/research">Joel Marvin Tendler</a>:
+&quot;A Stiffly Stable
+Integration Process Using Cyclic Composite Methods&quot;,
+Ph.D. Diss., Syracuse University, Syracuse, New York,
+26.Feb.1973, <em>viii</em>+<em>iv</em>+172 pages.</p>
+<h2>5. Die zweite Dahlquist-Barriere<a id=dahlquistbarriere2></a></h2>
+<p><strong>1.</strong> Die erste Dahlquist-Barriere schränkt die höchstmögliche Konvergenzordnung
+ein, aber allerdings nicht allzu drastisch.
+Sehr drakonisch wird jedoch die Vielfalt $A$-stabiler linearer
+Mehrschrittverfahren durch die zweite Dahlquist-Barriere eingeengt.
+Es stellt sich heraus, daß man über die Ordnung 2 grundsätzlich nicht
+hinaus kommt.
+Hier gilt dann also</p>
+<p><strong>2. Satz:</strong>  <a href="https://de.wikipedia.org/wiki/Zweite_Dahlquist-Barriere">Zweite Dahlquist-Barriere</a>.</p>
+<p><strong>(1)</strong> Ein lineares $A$-stabiles Mehrschrittverfahren ist stets implizit und
+besitzt höchstens die Konsistenzordnung und damit die Konvergenzordnung 2.</p>
+<p><strong>(2)</strong> Unter allen linearen $A$-stabilen Mehrschrittverfahren der
+Konsistenzordnung 2, besitzt die Trapezregel
+$y_{n+1}=y_n+h\cdot(f_{n+1}+f_n)/2$ ($\vartheta=1/2$-Einschrittverfahren)
+die kleinstmögliche Fehlerkonstante.</p>
+<p>Die BDF2 ist das einzige lineare $2$-Schrittverfahren, welches
+$A_\infty^0$-stabil ist.</p>
+<p>Für den funktionentheoretischen Beweis sei auf die Originalarbeit von
+<a href="ttps://doi.org/10.1007/BF01963532">Dahlquist (1963)</a> verwiesen,
+<a href="https://mathshistory.st-andrews.ac.uk/Biographies/Dahlquist/">Germund G. Dahlquist (1925--2005)</a>.
+Der Beweis beruht maßgeblich auf den folgenden beiden Sachverhalten und dem
+Vorzeichenverhalten gewisser Terme.</p>
+<p><strong>3. Lemma:</strong>  Ein $k$-Schrittverfahren ist $A$-stabil genau dann,
+wenn $\rho(\mu)/\sigma(\mu)$ das Äußere des Einheitskreises auf die
+komplexe linke Halbebene abbildet, also
+$\mathop{\rm Re}\nolimits \left[\rho(\mu)/\sigma(\mu)\right]&lt;0$, für $\left|\mu\right|&gt;1$.</p>
+<p><strong>4. Satz:</strong>  Satz von Riesz-Herglotz.</p>
+<p><em>Voraussetzungen:</em> Die Funktion $\varphi(z)$ sei holomorph für $\mathop{\rm Re}\nolimits  z&gt;0$.
+Desweiteren gelte für alle Argumente in der rechten Halbebene
+$\mathop{\rm Re}\nolimits \varphi(z)\ge0$, also</p>
+<div class=math>
+$$
+    \mathop{\rm Re}\nolimits  z\gt 0 {\mskip 5mu}\Longrightarrow{\mskip 5mu} \mathop{\rm Re}\nolimits \varphi(z)\ge0.
+$$
+</div>
+<p>Ferner genüge $\varphi$ auf der positiven reellen Achse der
+Beschränktheitsbedingung
+$\sup\left\{\left|x\varphi(x)\right|: 0&lt;x&lt;\infty\right\}$.</p>
+<p><em>Behauptung:</em> $\varphi$ hat für alle Argumente aus der rechten Halbebene die
+Darstellung</p>
+<div class=math>
+$$
+    \varphi(z) = \int_{-\infty}^\infty {d\omega(t)\over z-it},
+    \qquad\hbox{für}\quad\mathop{\rm Re}\nolimits  z\gt 0,
+$$
+</div>
+<p>wobei $\omega(t)$ beschränkt und nicht fallend ist.</p>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Gustav_Herglotz">Gustav Ferdinand Maria Herglotz (1881--1953)</a>,
+<a href="https://en.wikipedia.org/wiki/Frigyes_Riesz">Friedrich Riesz (1880--1956)</a>.</p>
+<p>Aus dieser einschränkenden Begrenzung der Konvergenzordnung, beziehen
+Begriffe wie $A[\alpha]$-, $S[\delta]$-Stabilität, etc., überhaupt ihre
+Berechtigung.
+Gäbe es $A$-stabile lineare $k$-Schrittverfahren beliebig hoher Ordnung,
+so wären dies die idealen Verfahren zur Lösung steifer
+Differentialgleichungen, unter der Voraussetzung daß nicht andere
+Eigenschaften, wie z.B. Schrittzahl $k$, Fehlerkonstanten, u.s.w.,
+erheblich verschlechtert würden.
+Beispielsweise wäre ein $A_\infty^0$-stabiles, lineares
+4-Schrittverfahren, bei Fehlerkonstanten im Bereich von ca. $1\over10$,
+ein ideales Verfahren zur Lösung steifer Differentialgleichungen.
+Die zweite Dahlquist-Barriere besagt, daß es solch ein Verfahren
+prinzipiell nicht geben kann.</p>
+<p>Alternative Beweisgänge werden in Wanner (1987), s.u.,
+angedeutet, allerdings nicht streng bewiesen.
+Die Trapezregel ist nicht $A_\infty^0$-stabil.
+Die Dissertation <a href="https://search.worldcat.org/title/219969663">Tischer (1983)</a> und
+<a href="https://epubs.siam.org/doi/10.1137/0904051">Tischer/Sacks-Davis (1983)</a> geben
+$A_\infty^0$- und $S_\infty^0$-stabile zyklische zweistufige
+Verfahren an, mit den Konvergenzordnungen $p=2,3,4$ und benötigten
+Startwerten von $k=2,3,4$.
+Allerdings sind bei allen Stufen der zyklischen Formeln von
+<a href="https://search.worldcat.org/title/219969663">Tischer (1983)</a> (Dissertation) und <a href="https://epubs.siam.org/doi/10.1137/0904051">Tischer/Sacks-Davis (1983)</a>, die
+Äquilibrierungsmaße vergleichsweise hoch.</p>
+<p>Bibliographisch: <a href="https://www.researchgate.net/profile/Peter-Tischer-2/research">Peter E. Tischer</a>,
+<a href="https://www.researchgate.net/scientific-contributions/Ron-Sacks-Davis-35309423/publications">Ron Sacks-Davis</a>.</p>
+<p><a href="https://www.researchgate.net/profile/Peter-Tischer-2/research">Peter E. Tischer</a>:
+&quot;The Cyclic Use of Linear Multistep
+Formulas for the Solution of Stiff Differential Equations&quot;, Ph.D. Thesis,
+Department of Computer Science, Monash University, Clayton, Victoria,
+Australia, August 1983, <em>x</em>+180 pages.</p>
+<p><a href="https://de.wikipedia.org/wiki/Gerhard_Wanner_(Mathematiker)">Wanner, Gerhard (*1942)</a>:
+&quot;Order Stars and Stability&quot;, in
+``The State of the Art in Numerical Analysis&quot;,
+Proceedings of the joint IMA/SIAM conference held at the
+University of Birmingham, 14--18 April 1986,
+Edited by A. Iserles and M.J.R. Powell,
+Clarendon Press, Oxford, 1987, <em>451--471</em></p>
+<p>Die Tatsache, daß ein explizites lineares Mehrschrittverfahren nicht
+$A$-stabil sein kann, ist sehr leicht einzusehen.
+Auch eine beliebige Kombination expliziter linearer
+Mehrschrittverfahren, mit äquidistanter Gitterweite $h$, kann
+nicht $A$-stabil sein.
+Sehr wohl kann jedoch eine Kombination von impliziten und expliziten
+Verfahren sogar $A_\infty^0$-stabil sein.</p>
+<p>Zusätzliches Licht auf die Beziehung zwischen Konsistenzordnung und
+Stabilitätseigenschaften wirft der Satz von <a href="https://doi.org/10.1007/BF01400542">Jeltsch/Nevanlinna (1982)</a>.</p>
+<p>Bibliographisch: <a href="https://www.genealogy.math.ndsu.nodak.edu/id.php?id=26337">Rolf Jeltsch</a>,
+<a href="https://www.mathgenealogy.org/id.php?id=60820">Olavi Nevanlinna</a>.</p>
+<p><strong>5. Satz:</strong>  siehe <a href="https://doi.org/10.1007/BF01400542">Jeltsch/Nevanlinna (1982)</a>.
+Es gilt</p>
+<div class=math>
+$$
+    \forall k\in\mathbb{N}:\forall\alpha\in[0^\circ,90^\circ):\quad
+        \hbox{existiert mindestens ein $A[\alpha]$-stabiles Verfahren}
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \forall k\in\mathbb{N}:\forall\delta\gt 0:\quad\hbox{existiert mindestens ein
+        $S[\delta]$-stabiles Verfahren}.
+$$
+</div>
+<p>Weiter gibt es funktionale Zusammenhänge zwischen Fehlerkonstanten
+und erreichbarer Höchstordnung.</p>
+<p><strong>6. Satz:</strong>  siehe <a href="https://doi.org/10.1007/BF01389442">Jeltsch/Nevanlinna (1986)</a>.</p>
+<p><em>Voraussetzung:</em> Es sei $c_{p+1}$ der Fehlerfaktor von</p>
+<div class=math>
+$$
+    (L_hy)(t) := \sum_{i=0}^k \sum_{j=0}^m \alpha_{ij} h^j y^{(j)}(t+ih),
+    \qquad c_{p+1}={1\over y^{(p+1)}(0)} (L_1y)(0).
+$$
+</div>
+<p>Die Wurzeln von $\rho_0(\zeta)$ seien $\zeta_1=1,\zeta_2,\ldots,\zeta_k$,
+welche in der Einheitskreisscheibe liegen:</p>
+<div class=math>
+$$
+    \left|\zeta_i\right|\le R,\qquad 0\le R\le1.
+$$
+</div>
+<p><em>Behauptung:</em> (1) Ist die Formel explizit und von der Ordnung $p=mk$, so
+gilt</p>
+<div class=math>
+$$
+    c_{p+1} \ge {1\over(m+k)!} 2^{1-k} \sum_{j=0}^{k-1} {k-1\choose j}
+        \left(1-R\over1+R\right)^j f_{jkm}.
+$$
+</div>
+<p>(2) Im impliziten Falle und der Ordnung $p=(k+1)m$ gilt</p>
+<div class=math>
+$$
+    (-1)^m c_{p+1} \ge {(-1)^m\over\left[(k+1)m\right]!} 2^{1-k}
+        \sum_{j=0}^{k-1} {k-1\choose j} \left(1-R\over1+R\right)^j e_{jkm}.
+$$
+</div>
+<p>(3) In beiden Fällen, also in Fall (1) und (2) ist Gleichheit möglich
+bei der Formel maximaler Ordnung mit dem charakteristischen Polynom</p>
+<div class=math>
+$$
+    \rho_0(\zeta) = (\zeta-1)(\zeta+R)^{k-1},
+$$
+</div>
+<p>welches stabil ist, für $R&lt;1$ oder $R=1$ und $k\le2$.</p>
+<p>Die Größen $f_{jkm}$ und $e_{jkm}$ sind gegeben durch</p>
+<div class=math>
+$$
+    f_{jkm} := \sum_{i=0}^{k-1} T_{ij} W_{i,k-1,m}, \qquad
+    W_{jkm} := \int_j^{j+1} \prod_{\nu=0}^k (t-\nu) dt,
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    e_{jkm} := \sum_{i=0}^{k-1} T_{ij} W_{i,k+1,m}, \qquad
+    T_{ij} := \sum_{\mu=\max(0,i-j)}^{\min(n-j,i)} {j\choose i-\mu}
+        {n-j\choose\mu} (-1)^{j-i+\mu},
+$$
+</div>
+<p>für $j=0,\ldots,k-1$.</p>
+<p><em>Beweis:</em> <a href="https://doi.org/10.1007/BF01389442">Jeltsch/Nevanlinna (1986)</a>.
+    ☐</p>
+<p>Nach dem Satz von <a href="https://doi.org/10.1007/BF01400542">Jeltsch/Nevanlinna (1982)</a>
+gibt es also “fast $A$-stabile” lineare Mehrschrittverfahren mit
+beliebiger Anzahl von Startwerten.
+Dennoch sind diese Verfahren nicht $A$-stabil und schon gar nicht
+$A_\infty^0$- oder $S_\infty^0$-stabil, nach der zweiten
+Dahlquist-Barriere.
+Vielmehr rücken die Wurzeln betragsmässig immer mehr der eins
+näher, für $H\to\infty$, und die Fehlerkonstanten werden mit größer
+werdenden $k$ immer größer.
+Beispielsweise verwendet <a href="https://doi.org/10.1137/0906063">Gupta (1985)</a>
+$k$-Schrittverfahren mit den in der Tabelle angegebenen Eigenschaften.</p>
+<p>Bibliographisch: <a href="https://users.monash.edu/~gopal/shadowfax/">Gopal K. Gupta</a>.</p>
+<table>
+<thead>
+<tr>
+<th><em>p</em></th>
+<th align="left">$\alpha$</th>
+<th align="left">$\delta$</th>
+<th align="left">$c_{p+1}$</th>
+<th align="left">$\mu_\infty$</th>
+<th><em>k</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td align="left">90.00</td>
+<td align="left">0.0</td>
+<td align="left">0.5</td>
+<td align="left">0.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="left">90.00</td>
+<td align="left">0.0</td>
+<td align="left">0.083</td>
+<td align="left">1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="left">86.46</td>
+<td align="left">0.075</td>
+<td align="left">0.242</td>
+<td align="left">0.32</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="left">80.13</td>
+<td align="left">0.282</td>
+<td align="left">0.374</td>
+<td align="left">0.43</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="left">73.58</td>
+<td align="left">0.606</td>
+<td align="left">0.529</td>
+<td align="left">0.567</td>
+<td>7</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="left">67.77</td>
+<td align="left">1.218</td>
+<td align="left">0.724</td>
+<td align="left">0.878</td>
+<td>9</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="left">65.53</td>
+<td align="left">1.376</td>
+<td align="left">1.886</td>
+<td align="left">0.898</td>
+<td>12</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="left">64.96</td>
+<td align="left">1.149</td>
+<td align="left">7.686</td>
+<td align="left">0.790</td>
+<td>16</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="left">62.78</td>
+<td align="left">2.086</td>
+<td align="left">16.737</td>
+<td align="left">0.989</td>
+<td>19</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="left">63.74</td>
+<td align="left">1.223</td>
+<td align="left">133.955</td>
+<td align="left">0.878</td>
+<td>26</td>
+</tr>
+</tbody>
+</table>
+<p>Hierbei bedeutet $p$ die Konvergenzordnung, $k$ die Anzahl der
+Startwerte, $c_{p+1}$ der Fehlerfaktor, $\alpha$ der Widlund-Winkel,
+und $\delta$ ist der entsprechende Wert bei der $S[\delta]$-Stabilität.
+$\mu_\infty$ ist der Betrag der betragsmässig größten Wurzel bei $\infty$.</p>
+<p>Es zeigt sich, daß das Programm DSTIFF, welches diese Formeln benutzt,
+häufig doppelt so viele Funktionsauswertungen und doppelt so lange
+Rechenzeiten beansprucht, wie das Programm LSODE, welches auf den BDF$i$,
+mit $i\in\{1,\ldots,5\}$ basiert.
+Man beachte allerdings, daß hier Implementierungen von Formeln und
+Heuristik miteinander verglichen wurden.
+Dieser Vergleich, den <a href="https://doi.org/10.1137/0906063">Gupta (1985)</a> anstellte, ist also
+keine endgültige Wertung von Formeln, sondern eine Wertung von Programmen.
+Eine geschickte Programmierung und eine durchdachte Heuristik sind von
+nicht zu unterschätzender Wichtigkeit.</p>
+<p>Aufgrund einer modifizierten Strategie für die Korrektoriteration in dem
+Programm DSTIFF, sind
+die Anzahlen für $LU$-Zerlegungen (= Jacobimatrixauswertungen) leicht
+geringer, als für das Programm LSODE.
+Lediglich erwartungsgemäss für das Problem B5 benötigt das Programm DSTIFF
+bedeutend weniger Schritte, als das Programm LSODE.
+Bei diesem Problem werden die Stabilitätseigenschaften besonders gefordert.
+Wüßte man im voraus um die Lage der Eigenwerte der konstanten Jacobimatrix,
+so könnte man bei dem Programm LSODE gleich von vorne herein eine passende
+Höchstordnung wählen und damit würden sich beide Programme wieder
+angleichen.
+Das Verhältnis der Schritte der beiden Programme zueinander beträgt bei
+B5 grob $1:4$ (DSTIFF:LSODE).
+Dieses Verhältnis übersetzt sich allerdings nicht in gleichem Maßstab auf die
+Rechenzeit.
+Die Rechenzeit ist lediglich um einen wesentlich geringeren Betrag
+angestiegen.</p>
+<p>Eine gewisse Sonderstellung nehmen die BDF$i$ ein, wegen
+$\sigma(\mu)=\mu^i$.</p>
+<p><strong>7. Bemerkung:</strong>  Die BDF$i$ sind die einzigen linearen
+$i$-Schrittverfahren der Konsistenzordnung $i$, für $i=1,\ldots,6$, die
+$A_\infty^0[\alpha]$- bzw. $S_\infty^0[\delta]$-stabil sind.</p>
+<p>Es gibt weitere lineare Mehrschrittverfahren ($\ne$BDF$i$), die
+$A_\infty^0[\alpha]$- bzw. $S_\infty^0[\delta]$-stabil sind, jedoch ist
+dann die Konsistenzordnung $i$ nicht mehr mit $i$ Startwerten zu erreichen.
+Für mehrstufige Verfahren gilt die Bemerkung nicht mehr, wie z.B. die
+zyklischen Formeln von <a href="https://search.worldcat.org/title/634642355">Tendler (1973)</a> deutlich machen,
+siehe auch <a href="https://dl.acm.org/doi/pdf/10.1145/356502.356495">Tendler/Bickart/Picel (1978)</a>.</p>
+<h2>6. Annullierte Dominanz und Totalannullation<a id=annulliertedominanz></a></h2>
+<p>Wie üblich bedeute “$\cong$” Gleichheit bis auf ${\cal O}(h^{p+2})$.
+Jede Stufe eines zusammengesetzten Verfahrens wird nun in einen
+<a href="https://de.wikipedia.org/wiki/Taylor-Formel">Taylorabschnitt</a> (<a href="https://de.wikipedia.org/wiki/Brook_Taylor">Taylor, Brook (1685--1731)</a>) zerlegt und man erhält hierfür</p>
+<div class=math>
+$$
+    \gamma \cong \pmatrix{
+        c_{11}\dot yh+\cdots+c_{1,p+1}y^{(p+1)}h^{p+1}\cr
+        c_{21}\dot yh+\cdots+c_{2,p+1}y^{(p+1)}h^{p+1}\cr
+        \vdots \qquad \cdots \qquad \vdots\cr
+        c_{s1}\dot yh+\cdots+c_{s,p+1}y^{(p+1)}h^{p+1}\cr
+    }
+    = \underbrace{\pmatrix{
+        c_{11} & \ldots & c_{1p}\cr
+        c_{21} & \ldots & c_{2p}\cr
+        \vdots & \ddots & \vdots\cr
+        c_{s1} & \ldots & c_{sp}\cr}}_{\in\mathbb{C}^{s\times (p+1)}}{\mskip 3mu}
+    \underbrace{\pmatrix{\dot yh\cr \ddot yh^2\cr \vdots\cr y^{(p)}h^p\cr}}
+        _{\in\mathbb{C}^p}
+$$
+</div>
+<p>$\gamma$ kann aufgespalten werden in eine Summe</p>
+<div class=math>
+$$
+    \gamma \cong \pmatrix{c_{11}\cr\vdots\cr c_{s1}\cr}\dot yh
+        +\pmatrix{c_{21}\cr\vdots\cr c_{s,2}\cr}\ddot yh
+        +\cdots+\pmatrix{c_{1,p+1}\cr\vdots\cr c_{s,p+1}\cr}y^{(p+1)}h^{p+1}
+$$
+</div>
+<p>und jeder Summand wird einzeln auf annullierte Dominanz, oder
+Totalannullation geprüft.
+Bei Verfahren, bei denen alle Stufen die gleiche Konsistenzordnung haben,
+sind $c_{ij}=0$, für $j\le p$, und $i=1,\ldots,s$, und die obige Gleichung
+reduziert sich dann auf</p>
+<div class=math>
+$$
+    \gamma \cong \pmatrix{
+        c_{1,p+1}y^{(p+1)}h^{p+1}\cr \vdots\cr c_{s,p+1}y^{(p+1)}h^{p+1}\cr}
+    = \pmatrix{c_{1,p+1}\cr \vdots\cr c_{s,p+1}\cr} y^{(p+1)}h^{p+1}.
+$$
+</div>
+<p><strong>1. Beispiel:</strong>  Es werde das explizite Euler-Verfahren als
+Prädiktor verwendet und mit der BDF2 werde zweimal anschliessend iteriert.</p>
+<table>
+<thead>
+<tr>
+<th>Schritt</th>
+<th>Formel</th>
+<th>Verfahren</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prädiktor</td>
+<td>$y^0_{n+1}=y_n+z_n$</td>
+<td>explizites Euler-Verfahren</td>
+</tr>
+<tr>
+<td>Korrektor</td>
+<td>$y_{n-1}-4y_n+3y^1_{n+1}=2z^0_{n+1}$</td>
+<td>BDF2</td>
+</tr>
+<tr>
+<td>Korrektor</td>
+<td>$y_{n-1}-4y_n+3y_{n+1}=2z^0_{n+1}$</td>
+<td>BDF2</td>
+</tr>
+</tbody>
+</table>
+<p>Mit $u_n=(y^0_n,{\mskip 3mu}y^1_n,{\mskip 3mu}y_n)$ ergibt sich für die sechs Matrizen</p>
+<div class=math>
+$$
+    A_0=\pmatrix{0&0&0\cr 0&0&1\cr 0&0&1\cr},\quad
+    A_1=\pmatrix{0&0&-1\cr 0&0&-4\cr 0&0&-4\cr},\quad
+    A_2=\pmatrix{1&0&0\cr 0&3&0\cr 0&0&3\cr},\quad
+    B_0=B_1={\bf 0},\quad
+    B_2=\pmatrix{0&0&0\cr 2&0&0\cr 0&2&0\cr}.
+$$
+</div>
+<p>Für das <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a> $\rho(\mu)=A_0+A_1\mu+A_2\mu^2$ ergibt sich</p>
+<div class=math>
+$$
+    \rho(\mu) = \pmatrix{
+        \mu^2 & 0 & 0\cr
+        0 & 3\mu^2 & 1-4\mu\cr
+        0 & 0 & 3\mu^2-4\mu+1\cr}
+$$
+</div>
+<p>Auffällig ist die obere Dreiecksgestalt und die Verteilung der
+$\mu^\kappa$-Terme auf der Diagonalen.
+Weiterhin erscheint in der rechten unteren Ecke das charakteristische
+Polynom des Korrektors.
+Dieser Sachverhalt gilt ganz allgemein.
+Der Nullensatz für Prädiktor-Korrektor-Verfahren lautet:</p>
+<p><strong>2. Satz:</strong>  Sei $\rho_c$ das charakteristische Polynom
+des Korrektors.
+Für das Matrixpolynom eines $P(EC)^i\{E\}$-Verfahrens, mit</p>
+<div class=math>
+$$
+    \rho(\mu) = \sum_{\nu=0}^\kappa A_\nu\mu^\nu,\qquad
+    \deg\rho = \kappa,\qquad
+    A_\nu\in\mathbb{C}^{(i+1)\times(i+1)},\quad\nu=0,\ldots,\kappa,
+$$
+</div>
+<p>hat man für alle $\mu\in\mathbb{C}$ die Darstellung</p>
+<div class=math>
+$$
+    \rho(\mu) = \pmatrix{
+        \alpha_{11}\mu^\kappa & 0 & \ldots & *\cr
+        0 & \alpha_{22}\mu^\kappa & \ldots & *\cr
+        \vdots & \vdots & \ddots & \vdots\cr
+        0 & 0 & \ldots & \rho_c(\mu)\cr} \in \mathbb{C}^{(i+1)\times(i+1)}.
+$$
+</div>
+<p><em>Beweis:</em> (Nullensatz) Es ist</p>
+<div class=math>
+$$
+    u_{n+\nu} = \pmatrix{y^0_{n+\nu}\cr \vdots\cr y^{i-1}_{n+\nu}\cr y_{n+\nu}\cr},
+    \qquad \nu=-\kappa+1,\ldots,1.
+$$
+</div>
+<p>Die ersten $i$ Komponenten der Vektoren $u_{n+\nu}$ kommen in der letzten
+Korrektorstufe nicht vor.
+Die Matrizen $A_0,\ldots,A_{\kappa-1}$ tragen Elemente lediglich auf der
+letzten Spalte, sind also alle von der Form</p>
+<div class=math>
+$$
+    A_0\sim A_1\sim\ldots A_{\kappa-1}\sim\pmatrix{
+        0 & \ldots & 0 & *\cr
+        \vdots & \ddots & \vdots & \vdots\cr
+        0 & \ldots & 0 & *\cr}
+$$
+</div>
+<p>während hingegen $A_\kappa$ Diagonalgestalt hat, also</p>
+<div class=math>
+$$
+    A_\kappa = \pmatrix{
+        \alpha_{11}   &        & \llap{0}\cr
+                      & \ddots & \cr
+        \rlap{0} & \ldots & \alpha_\kappa\cr},
+$$
+</div>
+<p>wobei $\alpha_{11}=\alpha_\kappa^P$, der führende Koeffizient des
+Prädiktor-Verfahrens ist und
+$\alpha_{22}=\cdots=\alpha_{i+1,i+1}=\alpha_\kappa$ gleich dem
+führenden Koeffizient des Korrektors ist.
+Summation der $A_\nu\mu^\nu$ ergibt die Behauptung.
+    ☐</p>
+<p>Nur $y^*_{n+1}$, also die Lösung der impliziten Korrektorgleichung für die
+Zeit $t_{n+1}$, ist gesucht.
+Die anderen vergangenen Werte sind schon gefunden.
+Die Zwischenwerte der vergangenen Iterationen werden nicht mehr verwendet,
+anders als bei semiiterativen Verfahren.
+Würde man diese dennoch verwenden, so könnte sich natürlich auch das
+Spektrum ändern, weil sich sich dann auch die obere Dreiecksgestalt ändert.
+Vorausgesetzt wird hier ebenfalls, daß immer mit dem gleichen Korrektor
+iteriert wird, und daß nur ein einziger Prädiktor genommen wird.
+Z.B. verwenden off-step-point Verfahren u.U. mehrere
+Prädiktoren, so auch <a href="https://doi.org/10.1002/zamm.19730530805">Filippi/Kraska (1973)</a>.</p>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Siegfried_Filippi">Siegfried Filippi (1929--2022)</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=53408">Ernst Kraska (1932--2021)</a>, <a href="https://trauer.augsburger-allgemeine.de/traueranzeige/ernst-kraska">Todesanzeige</a>.</p>
+<p><strong>3. Folgerungen:</strong>  <strong>(1)</strong> Das charakteristische Polynom
+$Q(\mu,0)=\det\rho(\mu)$ sowohl des $P(EC)^iE$-, als auch des
+$P(EC)^i$-Verfahrens hat mindestens $\kappa i$ Nullen im Spektrum
+und die restlichen $\kappa$ Eigenwerte stimmen mit den Wurzeln des
+charakteristischen Polynomes $\rho_c$ des Korrektors überein.</p>
+<p><strong>(2)</strong> Insbesondere ist ein $P(EC)^iE$- bzw. $P(EC)^i$-Verfahren genau
+dann stabil, wenn der Korrektor stabil ist.
+Die Stabilität der Prädiktorformel ist völlig unerheblich für die
+$D$-Stabilität des $P(EC)^iE$- bzw. $P(EC)^i$-Verfahrens.
+Sehr wohl hat natürlich der Prädiktor Einfluß auf das Aussehen des
+Stabilitätsgebietes.</p>
+<p><strong>(3)</strong> Die Linkseigenvektoren $v_m$ mit $m=1,\ldots$, zu den nicht zu
+Null gehörenden Eigenwerten, also somit $m\le\kappa$, sind alle von der
+Form</p>
+<div class=math>
+$$
+    v_m = (0,{\mskip 3mu}\ldots,{\mskip 3mu}0,{\mskip 3mu}1)\in\mathbb{C}^{1\times(i+1)},\qquad m\le\kappa.
+$$
+</div>
+<p>Folgerung (2) kann man auch auf andere Art und Weise einsehen.
+Seien die beiden Funktionen $\varphi$ und $\psi$ Lipschitz-stetig,
+dann ist auch die verkettete Funktion $\varphi\circ\psi$ Lipschitz-stetig.
+Ist also</p>
+<div class=math>
+$$
+    \left|\varphi(x)-\varphi(y)\right|\le K\left|x-y\right|\qquad\hbox{und}\qquad
+    \left|\psi(u)-\psi(v)\right|\le L\left|u-v\right|,
+$$
+</div>
+<p>so gilt</p>
+<div class=math>
+$$
+    \left|\varphi(\psi(u))-\varphi(\psi(v))\right|
+        \le K\left|\psi(u)-\psi(v)\right|\le KL\left|u-v\right|.
+$$
+</div>
+<p>Denkt man sich nun ein Picard-Prädiktor-Korrektor-Verfahren nicht als
+einziges mehrstufiges, i.d.R. lineares Verfahren, sondern denkt man es
+sich als ein ineinander verschachteltes, i.d.R. nicht-lineares
+Verfahren, so sieht man ebenfalls sofort, daß für die
+Stabilitätseigenschaften bzgl. $h\to0$, nur der Korrektor maßgeblich
+ist und der Prädiktor unmaßgeblich ist.</p>
+<p><strong>4.</strong> Sei der Prädiktor $\hat z_{n+\kappa}$ gegeben durch die
+Matrix-Differenzengleichung</p>
+<div class=math>
+$$
+    \hat A_0z_n+\cdots+\hat A_{\kappa-1}z_{n+\kappa-1}+\hat A_\kappa\hat z_{n+\kappa}
+    = h\varphi(z_n,\ldots,z_{n+\kappa-1}),\qquad \hat A_\kappa=I
+$$
+</div>
+<p>und der Korrektorwert ergebe sich als Lösung der Matrix-Differenzengleichung</p>
+<div class=math>
+$$
+    A_0z_n + \cdots + A_\kappa z_{n+\kappa-1} + A_\kappa
+    = h \psi(z_n,\ldots,z_{n+\kappa-1},z_{n+\kappa}),  \qquad A_\kappa = I.
+$$
+</div>
+<p>Picard-Iteration besteht nun darin, daß man den Wert $z_{n+\kappa}$ in der
+Funktion $\psi$ ersetzt durch die Iterierte der vorherigen Iteration, also
+wird $z_{n+\kappa}$ in $\psi$ ersetzt durch $\hat z_{n+\kappa}$.
+Direkte Substitution der Bestimmungsgleichung für den
+Prädiktorwert $\hat z_{n+\kappa}$ in die Funktion $\psi$, ergibt dann</p>
+<div class=math>
+$$
+    \sum_{i=0}^\kappa A_i z_{n+i} = h\vartheta(z_n,\ldots,z_{n+\kappa-1}),
+$$
+</div>
+<p>wobei die Funktion $\vartheta$ Lipschitz-stetig ist und damit erhält man
+mit den üblichen Sätzen bei gegebener Konsistenz und Stabilität dann die
+Konvergenz.
+Über die Entstehungsgeschichte von $\vartheta$ braucht man nichts zu wissen,
+außer eben, daß $\vartheta$ Lipschitz-stetig bzgl. seiner Argumente ist.
+Insbesondere die Nullstabilität hängt jetzt offensichtlich nur noch von den
+Matrizen $A_i$ ab.
+Iteriert man häufiger als einmal, also Picard-$P(EC)^i\{E\}$ (i&gt;1), so
+wird die Verschachtelungtiefe nur höher, am Prinzip ändert sich nichts.</p>
+<p>Aus der Folgerung (3) ergibt sich jetzt sofort, daß die Fehlervektoren des
+Prädiktors und die Fehlervektoren der Zwischeniterierten von den
+Linkseigenvektoren $v_m$ vollständig weggefiltert werden.
+Dies heißt, die Eigenwerte nicht gleich Null bekommen nur den Fehlerfaktor
+des Korrektors zu Gesicht und die restlichen Fehlerfaktoren werden von
+den Nullen im Spektrum total annulliert.
+Überhaupt gibt es Parallelen zwischen <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge-Kutta-Verfahren</a>
+und Prädiktor-Korrekor-Verfahren.
+Prädiktor-Korrektor-Verfahren steht hier sowohl für $P(EC)^iE$- also auch
+für $P(EC)^i$-Verfahren, kurz $P(EC)^i\{E\}$-Verfahren.
+Diesen Effekt der Totalannullation kann man anhand eines Beispiels besonders
+deutlich nachvollziehen.</p>
+<p><strong>5. Beispiel:</strong>  Als Prädiktor-Korrektor-Verfahren werde verwendet</p>
+<table>
+<thead>
+<tr>
+<th>Schritt</th>
+<th>Formel</th>
+<th>Verfahren</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prädiktor</td>
+<td>$y^0_{n+1}=y_n+z_n$</td>
+<td>explizites Euler-Verfahren</td>
+</tr>
+<tr>
+<td>Korrektor</td>
+<td>$y_{n-1}-4y_n+3y_{n+1}=2z^0_{n+1}$</td>
+<td>BDF2</td>
+</tr>
+</tbody>
+</table>
+<p>Mit $u_n=(y^0_n,{\mskip 3mu}y_n)$ erhält man die sechs Matrizen</p>
+<div class=math>
+$$
+    A_0=\pmatrix{0&0\cr 0&1\cr},\quad
+    A_1=\pmatrix{0&-1\cr 0&-4\cr},\quad
+    A_2=\pmatrix{1&0\cr 0&3\cr},\qquad
+    B_0={\bf 0},\quad
+    B_1=\pmatrix{0&1\cr 0&0\cr},\quad
+    B_2=\pmatrix{0&0\cr 2&0\cr} .
+$$
+</div>
+<p>Als Lösung für die Differenzengleichung</p>
+<div class=math>
+$$
+    A_2u_{n+2}+A_1u_{n+1}+A_0u_n=\Gamma\hat Z,\qquad n=0,1,\ldots
+$$
+</div>
+<p>erhält man nach Durchmultiplikation mit $A_2^{-1}$ für den dominanten Term</p>
+<div class=math>
+$$
+    \pmatrix{1&*&*&1\cr 0&*&*&1\cr}
+    \pmatrix{0&&&\cr &0&&\cr &&1/3&\cr &&&1\cr}
+    \pmatrix{*&*\cr *&*\cr 0&1\cr 0&1\cr}
+    \pmatrix{1/2&*\cr 0&-2/3\cr} \hat Z.
+$$
+</div>
+<p>Die ersten Fehlerterme des Prädiktors sind $h^2/2\ddot y+{\cal O}(h^3)$
+und für den Korrektor lauten sie $-2h^3/3y^{III}+{\cal O}(h^4)$.</p>
+<p>Die Fehlervektoren des Prädiktors liegen nun gerade so, daß sie genau
+auf diese Nullen heraufpassen, das heißt die Fehlervektoren stehen
+senkrecht auf den nicht zu Null gehörenden Jordanvektoren.
+Die vom Prädiktor gelieferten niedrigen Konsistenzordnungen, werden
+deswegen total annulliert (Totalannullation).
+Dieses Verhalten ist völlig analog dem Verhalten bei <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge-Kutta-Verfahren</a>,
+wo die Stufen mit niedrigen Konsistenzordnungen von den Nullen in der
+Jordanmatrix</p>
+<div class=math>
+$$
+    J = \pmatrix{
+        0 & & & \llap0\cr
+          & \ddots & & \cr
+          & & 0 & \cr
+        \rlap0 & & & 1\cr}
+$$
+</div>
+<p>vollständig bedämpft werden und somit keinerlei Wirkung zeigen.
+Dies gilt zumindestens im asymptotischen Falle $h\to 0$, wo allein
+einzig die $A_\nu$ entscheidend wirken und die Matrizen $B_\nu$
+keine Rolle spielen.</p>
+<p><strong>6. Beispiel:</strong>  Runge-Kutta-Verfahren mit insgesamt 4 Stufen.</p>
+<div class=math>
+$$
+    A = \pmatrix{
+        0 & 0 & 0 & 1\cr
+        0 & 0 & 0 & 1\cr
+        0 & 0 & 0 & 1\cr
+        0 & 0 & 0 & 1\cr}, \quad
+    X = \pmatrix{
+        1 & 0 & 0 & 1\cr
+        0 & 1 & 0 & 1\cr
+        0 & 0 & 1 & 1\cr
+        0 & 0 & 0 & 1\cr}, \quad
+    J = \pmatrix{
+        0 &   &   & \llap0\cr
+          & 0 &   & \cr
+          &   & 0 & \cr
+        \rlap0 & & & 1\cr}, \quad
+    Y = \pmatrix{
+        1 & -1 & 0 & 0\cr
+        0 & 1 & -1 & 0\cr
+        0 & 0 & 1 & -1\cr
+        0 & 0 & 0 & 1\cr}
+$$
+</div>
+<p>Die Konsistenzordnung kann pro Stufe um eine Einheit steigen.
+Die Matrix $C$ hat somit die Form</p>
+<div class=math>
+$$
+    C = \pmatrix{
+        c_1 & * & * & *\cr
+        0 & c_2 & * & *\cr
+        0 & 0 & c_3 & *\cr
+        0 & 0 & 0 & c_4\cr}
+$$
+</div>
+<p><strong>7. Beispiel:</strong>  Die hier zutage tretende Ähnlichkeit zwischen
+Runge-Kutta-Verfahren und $P(EC)^i\{E\}$-Verfahren gilt sogar soweit,
+daß manche $P(EC)^i\{E\}$-Verfahren mit bestimmten expliziten
+Runge-Kutta-Ver-fahren völlig gleichwertig sind.
+Zum Beispiel gilt für das verbesserte Euler-Verfahren mit dem Parametertableau</p>
+<div class=math>
+$$
+\begin{array}{c|cc}
+   1 && 1 & \cr
+   \hline
+     && {1\over2} & {1\over2}\cr
+\end{array}
+\qquad\qquad
+\eqalign{k_0 &= f(t_0,y_0)\cr
+         k_1 &= f(t_0+h,y_0+hk_0)\cr
+         \hline
+         y_1 &= y_0+{h\over2}\left(k_0+k_1\right)\cr
+}
+$$
+</div>
+<p>daß es völlig identisch ist mit dem impliziten Trapezverfahren, wobei das
+explizite Euler-Verfahren als Prädiktor verwendet wird:</p>
+<div class=math>
+$$
+% sich ausdehnender Rechtspfeil, s.Knuth, S.325
+% ev. noch ein \smash einfügen, sodaß \matrix "nichts" merkt
+%\def\mapright#1{
+%    \setbox0=\hbox{$#1$}     % temporär ablegen und dann ausmessen
+%    \dimen0=\wd0             % weil man \wd0 nicht "advancen" kann
+%    \advance\dimen0 by 0.7cm % bißchen mehr Platz
+%    \mathop{                 % \limits will dies halt so
+%        \hbox to \dimen0{\rightarrowfill}
+%    } \limits^{#1}           % darüber die Information
+%}
+    y_{n+1} = y_n + {h\over2}\left\{f_n+f_{n+1}\right\} %\mapright{PECE}
+        \overset{PECE}\longrightarrow
+        y_n + {h\over2}\left\{f_n+f(t_{n+1},y_n+hf_n)\right\}.
+$$
+</div>
+<p>Die Analyse beider Verfahren geschieht häufig völlig getrennt.
+Die Konsistenzordnung 2 des verbesserten Euler-Verfahrens weist man häufig
+durch Taylorentwicklung direkt nach.
+Beim Prädiktor-Korrektor Verfahren wendet man die Konsistenzsätze an, weist
+Stabilität des Korrektors nach und zeigt schließlich mit Hilfe des Satzes
+von <a href="https://dl.acm.org/doi/pdf/10.1145/362663.362745">Liniger (1971)</a>, daß die Konsistenzordnung des
+Korrektors erhalten bleibt, wenn man ausreichend lange iteriert.</p>
+<p><strong>8.</strong> Wichtig für das Konvergenzverhalten ist die spektrale Struktur der
+drei Matrizen $X$, $J$ und $Y$:</p>
+<div class=math>
+$$
+\eqalign{
+    X: & \qquad XJ^\nu Y\gamma=\ldots,\cr
+    J: & \qquad J^\nu Y\gamma=\ldots,\cr
+    Y: & \qquad Y\gamma=(\ldots 0\ldots)^\top.\cr
+}
+$$
+</div>
+<p>Seien $v_1,\ldots,v_r$ die Linkseigenvektoren zum <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a> $\rho$
+zum Eigenwert $\lambda=1$, so gilt als Bedingung
+der annullierten Dominanz</p>
+<div class=math>
+$$
+    v_i{\mskip 3mu}\rho(1)=0,\quad v_i{\mskip 3mu}\gamma=0,\quad v_i\ne{\bf0}^\top,\qquad
+    i=1,\ldots,r.
+$$
+</div>
+<p>Für den Fall $r=1$ erhält man also die geometrische Bedingung, daß
+die Spalten der Matrix $(\rho(1),{\mskip 3mu}\gamma)$ aus dem orthogonalen
+Komplement von $v$ sein müssen, somit</p>
+<div class=math>
+$$
+    (\rho(1),{\mskip 3mu}\gamma)\in v^\bot.
+$$
+</div>
+<p>Ist der Linkskern von $\rho(1)$ nicht mehr 1-dimensional, sondern
+$r$-dimensional, so hat die Bedingung zu gelten</p>
+<div class=math>
+$$
+\def\spn{\mathop{\rm span}}
+    \left(\rho(1),\gamma\right)\in\left(\spn(v_1,\ldots,v_r)\right)^\bot
+$$
+</div>
+<p>Für Eigenwerte $\left|\mu\right|=1$ gilt ganz entsprechend</p>
+<div class=math>
+$$
+    \left(\rho(\mu),\gamma\right)\in\left(\spn(v_1,\ldots,v_r)\right)^\bot,
+$$
+</div>
+<p>wobei $r$ jetzt die Vielfachheit des Eigenwertes zu $\left|\mu\right|=1$
+ist und entsprechend $v_1,\ldots,v_r$ die Linkseigenvektoren zu diesem
+Eigenwert sind.
+Algebraische Vielfachheit (=Multiplizität der Nullstelle des
+charakteristischen Polynoms) und geometrische Vielfachheit (=Dimension des
+invarianten Unterraumes) müssen bei dominanten Eigenwerten natürlich gleich
+sein.
+Anhand der oben schon angegebenen Darstellung für die Lösung der
+Matrixdifferenzengleichung, und zwar in der Form</p>
+<div class=math>
+$$
+    u_{m+1} = XT^{m+1}c + X\sum_{i=0}^m T^{m-i}Yf_i, \qquad m=0,1,\ldots,
+$$
+</div>
+<p>ist das Auftauchen der <em>Linkseigenvektoren</em> sofort offenkundig.
+Die Bedingung der annullierten Dominanz ist eine stetige Invariante, da
+bei einfachen Eigenwerten die Eigenvektoren stetig von kleinen Änderungen
+abhängen.
+Bei mehrfachen Eigenwerten muß dies nicht unbedingt gelten.</p>
+<h2>7. Das $n$-dimensionale äußere Produkt für $n-1$ Vektoren<a id=aeussereprodukt></a></h2>
+<p>Man vgl. auch <a href="/blog/2015/03-15-on-differential-forms-2">On Differential Forms</a>.</p>
+<p><strong>1.</strong> Da die Determinante in jeder Spalte linear ist, stellt</p>
+<div class=math>
+$$
+    x\mapsto\det\left(a_1,\ldots,a_{n-1},x\right)
+$$
+</div>
+<p>für fest gegebene $a_1,\ldots,a_{n-1}\in\mathbb{R}^n$, eine Linearform
+des $\mathbb{R}^n$ dar.
+Nach dem <a href="https://de.wikipedia.org/wiki/Darstellungssatz_von_Fr%C3%A9chet-Riesz">Darstellungssatz von Riesz</a>:</p>
+<blockquote>
+<p>Sei $H$ ein Hilbertraum, und sei $f:H\to\mathbb{C}$ ein stetiges lineares Funktional, dann</p>
+</blockquote>
+<div class=math>
+$$ \dot\exists b\in H:\enspace\forall x\in H:\quad f(x)=\langle b,x\rangle$$
+</div>
+<blockquote>
+<p>und weiter ist $|b|=|f|$.</p>
+</blockquote>
+<p>Daher gibt es genau einen Vektor $b\in\mathbb{R}^n$,
+sodaß die Linearform als Skalarprodukt geschrieben werden kann:</p>
+<div class=math>
+$$
+    \dot\exists b:\enspace\forall x:\quad
+        \det\left(a_1,\ldots,a_{n-1},x\right)=\langle b,x\rangle
+        \qquad(a_i\hbox{ fest}). \tag{*}
+$$
+</div>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Frigyes_Riesz">Riesz, Friedrich (1880--1956)</a>.</p>
+<p><strong>2.</strong> Diesen, implizit durch das Skalarprodukt, eindeutig bestimmten Vektor $b$
+nennt man das <em>Vektorprodukt</em> (auch <em>Kreuzprodukt</em> oder
+<em>äußeres Produkt</em>) und schreibt hierfür</p>
+<div class=math>
+$$
+    b =: a_1\wedge\cdots\wedge a_{n-1} =: \bigwedge_{i=1}^{n-1} a_i,
+$$
+</div>
+<p>oder auch</p>
+<div class=math>
+$$
+    a_1\times\cdots\times a_{n-1}=\mathop{\times}_{i=1}^{n-1} a_i.
+$$
+</div>
+<p>Es gilt also</p>
+<div class=math>
+$$
+    \det\left(a_1,\ldots,a_{n-1},x\right)
+        = \left\langle\bigwedge_{i=1}^{n-1}a_i,x\right\rangle.\tag{**}
+$$
+</div>
+<p><strong>3.</strong> Hieraus liest man ab</p>
+<div class=math>
+$$
+\eqalign{
+  \bigwedge_{i=1}^{n-1}a_i=0\quad &\Longleftrightarrow\quad a_i\hbox{ linear abhängig},\cr
+  a_1\wedge\cdots\wedge a_i\wedge\cdots\wedge a_k\wedge\cdots\wedge a_{n-1}&=
+  -\left(a_1\wedge\cdots\wedge a_k\wedge\cdots\wedge a_i\wedge\cdots\wedge a_{n-1}\right),\cr
+  a_1\wedge\cdots\wedge a_i+\hat a_i\wedge\cdots\wedge a_{n-1} &=
+  \left(a_1\wedge\cdots\wedge a_i\wedge\cdots\wedge a_{n-1}\right) +
+  \left(a_1\wedge\cdots\wedge \hat a_i\wedge\cdots\wedge a_{n-1}\right),\cr
+  a_1\wedge\cdots\wedge\lambda a_i\wedge\cdots\wedge a_{n-1} &=
+  \lambda\left(a_1\wedge\cdots\wedge a_i\wedge\cdots\wedge a_{n-1}\right),\cr
+  \left\langle\bigwedge_{i=1}^{n-1}a_i,a_k\right\rangle &= 0,
+  \quad k=1,\ldots,n-1.\cr
+}
+$$
+</div>
+<p>Die letzte Gleichung sagt, daß das äußere Produkt senkrecht auf jedem
+“Einzelfaktor” steht.
+Weiter kann man jetzt noch die Jacobische und die <a href="https://de.wikipedia.org/wiki/Kreuzprodukt#Gra.C3.9Fmann-Identit.C3.A4t">Grassmannsche Identität</a>
+leicht nachrechnen.
+Die obigen Gleichungen gelten auch für $n=2$, wobei dann
+$\bigwedge_{i=1}^1a_i=a_1$ ist.</p>
+<p>Bibliographisch:
+<a href="https://de.wikipedia.org/wiki/Hermann_Gra%C3%9Fmann">Grassmann, Hermann (1809--1877)</a>,
+<a href="https://de.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi">Jacobi, Carl Gustav (1804--1851)</a>.</p>
+<p>Das oben eingeführte äußere Produkt ist ein spezielles äußeres Produkt.
+Es gibt weitere äußere Produkte.
+Bei diesen ist der Bildbereich nicht mehr notwendig gleich $\mathbb{C}^n$,
+sondern $\mathbb{C}[{n\choose m}]$, bei einem $m$-fachen Produkt.
+Für $m=n-1$ ergibt sich natürlich genau das oben angegebene Produkt, bis
+auf Proportionalität.</p>
+<p><strong>4.</strong> Die Komponenten des Vektors $b$ bei $(*)$, ergeben sich durch sukzessives
+Einsetzen der $n$ Einheitsvektoren $e_i$ zu</p>
+<div class=math>
+$$
+    b_i = \left\langle b,e_i\right\rangle
+        = \det\left(a_1,\ldots,a_{n-1},e_i\right), \qquad i=1,\ldots,n.
+$$
+</div>
+<p>Für den Betrag des äußeren Produktes gilt</p>
+<div class=math>
+$$
+    \left|\bigwedge_{i=1}^{n-1}a_i\right|^2 = \left|\matrix{
+        \langle a_1,a_1\rangle & \ldots & \langle a_1,a_{n-1}\rangle\cr
+        \vdots                 & \ddots & \vdots\cr
+        \langle a_1,a_{n-1}\rangle & \ldots & \langle a_{n-1},a_{n-1}\rangle\cr
+    }\right|,
+$$
+</div>
+<p>weges des Satzes über die <a href="https://de.wikipedia.org/wiki/Gramsche_Determinante">Gramsche Determinante</a>
+(<a href="https://de.wikipedia.org/wiki/J%C3%B8rgen_Pedersen_Gram">Gram, Jorgen Pedersen (1850--1916)</a>)</p>
+<div class=math>
+$$
+    \det(a_1,\ldots,a_n){\mskip 3mu}\det(b_1,\ldots,b_n) = \left|\matrix{
+        \langle a_1,b_1\rangle & \ldots & \langle a_1,b_n\rangle\cr
+        \vdots                 & \ddots & \vdots\cr
+        \langle a_n,b_1\rangle & \ldots & \langle a_n,b_n\rangle\cr
+    }\right|.
+$$
+</div>
+<p><strong>5.</strong> Die Definition des Vektorproduktes kann auch in der folgenden Form geschehen:</p>
+<div class=math>
+$$
+    x\mapsto\det(a_1,\ldots,a_{i-1},x,a_{i+1},\ldots,a_n)
+$$
+</div>
+<p>ist eine Linearform für feste $a_i$, u.s.w.
+Die $a_1,\ldots,a_{i-1},x,,a_{i+1},\ldots,a_n$ bilden ein Rechtssystem.</p>
+<p><strong>6. Beispiel:</strong>  $n=3$. Gesucht sind die Komponenten des Vektorproduktes
+$a\times b$, mit $a=(\alpha_1,{\mskip 3mu}\alpha_2,{\mskip 3mu}\alpha_3)$ und
+$b=(\beta_1,{\mskip 3mu}\beta_2,{\mskip 3mu}\beta_3)$.
+Zu berechnen sind drei Determinanten,</p>
+<div class=math>
+$$
+    a\times b = \pmatrix{
+        \left|\matrix{\alpha_1&\beta_1&1\cr \alpha_2&\beta_2&0\cr \alpha_3&\beta_3&0\cr}\right|\\[0.5em]
+        \left|\matrix{\alpha_1&\beta_1&0\cr \alpha_2&\beta_2&1\cr \alpha_3&\beta_3&0\cr}\right|\\[0.5em]
+        \left|\matrix{\alpha_1&\beta_1&0\cr \alpha_2&\beta_2&0\cr \alpha_3&\beta_3&1\cr}\right|\cr}
+    = \pmatrix{
+        \alpha_2\beta_3-\alpha_3\beta_2\cr
+        \alpha_3\beta_1-\alpha_1\beta_3\cr
+        \alpha_1\beta_2-\alpha_2\beta_1\cr}.
+$$
+</div>
+<p><strong>7. Beispiel:</strong>  $n=2$. Gesucht sind die Komponenten des
+Vektors $a^\bot$, welcher senkrecht steht auf $a$,
+mit $a={\alpha_1\choose\alpha_2}$.
+Das äußere Produkt liefert gerade solch einen Vektor.
+In diesem Fall hat das Produkt nur einen Faktor.
+Zu berechnen sind hier $n=2$ Determinanten und zwar</p>
+<div class=math>
+$$
+    a^\bot = \pmatrix{
+        \left|\matrix{\alpha_1 & 1\cr \alpha_2 & 0\cr}\right| \\[0.5em]
+        \left|\matrix{\alpha_1 & 0\cr \alpha_2 & 1\cr}\right| \cr}
+    = \pmatrix{-\alpha_2\cr \alpha_1\cr}.
+$$
+</div>
+<p>Eine Einführung in das Vektorprodukt findet man beispielsweise in
+den Büchern von <a href="https://www.amazon.de/Einf%C3%BChrung-die-lineare-Algebra-German/dp/3528384883/">Walter (1986)</a>
+oder <a href="https://www.amazon.de/Grundwissen-Mathematik-Springer-Lehrbuch-analytische-Geometrie/dp/3540629033/">Koecher (1985)</a>.
+Besonders hervorzuheben ist hierbei die ausführliche Darstellung von
+<a href="https://onlinelibrary.wiley.com/doi/epdf/10.1002/zamm.19680480212">Gröbner (1966)</a>.</p>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Rolf_Walter_(Mathematiker)">Rolf Walter (1937--2022)</a>,
+<a href="https://de.wikipedia.org/wiki/Max_Koecher">Max Koecher (1924--1990)</a>,
+<a href="https://de.wikipedia.org/wiki/Wolfgang_Gr%C3%B6bner">Wolfgang Gröbner (1899--1980)</a>.</p>
+<h2>8. Äußeres Produkt und Fehlerkonstanten<a id=fehlerkonstanten></a></h2>
+<p>Für die Fehlerkonstante von Henrici</p>
+<div class=math>
+$$
+    C := {v{\mskip 3mu}\gamma\over v{\mskip 3mu}\rho'(1){\mskip 3mu}w},\qquad\left\{\eqalign{
+        v{\mskip 3mu}\rho(1)&=0, \quad v\ne0,\cr
+        \rho(1){\mskip 3mu}w&=0, \quad w\ne0,\cr
+    }\right.
+$$
+</div>
+<p>erhält man nun das folgende Resultat.
+Da das äußere Produkt $\bigwedge_{i=1}^{n-1}a_i$ senkrecht steht auf $a_i$,
+für $i=1,\ldots,n-1$, ist dieses Produkt also Linkseigenvektor von
+$\rho(1)$, wenn man die Spalten der Matrix $\rho(1)$ mit $a_i$
+bezeichnet und einen Spaltenvektor, sagen wir $a_n$, herausstreicht.
+Wenn man einmal von Umnumerierungen absieht, so hat man damit alle Fälle
+abgedeckt.
+Die Restmatrix sei</p>
+<div class=math>
+$$
+    \widehat{\rho(1)}\in\mathbb{R}^{n\times(n-1)}.
+$$
+</div>
+<p>Ist $\bigwedge_{i=1}^{n-1}a_i=0$, so hat $\rho(1)$ einen mehrfachen
+Eigenwert $\mu=1$; man erhält hier also zugleich ein leichtes Kriterium,
+unter der Voraussetzung starker Stabilität.
+Dies liegt daran, daß das Vektorprodukt genau dann verschwindet, falls
+die Faktoren linear abhängig sind,
+siehe <a href="https://onlinelibrary.wiley.com/doi/epdf/10.1002/zamm.19680480212">Gröbner (1966)</a>.
+Da die Berechnung von $\bigwedge_{i=1}^{n-1}a_i$ allerdings häufig über
+Determinanten geschieht, ist dieses Kriterium von der praktischen
+Rechnung nicht immer günstig.
+Wie starke Stabilität nachgewiesen wurde, sei hier dazu noch nicht einmal
+berücksichtigt.
+Für die Fehlerkonstante ergibt sich wegen $(**)$</p>
+<div class=math>
+$$
+    C = {\det(\widehat{\rho(1)},\gamma)\over
+        \det(\widehat{\rho(1)},\rho'(1){\mskip 3mu}w)}.
+$$
+</div>
+<p>Dies heißt, das Volumen der durch die linear unabhängigen Spaltenvektoren
+von $\rho(1)$ und dem Vektor $\gamma$ aufgespannten Körpers, ist der
+Zähler der Henricischen Fehlerkonstante.</p>
+<p>Verschwindet der Zähler der Henricischen Fehlerkonstante, so liegt
+annullierte Dominanz vor.
+<a href="https://www.amazon.de/numerische-Behandlung-gew%C3%B6hnlicher-Differentialgleichungen-Ber%C3%BCcksichtigung/dp/3112728440/">Albrecht (1979)</a> nennt dies die <em>Ordnungsbedingung</em>.
+Durch Berechnen von $\det\left(\widehat{\rho(1)},\gamma\right)$ kann man
+dies also überprüfen.
+Diese Prüfung auf annullierte Dominanz kann man natürlich auch ohne den
+Umweg über das Kreuzprodukt, wie folgt herleiten.
+Aus</p>
+<div class=math>
+$$
+    v\ne0,\qquad v{\mskip 3mu}\rho(1)=0,\qquad v{\mskip 3mu}\gamma=0
+$$
+</div>
+<p>folgt, daß die zusammengesetzte Matrix $\left(\rho(1),\gamma\right)$ nicht
+maximalen Rang haben kann, also</p>
+<div class=math>
+$$
+    \mathop{\rm rank}\left(\rho(1),\gamma\right) = \kappa-n_1,\qquad
+    \hbox{somit}\qquad \det\left(\widehat{\rho(1)},\gamma\right)=0.
+$$
+</div>
+<p>Hierbei war $n_1$ die Vielfachheit des Eigenwertes $\mu=1$.
+Für Eigenwerte $\left|\mu\right|=1$ gilt allgemein
+$\mathop{\rm rank}\left(\rho(\mu),\gamma\right)=\kappa-n_\mu$, mit $n_\mu$
+Vielfachheit des Eigenwertes $\left|\mu\right|=1$.
+Falls $n_\mu\ge1$ dann $\det\left(\widehat{\rho(1)},\gamma\right)=0$.</p>
+<p>Damit sind alle denkbaren Fälle erschöpft, wenn man von Umnumerierungen
+absieht.</p>
+<p><strong>1. Beispiel:</strong>  Zweistufiges, zyklisches lineares
+Mehrschrittverfahren mit zwei Startwerten.
+Die erste Stufe, mit Fehlerfaktor $\gamma_1$, sei</p>
+<div class=math>
+$$
+    \alpha_0^1y_{2n}+\alpha_1^1y_{2n+1}+\alpha_2^1y_{2n+2}=\ldots
+$$
+</div>
+<p>und die zweite Stufe, mit Fehlerfaktor $\gamma_2$, sei</p>
+<div class=math>
+$$
+    \alpha_0^2y_{2n}+\alpha_1^2y_{2n+1}+\alpha_2^2y_{2n+2}+\alpha_3^2y_{2n+3}=\ldots{\mskip 3mu}.
+$$
+</div>
+<p>Dann ist</p>
+<div class=math>
+$$
+    \rho(1) = \pmatrix{
+        \alpha_0^1+\alpha_2^1 & \alpha_1^1\cr
+        \alpha_0^2+\alpha_2^2 & \alpha_1^2+\alpha_3^2\cr}.
+$$
+</div>
+<p><strong>2.</strong> <strong>Bedingung der annullierten Dominanz für zweistufige Verfahren.</strong>
+Für zweistufige Verfahren hat man</p>
+<div class=math>
+$$
+\def\sumalf#1#2#3{\displaystyle\sum_{i\mathbin\%#3={#1}}\alpha_i^{#2}}
+    \rho(1) = \pmatrix{
+        \sumalf012 & \sumalf112\cr
+        \sumalf022 & \sumalf122\cr}
+    =: \pmatrix{
+        \alpha_g^1 & \alpha_u^1\cr
+        \alpha_g^2 & \alpha_u^2\cr}
+$$
+</div>
+<p>und der Fehlervektor sei $\gamma=(\gamma_1,{\mskip 3mu}\gamma_2)$.
+Aufgrund der Konsistenz $\rho(1){\mskip 3mu}{1\choose 1}={0\choose0}$, ist</p>
+<div class=math>
+$$
+    \alpha_u^1+\alpha_g^1=0, \qquad \alpha_g^2+\alpha_u^2=0.
+$$
+</div>
+<p>Ist nun die Matrix $\rho(1)$ nicht die Nullmatrix, so erhält man als
+Linkseigenvektor zu $\rho(1)$ natürlich</p>
+<div class=math>
+$$
+    \pmatrix{\alpha_g^1\cr \alpha_g^2\cr}^\bot
+    = \pmatrix{-\alpha_g^2\cr \alpha_g^1\cr}
+$$
+</div>
+<p>und damit als Bedingung für annullierte Dominanz</p>
+<div class=math>
+$$
+    \alpha_g^1\gamma_2 = \alpha_g^2\gamma_1.
+$$
+</div>
+<p>Wäre jetzt $(\alpha_g^1,{\mskip 3mu}\alpha_g^2)=(0,{\mskip 3mu}0)$, so wäre die
+Matrix $\rho(1)$ gleich der Nullmatrix und die Bedingung der annullierten
+Dominanz führte zu der Bedingung, daß der Fehlervektor $\gamma$ sowohl
+auf $1\choose 0$, als auch auf $0\choose 1$ senkrecht stehen müßte.
+Damit wäre $\gamma_1=\gamma_2=0$, die Bedingung also leer.
+Die Konsistenzordnung im modifizierten Sinne wäre schon eine Ordnung
+höher als die wirklich erreichte Konvergenzordnung.</p>
+<p><strong>3. Beispiel:</strong>
+Verwendet man als erste Stufe das ^{Verfahren von Milne-Simpson} der Ordnung 4,
+mit</p>
+<div class=math>
+$$
+    3y_{n+1} - 3y_{n-1} = z_{n+1} + 4z_n + z_{n-1}
+$$
+</div>
+<p>und als zweite Stufe ein beliebiges Verfahren dritter Ordnung, so ist die
+Bedingung der annullierten Dominanz automatisch erfüllt, wegen</p>
+<div class=math>
+$$
+    \alpha_g^1 = 0,  \qquad \gamma_1 = 0.
+$$
+</div>
+<p>Das so gebildete zweistufige Verfahren konvergiert dann insgesamt mit der
+Ordnung 4.</p>
+<p><strong>4.</strong> <strong>Bedingung der annullierten Dominanz für dreistufige Verfahren.</strong>
+Sei der Fehlervektor des Verfahrens bezeichnet
+mit $\gamma=(\gamma_1,{\mskip 3mu}\gamma_2,{\mskip 3mu}\gamma_3)$ und der Matrix $\rho(1)$
+sei gegeben durch</p>
+<div class=math>
+$$
+    \rho(1) = \pmatrix{
+        \sumalf013 & \sumalf113 & \sumalf213\cr
+        \sumalf023 & \sumalf123 & \sumalf223\cr
+        \sumalf033 & \sumalf133 & \sumalf233\cr}
+    =: \pmatrix{
+        * & m_1 & n_1\cr
+        * & m_2 & n_2\cr
+        * & m_3 & n_3\cr}
+$$
+</div>
+<p>wobei</p>
+<div class=math>
+$$
+\eqalign{
+    m_i: &\quad\hbox{Summe der $\alpha_i$-Koeffizienten mit $i=3k+1$,}\cr
+    n_i: &\quad\hbox{Summe der $\alpha_i$-Koeffizienten mit $i=3k+2$ .}\cr
+}
+$$
+</div>
+<p>Als Bedingung für annullierte Dominanz ergibt sich nun</p>
+<div class=math>
+$$
+    \gamma_1(m_2n_3-m_3n_2)+\gamma_2(m_3n_1-m_1n_3)+\gamma_3(m_1n_2-m_2n_1)=0,
+$$
+</div>
+<p>unter der Voraussetzung, daß $\rho(1)$ den Rang 2 hat.</p>
+<p>Die Verallgemeinerung auf den $r$-stufigen Fall ergibt unmittelbar</p>
+<div class=math>
+$$
+    \rho(1) = \pmatrix{
+        \sumalf01r & \ldots & \sumalf{r-1}1r\cr
+        \vdots     & \ddots & \vdots\cr
+        \sumalf0rr & \ldots & \sumalf{r-1}rr\cr
+    }
+$$
+</div>
+<h2>9. Rechenregeln für Fehlerkonstanten<a id=rechenregeln></a></h2>
+<p><strong>1.</strong> <a href="https://en.wikipedia.org/wiki/Peter_Henrici_(mathematician)">Henrici, Peter Karl Eugen (1923--1987)</a>.
+Hier wird nun allgemeiner eine Klasse von Fehlerkonstanten vorgestellt
+und die Beziehung zueinander werden aufgezeigt.
+Liegt das Verfahren $z_{n+1}=Az_n+h\varphi_n$ zugrunde mit
+Fehlervektor $\gamma$, so wird eine Fehlerkonstante definiert durch</p>
+<div class=math>
+$$
+    C_A = {\tilde v{\mskip 3mu}\tilde\gamma\over\tilde vw}, \qquad\left\{
+    \eqalign{\tilde vA&=\tilde v,\quad\tilde v\ne0,\cr
+        Aw&=w,\quad w\ne0.\cr}\right.
+$$
+</div>
+<p>Sei jetzt leicht allgemeiner $Lz_{n+1} = Uz_n + h\varphi_n$.
+Dann gilt</p>
+<div class=math>
+$$
+    C_A = {v{\mskip 3mu}\gamma\over vLw}, \qquad\left\{
+    \eqalign{v(L+U)&=0,\quad v\ne0\cr (L+U)w&=0,\quad w\ne0.\cr}\right.
+$$
+</div>
+<p>Dies gilt wegen $A=-L^{-1}U$, daher</p>
+<div class=math>
+$$
+    A-I=-(L^{-1}U+I)=-L^{-1}(L+U).
+$$
+</div>
+<p>Aus $\tilde v(A-I)=0$ folgt</p>
+<div class=math>
+$$
+    \tilde vL^{-1}(L+U) = (vL) L^{-1}(L+U)=0,
+$$
+</div>
+<p>und damit ist $v$ Linkseigenvektor von $L\mu+U$ zum Eigenwert $\mu=1$,
+während $\tilde v=vL^{-1}$ und $\tilde\gamma=L^{-1}\gamma$ war.
+Vorausgesetzt ist natürlich, daß das <a href="/blog/2024/01-23-matrixpolynome">Matrixpolynom</a> $L\mu+U$ monisch ist,
+also $L$ invertierbar ist.
+Wegen der Null-Stabilität des Verfahrens ist das natürlich der Fall.
+Erkennbar ist auch, daß der Nenner nicht verschwinden kann, da
+die Matrix $A$ zur <a href="https://en.wikipedia.org/wiki/M-matrix">Klasse <strong>M</strong></a> gehört,
+siehe <a href="https://epubs.siam.org/doi/book/10.1137/1.9781611971323">Ortega (1972)</a>.</p>
+<p>Bibliographisch: <a href="https://www.mathgenealogy.org/id.php?id=44457">Ortega, James McDonough</a>.</p>
+<p>Die obige Fehlerkonstante verallgemeinert sich sinngemäß bei mehrfachen
+Eigenwerten $\mu=1$.</p>
+<p>Da die zyklischen Verfahren in der Dissertation von <a href="https://search.worldcat.org/title/634642355">Tendler (1973)</a>
+oder <a href="https://dl.acm.org/doi/pdf/10.1145/356502.356495">Tendler/Bickart/Picel (1978)</a>, in der Dissertation von
+<a href="https://search.worldcat.org/title/219969663">Tischer (1983)</a> und
+<a href="https://epubs.siam.org/doi/10.1137/0904051">Tischer/Sacks-Davis (1983)</a> und schließlich auch alle
+zyklischen Verfahren von <a href="https://doi.org/10.1137/0708018">Donelson/Hansen (1971)</a>
+jedoch nur einen einfachen Eigenwert bei $\mu=1$ besitzen, wird dieser Fall
+hier nicht weiter verfolgt.</p>
+<p>Bibliographisch: <a href="https://www.researchgate.net/profile/Peter-Tischer-2/research">Peter E. Tischer</a>,
+<a href="https://www.researchgate.net/scientific-contributions/Ron-Sacks-Davis-35309423/publications">Ron Sacks-Davis</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=44510">Donelson III, John (1941--2010)</a>, <a href="https://www.moneyandking.com/obits/dr-john-donelson-iii/">biography</a>,
+<a href="https://genealogy.math.ndsu.nodak.edu/id.php?id=25013">Hansen, Eldon Robert (*1927)</a>, <a href="https://en.wikipedia.org/wiki/Eldon_Hansen">wiki</a>.</p>
+<p><a href="https://www.researchgate.net/profile/Joel-Tendler/research">Joel Marvin Tendler</a>:
+&quot;A Stiffly Stable
+Integration Process Using Cyclic Composite Methods&quot;,
+Ph.D. Diss., Syracuse University, Syracuse, New York,
+26.Feb.1973, <em>viii</em>+<em>iv</em>+172 pages.</p>
+<p><a href="https://www.researchgate.net/profile/Peter-Tischer-2/research">Peter E. Tischer</a>:
+&quot;The Cyclic Use of Linear Multistep
+Formulas for the Solution of Stiff Differential Equations&quot;, Ph.D. Thesis,
+Department of Computer Science, Monash University, Clayton, Victoria,
+Australia, August 1983, <em>x</em>+180 pages.</p>
+<p>Im folgenden werden zwei Eigenschaften der Fehlerkonstanten von Henrici
+gezeigt.
+Zum einen ist die Fehlerkonstante von Henrici
+unabhängig von einer Skalierung des Verfahrens und zum anderen
+kann man sich auf den Fall einer Linearisierung des
+Matrixpolynomes beschränken.
+Für die praktische Rechnung von Linkseigenvektoren und weiteren Größen
+ist es natürlich günstiger das Verfahren in Form eines Matrixpolynomes mit
+möglichst geringer Dimension darzustellen.
+An anderer Stelle wiederum ist es angebrachter die Linearisierung zu
+betrachten, um nur mit einer einzigen Matrix zu hantieren.
+Daher ist es günstig für beide Darstellungen äquivalente Beschreibungen
+zur Verfügung zu haben.</p>
+<p>Als nächstes wird nun also gezeigt, daß die Fehlerkonstante von Henrici
+unanhängig von einer Skalierung der Stufen ist.
+Jede Stufe darf beliebig mit einem Faktor $(\ne\!0)$ multipliziert werden,
+der gesamte Zyklus darf sogar einer nichtsingulären Skalierung unterzogen
+werden.
+Weiterhin ersieht man hieraus, daß die Fehlerkonstante von Henrici
+unabhängig von der Reihenfolge der Stufen ist.
+Für die umgedrehte Reihenfolge der Stufen wählt man beispielsweise
+einfach die Hankelmatrix
+$D=(\delta_{i,s+1-j})_{i,j=1}^s\in\mathbb{C}^{s\times s}$.
+Eine Vertauschung von Stufen innerhalb eines Zykluses kann natürlich sehr
+wohl die Anzahl der Startwerte ändern, u.U. kann sich also auch sogar die
+Anzahl der Matrizen im Matrixpolynom ändern.
+Dieser Fall ist dennoch mitberücksichtigt, da man ja das “alte” Verfahren
+mit Nullmatrizen ergänzen kann.</p>
+<p><strong>2. Satz:</strong>  Sei $D\in\hbox{GL}(\mathbb{C},s)$ und sei $\hat\rho(\mu)=D\rho(\mu)$
+das skalierte Polynom.
+Das zu dem Matrixpolynom $\rho$ gehörige Verfahren habe die Fehlerkonstante</p>
+<div class=math>
+$$
+    C={v{\mskip 3mu}\gamma\over v{\mskip 3mu}\rho'(1){\mskip 3mu}w}\qquad\left\{\eqalign{
+        v{\mskip 3mu}\rho(1)&=0,\quad v\ne0,\cr
+        \rho(1){\mskip 3mu}w&=0,\quad w\ne0.\cr}\right.
+$$
+</div>
+<p>Der Vektor $\gamma$ enthält hierbei die Fehlerfaktoren der Stufen.
+$\hat C$ sei die Fehlerkonstante von Henrici des skalierten Verfahrens.
+Dann gilt</p>
+<div class=math>
+$$
+    C = \hat C.
+$$
+</div>
+<p><em>Beweis:</em>  Es ist $\hat\rho(1)=D\rho(1)$, $\hat\gamma=D\gamma$,
+und $\hat v:=vD^{-1}$ ist Linkseigenvektor von $\hat\rho(1)$.
+Die Ableitung des Matrixpolynomes $\rho$ an der Stelle 1 skaliert sich
+ebenfalls entsprechend, also $\hat\rho'(1)=D\rho'(1)$.
+Der Rechtseigenvektor $w$ ist auch gleichzeitig Rechtseigenvektor
+von $\hat\rho(1)$.
+Nun ist</p>
+<div class=math>
+$$
+    \hat C = {\hat v\hat\gamma\over\hat v{\mskip 3mu}\hat\rho'(1){\mskip 3mu}\hat w}
+        = {vD^{-1}D\gamma\over vD^{-1}D\rho'(1){\mskip 3mu}w} = C.
+$$
+</div>
+<p>    ☐</p>
+<p><strong>3.</strong> Sei jetzt allgemeiner statt des Matrixpolynoms $\rho(\mu)=L\mu+U$,
+betrachtet der Fall des Matrixpolynoms</p>
+<div class=math>
+$$
+    \rho(\mu) := A_0+A_1\mu+\cdots+A_\kappa\mu^\kappa.
+$$
+</div>
+<p>Dann ist</p>
+<div class=math>
+$$
+    C_H = {v{\mskip 3mu}\gamma\over v{\mskip 3mu}\rho'(1){\mskip 3mu}w},
+$$
+</div>
+<p>eine Fehlerkonstante.
+Hierbei sind $v$ und $w$ entsprechend die Links- und Rechtseigenvektoren
+des Matrixpolynomes $\rho(\mu)$ zum dominanten Eigenwert $\mu=1$, es ist
+also</p>
+<div class=math>
+$$
+    v{\mskip 3mu}\rho(1)=0,\quad v\ne0\qquad\quad\hbox{und}\qquad\quad
+    \rho(1){\mskip 3mu}w=0,\quad w\ne0.
+$$
+</div>
+<p>Durch Wahl einer speziellen Norm und entsprechende Normierung des
+Vektors $w$ kann man dann auch den bestimmten Artikel benutzen.</p>
+<p>In natürlicher und offensichtlicher Weise wird hiermit die klassische
+Fehlerkonstante von Henrici verallgemeinert.
+Auch hier kann der Nenner nicht verschwinden, da, wie unten gezeigt wird,
+diese Konstante mit der oben angegebenen Konstante äquivalent ist.
+Sind die Koeffizienten des Polynomes $A_i$ nicht von der Form
+$\alpha_i\otimes I$, so gilt nicht notwendig $\rho'(1)=\sigma(1)$,
+wie man anhand des folgenden Beispiels einsieht.</p>
+<p><strong>4. Beispiel:</strong>  Die zyklische, zweimalige
+Hintereinanderausführung der BDF2 führt auf die Matrix mit den Einträgen</p>
+<div class=math>
+$$
+    \pmatrix{A_0, &A_1 &| &B_0, &B_1 \cr}
+$$
+</div>
+<p>und den Elementen</p>
+<div class=math>
+$$
+\left( \begin{array}{cccc|cccc}
+        1 & -4 & 3 & 0 & \tt & 0 & 0 & 2 & 0\cr
+        0 & 1 & -4 & 3 & \tt & 0 & 0 & 0 & 2\cr
+\end{array} \right).
+$$
+</div>
+<p>Hier ist $\rho(\mu)=A_0+A_1\mu$ und $\sigma(\mu)=B_1\mu$.
+Offensichtlich gilt jetzt nicht $\rho'(1)=\sigma(1)$,
+da $\rho'(1)\equiv A_1\ne\sigma(1)\equiv B_1$ und dies obwohl jede Stufe
+die gleiche Konsistenzordnung hat, ja sogar alle Stufen gleich sind.</p>
+<p>Nun wird gezeigt, daß alle angegebenen Fehlerkonstanten äquivalent sind.
+Um die nachstehenden Überlegungen durchsichtiger zu gestalten, soll
+anhand eines einfachen Beispieles unter anderem einige Eigenschaften
+der Begleitmatrix gezeigt werden.</p>
+<p><strong>5. Beispiel:</strong>  Es sei das Polynom</p>
+<div class=math>
+$$
+\def\aa{\alpha_0} \def\ab{\alpha_1} \def\ac{\alpha_2}
+    \rho(\mu)=\aa+\ab\mu+\ac\mu^2+\mu^3
+$$
+</div>
+<p>vorgelegt, und es sei $\rho(1)=0$.
+Die Koeffizienten dieses Polynoms seien aus einem beliebigen Ring,
+nicht notwendig kommutativ, wobei 1 das neutrale Element bezeichne.
+Die Begleitmatrix zu $\rho$ sei</p>
+<div class=math>
+$$
+    C_1 = \pmatrix{
+        0    & 1    & 0\cr
+        0    & 0    & 1\cr
+        -\aa & -\ab & -\ac\cr}, \qquad\hbox{also}\qquad
+    I-C_1 = \pmatrix{
+        1   & -1  & 0\cr
+        0   & 1   & -1\cr
+        \aa & \ab & 1+\ac\cr}.
+$$
+</div>
+<p>Jetzt ist</p>
+<div class=math>
+$$
+    v = (\ab+\ac+1, \ac+1, 1)
+$$
+</div>
+<p>Linkseigenvektor des Matrixpolynoms $I\mu-C_1$ zu $\mu=1$, wegen</p>
+<div class=math>
+$$
+    v(I-C_1) = \bigl(
+        (\ab+\ac+1)+\aa,{\mskip 3mu}-(\ab+\ac+1)+(\ac+1)+\ab,{\mskip 3mu}-(\ac+1)+(\ac+1)\bigr) =
+        (0,{\mskip 3mu}0,{\mskip 3mu}0),
+$$
+</div>
+<p>da ja $\aa+\ab+\ac+1=0$, aufgrund $\rho(1)=0$.
+Wichtig ist noch zu vermerken, daß die Summe der Komponenten des Vektors $v$,
+gerade die Ableitung des Polynoms an der Stelle 1 ist, also es gilt</p>
+<div class=math>
+$$
+    v\pmatrix{1\cr 1\cr 1\cr} = (\ab+\ac+1)+(\ac+1)+1 =
+        3+2\ac+1\ab = \rho'(1).
+$$
+</div>
+<p>Wegen $\rho(1)=0$ ist selbstverständlich $w^\top=(1,1,1)$
+Rechtseigenvektor der Matrix $C_1$.
+Den Linkseigenvektor zu $C_1\in\mathbb{C}^{s\times s}$ kann man natürlich auch
+über das äußere Produkt erhalten.
+Aus der Matrix $(I-C_1)$ streicht man eine Spalte und ersetzt diese Spalte
+sukzessive $s$-mal durch den $i$-ten Einheitsvektor, für $i=1,\ldots,s$ und
+berchnet die $s$ Determinanten, also die Komponenten des äußeren Produktes.</p>
+<p>Interessant ist in diesem Zusammenhang der nachstehende Zusammenhang
+zwischen Rechtseigenvektoren und Begleitmatrix,
+siehe <a href="https://www.amazon.com/Gew%C3%B6hnliche-Differentialgleichungen-Grundlagen-Heidelberger-Taschenb%C3%BCcher/dp/3540058656/">Schäfke/Schmidt (1973)</a>, S.94.</p>
+<p>Bibliographisch: <a href="https://de.wikipedia.org/wiki/Friedrich_Wilhelm_Sch%C3%A4fke">Schäfke, Friedrich Wilhelm (1922--2010)</a>,
+<a href="https://www.genealogy.math.ndsu.nodak.edu/id.php?id=57714">Schmidt, Dieter (*1941)</a>.</p>
+<p><strong>6. Satz:</strong>  Sei $C_1$ die Begleitmatrix des monischen
+Polynoms $\rho$ des Grades $n$.
+Ist $0\ne\mu\in\mathbb{C}$ Nullstelle von $\rho(\mu)$ der genauen Ordnung $r$, so
+liefert die vektorwertige Funktion $w_0\colon\mathbb{C}\to\mathbb{C}^n$ definiert
+durch</p>
+<div class=math>
+$$
+    w_0(\mu) := \pmatrix{1\cr \mu\cr \vdots\cr \mu^{n-1}\cr}
+$$
+</div>
+<p>mit</p>
+<div class=math>
+$$
+    w_i(\mu) := {1\over i!}w^{(i)}(\mu), \qquad i=0,1,\ldots,r-1
+$$
+</div>
+<p>ein System von Rechts-Jordanvektoren zum Eigenwert $\mu$ von $C_1$, für
+welches also gilt</p>
+<div class=math>
+$$
+    (C_1-\mu I)w_i =
+    \cases{
+        0,       &für $i=1$,\cr
+        w_{i-1}, &für $i=2,3,\ldots,r$.\cr
+    }
+$$
+</div>
+<p><em>Beweis:</em>
+Man geht aus von der Identität $(\lambda I-C_1)=\rho(\lambda)e_n$, wobei
+$e_n=(0,\ldots,0,1)\in\mathbb{C}^n$.
+$i$-malige Differentiation liefert</p>
+<div class=math>
+$$
+    \left(\lambda I-C_1\right) w_0^{(i)}(\lambda)
+    = \rho^{(i)}(\lambda) e_n - i w_0^{(i-1)}(\lambda)
+$$
+</div>
+<p>Einsetzen von $\lambda=\mu$, für $i=0,1,\ldots,r-1$ ergibt mit
+$\rho^{(r)}(\mu)=0$ (algebraische Vielfachheit von $\mu$), daß die
+$r$ linear unabhängigen Vektoren $w_i$ Hauptvektoren zu $\mu$ von $C_1$ sind.
+    ☐</p>
+<p>Um nun eine gewisse Äquivalenz der Fehlerkonstanten zu zeigen, verfährt man
+wie nachstehend.
+Bei gewissen Einschränkungen an die Links- und Rechtseigenvektoren, kann
+man tatsächlich Gleichheit erzielen.
+Zumindestens Proportionalität ist stets gewährleistet.</p>
+<p><strong>7. Satz:</strong>  Voraussetzungen: Es sei</p>
+<div class=math>
+$$
+    \rho(\mu) = I\mu^\kappa + A_{\kappa-1}\mu^{\kappa-1} + \cdots
+        + A_1\mu + A_0 \in \mathbb{C}^{\ell\times\ell},
+$$
+</div>
+<p>($\ell{\buildrel\land\over=}$Stufenzahl), ferner sei
+$C_1\in\mathbb{C}^{\ell\kappa\times\ell\kappa}$ die erste
+Begleitmatrix zu $\rho(\mu)$, also</p>
+<div class=math>
+$$
+    C_1 = \pmatrix{
+        0      & I      & 0      & \ldots & 0\cr
+        0      & 0      & I      & \ldots & 0\cr
+        \vdots & \vdots & \vdots & \ddots & \vdots\cr
+               &        &        & \ldots & I\cr
+        -A_0   & -A_1   &        & \ldots & -A_{\kappa-1}\cr
+    } .
+$$
+</div>
+<p>$v$ und $w$ seien beliebige aber feste Links- und Rechtseigenvektoren von
+$\rho(\mu)$ zu $\mu=1$ und</p>
+<div class=math>
+$$
+\eqalignno{
+    v_c &:= v{\mskip 3mu}(A_1+A_2+\cdots+I, A_2+\cdots+I, \ldots, I)
+        \in \mathbb{C}^{\kappa\ell}, \cr
+    w_c &:= \pmatrix{I\cr \vdots\cr I\cr} w
+        \in \mathbb{C}^{\kappa\ell}, \qquad I=I_\ell\in\mathbb{C}^{\ell\times\ell} . \cr
+}
+$$
+</div>
+<p>$\gamma\in\mathbb{C}^\ell$ sei gänzlich beliebig und
+$\gamma_c = (0,\ldots,0,\gamma)^\top \in \mathbb{C}^{\kappa\ell}$,
+($\gamma,\gamma_c{\buildrel\land\over=}$Fehlervektoren).</p>
+<p>Behauptungen: (1) $v_c$ und $w_c$ sind Links- und Rechtseigenvektoren von
+$\rho_c(\mu) := I\mu - C_1$ zu $\mu=1$.</p>
+<p>(2) Es gilt</p>
+<div class=math>
+$$
+    {v{\mskip 3mu}\gamma\over v{\mskip 3mu}\rho'(1){\mskip 3mu}w} = {v_c{\mskip 3mu}\gamma_c\over v_c{\mskip 3mu}w_c}
+        = {v_c{\mskip 3mu}\gamma_c\over v_c{\mskip 3mu}\rho_c'(1){\mskip 3mu}w_c} .
+$$
+</div>
+<p><em>Beweis:</em>  zu (1): Man sieht schnell, daß tatsächlich $v_c\rho_c(1)=0$ und
+$\rho_c(1)w_c=0$, mit</p>
+<div class=math>
+$$
+    \rho_c(1) = I - C_1 = \pmatrix{
+        I      & -I     & 0      & \ldots & 0\cr
+        0      & I      & -I     & \ldots & 0\cr
+        \vdots & \vdots & \vdots & \ddots & \vdots\cr
+               &        &        & \ldots & -I\cr
+        A_0    & A_1    &        & \ldots & I+A_{\kappa-1}\cr
+    } .
+$$
+</div>
+<p>zu (2): Gezeigt wird, daß Zähler und Nenner jeweils gleich sind.
+Für die Zähler ist dies unmittelbar klar.
+Für die Nenner rechnet man leicht nach, daß</p>
+<div class=math>
+$$
+      v_c{\mskip 3mu}\rho_c'(1){\mskip 3mu}w_c
+    = v_c{\mskip 3mu}I_{\kappa\ell\times\kappa\ell}{\mskip 3mu}w_c
+    = v_c{\mskip 3mu}w_c
+    = v{\mskip 3mu}\rho'(1){\mskip 3mu}w .
+$$
+</div>
+<p>    ☐</p>
+<p>Die hier durchgeführten Überlegungen gelten sinngemäß in beliebigen,
+nicht notwendigerweise kommutativen Ringen.
+Hierzu ersetzt man $\mathbb{C}^\ell$ durch $\mathbb{R}$.
+Der obige Satz rechtfertigt in gewisser Hinsicht</p>
+<p><strong>8. Definition:</strong>  Die Linearform $\gamma\mapsto v\gamma/v\rho'(1)w$
+heißt <em>Henrici-Linearform</em>, mit $v$, $w$ wie oben.
+Insbesondere für einen Fehlervektor (spezieller Vektor des $\mathbb{C}^\ell$)
+heißt der Wert dann <em>Henrici-Fehlerkonstante</em>.</p>
+<p>Selbstverständlich wird nicht behauptet, daß
+$v\gamma/v\rho'(1)w = v_c\gamma/v_c\rho_c'(1)w_c$ für beliebige Links-
+und Rechtseigenvektoren $v$, $w$, bzw. $v_c$, $w_c$.
+Dies erkennt man unmittelbar, falls man einen der Vektoren beliebig streckt
+oder staucht.
+Für den Zähler waren gewisse Unterraumeigenschaften von $\gamma_c$, nämlich
+$\gamma_c=(0,\ldots,0,*)^\top$ bedeutsam.</p>
+<p>Die weiteren Verallgemeinerungen führen dann direkt zu den Begriffen der
+annullierten Dominanz und der Totalannullation.
+Um nun die Verbindung mit der klassischen Fehlerkonstante von Henrici
+weiter aufzuzeigen, sei auf den folgenden Sachverhalt hingewiesen.</p>
+<p>Bei $m$-facher Wiederholung ein und desselben Verfahrens, multipliziert
+sich die oben angegebene Fehlerkonstante mit $m$.
+Dieses Ergebnis ergibt sich sofort, wenn man erkennt, daß</p>
+<div class=math>
+$$
+    (1,\ldots,1) \in \mathbb{C}^{1\times m}
+$$
+</div>
+<p>Linkseigenvektor von $\rho(1)$ ist.
+Dann steht im Zähler $(1,\ldots,1){\mskip 3mu}\gamma$ und da jede Komponente
+von $\gamma$ natürlich gleich ist, erhält man sofort das verlangte
+Resultat, wenn man noch weiß, daß der Nenner natürlich bei welcher
+Dimension auch immer, gleich bleibt.
+Auch hier gelten wieder, w.o. schon bemerkt, diese Ergebnisse in
+beliebigen Ringen, nicht notwendig kommutativ.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=Das+Fehlerverhalten+zusammengesetzer+linearer+Mehrschrittformeln%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=Das+Fehlerverhalten+zusammengesetzer+linearer+Mehrschrittformeln&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln&amp;title=Das+Fehlerverhalten+zusammengesetzer+linearer+Mehrschrittformeln" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=Das+Fehlerverhalten+zusammengesetzer+linearer+Mehrschrittformeln&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=Das+Fehlerverhalten+zusammengesetzer+linearer+Mehrschrittformeln%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#annullierte+Dominanz>annullierte Dominanz</a>, <a href=/aux/tags/#Ordnungsbedingung>Ordnungsbedingung</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2024">Index for the year 2024.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 173.24 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="Gaußsche Eliminationsverfahren, Wilkinsonsche Vermutung durch Edelman widerlegt, Darstellungssatz nach Day/Peterson">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>Lösung linearer Gleichungssysteme - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2024-06-10 14:00:00">10th June 2024</time>, 23 min read</p>
+<h1>Lösung linearer Gleichungssysteme</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme">eklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme</a>.</p>
+<br>
+<ul>
+<li><a href="#konditionszahlen">1. Konditionszahlen von Matrizen</a></li>
+<li><a href="#zeilenoperationen">2. Elementare Zeilen- und Spaltenoperationen</a></li>
+<li><a href="#luzerlegung">3. Die $LU$-Zerlegung</a></li>
+<li><a href="#gauss">4. Die Gauß-Elimination</a></li>
+</ul>
+<p>Bei jedem Iterationsschritt eines <a href="https://en.wikipedia.org/wiki/Newton%27s_method">Newton-Raphson-Verfahrens</a>, bzw. bei
+jeder Aktualisierung der Iterationsmatrix beim
+Newton-Kantorovich Iterationsverfahren, fällt die Lösung eines
+linearen Gleichungssystems an.
+Es ist daher von Wichtigkeit, für diesen Prozeß ein zuverlässiges
+und zugleich effizientes Lösungsverfahren parat zu haben.</p>
+<h2>1. Konditionszahlen von Matrizen<a id=konditionszahlen></a></h2>
+<p>Wie könnte man erkennen, ob ein berechnetes Ergebnis $x$ für ein
+lineares Gleichungssystem $Ax=b$, eine gute Näherung darstellt?
+Naheliegend wäre die Betrachtung des Residuums $Ax-b$.
+Wie das folgende Beispiel deutlich macht, ist dieses Maß mit Vorsicht
+zu geniessen.</p>
+<p><strong>1. Beispiel:</strong>  Sei betrachtet das lineare Gleichungssystem</p>
+<div class=math>
+$$
+    \pmatrix{10&7&8&7\cr 7&5&6&5\cr 8&6&1& 9\cr 7&5&9&10\cr}
+    \pmatrix{x_1\cr x_2\cr x_3\cr x_4\cr}=
+    \pmatrix{32\cr 23\cr 33\cr 31\cr}.
+$$
+</div>
+<p>Einige Vektoren $x$ und ihre Bilder $Ax$ lauten</p>
+<div class=math>
+$$
+    \pmatrix{6\cr -7.2\cr 2.9\cr -0.1\cr}\mapsto
+        \pmatrix{32.1\cr 22.9\cr 32.9\cr 31.1\cr},\qquad
+    \pmatrix{1.50\cr 0.18\cr 1.19\cr 0.89\cr}\mapsto
+        \pmatrix{32.01\cr 22.99\cr 32.99\cr 31.01\cr},\qquad
+    \hbox{richtig:}\quad\pmatrix{1\cr 1\cr 1\cr 1\cr}\mapsto
+        \pmatrix{32\cr 23\cr 33\cr 31\cr}.
+$$
+</div>
+<p>Die ersten beiden Vektoren könnten den Eindruck erwecken, daß man
+sich schon sehr nahe der richtigen Lösung befindet, jedoch ist beim ersten
+Mal keine der angegebenen Nachkommaziffern richtig, und beim zweiten Mal ist
+nur bei 2 Komponenten eine einzige Stelle hinter dem Komma richtig.
+Dies alles ist möglich, obwohl die Matrix symmetrisch ist und alle
+Komponenten der Matrix dem gleichen Größenbereich entstammen.</p>
+<p>Ähnliche Verhältnisse liegen vor bei dem nachstehenden Beispiel.</p>
+<p><strong>2. Beispiel:</strong>  Betrachtet sei nun das lediglich zweidimensionale
+Problem mit den Daten</p>
+<div class=math>
+$$
+    A:=\pmatrix{1.2969&0.8648\cr 0.2161&0.1441\cr},\qquad
+    b:=\pmatrix{0.8642\cr 0.1440\cr},\qquad
+    \overline x:=\pmatrix{\phantom{-}0.9911\cr -0.4870\cr}.
+$$
+</div>
+<p>Der Residuenvektor ist hier exakt $(-10^{-8},{\mskip 3mu}10^{-8})$, dennoch lautet
+die exakte Lösung $(2,{\mskip 3mu}-2)$.</p>
+<p>Die Empfindlichkeit, mit der ein lineares Gleichungsystem auf
+Änderung der Eingabedaten reagiert, wird quantitativ erfaßt durch die
+<a href="https://de.wikipedia.org/wiki/Kondition_(Mathematik)">Konditionszahl</a>.</p>
+<p><strong>3. Satz:</strong>  Voraussetzungen: Die Matrix $A$ sei invertierbar und
+$x$ sei die exakte Lösung des linearen Gleichungssystems $Ax=b$.
+Bekannt sei eine Näherungslösung $\hat x$.
+$r$ sei das Residuum, also $r:=b-A\hat x$.</p>
+<p>Behauptung: Es gilt die beidseitige, scharfe Abschätzung</p>
+<div class=math>
+$$
+    {1\over|A|\cdot|A^{-1}|}{|r|\over|b|}\buildrel 1)\over\le
+    {|x-\hat x|\over|x|}\buildrel 2)\over\le
+    \left|A\right| \cdot \left|A^{-1}\right| {\left|r\right|\over\left|b\right|}.
+$$
+</div>
+<p><em>Beweis:</em>  Zu 1). Wegen $|r|=|b-A\hat x|=|Ax-A\hat x|\le|A|\cdot|x-\hat x|$,
+ist $|r|/|A|\le|x-\hat x|$.
+Andererseits ist $|x|=|A^{-1}b|\le|A^{-1}|\cdot|b|$, also
+$1/(|A^{-1}|\cdot|b|)\le1/|x|$, nach Multiplikation entsprechender
+Seiten der beiden hergeleiteten Ungleichung die unter 1) gemachte Behauptung</p>
+<div class=math>
+$$
+    {1\over|A|\cdot|A^{-1}|}{|r|\over|b|}\le{|x-\hat x|\over|x|}.
+$$
+</div>
+<p>Diese Abschätzung ist scharf.
+Sei zur Abkürzung $e:=x-\hat x$.
+Die Ungleichung wird zu einer Gleichung, wenn $|Ae|=|A|\cdot|e|$ und
+$|A^{-1}b|=|A^{-1}|\cdot|b|$.
+Nach Definition von Matrixnormen gibt es solche Vektoren $e^*$ und $b^*$,
+sodaß $|Ae^*|=|A|\cdot|e^*|$ und $|A^{-1}b^*|=|A^{-1}|\cdot|b^*|$.
+Für $b^*$ und $\tilde x:=A^{-1}b^*-e$ wird die Ungleichung zu einer
+Gleichung.</p>
+<p>Zu 2). Erstens wegen
+$\left|b\right| = \left|Ax\right| \le \left|A\right| \cdot \left|x\right|$
+ist $1 / \left|x\right| \le \left|A\right| / \left|b\right|$.
+Zweitens ist $\left|x-\hat x\right| = \left|A^{-1}b-A^{-1}A\hat x\right|
+= \left|A^{-1}r\right| \le \left|A^{-1}\right| \cdot \left|r\right|$.
+Insgesamt ergibt sich wieder durch Multiplikation entsprechender Seiten</p>
+<div class=math>
+$$
+    {|x-\hat x|\over|x|}\le|A|\cdot|A^{-1}|\cdot{|r|\over|b|}.
+$$
+</div>
+<p>Auch diese Ungleichung ist scharf.
+Wähle $x^*$ und $r^*$ mit $|Ax^*|=|A|\cdot|x^*|$ und
+$\left|A^{-1}r^*\right| = \left|A^{-1}\right| \cdot \left|r^*\right|$.
+Für $b^*:=A^{-1}x^*$ und $\hat x^*:=x^*-A^{-1}r^*$ gilt Gleichheit.
+    ☐</p>
+<p><strong>4. Definition:</strong>  Die Zahl
+$\kappa(A) := \left|A\right| \cdot \left|A^{-1}\right|$ heißt
+<a href="https://de.wikipedia.org/wiki/Kondition_(Mathematik)"><em>Konditionszahl</em></a> der quadratischen Matrix $A$ zur
+Norm $\left|\cdot\right|$.</p>
+<p>Für rein theoretische Überlegungen stellt die Konditionszahl eine
+gute Beschreibung von Störungs- und Empfindlichkeitsphänomenen dar.
+Jedoch ist man ja gerade an der Inverse, bzw. an der Lösung des
+linearen Gleichungssystems interessiert.
+Die hier bei der Analyse auftauchende Konditionszahl ist also bei
+der praktischen Auflösung nicht bekannt.
+Es gibt Verfahren, mit denen die Konditionszahl geschätzt werden kann.
+Diese Verfahren sind stellenweise mit der <a href="https://de.wikipedia.org/wiki/Gau%C3%9Fsches_Eliminationsverfahren">Gaußschen Eliminationsmethode</a>
+auf das engste gekoppelt und ergeben sich daher zusammen mit der Rechnung.
+Direkt aus der Defintion der Konditionszahl ersieht man</p>
+<p><strong>5. Eigenschaften:</strong>  Es gelten $\kappa(A)\ge1$ und
+$\kappa(AB)\le\kappa(A)\cdot\kappa(B)$.</p>
+<p>Mit Hilfe der Konditionszahl lässt sich eine Abschätzung einfach schreiben,
+welche charakterisiert, inwieweit Störungen in der Matrix $A$ zu
+Veränderungen in der eigentlich gewünschten Lösung $x$ führen.</p>
+<p><strong>6. Satz:</strong>  Löst man statt des exakten Systems $Ax=b$ das gestörte
+System $\hat A\hat x=b$, so gilt die scharfe Abschätzung nach oben</p>
+<div class=math>
+$$
+    {\left|x-\hat x\right|\over\left|\hat x\right|} \le
+        \kappa(A) {|A-\hat A|\over\left|A\right|}.
+$$
+</div>
+<p><em>Beweis:</em>  Zunächst ist
+$x=A^{-1}b=A^{-1}\hat A\hat x=A^{-1}(A+\hat A-A)\hat x=\hat x+A^{-1}(\hat A-A)\hat x$,
+also $x-\hat x=A^{-1}(\hat A-A)\hat x$, somit
+$|x-\hat x|\le|A^{-1}|\cdot|A-\hat A|\cdot|\hat x|$.
+Durch Erweitern mit $|A|\ne0$ schließlich</p>
+<div class=math>
+$$
+    {\left|x-\hat x\right|\over\left|\hat x\right|}
+    \le \left|A^{-1}\right| \cdot |A-\hat A| %\left|A-\hat A\right|
+    =   \left|A^{-1}\right| \cdot \left|A\right|
+         %   {\left|A-\hat A\right|\over\left|A\right|}.
+            {|A-\hat A|\over\left|A\right|}.
+$$
+</div>
+<p>Die Abschätzung ist offensichtlich scharf.
+    ☐</p>
+<p>Die Konditionszahl charakterisiert gleichzeitig auch den Abstand zu allen
+nicht-invertierbaren Matrizen “in der Nähe” von $A$.</p>
+<p><strong>7. Satz:</strong>  Für alle invertierbaren Matrizen $A$ gilt</p>
+<div class=math>
+$$
+    \min\left\{{|A-B|\over|A|}:\hbox{$B$ nicht invertierbar}\right\}
+    \ge{1\over\kappa(A)}.
+$$
+</div>
+<p>Für die Maximumnorm, die 1-Norm und die euklidische Norm gilt Gleichheit.</p>
+<p><em>Beweis:</em>  Ist $B$ eine beliebige nicht-invertierbare Matrix, so gibt es
+also einen Vektor $x\ne0$, mit $Bx=0$.
+Für diesen Vektor $x$ gilt:</p>
+<div class=math>
+$$
+\eqalign{
+    |x| = |A^{-1}Ax| &\le |A^{-1}|\cdot|Ax|=|A^{-1}|\cdot|(A-B)x|\cr
+    &\le |A^{-1}|\cdot|A-B|\cdot|x|.\cr
+}
+$$
+</div>
+<p>Daher $1\le|A^{-1}|\cdot|A-B|$, somit</p>
+<div class=math>
+$$
+    {1\over\kappa(A)}={1\over|A|\cdot|A^{-1}|}\le{|A-B|\over|A|}.
+$$
+</div>
+<p>Für die behauptete Gleichheit bei der Maximumnorm, schätzt man in
+umgekehrter Richtung ab und zeigt damit indirekt durch Eingabelung, die
+Gleichheit.</p>
+<p>Zur genaueren Unterscheidung von Normen und Betragsstrichen, werde
+mit $\left|\cdot\right|_\infty$ die Maximumnorm bezeichnet und
+mit $\left|\cdot\right|$ die gewöhnliche Betragsfunktion für skalare Größen.
+Sei $v$ ein Einheitsvektor mit den beiden Eigenschaften
+$\left|v\right|_\infty = 1$ und $\left|A^{-1}v\right|_\infty
+= \left|A^{-1}\right|_\infty \cdot \left|v\right|_\infty$.
+Nach Definition der zu einer Vektornorm gehörenden Matrixnorm gibt es
+solch einen Vektor $v$.</p>
+<p>Weiter sei $y:=A^{-1}v$, $\left|y\right|_\infty =: \left|y_m\right|$.
+Sei $e_m$ der $m$-te Einheitsvektor; $z:=y_m^{-1}e_m$ und $B:=A-vz^\top$.
+Wegen $By=AA^{-1}v-y_m^{-1}y_mv=0$ und $y\ne0$, ist $B$ nicht invertierbar.
+Für beliebige Vektoren $x$ gilt</p>
+<div class=math>
+$$
+\eqalign {
+\left\|(A-B)x\right\|_\infty
+&= \left\|y_m^{-1}x_mv\right\|_\infty = \left|y_m\right|^{-1} \cdot
+\left|x_m\right| \cdot \left\|v\right\|_\infty\cr
+&= \left|y_m\right|^{-1} \left|x_m\right|\cr
+&= \left\|y\right\|_\infty \cdot \left|x_m\right|\cr
+&= (\left\|A^{-1}v\right\|_\infty)^{-1} \cdot \left|x_m\right|\cr
+&= \left\|A^{-1}\right\|_\infty^{-1} \cdot \left\|v\right\|_\infty
+    \cdot \left|x_m\right|\cr
+&= \left\|A^{-1}\right\|_\infty^{-1} \cdot \left\|x\right\|_\infty.\cr
+}
+$$
+</div>
+<p>Da $x$ beliebig war gilt somit</p>
+<div class=math>
+$$
+    \left\|A-B\right\|_\infty \le {1\over\left\|A^{-1}\right\|_\infty},
+$$
+</div>
+<p>also</p>
+<div class=math>
+$$
+    {\left\|A-B\right\|_\infty\over\left\|A\right\|_\infty}
+    \le {1\over\left\|A^{-1}\right\|_\infty \cdot \left\|A\right\|_\infty}
+    = {1\over\kappa_\infty(A)}.
+$$
+</div>
+<p>Für die $1$-Norm führt man den Beweis ganz ähnlich und für die euklidische
+Norm benutzt man den Satz über die Existenz einer Singulärwertzerlegung.
+Der genaue Beweis werde hier nicht ausgeführt.
+    ☐</p>
+<p>In anderer Formulierung des oben schon bewiesenen Satzes, lässt
+sich schreiben:</p>
+<p><strong>8. Satz:</strong>  Es sei $A$ invertierbar und es sei
+$A(x+\Delta x)=b+\Delta b$.
+Dann gilt</p>
+<div class=math>
+$$
+    {\left|\Delta x\right|\over\left|x\right|}
+    \le \kappa(A){\left|\Delta b\right|\over\left|b\right|}.
+$$
+</div>
+<p>Der nächste Satz zeigt, daß das symmetrisierte Gleichungssystem
+$A^\top Ax=A^\top b$ eine größere, und damit schlechtere Konditionszahl
+besitzt, als das ursprüngliche System.
+Insbesondere gelten diese Überlegungen für das Normalgleichungssystem
+(Ausgleichung im Sinne kleinster Quadrate), obwohl dort die
+entsprechenden Matrizen nicht quadratisch, also erst recht nicht
+invertierbar sind.</p>
+<p><strong>9. Satz:</strong>  Für eine beliebige invertierbare Matrix $A$ gilt
+$\kappa_s(A)\le\kappa_s(A^\top A)$.</p>
+<p><em>Beweis:</em>  Seien $\mu_{\rm max}$ und $\mu_{\rm min}$ entsprechend die
+größten und kleinsten Eigenwerte von $A^\top A$.
+Dann ist $\left|A\right|_s=\sqrt{\mu_{\rm max}}$
+und $\left|A^{-1}\right|=\sqrt{\mu_{\rm min}^{-1}}$.
+Weiter ist $\left|A^\top A\right|_s = \mu_{\rm max}$
+und $\left|(A^\top A)^{-1}\right| = \mu_{\rm min}^{-1}$.
+Daher ist</p>
+<div class=math>
+$$
+    \kappa_s = \sqrt{\mu_{\rm max}\over\mu_{\rm min}}
+    \le {\mu_{\rm max}\over\mu_{\rm min}} = \kappa_s(A^\top A).
+$$
+</div>
+<p>    ☐</p>
+<p>Welche ist nun die beste Vorkonditionierung mit einer Diagonalmatrix?
+Es zeigt sich nun, daß dies gerade die normmässige Äquilibrierung aller
+Zeilenvektoren der Matrix $A$ ist.</p>
+<p><strong>10. Satz:</strong>  Ist die invertierbare $(n\times n)$-Matrix $A=(a_{ik})$
+normiert (äquilibriert) gemäß</p>
+<div class=math>
+$$
+    \sum_{k=1}^n \left|a_{ik}\right| = 1,\qquad\hbox{für}\quad i=1,\ldots,n,
+$$
+</div>
+<p>so gilt für jede Diagonmalmatrix $D$ mit $\det D\ne0$, die Ungleichung</p>
+<div class=math>
+$$
+    \kappa_\infty(DA)\ge\kappa_\infty(A).
+$$
+</div>
+<p>$\kappa_\infty$ bezeichnet hier die Konditionszahl bezüglich der
+Zeilensummennorm (verträgliche Norm für die Maximumnorm $\left|\cdot\right|$).</p>
+<p><em>Beweis:</em> siehe Werner (1975)*1972+1, Werner, Helmut.
+Es sei $\left|\cdot\right|$ die Maximum-Vektornorm bzw. die
+Zeilensummennorm bei Matrizen.
+Für jede Diagonalmatrix $D=(d_{ii})$, mit $\det D\ne0$ gilt</p>
+<div class=math>
+$$
+    \left|DA\right|
+    = \max_{i=1}^n \left(\left|d_{ii}\right| \sum_{k=1}^n \left|a_{ik}\right| \right)
+    = \max_{i=1}^n \left|d_{ii}\right|
+$$
+</div>
+<p>und</p>
+<div class=math>
+$$
+    \left|(DA)^{-1}\right| = \left|A^{-1}D^{-1}\right|
+    = \max_{i=1}^n \left( \sum_{k=1}^n \left|\tilde a_{ik}\right| {1\over d_{kk}}\right)
+    \ge \left|A^{-1}\right| \cdot \min_{i=1}^n {1\over \left|d_{ii}\right|}.
+$$
+</div>
+<p>Hierbei bezeichnete $\tilde a_{ik}$ die Komponenten der inversen
+Matrix $A^{-1}$.
+Aus den beiden obigen Gleichungen folgt</p>
+<div class=math>
+$$
+    \kappa_\infty(DA) = \left|DA\right| \cdot \left|(DA)^{-1}\right|
+    \ge \left|A^{-1}\right| \cdot
+        \underbrace{\max_{i=1}^n \left|d_{ii}\right| \cdot \min_{i=1}^n {1\over\left|d_{ii}\right|}}
+        _{\displaystyle{{} = 1 = \left|A\right|}}
+    =\kappa_\infty(A).
+$$
+</div>
+<p>    ☐</p>
+<p>Versucht man nun hingegen auf beiden Seiten der Matrix eine Äquilibrierung
+zu erreichen, so kann man sich nach den Worten von <a href="https://en.wikipedia.org/wiki/Germund_Dahlquist">Dahlquist</a> und Björck
+u.U. ebenfalls “in die Nesseln setzen”.</p>
+<p><strong>11. Beispiel:</strong>  Man betrachte für
+$0 &lt; \left|\varepsilon\right| &lt; 1$ die Matrix</p>
+<div class=math>
+$$
+    A := \pmatrix{\varepsilon&-1&1\cr -1&1&1\cr 1&1&1\cr},\qquad
+    A^{-1} = {1\over4}\pmatrix{0&-2&2\cr -2&1-\varepsilon&1+\varepsilon\cr
+        2&1+\varepsilon&1-\varepsilon\cr}.
+$$
+</div>
+<p>Sein nun $D_1 := \mathop{\rm diag}(1,\varepsilon,\varepsilon)$ und
+$D_2 := \mathop{\rm diag}(\varepsilon^{-1},1,1)$.
+Die skalierte Matrix</p>
+<div class=math>
+$$
+    B:=D_2AD_1=\pmatrix{1&-1&1\cr -1&\varepsilon&\varepsilon\cr
+        1&\varepsilon&\varepsilon\cr}
+$$
+</div>
+<p>ist zwar jetzt zeilenäquilibriert, jedoch beträgt die Konditionszahl jetzt
+$\kappa(B)\approx3/\varepsilon$, während hingegen $\kappa(A)=3$.</p>
+<h2>2. Elementare Zeilen- und Spaltenoperationen<a id=zeilenoperationen></a></h2>
+<p>Wenn auch die <a href="https://en.wikipedia.org/wiki/Cramer%27s_rule">Cramersche Regel</a> eine elegante Darstellung der Lösung
+eines linearen Gleichungssystems liefert, so ist doch selbst bei
+bestmöglicher Ausrechnung aller Determinanten der Aufwand höher, als
+derjenige von Verfahren, die im folgenden vorgestellt werden.
+Würde man die $(n+1)$ Determinanten ($n$ Zählerdeterminanten und
+eine Nennerdeterminante) als Summe von jeweils $n$ Faktoren berechnen,
+so gelänge man zu Rechengrößenordnungen der Form $(n!)$.
+Schon $n=50$ würde mehr als $10^{64}$ Gleitkommamultiplikationen erfordern,
+was selbst für Größtrechenanlagen unvertretbar lange Rechenzeiten
+heraufbeschwören würde.
+Aber, wie eben erwähnt, selbst bei bestmöglicher und effizientester
+Auswertung von Determinanten, wären immer noch größenordnungsmässig
+$n^4$ Operationen nötig, während hingegen die im weiteren Verlaufe
+dargestellten Verfahren in der Größenordnung $n^3$ liegen.</p>
+<p><strong>1.</strong> Ein lineares Gleichungssystem mit $p$ Gleichungen und $n$ Unbekannten
+$x_1$, $x_2$ bis $x_n$ hat die Form</p>
+<div class=math>
+$$
+\eqalign{
+    a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n &= b_1\cr
+    a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n &= b_2\cr
+                                         &\: \vdots\cr
+    a_{p1}x_1+a_{p2}x_2+\cdots+a_{pn}x_n &= b_p\cr
+}
+$$
+</div>
+<p>Hierbei sind $a_{ij}$ und $b_k$ feste gegebene Zahlen.
+Die $a_{ij}$ heißen die Koeffizienten.
+Der erste Index (hier $i$) heißt Zeilenindex, der zweite Index (hier $j$)
+heißt Spaltenindex.
+Der Vektor $(b_1,\ldots,b_p)$ heißt Vektor der rechten Seite
+[^{right hand side (RHS)}].
+Das lineare Gleichungssystem heißt <em>homogen</em>, falls der Vektor
+der rechten Seite gleich dem Nullvektor ist, also $b_k=0$, für
+alle $k=1,\ldots,p$.</p>
+<p><strong>2.</strong> Daß man beim Operieren mit Gleichungssystemen vorsichtig sein muß,
+zeigt das folgende Beispielgleichungssystem</p>
+<div class=math>
+$$
+\eqalign{
+    x+y+z &= 1\cr
+    x-y+z &= 0\cr
+    -x+y-z &= 0
+}
+$$
+</div>
+<p>Zieht man nun die drei Folgerungen, erstens die 1.te Gleichung
+beizubehalten, zweitens alle drei Gleichungen zusammenzuaddieren und
+drittens die 2.te zur 3.ten Gleichung zu addieren, so erhält man</p>
+<div class=math>
+$$
+\eqalign{
+    x+y+z &= 1\cr
+    x+y+z &= 1\cr
+     0 &= 0\cr
+}
+$$
+</div>
+<p>Aufgrund der Konstruktion ist jedes Tripel $(x,y,z)$, welches das
+ursprüngliche Gleichungssystem löst auch gleichzeitig Lösung des
+neuen umgeformten Systems.
+Die Umkehrung gilt jedoch nicht!
+Das Tripel mit $x=y=z=1/3$ löst zwar das neue, umgeformte System, nicht
+aber das ursprüngliche.
+Durch Ziehen von Folgerungen können also Lösungen hinzukommen!</p>
+<p><strong>3.</strong> Gibt es Umformungen, die die Lösungsmenge nicht verändern?
+Ja, es gibt bei linearen Gleichungssystemen unendlich viele
+Umformungsmöglichkeiten, die die Lösungsgesamtheit nicht verändern.
+Drei besonders wichtige sind die nachstehenden Umformungen:</p>
+<ol>
+<li>Vertauschen zweier Gleichungen, und</li>
+<li>Multiplikation einer der Gleichungen mit einer Zahl${}\ne0$,</li>
+<li>Addition einer mit einer beliebigen Zahl multiplizierten
+Gleichung zu einer weiteren Gleichung.</li>
+</ol>
+<p>Die nicht betroffenen Gleichungen des Systems werden beibehalten, so
+wie sie sind.
+Es gilt nun, daß die obigen drei Vertreter von Umformungen, die
+Lösungsgesamtheit nicht verändern.
+Diese drei ausgezeichneten Umformungen, heißen {\it ^{elementare
+Umformungen}}.
+Mit den obigen drei Umformungen, wäre das obige malheur nicht passiert.</p>
+<p><strong>4. Satz:</strong>  Bei elementaren Umformungen ändert sich die
+Lösungsmenge nicht.</p>
+<p><em>Beweis:</em>  Das oben angeschriebene Gleichungssystem lautet nach Anwendung
+der dritten Umformungsregel</p>
+<div class=math>
+$$
+\eqalign{
+    a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n &= b_1\cr
+    (a_{21}+\lambda a_{11})x_1+(a_{22}+\lambda a_{12})x_2+\cdots
+        +(a_{2n}+\lambda a_{1n})x_n &= b_2+\lambda b_1\cr
+                                         &\: \vdots\cr
+    a_{p1}x_1+a_{p2}x_2+\cdots+a_{pn}x_n &= b_p\cr
+}
+$$
+</div>
+<p>Die erste Zeile des Gleichungssytems wurde mit $\lambda$ multipliziert
+und zur zweiten Gleichung hinzuaddiert.
+Die restlichen Zeilen wurden völlig unverändert übernommen.
+Die Lösung des alten Gleichungssystems ist zugleich auch Lösung des neuen
+umgeformten Lösungssystems, da aber diese Umformung rückgängig gemacht
+werden kann, hat das neue System genau die gleichen Lösungen.
+Die Rückgängigmachung geschähe dadurch, daß man die erste Gleichung
+mit $(-\lambda)$ multipliziert und zur zweiten Gleichung hinzuaddiert.
+Der Rest der Gleichungen wird wieder belassen.
+    ☐</p>
+<p><strong>5.</strong> Zu diesen drei elementaren Umformungen korrespondieren die folgenden
+sogenannten <a href="https://en.wikipedia.org/wiki/Elementary_matrix"><em>Elementarmatrizen</em></a>.
+Die Vertauschung zweier Zeilen</p>
+<div class=math>
+$$
+    \begin{pmatrix}
+          & & & & & & & \cr
+          & 1 &        &   &        &   &        & 0\cr
+          &   & \ddots &   &        &   & \unicode{x22F0} & \cr
+     i\to &   &        & 0 & \ldots & 1 & \ldots & \cr
+          & \vdots & & \vdots & & \vdots &       & \vdots\cr
+     j\to &   & \ldots & 1 & \ldots & 0 &        & \cr
+          & \vdots & \unicode{x22F0} & & & & \ddots       & \vdots\cr
+          & 0 & & & & & & 1\cr
+    \end{pmatrix}
+$$
+</div>
+<p>Addiert man zur $i$-ten Zeile von $L(\lambda)$ die $j$-te Zeile
+multipliziert mit $f(\lambda)$, so ist die äquivaltent mit der
+Linksmultiplikation mit</p>
+<div class=math>
+$$
+    \begin{pmatrix}
+          &   &        &   &        & j\downarrow & & \cr
+          & 1 &        &   &        &            &  & \cr
+          &   & \ddots &   &        &            &  & \cr
+     i\to &   &        & 1 & \ldots & f(\lambda) &  & \cr
+          &   &        &   & \ddots & \vdots     &  & \cr
+          &   &        &   &        & 1          &  & \cr
+          &   &        &   &        &            & \ddots & \cr
+          &   &        &   &        &            &  & 1\cr
+    \end{pmatrix}
+$$
+</div>
+<p>Die gleiche Operation für die Spalten ist äquivalent mit der Multiplikation
+von rechts mit der transponierten Matrix</p>
+<div class=math>
+$$
+    \begin{pmatrix}
+         &   &        &   &        & & & \cr
+         & 1 &        &   &        & & & \cr
+         &   & \ddots &   &        & & & \cr
+    i\to &   &        & 1 &        & & & \cr
+         &   &   & \vdots & \ddots & & & \cr
+    j\to &   &   & f(\lambda) & \ldots & 1 & & \cr
+         &   &        &   &        & & \ddots & \cr
+         &   &        &   &        & & & 1\cr
+    \end{pmatrix}
+$$
+</div>
+<p>Schließlich die Multiplikation der $i$-ten Zeile (Spalte) von $L(\lambda)$
+mit einer Zahl $a\ne0$ ist äquivalent mit der Multiplikation von links
+(rechts) mit der Matrix</p>
+<div class=math>
+$$
+    \begin{pmatrix}
+          &   &        &   & j\downarrow & & & \cr
+          & 1 &        &   &   &   &        & \cr
+          &   & \ddots &   &   &   &        & \cr
+          &   &        & 1 &   &   &        & \cr
+     i\to &   &        &   & a &   &        & \cr
+          &   &        &   &   & 1 &        & \cr
+          &   &        &   &   &   & \ddots & \cr
+          &   &        &   &   &   &        & 1\cr
+    \end{pmatrix}
+$$
+</div>
+<h2>3. Die $LU$-Zerlegung<a id=luzerlegung></a></h2>
+<p><strong>1.</strong> Die Produktzerlegung der Matrix $A\in\mathbb{C}^{n\times n}$ in
+$A=LU$, mit Subdiagonalmatrix $L$ und Superdiagonalmatrix $U$
+heißt eine $LU$-Zerlegung.
+Wie das Beispiel der Matrix $A=({0\atop1}{1\atop0})$ zeigt, braucht
+es nicht unbedingt immer eine $LU$-Zerlegung zu geben.</p>
+<p>Gibt es jedoch eine $LU$-Zerlegung, so ist diese Zerlegung unter
+gewissen Normierungsbedingungen auch eindeutig.</p>
+<p><strong>2. Satz:</strong>  Die Zerlegung einer invertierbaren Matrix $A$ in das
+Produkt $A=L\cdot U$, einer Superdiagonalmatrix $U$ und einer
+normierten Subdiagonalmatrix $L$ (Subdiagonalmatrix mit lauter Einsen in
+der Diagonalen), ist eindeutig, wenn sie existiert.</p>
+<p><em>Beweis:</em> $A$ sei zerlegbar in die beiden Produkte $A=LU=\hat L\hat U$,
+mit Superdiagonalmatrizen $U$, $\hat U$ und normierten Subdiagonalmatrizen
+$L$, $\hat L$.
+Das Produkt von Superdiagonalmatrizen ist wieder eine Superdiagonalmatrix.
+Durch Transponierung erhält man entsprechend, daß das Produkt von
+Subdiagonalmatrizen wieder eine Subdiagonalmatrix ist und, daß weiter das
+Produkt von zwei normierten Subdiagonalmatrizen wieder eine normierte
+Subdiagonalmatrix ist.
+Nun folgt aus der Gleichung
+$U\hat U^{-1}=L^{-1}\hat L=I$, dann $\hat L^{-1}=L^{-1}$ und
+$\hat U^{-1}=U^{-1}$ (Eindeutigkeit der Inversen).
+    ☐</p>
+<p>Die folgende Tabelle gibt an: die wesentliche Anzahl der durchzuführenden
+Operationen und der benötigte Speicherplatzbedarf bei vollbesetzten
+Matrizen, bei symmetrischen $(m,m)$-Bandmatrizen und dies in Abhängigkeit
+davon, ob eine Pivotsuche durchgeführt wird oder nicht.</p>
+<table>
+<thead>
+<tr>
+<th> </th>
+<th>vollbesetzte Matrix</th>
+<th>Bandmatrix ohne Pivot</th>
+<th>Bandmatrix mit Pivot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speicherplatzbedarf</td>
+<td>$n^2$</td>
+<td>$(2m+1)n$</td>
+<td>$(3m+1)n$</td>
+</tr>
+<tr>
+<td><em>LU</em>-Faktorisierung</td>
+<td>$n^3/3$</td>
+<td>$(m+1)mn$</td>
+<td>$(2m+1)mn$</td>
+</tr>
+<tr>
+<td>Rücksubstitution</td>
+<td>$n^2$</td>
+<td>$(2m+1)n$</td>
+<td>$(3m+1)n$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3. Definition:</strong>  $A\in\mathbb{C}^{n\times n}$ heißt
+^{$(m,k)$-Bandmatrix} ($m,k\in\{0,\ldots,n-1\}$) mit linksseitiger
+Bandbreite $m$ und
+rechtsseitiger Bandbreite $k$,
+wenn $A$ insgesamt $m$ ^{Unterdiagonalen} und $k$ ^{Oberdiagonalen} enthält,
+welche Nichtnullelemente besitzen und sonst $A$ nur aus Nullen besteht.
+Eine ^{Tridiagonalmatrix} ist somit eine $(1,1)$-Bandmatrix, eine ^{obere
+Hessenbergmatrix} ist eine $(1,n-1)$-Bandmatrix
+und eine ^{untere Hessenbergmatrix} ist eine
+$(n-1,1)$-Bandmatrix.
+Hermitesche $(m,k)$-Bandmatrizen sind stets $(m,m)$-Bandmatrizen.
+Gelegentlich ist es nützlich zu sagen, daß $A$ eine $(m,k)$-Bandmatrix ist,
+wenn die entsprechenden Unter- oder Überdiagonalen Nichtnullelemente enthalten
+<em>können.</em>
+So wäre dann die Nullmatrix eine
+$(m,k)$-Bandmatrix für jedes $m,k\in\{0,\ldots,n-1\}$.</p>
+<p><strong>4. Lemma:</strong>  $A\in\mathbb{C}^{n\times n}$ sei eine $(m,k)$-Bandmatrix und
+besitze eine $LU$-Zerlegung.
+Dann ist $L$ eine $(m,0)$-Bandmatrix und $U$ ist eine $(0,k)$-Bandmatrix.</p>
+<p><em>Beweis:</em>  Es ist $a_{ij}=\sum_{\nu=1}^{\min(i,j)} \ell_{i\nu} u_{\nu j}$,
+also</p>
+<div class=math>
+$$
+\eqalignno{
+    &u_{1j} = a_{1j} \quad (j=1,\ldots,n), \qquad
+        \ell_{i1} = {a_{i1} \over u_{11}}, \cr
+    &i=2,\ldots,n: \cr
+    &\qquad\qquad u_{ij} = a_{ij} - \sum_{\nu=1}^{i-1} \ell_{i\nu} u_{\nu j}
+        \quad(j=i,i+1,\ldots,n),\cr
+    &\qquad\qquad \ell_{ji} = {1\over u_{ii}} \left(a_{ji} -
+        \sum_{\nu=1}^{i-1} \ell_{i\nu} u_{\nu j}\right) \quad(j=i+1,\ldots,n).\cr
+}
+$$
+</div>
+<p>    ☐</p>
+<p>Umgekehrt ist das Produkt einer $(m,0)$-Bandmatrix mit einer $(0,k)$-Bandmatrix
+immer mindestens eine $(m,k)$-Bandmatrix.</p>
+<p><strong>5. Beispiel:</strong>  Die Inversen von Bandmatrizen können einen hohen
+Auffüllungsgrad aufweisen.
+Dies zeigt</p>
+<div class=math>
+$$
+    A = \pmatrix{
+        1 & -1 &    &    & \cr
+       -1 &  2 & -1 &    & \cr
+          & -1 &  2 & -1 & \cr
+          &    & -1 &  2 & -1\cr
+          &    &    & -1 & 2\cr}, \qquad
+    L^\top = U = \pmatrix{
+        1 & -1 &    &    & \cr
+          &  1 & -1 &    & \cr
+          &    &  1 & -1 & \cr
+          &    &    &  1 & -1\cr
+          &    &    &    & 1\cr}.
+$$
+</div>
+<p>Die Matrix $A$ ist diagonal-dominant mit positiven Diagonaleinträgen,
+also positiv definit.
+$L$ und $U$ sind Dreiecksbandmatrizen, dennoch ist die Inverse von $A$
+vollbesetzt, nämlich</p>
+<div class=math>
+$$
+    A^{-1} = \pmatrix{
+        5 & 4 & 3 & 2 & 1\cr
+        4 & 4 & 3 & 2 & 1\cr
+        3 & 3 & 3 & 2 & 1\cr
+        2 & 2 & 2 & 2 & 1\cr
+        1 & 1 & 1 & 1 & 1\cr}.
+$$
+</div>
+<h2>4. Die Gauß-Elimination<a id=gauss></a></h2>
+<p><strong>1. Definition:</strong>  Es bezeichnet $B[k]:=(b_{ij})_{i,j=1,\ldots,k}$
+die Matrix gebildet aus den führenden $k$ Zeilen und Spalten.
+Entsprechend entgegengesetzt bezeichnet
+$B\!\left]\ell\right[:=(b_{ij})_{i,j=n-\ell,\ldots,n}$ die Matrix zusammengesetzt
+aus den letzten $\ell$ Zeilen und Spalten.</p>
+<p><strong>2.</strong> Das <a href="https://de.wikipedia.org/wiki/Gau%C3%9Fsches_Eliminationsverfahren">Gaußsche Eliminationsverfahren</a> mit totaler Pivotsuche
+(GECP: Gaussian Elimination with complete pivoting) geht wie folgt vor sich.
+Es sei $A$ eine komplexe $n\times n$ Matrix.</p>
+<ol>
+<li>Durchsuche die Matrix $A$ nach dem betragsmässig größten Element,
+das sogenannte Pivotelement.
+Dieses sei $a_{ij}$.
+Vertausche die $i$-te Zeile mit der ersten Zeile und vertausche die
+$j$-te Spalte mit der ersten Spalte.
+Die so neu gebildete Matrix heiße $A^{(0)}$.</li>
+<li>Pivotiere bzgl. $a_{11}^{(0)}$, d.h. addiere ein Vielfaches der ersten
+Zeile zu allen darunterliegenden Zeilen, sodaß in der ersten Spalte,
+nur noch Nullen stehen (außer in dem ersten Element, dem Pivot, stehen
+dann nur noch Nullen im ersten Spaltenvektor).
+Die  jetzt neu erhaltene Matrix heiße $A^{(1)}$.</li>
+<li>In gleicher Weise führe den zweiten Schritt durch für
+$k=2,\ldots,n-1$, d.h. finde in $A^{(k-1)}\!\left]n-k+1\right[$ das
+betragsmässig größte Element, nenne es Pivotelement, und vertausche dann
+die entsprechende Zeile und Spalte, sodaß dieses Element in die
+Position $(k,k)$ kommt.
+Wenn das Pivotelement nicht Null ist, so pivotiere, andernfalls breche
+das Verfahren ganz ab: die Matrix $A$ ist nicht invertierbar.
+Die neu erhaltene Matrix nenne $A^{(k)}$.</li>
+</ol>
+<p>Die Gauß-Elimination liefert entweder eine obere Dreiecksmatrix
+$A^{(n-1}$, oder die Information, daß $A$ nicht invertierbar ist.
+Wie erwähnt, heißen die Diagonalelemente $a_{kk}^{(k-1)}$ Pivotelemente.
+Eine Matrix $A$ ist genau dann invertierbar, wenn alle Pivotelemente
+nicht verschwinden (Produkt der Diagonalelemente ist bis auf das Vorzeichen
+der Wert einer Determinante).
+Wenn man das betragsmässig größte Element der Restmatrix
+$A\!\left]n-k\right[$ nur in der ersten Spalte von $A\!\left]n-k\right[$
+sucht, also das betragsmässig größte Element der jeweils ersten Spalte sucht,
+anstatt in der ganzen Matrix $A\!\left]n-k\right[$ danach zu suchen (w.o.),
+so spricht man von Gauß-Elimination mit partieller Pivotsuche.
+Beschränkt man sich sogar bei der Suche auf ein beliebiges nicht
+verschwindendes Element, so spricht man von gewöhnlicher Gauß-Elimination.
+Bei Handrechnung verwendet man häufig die gewöhnliche Gauß-Elimination und
+wählt als Pivot möglichst kleine ganze Zahlen, falls vorhanden, z.B. 1.
+Programmiert wird i.d.R. die Gauß-Elimination mit partieller Pivotwahl,
+während GECP eher selten angewendet wird.</p>
+<p>Nach dem $k$-ten Eliminationsschritt sieht die umgeformte Matrix $A$ dann
+wie folgt aus</p>
+<div class=math>
+$$
+A^{(k-1)} = \left( \begin{array}{cccc|cccc}
+a_{11}^{(0)} & a_{12}^{(0)} & \ldots & a_{1,k}^{(0)} && a_{1,k+1}^{(0)} & \ldots & a_{1,n}^{(0)}\cr
+             & a_{22}^{(1)} & \ldots & a_{2,k}^{(1)} && a_{2,k+1}^{(1)} & \ldots & a_{2,n}^{(1)}\cr
+             &              & \ddots & \vdots        && \vdots          & \ddots & \vdots\cr
+0            &              &        & a_{k,k}^{(k-1)}{\mskip 5mu} && a_{k,k+1}^{(k-1)} & \ldots & a_{k,n}^{(k-1)}\cr
+\hline
+&&& * && * & \ldots & *\cr
+&&& * && * & \ldots & *\cr
+&0&& \vdots && \vdots & \ddots & \vdots\cr
+&&& * && * & \ldots & *\cr
+\end{array} \right)
+$$
+</div>
+<p>Wüßte man im voraus, welche Zeilen und Spalten jeweils zu vertauschen
+wären, so könnte man diese gleich im voraus durchführen.
+Mit dieser so vorpräparierten Matrix bräuchte man dann keinerlei Zeilen-
+und Spaltenvertauschungen durchzuführen.
+Alle diejenigen Matrizen, bei denen diese Vorvertauschungen schon
+durchgeführt sind, sollen CP heißen (^{completely pivoted}).</p>
+<p>Es sei</p>
+<div class=math>
+$$
+    g(A) = {\displaystyle{\max_{i,j,k} |a_{ij}^{(k)}|}
+        \over \displaystyle{\max_{i,j} \left|a_{ij}\right|} } .
+$$
+</div>
+<p>Diese Größe heißt <em>Wachstum der Pivotstrategie</em>.</p>
+<p>Bei partieller Pivotwahl kann gelten $g(A)=2^n$.
+Bei totaler Pivotsuche sagt die 1992 falsifizierte <a href="https://math.mit.edu/~edelman/publications/complete_pivoting.pdf">Wilkinsonsche Vermutung</a> (<a href="/pdf/complete_pivoting.pdf">local copy</a>),
+nach <a href="https://en.wikipedia.org/wiki/James_H._Wilkinson">James Hardy Wilkinson (1919--1986)</a>,
+$g(A)\le n$.
+Diese Abschätzung ist scharf, wie man anhand von sogenanten
+<a href="https://en.wikipedia.org/wiki/Hadamard_matrix">Hadamard-Matrizen</a>, <a href="https://de.wikipedia.org/wiki/Jacques_Hadamard">Jacques S. Hadamard, (1865--1963)</a>, zeigen kann.
+Für komplexe Matrizen sind diese Schranken zu erhöhen.
+Hierzu Jane Day und Brian Peterson in <a href="https://www.tandfonline.com/doi/abs/10.1080/00029890.1988.11972038">Day/Peterson (1988)</a>:</p>
+<blockquote>
+<p>Wilkinson's conjecture is very intriguing---easy to state, soon believed,
+and apparently very difficult to resolve.</p>
+</blockquote>
+<p><strong>3. Proposition:</strong>  $A\in\mathbb{C}^{n\times n}$ sei invertierbar und CP.
+Es werde der $k$-te Eliminationsschritt der GECP durchgeführt, $k&lt;i,j\le n$.
+Dann gilt</p>
+<div class=math>
+$$
+    a_{ij}^{(k)} = {A_{1,\ldots,k,i}^{1,\ldots,k,j} \over A_{1\ldots k}^{1\ldots k}}.
+$$
+</div>
+<p><em>Beweis:</em>  Da $A$ CP und da Pivotierung (nämlich Linearkombination von
+Zeilen) die Determinante und die Hauptminoren von $A$ nicht ändern, ergibt
+der Laplacesche Entwicklungssatz nach der $k$-ten Spalte (oder Zeile) sofort
+$\displaystyle{
+A_{1,\ldots,k,j}^{1,\ldots,k,i} = a_{ij}^{(k)} A_{1\ldots k}^{1\ldots k}.
+}$
+Aufgrund der Invertierbarkeit von $A$ folgt die gemachte Aussage.
+    ☐</p>
+<p><strong>4. Corollar:</strong>  Das Pivotelement $a_{kk}^{(k-1)}$ bei GECP ist
+$a_{kk}^{(k-1)}={1\over x}$;
+$x$ ist das $(k,k)$-Element der Inverse der Matrix $A[1\ldots k]$, also
+von $(A[1\ldots k])^{-1}$.
+Insbesondere ist $a_{nn}^{(n-1)}$ das Reziproke eines Elementes von $A^{-1}$.</p>
+<p><em>Beweis:</em>  Sei $B:=A[1\ldots k]$.
+Nach der Proposition ist dann</p>
+<div class=math>
+$$
+    (B^{-1})_{k,k} = {B_{1,\ldots,k-1}^{1,\ldots,k-1} \over B_{1\ldots k}^{1\ldots k}}
+    = {A_{1,\ldots,k-1}^{1,\ldots,k-1} \over A_{1\ldots k}^{1\ldots k}}
+    = {1 \over a_{kk}^{(k-1)}} .
+$$
+</div>
+<p>    ☐</p>
+<p><strong>5. Bemerkungen:</strong>  (1) GECP kann wie folgt interpretiert werden:
+Hat man die ersten $k-1$ Zeilen und Spalten gewählt, so wählt man die
+$k$-te Zeile und Spalte deswegen aus, weil dann die führende $k\times k$
+Determinante maximalen Betrag aufweist.</p>
+<p>(2) Alternativ kann man argumentieren: Hat man die ersten $k-1$ Zeilen und
+Spalten gewählt, so wählt man die $k$-te Zeile und Spalte deswegen aus, weil
+dann $\det A\!\left]n-k\right[$ minimalen Betrag aufweist.</p>
+<p>(3) Geometrisch gesprochen: man wählt die $k$-te Zeile und Spalte deswegen
+aus, weil dann das $k$-Volumen des Spates gebildet aus den ersten
+$k$ Zeilenvektoren und Spaltenvektoren aus $A[k]$ maximal wird.</p>
+<p>(4) Umgekehrt: man wählt die $k$-te Zeile und Spalte deswegen aus, weil
+damit das $(n-k)$-Volumen des projizierten Spates minimal wird, denn
+Pivotieren bzgl. $a_{kk}^{(k-1)}$ heißt Projizieren des Spates aufgespannt
+durch die Zeilen von $A^{(k-1)}\!\left]n-k+1\right[$ in den Spat aufgespannt
+durch die Zeilen von $A^{(k)}\!\left]n-k\right[$.</p>
+<p><strong>6. Satz:</strong>  Darstellungssatz für die Gauß-Elimination nach
+<a href="https://www.tandfonline.com/doi/abs/10.1080/00029890.1988.11972038">Day/Peterson (1988)</a>.
+Es sei $A\in\mathbb{C}^{n\times n}$ invertierbar und $k&lt;n$.
+Die Restmatrix nach dem $k$-ten Eliminationsschritt ist gegeben durch</p>
+<div class=math>
+$$
+    A^{(k)}\!\left]n-k\right[ = \left(A^{-1}\!\left]n-k\right[\right)^{-1}.
+$$
+</div>
+<p>D.h. die nach dem $k$-ten Eliminationsschritt noch nicht in Dreiecksform
+vorliegende Restmatrix $A^{(k)}\!\left]n-k\right[$ ist nichts anderes als
+von der eigentlichen Inversen $A^{-1}$ die invertierte Restmatrix
+$\bigl(A^{-1}\!\left]n-k\right[\bigr)^{-1}$.
+Damit stellt die Restmatrix nicht nur irgendeine Hilfsmatrix dar, sondern
+steht im Gegenteil mit der Inversen schon in engster Verbindung.</p>
+<p><em>Beweis:</em>  Für $i,j&gt;k$ sei $a_{ij}^{(k)}$ ein beliebiges Element von
+$A^{(k)}\!\left]n-k\right[$.
+Nach der vorhergehenden Proposition und dem Satz über Minoren Inverser gilt</p>
+<div class=math>
+$$
+    a_{ij}^{(k)} = {A_{1,\ldots,k,i}^{1,\ldots,k,j} \over A_{1\ldots k}^{1\ldots k}}
+    = {(-1)^{i+j} \left|A\right| (A^{-1})_{k+1,\ldots,\hat\imath,\ldots,n}
+        ^{k+1,\ldots,\hat\jmath,\ldots,n}\over A_{1\ldots k}^{1\ldots k}}
+$$
+</div>
+<p>Erneut wegen dem Satz über die Minoren Inverser gilt</p>
+<div class=math>
+$$
+    \left|A^{-1}\!\left]n-k\right[\right| = (A^{-1})_{k+1,\ldots,n}^{k+1,\ldots,n}
+    = {\alpha_{k+1,\ldots,n}^{k+1,\ldots,n} \over \left|A\right|}
+    = {A_{1\ldots k}^{1\ldots k} \over \left|A\right|}
+$$
+</div>
+<p>Durch Einsetzen</p>
+<div class=math>
+$$
+    a_{ij}^{(k)} = (-1)^{i+j} {(A^{-1})_{k+1,\ldots,\hat\imath,\ldots,n}^{k+1,\ldots,\hat\jmath,\ldots,n}
+        \over |A^{-1}\!\left]n-k\right[|} .
+$$
+</div>
+<p>Damit ist $a_{ij}^{(k)}$ genau der $(i,j)$-Eintrag von
+$(A^{-1}\!\left]n-k\right[)^{-1}$.
+    ☐</p>
+<p><strong>7. Corollar:</strong>  Führt man vor der eigentlichen Elimination sämtliche
+Zeilen- und Spaltenvertauschungen im voraus durch (also Matrix ist CP), so
+hat dies die Bedeutung, daß für $k=1,\ldots,n-1$ der Betrag der Determinante
+von $A^{-1}\!\left]n-k\right[$ nicht vergrößert werden kann durch irgendwelche
+Zeilen- und Spaltenvertauschungen der letzten $n-k+1$ Zeilen und Spalten
+von $A$.</p>
+<p><em>Beweis:</em>  Nach den obigen Bemerkungen (3) und (4) ist GECP gleichbedeutend
+mit der Minimierung von $\left|\det A^{(k)}\!\left]n-k\right[\right|$ in jedem
+Schritt $k$, also der Maximierung von $\left|\det A^{-1}\!\left]n-k\right[\right|$.
+    ☐</p>
+<p>Für positiv definite Matrizen $A$ ist GE immer anwendbar und zugleich liefert
+GE ein einfaches Kriterium zur Überprüfung auf positve Definitheit.
+Es gilt nämlich</p>
+<p><strong>8. Satz:</strong>  Voraussetzung: $A\in\mathbb{C}^{n\times n}$ sei hermitesch.
+(<a href="https://en.wikipedia.org/wiki/Charles_Hermite">Hermite, Charles (1822--1901)</a>)</p>
+<p>Behauptung: GE durchführbar $\land$ $a_{ii}^{(k)}&gt;0$ $\iff$ $A\succ0$.</p>
+<p><em>Beweis:</em> $A$ positiv definit $\iff$ $A_{1\ldots r}^{1\ldots r}&gt;0$ $\iff$
+$a_{ii}^{(k)}&gt;0$, da Determinanten oder Hauptminoren sich nicht ändern bei
+Addition von Vielfachen von Zeilen zueinander.
+    ☐</p>
+<p><strong>9. Corollar:</strong>  Jede positiv definite (hermitesche) Matrix $A$
+besitzt genau eine $LU$-Zerlegung der Form $A=LU=LDL^\top$, mit
+einer normierten Subdiagonalmatrix $L$ und einer Diagonalmatrix $D$
+mit lauter positiven Diagonalelementen.</p>
+<p>Die Gauß-Elimination mit Diagonalstrategie mit positiven (Diagonal-) Pivots
+ist genau dann ausführbar, wenn die Matrix positiv definit ist.
+Also bei positiv definiten Matrizen sind Zeilen- und/oder
+Spaltenvertauschungen prinzipiell nicht erforderlich.
+Dies ist insofern von besonderem Interesse, als daß bei sehr großdimensionalen
+Matrizen ($n&gt;1000$ beispielsweise) man besonders Wert legt auf einen
+geringen Auffüllungsgrad, welcher mit einer Pivotstrategie i.d.R. in einem
+Zielkonflikt steht.
+Konzentriert man sich daher bei positiv definiten Matrizen allein darauf,
+den Auffüllungsgrad gering zu halten, so bleibt dennoch die Gauß-Elimination
+immer durchführbar.</p>
+<p>Genauso zeigt man: GE durchführbar $\iff$ $A_{1\ldots r}^{1\ldots r}\ne0$,
+da auch hier wieder sich die Hauptminoren nicht ändern bei Linearkombination
+von Zeilen.
+Damit hat man: Eine Matrix $A$ besitzt genau dann eine $LU$-Zerlegung, wenn
+alle führenden Hauptminoren nicht verschwinden.
+Dies deswegen, weil die Existenz einer $LU$-Zerlegung äquivalent ist mit der
+Durchführbarkeit der Gauß-Elimination ohne irgendwelche Zeilen- oder
+Spaltenvertauschungen.</p>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=L%C3%B6sung+linearer+Gleichungssysteme%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=L%C3%B6sung+linearer+Gleichungssysteme&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme&amp;title=L%C3%B6sung+linearer+Gleichungssysteme" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=L%C3%B6sung+linearer+Gleichungssysteme&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=L%C3%B6sung+linearer+Gleichungssysteme%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2024/06-10-loesung-linearer-gleichungssysteme" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#Gau%C3%9Fsche+Elimination>Gaußsche Elimination</a>, <a href=/aux/tags/#Gleichungssysteme>Gleichungssysteme</a>
+	<br><strong>Author: </strong>Elmar Klausmeier
+	</p>
+	<p><a href="/blog/2024">Index for the year 2024.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">2023-08-03: A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 172.46 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVQ4T2OUn/2+loGRoZqR4T87AwngPwPjT4b/DK2M8nPe/yBVM8wekCGMCnPe/SfBYgylKAYk67AzMCEp2ff4N4O+KAvDtz//GXY8+M1gKcnCoCHEzDD/6k+4KhQD7iQKMDAyMjD8h7qp6OBXhgx9DoZX3/4zJOz8wrDMk4eBn52RwXvDZ9wGgExvPfUdrmBbIC/YgKojXxkOhvEzzLz0g6Hn7A/SDPj48z/Dz7//GcwlWBmc1nxkeP4VEWwYXgB6l+EnkJh75QfDpAs/GUAu0BRiYfgH9FfZoa8Ma+/8RglIDAMuvfnLcPTZb4aTz/8wHHn2B8WAEqAB6wkZgC0MQF74/ZeBwUSChcFp9UeGF8AwgQEMF+AKxNpjXxn2h/AzTAcGYi++QMQXjSu8eBh42fBEY7ouOzgdwMDeR78ZDKAJaev93wzWUiwMWsCENPsKjoRETpKmPDOBsjPQ2dXABExSdmYA5kRg0mgFAI5W3Y01yGITAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon">
+
+	<link rel="canonical" href="https://eklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="https://eklausmeier.goip.de/feed.xml">
+	<meta name="description" content="A 3D map of the spatial distribution of interstellar dust extinction out to a distance of 1.25 kpc from the Sun">
+	<meta name="author" content="Elmar Klausmeier">
+	<meta name="copyright" content="Elmar Klausmeier">
+	<meta name="generator" content="Simplified Saaze">
+
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="yTUhMMEASRjeaM8armGiZQ" async></script>
+
+	<title>A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun - Elmar Klausmeier's Blog on Computers, Programming, and Mathematics</title>
+
+<style>
+/* CSS for Elmar Klausmeier's blog
+   09-Aug-2021: Initial revision
+   25-Aug-2021: Added transformed anchor a
+   27-Jun-2022: dark/light switcher, see https://ihuoma.hashnode.dev/darklight-mode-switcher
+   11-Jul-2022: p+ul+ol same font
+   09-Aug-2022: fixed <a...> on tablets, removed commented-out stuff
+   28-May-2023: centered content, added background color
+   16-Oct-2023: added Google fonts
+   23-Oct-2023: added pagefind dark mode
+   16-Nov-2023: added kbd
+   04-Nov-2024: centered tables, aside on the left side
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap");
+
+:root { --bgSurrounding:#fffff6; --bgAcolor:white; color:black; --h1Color:DarkBlue; --thColor:LightBlue; --nthChild:#f2f2f2; --klmwidth:46rem; }
+.dark-mode { background-color:#22160B; color:white; --bgAcolor:black; --h1Color:LightBlue; --thColor:DarkBlue; --nthChild:#935116;
+	--pagefind-ui-primary: #eeeeee; --pagefind-ui-text: #eeeeee; --pagefind-ui-background: #152028; --pagefind-ui-border: #152028; --pagefind-ui-tag: #152028;
+}
+body {
+	background-color: var(--bgSurrounding);
+	font-family:Merriweather,Georgia,"Times New Roman",ui-serif,Cambria,Times,serif;
+	font-display:optional;
+	/*font-size: 28px;  font-weight: 100;*/
+	margin: auto;
+	width:var(--klmwidth)
+}
+h1::first-letter, h2::first-letter { font-family:UnifrakturMaguntia; color:brown }
+article, aside { background-color: var(--bgAcolor); border-radius:8px }
+
+a { color:inherit }
+a:hover { background-color:sandybrown }
+strong { font-weight:900 }
+.symbols { font-family:'Noto Sans Symbols 2'; font-size:36px }
+
+
+img[alt=Photo] { width:var(--klmwidth) }
+
+table { margin-left:auto; margin-right:auto }
+img { border-radius:8px; margin-left:auto; margin-right:auto; display:block }
+blockquote { font-style:italic; padding-left:0.4rem; border-left:2px solid #ccc }
+td { border:1px solid Black; border-collapse:collapse; padding:0.3rem 0.5rem 0.3rem 0.5rem }
+th { border:1px solid Black; background-color:var(--thColor); padding:0.3rem 0.5rem 0.3rem 0.5rem; position:sticky; top:0 }
+tr:nth-child(even) { background-color:var(--nthChild); }
+
+kbd {   /* https://www.rgagnon.com/jsdetails/js-nice-effect-the-KBD-tag.html */
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 16px;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	-moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+
+@media screen and (min-width:50rem) {
+	main, aside { max-width:46rem }
+	h1 { font-size:3em; color:var(--h1Color) }
+	h2 { font-size:2.7em; color:var(--h1Color) }
+	h3 { font-size:2.2em; color:var(--h1Color) }
+	h4 { font-size:2em; color:var(--h1Color) }
+	p { line-height:1.7; font-size:1.3rem }
+	blockquote { line-height:1.5; font-size:1.3rem }
+	ul, ol { line-height:1.5; font-size:1.3rem }
+	li { margin-bottom:0.6rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto; padding:1.4rem }
+	pre code { color:#e2e8f0; line-height:1.8; font-size:1.1rem; font-weight:400; }
+	code[class*="language-"], pre[class*="language-"] { line-height:1.5; font-size:1.15rem }
+}
+@media screen and (max-width:50rem) {
+	main, aside, header, footer { max-width:46rem; margin-left:0.3rem; margin-right:0.3rem }
+	/*body { width:100% }*/
+	h1 { font-size:2.2em; color:var(--h1Color) }
+	h2 { font-size:1.7em; color:var(--h1Color) }
+	h3 { font-size:1.4em; color:var(--h1Color) }
+	h4 { font-size:1.2em; color:var(--h1Color) }
+	p { line-height:1.5; font-size:1.0rem }
+	ul, ol { line-height:1.4; font-size:1.0rem }
+	li { margin-bottom:0.4rem }
+	pre { color:#e2e8f0; background-color:#2d3748; border-radius:0.4rem; overflow-x:auto }
+	pre code { color:#e2e8f0; line-height:1.3; font-size:1em }
+}
+@media screen and (max-width:46rem) {
+	body, main, aside, header, footer { max-width:45rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:34rem) {
+	body, main, aside, header, footer { max-width:33rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:24rem) {
+	body, main, aside, header, footer { max-width:23rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+@media screen and (max-width:20rem) {
+	body, main, aside, header, footer { max-width:19rem; margin-left:0.3rem; margin-right:0.3rem }
+}
+
+.dimmedColor { color:Gray }
+footer { font-family:sans-serif; color:Gray }
+.chartarea { height:400px; width:600px }
+
+/* Copied from TailwindCSS 2.0 typography.min.css */
+pre, code { font-family:"Noto Sans Mono" }
+code { color:inherit; font-weight:700; font-size:inherit }
+code::before { content:"`" }
+code::after { content:"`" }
+pre > code { font-weight:400 }
+pre code::before { content:"" }
+pre code::after{ content:"" }
+
+
+nav { border-radius:8px }
+/* Copied from W.S.Toh: https://code-boxx.com/simple-responsive-pure-css-hamburger-menu */
+#hamnav {	/* [ON BIG SCREENS] (A) WRAPPER */
+	/*width: var(--klmwidth);*/
+	background: Lightgray;
+	/* Optional */
+	position: sticky;
+	top: 0;
+}
+
+#hamitems { display:flex }	/* (B) HORIZONTAL MENU ITEMS */
+#hamitems a {
+	flex-grow: 2;
+	/*flex-basis: 0;*/
+	padding: 12px;
+	/*color: white;*/
+	text-decoration: none;
+	margin-left: 0rem;
+	text-align: left;
+	font-size:1.6rem;
+}
+/*#hamitems a:hover { background:Sandybrown }*/
+
+#hamnav label, #hamburger { display:none }	/* (C) HIDE HAMBURGER */
+
+.grid-container {	/* Holy Grail Layout */
+	display:grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'aside'
+		'footer';
+	gap: 0.1rem;
+	justify-content:center;
+	text-wrap:wrap;
+	text-align:left;
+}
+
+header { grid-area:header }
+main { grid-area:main }
+aside { grid-area:aside; background-color:moccasin }
+footer { grid-area:footer }
+
+@media screen and (min-width:95rem) {
+	.grid-container {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 40rem 47rem;
+		grid-template-areas:
+			'header header'
+			'aside main'
+			'footer footer';
+		gap: 2rem 4rem;
+		background-color: var(--bgSurrounding);
+		padding: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 50rem) {	/* [ON SMALL SCREENS] */
+	#hamitems a {	/* (A) BREAK INTO VERTICAL MENU */
+		box-sizing: border-box;
+		display: block;
+		/*width: 100%;*/
+		border-top: 1px solid #333;
+	}
+	#hamnav label {	/* (B) SHOW HAMBURGER ICON */
+		display: inline-block;
+		color: white;
+		background: DarkGreen;	/*#a02620;*/
+		font-style: normal;
+		font-size: 1.2em;
+		padding: 10px;
+	}
+	#hamitems { display:none }	/* (C) TOGGLE SHOW/HIDE MENU */
+	#hamnav input:checked ~ #hamitems { display:block }
+}
+
+
+
+</style>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+	window.addEventListener('DOMContentLoaded', (event) => {
+		new PagefindUI({ element: "#search", showSubResults: true });
+	});
+</script>
+
+</head>
+
+<body class=grid-container>
+
+	<header> 
+		<nav id=hamnav>	<!-- (A) MENU WRAPPER -->
+		<label for=hamburger>&#9776;</label><!-- (B) THE HAMBURGER -->
+			<input type=checkbox id=hamburger>
+		<div id=hamitems>	<!-- (C) MENU ITEMS -->
+			<a href="/blog">Blog</a>
+			<a href="/aux/about">About</a>
+			<a href="/music" aria-label="Music"><svg version="1.1" id="musicIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 104.23 122.88" style="enable-background:new 0 0 104.23 122.88; fill:Navy" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M87.9,78.04c2.74-0.48,5.33-0.4,7.6,0.13V24.82L39.05,41.03v61.95c0.03,0.34,0.05,0.69,0.05,1.03 c0,0,0,0.01,0,0.01c0,8.34-8.75,16.62-19.55,18.49C8.76,124.37,0,119.12,0,110.77c0-8.34,8.76-16.62,19.55-18.48 c4.06-0.7,7.84-0.39,10.97,0.71l0-76.26h0.47L104.04,0v85.92c0.13,0.63,0.2,1.27,0.2,1.91c0,0,0,0,0,0.01 c0,6.97-7.32,13.89-16.33,15.44c-9.02,1.56-16.33-2.83-16.33-9.8C71.57,86.51,78.88,79.59,87.9,78.04L87.9,78.04L87.9,78.04z"/></g></svg></a>
+			<a href="/gallery" aria-label="Gallery"><svg version="1.1" id="galleryIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 122.88 90.78" style="enable-background:new 0 0 122.88 90.78; fill:black" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M46.86,0.05h43.63l9.94,17.7h20.48c1.09,0,1.98,0.92,1.98,1.98v69.08c0,1.06-0.91,1.98-1.98,1.98H1.98 C0.92,90.78,0,89.89,0,88.81l0-69.08c0-1.09,0.89-1.98,1.98-1.98h9.21V11.4h11.38v6.35h12.36c2.57-5.08,5.14-10.15,7.71-15.23 C44.2-0.57,43.34,0.05,46.86,0.05L46.86,0.05z M110.07,26.5c3.26,0,5.9,2.64,5.9,5.9c0,3.26-2.64,5.9-5.9,5.9 c-3.26,0-5.9-2.64-5.9-5.9C104.18,29.14,106.82,26.5,110.07,26.5L110.07,26.5L110.07,26.5z M66.64,33.37 c9.87,0,17.88,8.01,17.88,17.88c0,9.87-8.01,17.88-17.88,17.88c-9.87,0-17.88-8.01-17.88-17.88 C48.76,41.38,56.77,33.37,66.64,33.37L66.64,33.37z M66.64,21.73c16.31,0,29.53,13.22,29.53,29.53c0,16.3-13.22,29.53-29.53,29.53 c-16.3,0-29.53-13.23-29.53-29.53C37.12,34.95,50.34,21.73,66.64,21.73L66.64,21.73z"/></g></svg></a>
+			<a href="/aux/yearOverview" aria-label="Year Overview"><svg id="yearOverviewIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 122.88 121"><defs><style>.cls-1{fill:#ef4136;}.cls-1,.cls-3,.cls-5{fill-rule:evenodd;}.cls-2{fill:gray;}.cls-3{fill:#e6e6e6;}.cls-4{fill:#1a1a1a;}.cls-5{fill:#c72b20;}</style></defs><title>Year Overview</title><path class="cls-1" d="M11.52,6.67h99.84a11.57,11.57,0,0,1,11.52,11.52V44.94H0V18.19A11.56,11.56,0,0,1,11.52,6.67Zm24.79,9.75A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Zm49.79,0a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-2" d="M111.36,121H11.52A11.57,11.57,0,0,1,0,109.48V40H122.88v69.46A11.56,11.56,0,0,1,111.36,121Z"/><path class="cls-3" d="M12.75,117.31h97.38a9.1,9.1,0,0,0,9.06-9.06V40H3.69v68.23a9.09,9.09,0,0,0,9.06,9.06Z"/><path class="cls-4" d="M39.54,100.77V66H32.29V58.42l8.6-3.69H51.47v46Zm19.46,0V91.31L73.2,76.8a28.28,28.28,0,0,0,2.27-2.52A11.27,11.27,0,0,0,76.91,72a5.21,5.21,0,0,0,.53-2.27A4.18,4.18,0,0,0,77,67.61a2.82,2.82,0,0,0-1.51-1.2A7.94,7.94,0,0,0,72.83,66H59.73V56.58q3-.69,6.73-1.26a56.19,56.19,0,0,1,8.64-.59,20.11,20.11,0,0,1,8.52,1.48A8.86,8.86,0,0,1,88,60.57a17,17,0,0,1,1.32,7.07,16.89,16.89,0,0,1-3.1,10.08A31.85,31.85,0,0,1,82.6,82l-7.87,8.06H90.59v10.69Z"/><path class="cls-5" d="M86.1,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.06,11.06,0,0,1,7.74-3.16Zm0,1.79a9.31,9.31,0,1,1-9.31,9.31,9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-5" d="M36.31,14.63a11.11,11.11,0,1,1-7.85,3.26l.11-.1a11.08,11.08,0,0,1,7.74-3.16Zm0,1.79A9.31,9.31,0,1,1,27,25.73a9.31,9.31,0,0,1,9.31-9.31Z"/><path class="cls-4" d="M80.54,4.56C80.54,2,83,0,86.1,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/><path class="cls-4" d="M30.75,4.56C30.75,2,33.24,0,36.31,0s5.56,2,5.56,4.56V25.77c0,2.51-2.48,4.56-5.56,4.56s-5.56-2-5.56-4.56V4.56Z"/></svg></a>
+			<a onclick="return darkLightToggle()" aria-label="Switch between light and dark mode"><svg version="1.1" id="darkLightIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32" width="32" x="0px" y="0px" viewBox="0 0 122.8 122.8" style="enable-background:new 0 0 240 240" xml:space="preserve"><g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g></svg></a>
+			<a href="/aux/uses" aria-label="Uses"><svg class="svg-icon" width="34" height="34" style="vertical-align:middle; fill:DarkGreen; overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M864 128l-704 0C140.8 128 128 140.8 128 160l0 512C128 691.2 140.8 704 160 704l236.8 0 0 128L256 832l0 64 512 0 0-64L627.2 832l0-128 236.8 0c19.2 0 32-12.8 32-32l0-512C896 140.8 883.2 128 864 128zM864 640c0 19.2-12.8 32-32 32L192 672c-19.2 0-32-12.8-32-32L160 192c0-19.2 12.8-32 32-32l640 0c19.2 0 32 12.8 32 32L864 640z"  /></svg></a>
+			<a href="/aux/blogroll" aria-label="Blogroll"><svg version="1.1" id="Blogroll" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="32" height="32"
+				viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135; fill:Navy"
+				xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876
+		c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881
+		c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526
+		c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698
+		l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648
+		c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0
+		L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499
+		C246.724,384.578,222.588,379.197,201.206,366.698z"/></g></svg></a>
+			<a href="/sitemap.html" aria-label="Sitemap"><svg id="sitemapIcon" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" height=32 width=32 viewBox="0 0 113.84 122.88"><defs><style>.cls-2{fill-rule:evenodd;}</style></defs><title>Sitemap</title><path class="cls-2" d="M1.78,4,.18,7.55H44.23L42.61,4H23a1.17,1.17,0,0,1-1.18-1.17V0H5.05V2.81A1.17,1.17,0,0,1,3.87,4Zm67.7,95.21,2.88,22.22a1.49,1.49,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77L69.66,97h44l-1.62-3.57H92.44a1.17,1.17,0,0,1-1.18-1.17V89.44H74.52v2.81a1.17,1.17,0,0,1-1.17,1.17ZM66.87,55.49l2.89,22.22a1.48,1.48,0,0,0,1.35,1.47h35c.81,0,1.26-.78,1.36-1.5l3.73-22.19Zm1.78-5.77-1.6,3.57H111.1l-1.62-3.57H89.83a1.17,1.17,0,0,1-1.17-1.18v-2.8H71.92v2.81a1.18,1.18,0,0,1-1.18,1.17ZM25.18,62.65H58.7v6H25.18v42H58.37v6H19.18V37.71h6V62.65ZM0,9.75,2.88,32a1.5,1.5,0,0,0,1.36,1.47h35c.81,0,1.26-.78,1.36-1.5L44.36,9.75Z"/></svg></a>
+			<a href="/aux/categories" aria-label="Categories"><svg version="1.1" id="catIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height=32 width=32 x="0px" y="0px" viewBox="0 0 102.78 123.1" style="enable-background:new 0 0 102.78 123.1" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.216;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M53.79,29.73c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78S51,34.05,51,32.52S52.25,29.73,53.79,29.73 L53.79,29.73z M58.1,118.65l0.06,0h0.31c0.48-0.01,0.57-0.06,0.94-0.3l0.36-0.23c4.77-3.01,7.04-7.46,7.57-12.92 c0.56-5.8-0.8-12.77-3.26-20.4l0,0c-0.01-0.03-0.02-0.06-0.03-0.09L57.9,62.32c-0.6,0.26-1.19,0.51-1.79,0.75 c-2.35,0.98-4.77,1.71-7.24,2.22c-2.66,0.57-5.33,0.88-8.01,0.93c-5.72,0.09-11.44-1.04-17.17-3.4l-3.65,14.36 c-0.7,2.74-1.28,5.17-1.76,7.36c-0.51,2.32-0.97,4.58-1.39,6.88c-0.21,1.13-0.33,1.75-0.45,2.38c-1.33,6.85-2.74,14.15,1.09,19.9 c1.09,1.64,2.5,2.85,4.2,3.66c1.74,0.82,3.8,1.25,6.16,1.31c0.05,0,0.09,0,0.14,0h2.79V95.37c0-1.18,0.96-2.14,2.14-2.14 c1.18,0,2.14,0.96,2.14,2.14v23.28h11.49V95.37c0-1.18,0.96-2.14,2.14-2.14c1.18,0,2.14,0.96,2.14,2.14v23.28H58.1L58.1,118.65z M14.21,1.45l8.09,7.7c6-2.42,12.05-3.72,18.15-3.78c6.12-0.05,12.26,1.16,18.43,3.77l9.05-8.46c0.86-0.8,2.2-0.76,3,0.1 c0.38,0.41,0.57,0.93,0.57,1.44h0l0.11,18.06c2.46,4.3,3.92,8.31,4.53,12.07l3.63-1.18c1.12-0.36,2.32,0.25,2.69,1.37 c0.36,1.12-0.25,2.32-1.37,2.69l-4.61,1.5c0,0.1,0,0.2-0.01,0.29c-0.08,3.19-0.8,6.16-2.04,8.95l2.92,0.39 c1.17,0.15,1.99,1.22,1.84,2.39c-0.15,1.17-1.22,1.99-2.39,1.84l-4.59-0.61c-0.29,0.44-0.6,0.87-0.92,1.3 c-2.73,3.67-5.99,6.62-9.57,8.89l6.42,23.33h0c2.62,8.14,4.06,15.66,3.44,22.1c-0.49,5.13-2.25,9.56-5.69,13.05h10.46h0.11v0.01 c6.98,0,12.4,0,17.7-5.14c3.08-2.98,4.37-6.8,4.26-10.6c-0.06-2.08-0.55-4.17-1.39-6.13c-0.85-1.97-2.05-3.79-3.54-5.33 c-2.92-3.01-6.97-4.97-11.68-4.83c-1.17,0.03-2.15-0.89-2.19-2.07c-0.03-1.17,0.89-2.15,2.07-2.19c6-0.18,11.15,2.29,14.85,6.11 c1.87,1.93,3.36,4.19,4.4,6.62c1.04,2.43,1.65,5.06,1.72,7.7c0.15,4.93-1.53,9.88-5.54,13.77c-6.55,6.34-12.71,6.34-20.67,6.34 v0.01h-0.11H58.56l-0.2,0h-9.12c-0.17,0.04-0.35,0.07-0.53,0.07c-0.18,0-0.36-0.02-0.53-0.07h-14.7c-0.17,0.04-0.35,0.07-0.53,0.07 c-0.18,0-0.36-0.02-0.53-0.07h-4.4c-0.08,0-0.15,0-0.23-0.01c-2.97-0.07-5.61-0.63-7.89-1.71c-2.41-1.14-4.4-2.85-5.94-5.16 c-4.79-7.2-3.21-15.37-1.72-23.05c0.19-0.96,0.37-1.91,0.45-2.34c0.42-2.3,0.89-4.61,1.43-7.03c0.56-2.54,1.15-5.01,1.78-7.49 l3.91-15.37c-4.32-2.53-7.98-5.91-10.53-10.02C9.14,50.51,9,50.28,8.87,50.06l-3.45,0.43c-1.17,0.14-2.23-0.69-2.38-1.86 c-0.14-1.17,0.69-2.23,1.86-2.38l2.05-0.25c-1.08-2.92-1.64-6.11-1.59-9.53l-3.78-1.23c-1.12-0.36-1.73-1.57-1.37-2.69 c0.36-1.12,1.57-1.73,2.69-1.37l2.85,0.93c0.6-3.71,1.9-7.65,4.02-11.8l0.84-17.41c0.06-1.17,1.05-2.08,2.23-2.03 C13.38,0.89,13.85,1.11,14.21,1.45L14.21,1.45L14.21,1.45z M20.37,13.2l-5.73-5.45l-0.64,13.21l0,0c-0.01,0.3-0.09,0.6-0.24,0.88 c-2.16,4.13-3.41,8.01-3.89,11.6l13.38,4.34c1.12,0.36,1.73,1.57,1.37,2.69c-0.36,1.12-1.57,1.73-2.69,1.37L9.66,37.85 c0.11,2.74,0.7,5.28,1.67,7.59l11.01-1.37c1.17-0.14,2.23,0.69,2.38,1.86c0.14,1.17-0.69,2.24-1.86,2.38l-9.3,1.16 c2.23,3.2,5.31,5.85,8.89,7.87c4.01,2.26,8.65,3.72,13.5,4.28c4.29,0.5,8.72,0.28,12.99-0.71c1.64-0.4,3.28-0.91,4.92-1.53 c5.15-2.03,9.86-5.33,13.55-10.06l-7.62-1.02c-1.17-0.15-1.99-1.22-1.84-2.39c0.15-1.17,1.22-1.99,2.39-1.84l9.64,1.29 c1.18-2.28,1.93-4.68,2.16-7.24l-11.42,3.7c-1.12,0.36-2.32-0.25-2.69-1.37c-0.36-1.12,0.25-2.32,1.37-2.69l12.63-4.1 c-0.47-3.57-1.88-7.47-4.38-11.75h0c-0.18-0.31-0.29-0.68-0.29-1.07L67.28,7.11l-6.43,6.02c-0.61,0.64-1.58,0.85-2.43,0.47 c-6.02-2.74-12-4.01-17.94-3.96c-5.94,0.05-11.87,1.43-17.8,3.98l0,0C21.92,13.94,21.01,13.8,20.37,13.2L20.37,13.2z M37.54,39.46 c-1.18,0-2.14-0.96-2.14-2.14s0.96-2.14,2.14-2.14h6.61c1.18,0,2.14,0.96,2.14,2.14s-0.96,2.14-2.14,2.14h-1.2 c0.08,1.25,0.3,2.35,0.63,3.28c0.49,1.4,1.23,2.42,2.12,3.07c0.87,0.64,1.91,0.97,3.03,0.99c0.86,0.02,1.77-0.14,2.71-0.47 c1.11-0.39,2.33,0.19,2.72,1.3c0.39,1.11-0.19,2.33-1.3,2.72c-1.41,0.5-2.83,0.74-4.22,0.71c-2-0.04-3.87-0.63-5.46-1.81 c-0.79-0.59-1.51-1.31-2.13-2.17c-0.55,0.89-1.2,1.59-1.95,2.15c-2.49,1.85-5.65,1.86-9.07,1.38c-1.17-0.16-1.98-1.24-1.82-2.4 c0.16-1.17,1.24-1.98,2.4-1.82c2.44,0.34,4.61,0.41,5.93-0.58c1.2-0.9,1.98-2.8,2.09-6.35H37.54L37.54,39.46z M28.12,29.73 c1.54,0,2.78,1.25,2.78,2.78s-1.25,2.78-2.78,2.78c-1.54,0-2.78-1.25-2.78-2.78S26.58,29.73,28.12,29.73L28.12,29.73z"/></g></svg></a>
+			<a href="/aux/privacy-policy" aria-label="Privacy Policy"><svg xmlns="http://www.w3.org/2000/svg" height=32 width=32 shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 511 512.35"><path d="M162.62 21.9c-5.49 5.43-10.63 12.02-15.42 19.71-17.37 27.82-30.33 69.99-39.92 123.16-56.3 10.64-91.06 34.14-89.9 58.14 1.04 21.74 28.46 38.41 69.67 49.92-2.71 8.38-2.07 9.82 1.6 20.13-30.78 12.98-62.94 52.4-88.65 86.93l100.03 67.61-35.32 64.85h384.41l-37.26-64.85L511 378.63c-29.08-40.85-64.19-75.56-86.12-84.98 4.63-12.02 5.44-14.12 1.56-20.79 41.21-11.72 68.23-28.84 68.17-51.47-.06-24.68-35.5-48.38-88.31-56.62-12.64-53.5-25.22-95.62-41.23-123.27-2.91-5.02-5.93-9.57-9.09-13.62-47.66-61.12-64.36-2.69-98.14-2.76-39.17-.08-44.15-53.69-95.22-3.22zm67.12 398.37c-3.57 0-6.47-2.9-6.47-6.47s2.9-6.47 6.47-6.47h10.52c1.38 0 2.66.44 3.7 1.17 3.77 2.1 7.46 3.33 11.01 3.42 3.54.09 7.14-.96 10.8-3.45a6.515 6.515 0 0 1 3.61-1.11l12.78-.03c3.57 0 6.46 2.9 6.46 6.47s-2.89 6.47-6.46 6.47h-10.95c-5.46 3.27-10.98 4.67-16.54 4.53-5.44-.14-10.78-1.77-16.01-4.53h-8.92zm-69.12-140.78c60.43 21.74 120.87 21.38 181.3 1.83-58.45 4.75-122.79 3.62-181.3-1.83zm208.37-.86c20.89 70.63-68.53 106.5-101.95 27.98h-22.11c-34.12 78.28-122.14 44.17-102.16-28.94-7.31-.8-14.51-1.68-21.56-2.62l-.32 1.88-.59 3.56-3.48 20.87c-30.39-6.72-13.36 71.77 14.26 64.87 4.22 12.18 7.69 22.62 11.26 32.19 36.81 98.83 190.88 104.81 226.95 6.36 3.78-10.32 6.85-21.64 11.24-35.39 25.44 4.06 46.35-73.31 15.34-67.63l-3.19-21.05-.55-3.65-.23-1.54c-7.47 1.16-15.12 2.2-22.91 3.11zM123.7 176.34l7.43-25.43c48.16 40.42 214.59 34.09 250.87 0l6.26 25.43c-42.31 44.75-219.33 38.67-264.56 0z"/></svg></a>
+			<a href="/feed.xml" aria-label="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" style="background-color:orange; fill:white"><path d="M200-120q-33 0-56.5-23.5T120-200q0-33 23.5-56.5T200-280q33 0 56.5 23.5T280-200q0 33-23.5 56.5T200-120Zm480 0q0-117-44-218.5T516-516q-76-76-177.5-120T120-680v-120q142 0 265 53t216 146q93 93 146 216t53 265H680Zm-240 0q0-67-25-124.5T346-346q-44-44-101.5-69T120-440v-120q92 0 171.5 34.5T431-431q60 60 94.5 139.5T560-120H440Z"/></svg></a>
+		</div>
+		</nav>
+	</header>
+
+	<main>
+<div id="search"></div>
+
+
+
+	<article>
+	<p class=dimmedColor><time datetime="2023-08-03 14:00:00">3rd August 2023</time>, 82 min read</p>
+<h1>A Parsec-Scale Galactic 3D Dust Map out to 1.25 kpc from the Sun</h1>
+<p>Original post is here <a href="https://eklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun">eklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun</a>.</p>
+<br>
+<p>Author</p>
+<ol>
+<li>Gordian Edenhofer (1,2,3)</li>
+<li>Catherine Zucker (3,4)</li>
+<li>Philipp Frank (1)</li>
+<li>Andrew K. Saydjari (3)</li>
+<li>Joshua S. Speagle  (5,6,7,8)</li>
+<li>Douglas Finkbeiner (3)</li>
+<li>Torsten Enßlin (1,2)
+}</li>
+</ol>
+<p>Institute</p>
+<ol>
+<li>Max Planck Institute for Astrophysics,
+Karl-Schwarzschild-Straße 1, 85748 Garching bei München, Germany</li>
+<li>Ludwig Maximilian University of Munich,
+Geschwister-Scholl-Platz 1, 80539 München, Germany</li>
+<li>Center for Astrophysics $\vert$ Harvard &amp; Smithsonian,
+60 Garden St., Cambridge, MA 02138</li>
+<li>Space Telescope Science Institute,
+3700 San Martin Dr, Baltimore, MD 21218</li>
+<li>Department of Statistical Sciences,
+University of Toronto, Toronto, ON M5G 1Z5, Canada</li>
+<li>David A. Dunlap Department of Astronomy &amp; Astrophysics,
+University of Toronto, Toronto, ON M5S 3H4, Canada</li>
+<li>Dunlap Institute for Astronomy &amp; Astrophysics,
+University of Toronto, Toronto, ON M5S 3H4, Canada</li>
+<li>Data Sciences Institute,
+University of Toronto, Toronto, ON M5G 1Z5, Canada
+}</li>
+</ol>
+<h2>Abstract</h2>
+<p><em>Context.</em>
+High-resolution 3D maps of interstellar dust are critical for probing the underlying physics shaping the structure of the interstellar medium, and for foreground correction of astrophysical observations affected by dust.
+}</p>
+<p><em>Aims.</em>
+We aim to construct a new 3D map of the spatial distribution of interstellar dust extinction out to a distance of 1.25kpc from the Sun.
+}</p>
+<p><em>Methods.</em>
+We leverage distance and extinction estimates to 54 million nearby stars derived from the Gaia BP/RP spectra.
+Using the stellar distance and extinction information, we infer the spatial distribution of dust extinction.
+We model the logarithmic dust extinction with a Gaussian Process in a spherical coordinate system via Iterative Charted Refinement and a correlation kernel inferred in previous work.
+We probe our 661 million dimensional posterior distribution using the variational inference method MGVI.
+}</p>
+<p><em>Results.</em>
+Our 3D dust map achieves an angular resolution of ${14'}$ ($N_\text{side}=256$).
+We sample the dust extinction in $516$ distance bins spanning 69 pc to 1250 pc.
+We obtain a maximum distance resolution of 0.4pc at 69pc and a minimum distance resolution of 7pc at 1.25kpc.
+}</p>
+<p><em>Conclusions.</em>
+Our map resolves the internal structure  of hundreds of molecular clouds in the solar neighborhood and will be broadly useful for studies of star formation, Galactic structure, and young stellar populations.
+It is available for download in a variety of coordinate systems at <a href="https://doi.org/10.5281/zenodo.8187943">https://doi.org/10.5281/zenodo.8187943</a> and can also be queried via the publicly available <code>dustmaps</code> Python package.
+}</p>
+<p><strong>Key words.</strong>
+interstellar dust
+-- interstellar medium
+-- Milky Way
+-- Gaia
+-- Gaussian processes
+-- Bayesian inference
+}</p>
+<ul>
+<li><a href="#s1">1. Introduction</a></li>
+<li><a href="#s2">2. Stellar Distance and Extinction Data</a></li>
+<li><a href="#s3">3. Priors</a></li>
+<li><a href="#s4">4. Likelihood</a><ul>
+<li><a href="#s4_1">4.1 Response</a></li>
+<li><a href="#s4_2">4.2 Likelihood and Joint Probability Density</a></li>
+</ul>
+</li>
+<li><a href="#s5">5. Posterior Inference</a></li>
+<li><a href="#s6">6. Caveats</a></li>
+<li><a href="#s7">7. Results</a><ul>
+<li><a href="#s7_1">7.1 Comparison to Existing 3D Dust Maps</a></li>
+</ul>
+</li>
+<li><a href="#s8">8. Conclusions</a></li>
+<li><a href="#s9">9. ZGR23 in dust-free Regions</a></li>
+<li><a href="#s10">10. Metric Gaussian Variational Inference</a></li>
+<li><a href="#s11">11. Extinction Catalog</a></li>
+<li><a href="#s12">12. 2kpc Reconstruction</a></li>
+<li><a href="#s13">13. Using the Reconstruction</a></li>
+<li><a href="#Literature">14. Literature</a></li>
+</ul>
+<h2>1. Introduction<a id=s1></a></h2>
+<p>Interstellar dust comprises only 1% of the interstellar medium by mass, but absorbs and re-radiates $&gt;30%$ of starlight at infrared wavelengths (<a href="https://doi.org/10.1046/j.1365-8711.2002.05881.x">Popescu2002</a>).
+As such, dust plays an outsized role in the evolution of galaxies, catalyzing the formation of molecular hydrogen, shielding complex molecules from the UV radiation field, coupling the magnetic field to interstellar gas, and regulating the overall heating and cooling of the interstellar medium (<a href="#Literature">Draine2011</a>).</p>
+<p>Dust's ability to scatter and absorb starlight is precisely the reason why we can probe it in three spatial dimensions.
+It preferentially absorbs shorter wavelengths of a stellar spectrum, thus leading to stars behind dense dust clouds appearing reddened relative to their intrinsic colors.
+The amount by which stars behind dust clouds appear reddened allows us to infer the amount of dust extinction between us and the reddened star.
+In combination with distance measurements to reddened stars, we can de-project the integrated extinction measurements into a three-dimensional map of differential dust extinction.</p>
+<p>Gaia has been transformative for the field by providing accurate distance information to more than one billion stars, primarily within a few kiloparsecs from the Sun.
+Precise distances not only improve our knowledge about a star's position, but they also break degeneracies inherent in the modeling of extinction and significantly reduce the extinction uncertainties (<a href="https://doi.org/10.3847/1538-4357/ab2388">Zucker2019</a>).
+Thanks to the large quantity of extinction and distance measurements available in the era of large photometric, astrometric, and spectroscopic surveys, we can now probe the 3D distribution of dust in the Milky Way on parsec scales.</p>
+<p>A number of 3D dust maps combining Gaia and vast photometric and spectroscopic surveys already exist.
+These maps primarily differ in the way they account for the so-called fingers-of-god effect, or the tendency of dust structures to be smeared out along the line of sight (LOS).
+The effect stems from superior constraints on stars' plane-of-sky (POS) positions relative to their LOS distance uncertainties.</p>
+<p>3D dust maps predominantly fall into two categories, each representing a trade-off between angular resolution and distance resolution: reconstructions on a Cartesian grid and reconstructions on a spherical grid.
+Cartesian reconstructions commonly feature less pronounced fingers-of-god but are lower in angular resolution (<a href="https://doi.org/10.1051/0004-6361/202243319">Vergely2022</a>, <a href="https://doi.org/10.1051/0004-6361/202142846">Lallement2022</a>, <a href="https://doi.org/10.1051/0004-6361/201834695">Lallement2019</a>, <a href="https://doi.org/10.1051/0004-6361/201832832">Lallement2018</a>, <a href="https://doi.org/10.1051/0004-6361/201730831">Capitanio2017</a>) or encompass limited volumes of the Galaxy (<a href="#Literature">Leike2020</a>, <a href="#Literature">Leike2019</a>).
+Spherical reconstructions are often higher angular resolution and probe larger volumes of the Galaxy but come with more strongly pronounced fingers-of-god or similar artifacts (<a href="https://doi.org/10.3847/1538-4357/ab5362">Green2019</a>, <a href="https://doi.org/10.1093/mnras/sty1008">Green2017</a>, <a href="https://doi.org/10.3847/2041-8213/ac67db">Rezaei2022</a>, <a href="https://doi.org/10.1051/0004-6361/202038708">Rezaei2020</a>, <a href="https://doi.org/10.1051/0004-6361/201833284">Rezaei2018</a>, <a href="https://doi.org/10.1051/0004-6361/201628885">Rezaei2017</a>, <a href="https://doi.org/10.1093/mnras/sty3341">Chen2019</a>, <a href="https://doi.org/10.3847/1538-4357/aabaef">Chen2018</a>, <a href="https://doi.org/10.1051/0004-6361/202141298">Dharmawardena2022</a>, <a href="https://doi.org/10.48550/arXiv.2204.11715">Leike2022</a>).</p>
+<p>Physical smoothness priors counterbalance the fingers-of-god effect as finger-like structures are a priori unlikely.
+In a Cartesian coordinate system it is comparatively easy to incorporate physical priors into the model such as the distribution of dust being spatially smooth.
+Smoothness priors are often incorporated using Gaussian Process (GP) priors.
+Sparsities and symmetries in the prior can be exploited to efficiently apply a GP on a regular Cartesian coordinate system.</p>
+<p>Spherical coordinate systems break these sparsities and symmetries in the prior but are much better aligned with the desired spacing of voxels along the LOS.
+Nearby, voxels can be spaced densely while at greater distances voxels can be spaced further apart.
+Naively using a GP prior is infeasible and approximations either trade fingers-of-god artifacts for other artifacts (<a href="https://doi.org/10.48550/arXiv.2204.11715">Leike2022</a>) or are too weak to regularize the reconstructions (<a href="https://doi.org/10.3847/1538-4357/ab5362">Green2019</a>).</p>
+<p>In this work, we present a 3D dust map that achieves high distance and angular resolution and probes a large volume of the Galaxy, all at a feasible computational cost.
+The map uses a new GP prior methodology to incorporate smoothness in a spherical coordinate system, mitigating fingers-of-god artifacts.
+With a spherical coordinate system we are able to probe dust beyond 1kpc while still resolving nearby dust clouds at parsec-scale resolution.
+In \Cref{sec:data}, we present the stellar distance and extinction estimates upon which our map is based.
+In \Cref{sec:priors}, we present our GP prior methodology for incorporating smoothness in a spherical coordinate system.
+\Cref{sec:likelihood} describes how we combine the data with our prior model and how we incorporate the distance uncertainties of stars.
+In \Cref{sec:posterior_inference} we describe our inference before recapitulating all approximations of the model and their implications in \Cref{sec:caveats}.
+Finally, in \Cref{sec:results} we present the final map and compare it to existing 3D dust maps and 2D observations.</p>
+<h2>2. Stellar Distance and Extinction Data<a id=s2></a></h2>
+<p>To construct a 3D dust map, we use the stellar distance and extinction estimates from <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a>, which are primarily based on the Gaia BP/RP spectra (spectral resolution R $\sim 30-100$).
+<a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a> adopt a data-driven approach to forward model the extinction, distance, and intrinsic parameters of each star given the combination of the Gaia BP/RP spectra and infrared photometry from 2MASS and unWISE (<a href="https://doi.org/10.1051/0004-6361/202141249">Carasco2021</a>, <a href="https://doi.org/10.48550/arXiv.2206.06143">DeAngeli2022</a>, <a href="https://doi.org/10.48550/arXiv.2208.00211">GaiaCollaboration2022</a>, <a href="https://doi.org/10.48550/arXiv.2206.06205">Montegriffo2022</a>, <a href="https://doi.org/10.3847/1538-4365/aafbea">Schlafly2019</a>, <a href="https://doi.org/10.1088/0004-6256/140/6/1868">Wright2010</a>, <a href="https://doi.org/10.1086/498708">Skrutskie2006</a>).
+The model is trained using a subset of stars with higher resolution spectra ($R \sim 1800$) available with LAMOST (<a href="https://doi.org/10.3847/1538-4365/ac4df7">Wang2022</a>, <a href="https://doi.org/10.1051/0004-6361/202141570">Xiang2022</a>).
+The resulting catalog contains distance, extinction, and stellar type ($T_{eff}$, [Fe/H], $\log g$) information for 220 million stars.
+Throughout this work, we will denote the <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a> catalog as ZGR23.</p>
+<p>Compared to other stellar distance and extinction catalogs, the ZGR23 catalog features smaller uncertainties on the extinction estimates while still targeting a significant number of stars.
+Approximately 87 million ZGR23 stars have an $A_V$ uncertainty below $60$ mmag.
+Thus, ZGR23 achieves similar extinction uncertainties compared to the subset of $39,538$ stars in the StarHorse catalog (<a href="https://doi.org/10.48550/arXiv.2303.09926">Queiroz2023</a>) that have both higher resolution APOGEE spectra and Pan-STARRS1 (PS1; <a href="#Literature">chambers2019</a>) $grizy$ photometry (typical $A_V$ extinction uncertainty of $60$ mmag).
+While the ZGR23 catalog is limited to stars with Gaia BP/RP measurements, the quality of the data makes the inference from the ZGR23 catalog competitive with models based on catalogs with larger numbers of stars --- 799 million stars in Bayestar19 (<a href="https://doi.org/10.3847/1538-4357/ab5362">Green2019</a>), 265 million in StarHorse DR2 (<a href="https://doi.org/10.1051/0004-6361/201935765">Anders2019</a>), and 362 million in StarHorse EDR3 (<a href="https://doi.org/10.1051/0004-6361/202142369">Anders2022</a>).
+We further find the ZGR23 catalog to have fewer systematic shifts in the extinction and reliable extinction uncertainties based on an analysis in dust-free regions; see \Cref{appx:zgr23_in_dust_free_regions} for further details.</p>
+<p>For our reconstruction we restrict our analysis to ZGR23 stars that have <code>quality_flags&lt;8</code> as recommended by the authors.
+We further subselect the stars based on their distance.
+We require ${1}/{(\omega-\sigma_\omega)}&lt;1.8\,\hbox{kpc}$ and ${1}/{(\omega+\sigma_\omega)}&gt;40\,\hbox{pc}$ with $\omega$ the parallax of a star and $\sigma_\omega$ the parallax uncertainty to enforce that all stars are likely within our reconstructed volume.
+In total, we select 53,880,655 stars.</p>
+<p>The reliability of our reconstruction is predominantly limited by the quality and quantity of the data.
+Both strongly depend on the POS position and distance.
+\Cref{fig:density_of_stars} shows 2D histograms of stellar density in heliocentric Galactic Cartesian (X, Y, Z) projections, as well as the number of stars as a function of distance.
+The densities of stars per distance bin first increases approximately quadratically with distance before falling off to a linear increase.
+At approximately $1.5\,\hbox{kpc}$ the number of stars per distance bin levels off before we start deselecting stars by requiring that they have a &gt;1 sigma chance of being within 1.8kpc in distance.
+\Cref{fig:density_of_stars_mollview} shows a POS histogram of the stars.
+A clear imprint of the Gaia BP/RP selection function is visible, cf. <a href="https://doi.org/10.1051/0004-6361/202244784">CantatGaudin2022</a>.
+A systematic undersampling of stars behind dense dust clouds is also apparent.
+We expect our reconstruction to be more trustworthy in regions of higher stellar density.
+Due to the obscuring effect of dust, regions within and behind dense dust clouds should be treated with more caution.</p>
+<p><strong>Heliocentric Galactic Cartesian (X, Y, Z) projected histograms.</strong></p>
+<p><img src="/img/parsec_res/density_of_stars.png" alt="Photo">}}
+}</p>
+<p><strong>Number of stars as a function of distance.</strong></p>
+<p><img src="/img/parsec_res/selection_function.png" alt="Photo">}}
+}
+\caption{%
+2D histograms of the density of stars in heliocentric Galactic Cartesian (X, Y, Z) projections, as well as the density of stars as a function of distance, for the subset of the ZGR23 catalog used in the reconstruction of our 3D dust map.
+The latter visualization additionally shows a linear growth and a quadratic growth with distance for comparison.
+}</p>
+<p><img src="/img/parsec_res/density_of_stars_mollview.png" alt="Photo">}}
+\caption{%
+Plane-of-sky distribution of the subset of  ZGR23 stars used in the reconstruction of our 3D dust map.
+}</p>
+<h2>3. Priors<a id=s3></a></h2>
+<p>Our quantity of interest is the 3D distribution of differential ZGR23 extinction $\rho$.\footnotemark
+By definition the differential extinction is positive.
+Furthermore, we assume it to be spatially smooth.
+A priori we assume the level of smoothness to be spatially stationary and isotropic.</p>
+<blockquote>
+<p>The ZGR23 extinction is in arbitrary units but can be translated to an extinction at any given wavelength by using the extinction curve published at <a href="https://doi.org/10.5281/zenodo.6674521">https://doi.org/10.5281/zenodo.6674521</a>.
+Furthermore, dust extinction can be translated to a rough hydrogen volume density by assuming a constant extinction to hydrogen column density ratio (see e.g. <a href="https://doi.org/10.3847/1538-4357/ac1f96">Zucker2021</a>).
+}</p>
+</blockquote>
+<p>To reconstruct the 3D volume efficiently, we discretize it in spherical coordinates.
+Specifically, we discretize our reconstructed volume into HEALPix spheres at logarithmically spaced distances.
+We adopt an $N_\text{side}$ of $256$, corresponding to $786,432$ POS bins.
+This $N_\text{side}$ corresponds to an angular resolution of $14'$.\footnotemark
+For the LOS direction, we adopt $772$ logarithmically spaced distance bins of which $256$ are used for padding.
+In contrast to reconstructions with linearly-spaced voxels in distance, we are able to probe much larger volumes while maintaining high resolution at nearby distances.</p>
+<blockquote>
+<p>The angular resolution of $14'$ refers to the angular size of our voxels.
+It provides a lower bound on the minimum separation between dust structures that we are able to resolve.
+In practice the resolution is highly position dependent and is predominantly driven by the quantity and quality of the data.
+}</p>
+</blockquote>
+<p>We encode both positivity and smoothness in our model by assuming the differential extinction to be log-normally distributed</p>
+<div class=math>
+$$
+\begin{equation}
+   \rho = \exp{s}
+\end{equation}
+$$
+</div>
+<p>with normally distributed $s$, where $s$ is drawn from a Gaussian process with homogeneous and isotropic correlation kernel $k$.
+From previous reconstructions of the differential extinction for the Gaia DR2 G-band $A_G$ (<a href="#Literature">Leike2020</a>), we have constraints on the correlation kernel of the logarithm of the differential extinction in a volume around the Sun ($|X| &lt; 370pc,, |Y| &lt; 370pc,, |Z| &lt; 270\,\hbox{pc}$).
+As part of our prior model we use the inferred $A_G$ extinction kernel from <a href="#Literature">Leike2020</a>.
+To account for the conversion between the ZGR23 extinction and $A_G$ extinction, we add a global multiplicative factor to $s$ in our model.\footnotemark
+Furthermore, we infer an additive offset in the differential extinction.
+We place a log-normal prior on the multiplicative parameter and a normal prior on the additive one</p>
+<blockquote>
+<p>By doing so (and by using ZGR23) we implicitly assume a spatially stationary reddening law for dust.
+}</p>
+</blockquote>
+<p>We enforce the correlation kernel $k$ using Iterative Charted Refinement (ICR) (<a href="https://doi.org/10.48550/ARXIV.2206.10634">Edenhofer2022</a>).
+ICR enables us to enforce a kernel on arbitrarily spaced voxels by representing the modeled volume at multiple resolutions.
+It starts from a very coarse view of our modeled volume.
+On this coarsest scale, ICR models the GP with learned voxel excitations $\xi_e^{(0)}$ and an explicit full kernel covariance matrix.
+A priori the parameters $\xi_e^{(0)}$ are standard normally distributed and coupled according to $k$ via ICR.
+It then iteratively refines $n_\text{lvl}$ times its coarse view of the space with local, fine, a priori standard normally distributed corrections $\xi_e^{(1)},\dots,\xi_e^{(n_\text{lvl})}$ until reaching the desired resolution.
+In each refinement it uses $n_\mathrm{csz}$ neighbors from the previous refinement to refine one coarse pixel into $n_\mathrm{fsz}$ fine pixels.
+See \Cref{alg:icr}.</p>
+<p><img src="/img/parsec_res/Algorithm1.webp" alt=""></p>
+<p>Pseudocode for ICR creating a GP $s$ from uncorrelated excitations $\left\{ \xi_e^{(0)},\dots,\xi_e^{(n_\mathrm{lvl})} \right\}$.
+Each coarse pixel at location $j$ is iteratively refined to $n_\mathrm{fsz}$ fine pixels using $n_\mathrm{csz}$ coarse pixel neighbors.
+The correlation kernel is denoted by $k$.
+Square brackets after variables and the two functions <code>ndindex</code> and <code>shape</code> denote NumPy-like (<a href="https://doi.org/10.1038/s41586-020-2649-2">Harris2020</a>) indexing routines.
+The call <code>explicit\_gp</code> refers to an unspecified Gaussian Process model explicitly representing the covariance of $k$ for the pixel positions modeled by $\xi^{(0)}_e$.
+}</p>
+<p>ICR uses local corrections at varying resolutions and within a refinement assumes the previous iteration to have modeled the GP without error.
+Both lead to slight errors in representing the kernel.
+For our use case we encounter errors in representing the kernel of a few percent.
+We accept these errors as a trade-off that enables the reconstruction to probe larger volumes.
+We refer to <a href="https://doi.org/10.48550/ARXIV.2206.10634">Edenhofer2022</a> for a detailed discussion of the kernel approximation errors.</p>
+<p>Overall, our model for the prior reads</p>
+<div class=math>
+$$
+\begin{equation}
+    \rho = \exp{\left[\mathrm{scl}(\xi_\mathrm{scl}) \cdot s\left(\xi_e^{(0)},\dots,\xi_e^{(n_\mathrm{lvl})}\right) + \mathrm{off}(\xi_\mathrm{off})\right]},
+\end{equation}
+$$
+</div>
+<p>where we denote the learned multiplicative scaling of $s$ by $\mathrm{scl}$, the learned additive offset by $\mathrm{off}$, and re-expressed both in terms of a priori standard normally distributed parameters $\xi_\mathrm{scl}$ and $\xi_\mathrm{off}$ respectively.
+The act of expressing $\mathrm{scl}$, $\mathrm{off}$ and $s$ via parameters with an a priori simpler distribution, here a standard normal distribution, is called re-parameterization.
+See <a href="http://proceedings.mlr.press/v37/rezende15.html">Rezende2015</a> for a detailed discussion on this subject.</p>
+<h2>4. Likelihood<a id=s4></a></h2>
+<p>To construct the likelihood we first need to define how the differential extinction $\rho$ --- our quantity of interest --- connects to the measured data $\mathcal{D}$.
+Our data comprises POS position, extinction $\mathcal{D}_A$, and parallax $\mathcal{D}_\omega$ data.
+The POS position is in essence without error.
+The extinction data $\mathcal{D}_A=\{A,\sigma_A\}$ is in the form of integrated LOS extinctions to stars $A$ and associated uncertainties $\sigma_A$
+The parallax data $\mathcal{D}_\omega=\{\omega, \sigma_\omega\}$ similarly is in the form of parallax estimates $\omega$ and uncertainties $\sigma_\omega$.</p>
+<p>In our model, we focus on the measured extinction $A$ and do not predict parallaxes to stars.
+Instead, we condition our model on the parallax data $\mathcal{D}_\omega$ and split the likelihood into the probability of the measured extinction given the true extinction $a$ and the probability of the true extinction given uncertain parallax information</p>
+<div class=math>
+$$
+\begin{align}
+   P(A\,|\,\rho,\mathcal{D}_\omega) &= \int\mathrm{d}{a}\ P(A,a\,|\,\rho,\mathcal{D}_\omega)
+   \\ &= \int\mathrm{d}{a}\ P(A\,|\,a) \cdot P(a\,|\,\rho,\mathcal{D}_\omega)\ . \label{eq:top_level_likelihood}
+\end{align}
+$$
+</div>
+<p>The first term of the integrand is constrained by the quality of the extinction measurements and the second by the quality of the parallax measurements.</p>
+<h3>4.1 Response<a id=s4_1></a></h3>
+<p>The second term in \Cref{eq:top_level_likelihood} $P(a,|,\rho,\mathcal{D}_\omega)$ can be expressed as the joint probability of extinction and true distance $d$ marginalized over the true distance</p>
+<div class=math>
+$$
+\begin{align}
+    P(a\,|\,\rho,\mathcal{D}_\omega)
+    &= \int\mathrm{d}d\ P(a,d\,|\,\rho,\mathcal{D}_\omega)
+    \\ &= \int\mathrm{d}d\ P(a\,|\,\rho,\mathcal{D}_\omega,d) \cdot P(d\,|\,\rho,\mathcal{D}_\omega)
+    \ .
+\end{align}
+$$
+</div>
+<p>We neglect data selection effects, i.e. $a$'s dependence on $\mathcal{D}_\omega$ given $d$ and $d$'s dependence on $\rho$ given $\mathcal{D}_\omega$, and use that the true extinction $a$ at known distance $d$ is simply the LOS integral of $\rho$ along the LOS to the star from zero to $d$</p>
+<div class=math>
+$$
+\begin{align}
+   P(a|\rho,\mathcal{D}_\omega)
+   &= \int\mathrm{d}d\ P(a|\rho,d) \cdot P(d|\mathcal{D}_\omega)
+   \\ &= \int\mathrm{d}d\ \delta\left( a - \underbrace{\int_0^{d}\mathrm{d}\tilde{d}\ \rho[\mathrm{POS}](\tilde{d})}_{:= R^{d}(\rho)} \right) \cdot P(d|\mathcal{D}_\omega)
+\end{align}
+$$
+</div>
+<p>with $\rho[\mathrm{POS}]$ the slice of $\rho$ at the POS positions of the stars, $\delta$ the Dirac delta distribution defined by $\int_{-\infty}^{\infty}\mathrm{d}x\ f(x)\delta(x)=f(0)$ for any continuous $f$ with compact support, and $R$ the response which maps from $\rho$ to the domain of the measured extinction.</p>
+<p>We approximate $P(a|\rho,\mathcal{D}_\omega)$ with a normal distribution</p>
+<div class=math>
+$$
+\begin{equation}
+   P(a|\rho,\mathcal{D}_\omega) \approx \mathcal{G}\left(a|\bar{a},\sigma_a^2\right)
+\end{equation}
+$$
+</div>
+<p>with mean $\bar{a}$ and standard deviation $\sigma_a$ to obtain a tractable expression for \Cref{eq:top_level_likelihood}.
+The mean extinction $\bar{a}$ is</p>
+<div class=math>
+$$
+\begin{align}
+   \bar{a} &:= {\langle a \rangle}_{P(a|\rho,\mathcal{D}_\omega)}
+   \\ &= \int\mathrm{d}a\,a\int\mathrm{d}d\ \delta\left( a - R^{d}(\rho) \right) \cdot P(d|\mathcal{D}_\omega)
+   \\ &= \int\int\mathrm{d}a\,\mathrm{d}d\ a \cdot \delta\left( a - R^{d}(\rho) \right) \cdot P(d|\mathcal{D}_\omega)
+   \\ &= \int\mathrm{d}d\ R^{d}(\rho) \cdot P(d|\mathcal{D}_\omega)
+   \\ &= {\left\langle R^{d}(\rho) \right\rangle}_{P(d|\mathcal{D}_\omega)}
+   \ .
+\end{align}
+$$
+</div>
+<p>Assuming the parallax ${1}/{d}$ is normally distributed, i.e. $P(d|\mathcal{D}_\omega)=\mathcal{G}\left({1}/{d} \vert \omega, \sigma_\omega^2\right)$ with mean $\omega$ and standard deviation $\sigma_\omega$, then</p>
+<div class=math>
+$$
+\begin{align}
+        {\langle a \rangle}_{P(a|\rho,\mathcal{D}_\omega)} &= {\left\langle R^{d}(\rho) \right\rangle}_{\mathcal{G}({1}/{d} \vert \omega, \sigma_\omega^2)}
+        \\ &= \int_0^{\infty}\mathrm{d}\tilde{d}\ \rho[\mathrm{POS}](\tilde{d}) \cdot \mathrm{sf}_\mathcal{G}\left({1}/{\tilde{d}} \vert \omega, \sigma_\omega^2\right)
+\end{align}
+$$
+</div>
+<p>with $\mathrm{sf}_\mathcal{G}\left({1}/{d} \vert \omega, \sigma_\omega^2\right) := 1 - \int_{-\infty}^{{1}/{d}}\mathrm{d}\omega'\ \mathcal{G}\left(\omega' \vert \omega, \sigma_\omega^2\right)$ the survival function of the normal distributed parallax.</p>
+<p>The standard deviation $\sigma_{a}$ can be understood as an additional error contribution for marginalizing over the distance.
+The error depends on the distance uncertainty and the dust along the full LOS</p>
+<div class=math>
+$$
+\begin{equation}
+   \sigma_{a}^2 := {\left\langle {\left(R^{d}(\rho)\right)}^2 \right\rangle}_{\mathcal{G}\left({1}/{d} \vert \omega, \sigma_\omega^2\right)} - {\langle R^{d}(\rho) \rangle}^2_{\mathcal{G}\left({1}/{d} \vert \omega, \sigma_\omega^2\right)}
+   \ .
+\end{equation}
+$$
+</div>
+<p>Evaluating both $\bar{a}$ and $\sigma_a^2$ is comparatively cheap in a spherical coordinate system since for a discretized sphere $R^{d}(\rho)$ is simply the cumulative sum of $\rho$ along the distance axis weighted by the radial extent of each voxel.</p>
+<h3>4.2 Likelihood and Joint Probability Density<a id=s4_2></a></h3>
+<p>We assume the measured extinction to be normally distributed around the true extinction $a$.
+We take the inferred extinction $A$ from the catalog to be the mean of the normal distribution.
+The accompanying uncertainty $\sigma_A$ in the catalog is assumed to be the standard deviation of $P(A,|,a)$.</p>
+<p>Some stars will have underestimated uncertainties either due to mismodeled intrinsic stellar properties in the inference or bad photometric measurements that were not flagged.
+We want our model to be able to detect and deselect stars which are in strong disagreement with the rest of the reconstruction.
+We do so by inferring an additional multiplicative factor per star $n_\sigma$ which scales $\sigma_A$.
+A priori, we assume $n_\sigma$ to be drawn from a heavy-tailed distribution.
+Specially, we assume $n_\sigma$ to follow an inverse gamma distributed.
+We again express $n_\sigma$ in terms of standard normally distributed parameters $n_\sigma(\xi_\sigma)$ in the inference.</p>
+<p>To summarize, our approximate likelihood first introduced in \Cref{eq:top_level_likelihood}, reads</p>
+<div class=math>
+$$
+\begin{align}
+        &P(A\,|\,\rho,n_\sigma,\mathcal{D}_\omega)
+        \\ &\approx \int\mathrm{d}{a}\ \mathcal{G}\left(A\,\left|\,a,{\left(n_\sigma \cdot \sigma_A\right)}^2\right.\right) \cdot \mathcal{G}\left(a\,\left|\,\bar{a}(\rho),\sigma_a^2(\rho)\right.\right)
+    \\ &= \mathcal{G}\left( A \,\left|\,\bar{a}(\rho),\left[n_\sigma \cdot \sigma_A\right]^2+\sigma_a^2(\rho) \right.\right) \label{eq:total_likelihood}
+\end{align}
+$$
+</div>
+<p>The uncertainty in the extinction $\sigma_{A}$ is scaled by $n_\sigma$ to deselect outliers and increased by $\sigma_{a}^2$ due to marginalizing over the distance uncertainty.</p>
+<p>The joint probability density function of data and parameters reads</p>
+<div class=math>
+$$
+\begin{align}
+      P&(A,\rho(\xi),n_\sigma(\xi) \vert \mathcal{D}_\omega)
+      \\ &=\ \mathcal{G}\left( A \,\left|\,\bar{a}(\rho(\xi)),\left[n_\sigma(\xi) \cdot \sigma_A\right]^2+\sigma_a^2(\rho(\xi)) \right.\right)
+      \cdot \mathcal{G}\left( \xi \,\left|\,0, 1\right.\right)
+\end{align}
+$$
+</div>
+<p>with $\xi$ the vector of all parameters of the model $\left\{\xi_e^{(0)},\dots,\xi_e^{(n_\mathrm{lvl})},\xi_\mathrm{scl},\xi_\mathrm{off},\xi_\sigma\right\}$.
+The complexity of the prior distributions has been fully absorbed into the transformations $s(\xi)$, $\mathrm{scl}(\xi)$, $\mathrm{off}(\xi)$, and $n_\sigma(\xi)$ from the a priori standard normally distributed parameters $\xi$.</p>
+<p>Parameters of the prior distributions.
+The parameters $s$, $\mathrm{scl}$, and $\mathrm{off}$ fully determine $\rho$.
+They are jointly chosen to a prior yield the kernel reconstructed in <a href="#Literature">Leike2020</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Distribution</th>
+<th>Mean</th>
+<th>Standard Deviation</th>
+<th>Degrees of Freedom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>s</em></td>
+<td>Normal</td>
+<td>0.0</td>
+<td>Kernel from <a href="#Literature">Leike2020</a></td>
+<td>786,432 × 772</td>
+</tr>
+<tr>
+<td>scl</td>
+<td>Log-Normal</td>
+<td>1.0</td>
+<td>0.5</td>
+<td>1</td>
+</tr>
+<tr>
+<td>off</td>
+<td>Normal</td>
+<td>$-6.91\left(\approx\ln10^{-3}\right)$ <br>prior median extinction <br>from <a href="#Literature">Leike2020</a></td>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shape Parameter</td>
+<td>Scale Parameter</td>
+<td></td>
+</tr>
+<tr>
+<td>$n_\sigma$</td>
+<td>Inverse Gamma</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>#Stars = 53,880,655</td>
+</tr>
+</tbody>
+</table>
+<p>Our priors in terms of non-standard-normal parameters are summarized in \Cref{tab:priors}.
+The priors for $s$, $\mathrm{scl}$, and $\mathrm{off}$ are chosen to a priori yield the kernel reconstructed in <a href="#Literature">Leike2020</a>.
+In contrast to <a href="#Literature">Leike2020</a>, we do not learn a full non-parametric kernel.
+However, we do infer $\mathrm{scl}$ and $\mathrm{off}$, the scale and zero-mode of the kernel.
+The prior for $n_\sigma$ is chosen such that the inverse gamma distribution has mode $1$ and standard deviation $2$.</p>
+<h2>5. Posterior Inference<a id=s5></a></h2>
+<p>In the previous section we took special care to express our model not only in terms of physical parameters, like the differential extinction density $\rho$, but also in terms of more simple parameters $\xi$.
+The act of expressing the parameters of the model $\mathrm{scl}$, $\mathrm{off}$, $s$, and $n_\sigma$ in terms of a priori standard normal distributed variables $\xi$ is called standardization, a special from of re-parameterization (see <a href="http://proceedings.mlr.press/v37/rezende15.html">Rezende2015</a>).
+Effectively we are shifting complexity from the prior to the likelihood.
+However, both the non-standardized and the standardized formulation of the joint model are equivalent.
+Standardizing models can lead to better conditioned inference problems as the parameters all vary on the same scales --- if the prior is not in conflict with the likelihood.
+We are going to use an inference scheme that relies on the standardized formulation.</p>
+<p>We want to infer the posterior for our standardized model from \Cref{eq:joint_model}.
+Directly probing the posterior via sampling methods like Hamiltonian Monte Carlo <a href="#Literature">Hoffman2011</a> is computationally infeasible.
+Instead, we use variational inference to approximate the true posterior.
+Specifically, we use Metric Gaussian Variational Inference (MGVI, <a href="https://doi.org/10.48550/ARXIV.1901.11033">Knollmueller2019</a>).
+We summarize the main idea behind MGVI in \Cref{appx:mgvi}.
+We do not approximate the posterior of the noise inference parameter $n_\sigma(\xi_\sigma)$ via variational inference and instead use only the maximum of the posterior for $\xi_\sigma$.</p>
+<p>To speed up the inference, we start the reconstruction at a lower resolution ($196,608$ POS bins at $N_\text{side}=128$ and $388$ LOS distance bins) and restrict the inference to a subset of stars with a $\geq 2$ sigma chance of being within 600pc and a $\geq 2$ sigma chance of being farther than 40pc.
+We successively increase the distance range of the map up to which stars are incorporated in steps of 300pc from 600pc to 1.8kpc.
+Every time we increase the distance range, we reset the parameters for $n_\sigma$.
+Then, after all data is incorporated, we increase the angular and distance resolution of the reconstruction to the final resolution.</p>
+<p>Our data selection deselects stars close to the maximum distance probed (c.f. \Cref{fig:density_of_stars}).
+This effect leads to the outer regions of the map being informed by relatively fewer stars compared to the inner regions.
+We observe that these regions are prone to producing spurious features.
+For our final data products we remove the outermost 550pc from the data constrained volume as we observe artifacts aligned with our data incrementation strategy within these regions.
+We believe 550pc to be a conservative cut but we advise caution when finding structures perfectly aligned with a sphere around the sun at 600pc, 900pc, or 1200pc.</p>
+<p>ZGR23 assumes all extinctions to be strictly positive.
+We neglect this constraint by assuming Gaussian errors which leads to an artificial spike in extinction in the first few voxels in each direction.
+As we know those regions to be effectively free of dust from previous reconstructions c.f. <a href="#Literature">Leike2020</a>, we remove the innermost HEALPix spheres until the mean POS differential extinction as a function of distance reaches a local minimum at 69pc.
+We release an additional HEALPix map of integrated extinction out to 69pc from the sun to correct integrated LOS predictions for the removed extinction.</p>
+<p>Our inference heavily utilizes derivatives of various components of our model.
+Derivatives are used for the minimization as well as for the variational approximation of the posterior.
+Previous models such as <a href="#Literature">Leike2019</a>, <a href="#Literature">Leike2020</a> relied on the Numerical Information Field Theory (NIFTy) package (<a href="#Literature">Selig2013</a>, <a href="#Literature">Steiniger2017</a>, <a href="#Literature">Arras2019</a>) and were limited to running on CPUs.</p>
+<p>We employ a new framework called NIFTy.re (<a href="#Literature">Edenhofer2023NIFTyRE</a>) for deploying NIFTy models to GPUs.
+NIFTy.re is part of the NIFTy Python package and internally uses JAX (<a href="http://github.com/google/jax">Jax2018</a>) to run models on the GPU.
+We are able to speed up the evaluation of the value and gradient of \Cref{eq:joint_model} by two orders of magnitude by transitioning from CPUs to GPUs.
+Our reconstruction ran on a single NVIDIA A100 GPU with 80 GB of memory for about four weeks.</p>
+<h2>6. Caveats<a id=s6></a></h2>
+<p>We believe statistical uncertainties are the dominant source of uncertainty for our reconstruction.
+However, it is important to also consider sources of systematic uncertainties.
+Depending on the application, the systematic uncertainties may be more important than the statistical uncertainties.
+The data that informed the reconstruction, the model with which we inferred it, and the inference procedure all contribute to the model systematic uncertainties.</p>
+<p>Naturally, the data themselves is a source of systematic uncertainties (spatially stationary reddening law, mismodeling of binaries, etc., see  <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a>) and additionally is known to be incomplete.
+Given lower stellar densities in heavily obscured regions, volumes of the map behind dense dust clouds are poorly constrained by the data and limits the map's fidelity, c.f. \Cref{fig:density_of_stars_mollview}.
+Thus, we believe our dust reconstruction to be an underestimation of the true extinction toward dense dust clouds.
+<a href="https://doi.org/10.3847/1538-4357/ac1f96">Zucker2021</a> also note this effect when comparing the <a href="#Literature">Leike2020</a> map with 2D integrated extinction maps based on infrared photometry, finding that the <a href="#Literature">Leike2020</a> is not sensitive to regions with $A_V \gtrsim 2$ mag.</p>
+<p>Our model includes a number of approximations.
+First, we assume a GP-prior on the logarithmic dust extinction using the kernel from <a href="#Literature">Leike2020</a> and additionally only apply it approximately via ICR.
+Second, we assume $\mathcal{D}_\omega$ to be independent of $\mathcal{D}_A$.
+Third, we assume the parallax error to be Gaussian, and fourth, we assume the extinction error to be Gaussian.</p>
+<p>For extremely low extinctions the assumption of $A$ being Gaussian is poor due to the positivity prior in the ZGR23 catalog.
+We correct for this bias towards higher estimated extinction in regions with assumed extremely low true extinctions post-hoc by cutting away the innermost 69pc as described in \Cref{sec:posterior_inference} and publish an auxiliary map of integrated extinction out to 69pc from the sun to correct integrated LOS predictions for the removed extinction.</p>
+<p>We further release a catalog of the predicted extinctions of our model to all stars that we use for the reconstruction to allow for additional validation work.
+In \Cref{appx:extinction_catalog}, we perform a non-exhaustive comparison of our predictions versus the ZGR23 ones.
+We find that both predictions for the extinction to stars disagree below 50 mmag and above 4 mag (34% more stars than expected have larger respectively smaller extinction prediction compared to ZGR23).
+See \Cref{appx:extinction_catalog} for more details.</p>
+<p>Furthermore, our posterior inference is an approximation.
+We assume our approximation of the true posterior accurately captures the intrinsic model uncertainties c.f. (<a href="https://doi.org/10.1038/s41550-021-01548-0">Arras2022</a>, <a href="#Literature">Leike2019</a>, <a href="#Literature">Leike2020</a>, <a href="https://doi.org/10.1051/0004-6361/202243326">Mertsch2023</a>, <a href="https://doi.org/10.48550/arXiv.2305.05489">Roth2023DirectionDependentCalibration</a>, <a href="https://doi.org/10.48550/arXiv.2304.12350">Hutschenreuter2023</a>, <a href="https://doi.org/10.48550/arXiv.2303.10099">Tsouros2023</a>, <a href="https://doi.org/10.3847/1538-3881/acabc1">Roth2023FastCadenceHighContrastImaging</a>, <a href="https://doi.org/10.1051/0004-6361/202140486">Hutschenreuter2022</a>).
+However, we do need to worry about structures getting burned in when we increase the maximum distance probed during the inference from 600 pc to 1800 pc in steps of 300pc as described in \Cref{sec:posterior_inference}.
+We check the final reconstruction for this effect by comparing it against a larger reconstruction which does not subselect the stars based on their distance during the inference but uses only a small sub-sample of ZGR23 stars with more stringent quality flags.
+The larger reconstruction which extends out to 2kpc in distance is released as an additional data product.
+We find no significant differences between both runs.
+See \Cref{appx:2kpc_reconstruction} for details on the larger reconstruction.</p>
+<h2>7. Results<a id=s7></a></h2>
+<p>We reconstruct 12 samples (6 antithetically drawn samples) of the 3D dust extinction distribution which each encompasses 607,125,504 differential extinction voxels.
+The voxels are arranged on $772$ HEALPix spheres with $N_\text{side}=256$ spaced at logarithmically increasing distances.
+After removing the innermost &lt;69pc and outermost &gt;1250pc HEALPix spheres, we are left with $516$ HEALPix spheres.
+The samples and the posterior mean for the reconstruction are publicly available at <a href="https://doi.org/10.5281/zenodo.8187943">https://doi.org/10.5281/zenodo.8187943</a>.
+We also provide the posterior mean and standard deviation of the reconstruction interpolated to heliocentric Galactic Cartesian Coordinates (X, Y, Z) and Galactic spherical Coordinates ($l$, $b$, $d$) as well as the scripts for the interpolation.
+Furthermore, the map can be queried via the <code>dustmaps</code> Python package (<a href="https://doi.org/10.21105/joss.00695">Green2018Dustmaps</a>).
+See \Cref{appx:using_the_reconstruction} for further details on using the reconstruction.</p>
+<p>The distance resolution in our reconstruction is highest for close-by voxels and decreases further out.
+Our highest distance resolution is 0.4pc and our lowest distance resolution is 7pc.\footnotemark
+Our angular resolution is $14'$ and is independent of the distance.</p>
+<blockquote>
+<p>The stated highest respectively lowest distance resolutions of 0.4pc respectively 7pc refer to the minimum respectively maximum extent of the voxels in the radial direction.
+This is not necessarily the same as the minimum separation in distance at which we are able to resolve structures with the given data and our model.
+In practice the resolution is highly position dependent and is predominantly driven by the quantity and quality of the data.
+}</p>
+</blockquote>
+<p>The reconstruction is in terms of the unitless ZGR23 extinction as defined in <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a>.
+For visualization purposes we translate the ZGR23 extinction to Johnson's V-band $\lambda=540.0{nm}$, i.e., $A_V := A(V=540.0{nm})$.
+To perform the conversion, we adopt the extinction curve published in ZGR23, and multiply the unitless ZGR23 extinction by a factor of $2.8$.
+We refer readers to the full extinction curve at <a href="https://doi.org/10.5281/zenodo.6674521">https://doi.org/10.5281/zenodo.6674521</a> from <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a> for the coefficients needed to translate the extinction to other bands.</p>
+<p><img src="/img/parsec_res/integrated_mollview.png" alt="Photo">}}
+\caption{%
+Mollweide projection of the POS integrated $A_V$ extinction out to 250pc, 500pc, 750pc, and up to the maximum distance of our map.
+The colorbar saturates at the $99.9%$ quantile.
+}</p>
+<p><img src="/img/parsec_res/diff_mollview.png" alt="Photo">}}
+\caption{%
+Same as \Cref{fig:integrated_mollview} but showing the difference between the integrated extinctions in between distance slices projection on the POS.
+The colorbar saturates at the $99.9%$ quantile.
+}</p>
+<p>\Cref{fig:integrated_mollview} depicts the POS projection of the posterior mean reconstruction integrated out to 250pc, 500pc, 750pc, and up to the end of our sphere.
+The $A_V$ values are in units of magnitudes.
+We see that higher-latitude features like the  Aquila Rift are comparatively close-by while structures in the Galactic plane appear only gradually.
+\Cref{fig:diff_mollview} shows the difference between the integrated POS projections.
+We recover well known features of integrated dust but are now able to de-project them.</p>
+<p><img src="/img/parsec_res/galactic.png" alt="Photo">}}
+\caption{%
+Heliocentric Galactic Cartesian (X, Y, Z) projections of the posterior mean of our 3D dust map in a box with dimensions $2.5kpc \times 2.5kpc \times 0.8\,\hbox{kpc}$ centered on the Sun.
+The colorbar is linear and saturates at the $99.9%$ quantile.
+A GIF of the posterior samples is shown at https://faun.rc.fas.harvard.edu/gedenhofer/perm/E+23/21b9_final.gif.
+A low-resolution 3D interactive version of this figure is available <a href="https://faun.rc.fas.harvard.edu/czucker/Paper_Figures/3D_Dust_Edenhofer2023.html">https://faun.rc.fas.harvard.edu/czucker/Paper_Figures/3D_Dust_Edenhofer2023.html</a>.
+}</p>
+<p><img src="/img/parsec_res/galactic_with_ysos.png" alt="Photo">}}
+\caption{%
+Same as \Cref{fig:galactic} but with a catalog of clusters of young stellar objects (<a href="#Literature">Kuhn2023YSO</a>) based on <a href="https://doi.org/10.3847/1538-4365/abe465">Kuhn2021</a>, <a href="https://doi.org/10.3847/1538-3881/ab99c8">Winston2020</a>, <a href="https://doi.org/10.48550/arXiv.2206.05796">Marton2022</a> shown as blue dots on top of the reconstruction and their distance uncertainties shown as extended lines.
+}</p>
+<p><img src="/img/parsec_res/galactic_std.png" alt="Photo">}}
+\caption{%
+Heliocentric Galactic Cartesian (X, Y, Z) projections of the standard deviation of the reconstructed dust extinction integrated within the box $2.5kpc \times 2.5kpc \times 0.8\,\hbox{kpc}$ centered on the Sun.
+The colorbar is linear and saturates at the $99.9%$ quantile.
+}</p>
+<p>\Cref{fig:galactic} show a bird's eye (X, Y), side-on (X, Z), and (Y, Z) projection of the posterior mean of our reconstruction in heliocentric Galactic Cartesian coordinates.
+The image depicts the innermost $2.5kpc \times 2.5kpc \times 0.8\,\hbox{kpc}$ around the Sun in $A_V$ extinction integrated over $z$ from -400 pc to 400 pc, $y$ in -1.25 kpc to 1.25 kpc, and $x$ in -1.25 kpc to 1.25 kpc, respectively.
+In \Cref{fig:galactic_ysos} we overlay a catalog of clusters of Young Stellar Objects (YSOs) (<a href="#Literature">Kuhn2023YSO</a>) based on <a href="https://doi.org/10.3847/1538-4365/abe465">Kuhn2021</a>, <a href="https://doi.org/10.3847/1538-3881/ab99c8">Winston2020</a>, <a href="https://doi.org/10.48550/arXiv.2206.05796">Marton2022</a>, which are shown as blue dots.
+The positions of the YSO clusters visually agree with the positions of dust clouds within the YSO clusters' reported distance uncertainties.
+The standard deviation of the reconstruction is shown in \Cref{fig:galactic_std}.
+It is on the order of $10%$ of the posterior mean and tends to increase with distance.</p>
+<p>The reconstruction has a high dynamic range and reveals faint dust lanes in the reconstructed volume.
+Small approximately spherical cavities are evident throughout the map.
+The dust clouds in the reconstruction are compact and only weakly elongated radially.
+Prominent large-scale features, such as the Radcliffe Wave <a href="https://doi.org/10.1038/s41586-019-1874-z">Alves2020</a> and the Split (<a href="https://doi.org/10.1051/0004-6361/201834695">Lallement2019</a>), have been resolved at an unprecedented level of detail, previously only accessible for the most nearby dust clouds.</p>
+<h3>7.1 Comparison to Existing 3D Dust Maps<a id=s7_1></a></h3>
+<p>In this section, we compare our map to other 3D dust maps in the literature.
+We denote the dust map by <a href="#Literature">Leike2020</a> by LGE20, <a href="https://doi.org/10.1051/0004-6361/202243319">Vergely2022</a> by VLC22, <a href="https://doi.org/10.3847/1538-4357/ab5362">Green2019</a> by Bayestar19, and <a href="https://doi.org/10.48550/arXiv.2204.11715">Leike2022</a> by L+22 in this section.
+For the purposes of comparison, we show the posterior mean.
+We release the statistical uncertainties as additional data products, and we strongly advise taking into account these statistical uncertainties for any quantitative analysis.
+However, the differences between the various 3D dust reconstructions discussed here are systematic differences and are not captured by the reconstructed statistical uncertainties.</p>
+<p><img src="/img/parsec_res/sidebyside.png" alt="Photo">}}
+\caption{%
+Side-by-side views of the 3D dust maps from Bayestar19, VLC22, L+22 and this work, shown in heliocentric Galactic Cartesian (X, Y, Z) projections.
+The colorbars are saturated at the $99.9%$ quantile of the respective reconstruction.
+}</p>
+<p>In \Cref{fig:sidebyside}, we show 3D (X, Y, Z) projections of the maps, comparing Bayestar19, VLC22, and this work side-by-side.
+All four maps agree on the general structure of the distribution of dust.</p>
+<p>This work, L+22, and VLC22 have a comparable distance resolution while Bayestar19 only features comparatively few distance bins and more strongly pronounced fingers-of-god.
+Compared to L+22, we feature more homogenously extended dust clouds and significantly less radial wiggles in the distances to dust clouds.
+Compared to VLC22, we feature more compact dust clouds, less grainy structures, and a higher dynamic range.
+Both this work and VLC22 feature dust clouds in a comparable volume around the sun despite the VLC22 map technically extending out further in Galactic heliocentric X and Y.</p>
+<p><img src="/img/parsec_res/sidebyside_leike2020box.png" alt="Photo">}}
+\caption{%
+Zoomed-in version of \Cref{fig:sidebyside} for the volume reconstructed in <a href="#Literature">Leike2020</a>, now also showing the LGE20 reconstruction for comparison.
+We leave out L+22 from the comparison because the authors explicitly focus on larger volumes and trade strongly pronounced artifacts in the inner couple hundred parsecs for a larger probed volume.
+The colorbars are again saturated at the $99.9%$ quantile of the respective reconstruction.
+}</p>
+<p>\Cref{fig:sidebyside_leike2020box} shows the same projections for the volume reconstructed in the LGE20 map and includes the LGE20 map for comparison.
+The zoom-in highlights the close similarity between this work and the LGE20 map.
+All larger structures have direct correspondences in the other map, yet the distances to the structures are slightly different.
+Furthermore, the LGE20 map appears slightly sharper.
+The model in LGE20 is very similar to ours but uses fewer approximations.
+LGE20 also uses compiled data (StarHorse DR2, see <a href="https://doi.org/10.1051/0004-6361/201935765">Anders2019</a>).
+More work is needed to asses the validity of the sharper features in LGE20 not present in this work.
+The VLC22 map is in good agreement as well but lower resolution.
+Bayestar19 poorly resolves distances at the scale of the LGE20 map.</p>
+<p><img src="/img/parsec_res/mollview_versus.png" alt="Photo">}}
+\caption{%
+Mollweide projections of total integrated extinction and 3D extinction maps integrated out the maximum distance of the respective map.
+Bayestar19 reconstructs up to a maximum distance of 63kpc (maximum reliable distance 10kpc) and is integrated out to that volume.
+L+22 reconstructs up to a maximum distance of 16kpc but the authors trust their map only out to 4kpc and we integrate their map only to 4kpc.
+VLC22 reconstructs a heliocentric box of size $3kpc \times 3kpc \times 800\,\hbox{pc}$ with $10^3\,\hbox{pc}^3$ voxels with at most $&lt;2.16\,\hbox{kpc}$ in distance and is integrated out to the end of the box.
+Likewise, LGE20 reconstructs a heliocentric box of size $\rm |X| &lt; 370pc, |Y| &lt; 370pc, |Z| &lt; 270\,\hbox{pc}$ covering at most $&lt;590\,\hbox{pc}$ in distance and is integrated out to the end of the box.
+The colorbars saturate at the respective $99%$ quantile of the map except for the colorbar of Planck 2013 which saturates at 5 mag for better comparability.
+}</p>
+<p>In \Cref{fig:mollview_versus} we compare the POS view of Bayestar19, L+22, VLC22, LGE20 and this work.
+The respective POS views are integrated out to the maximum distance probed by each map ---  $&lt;63\,\hbox{kpc}$ in distance for Bayestar19 (maximum reliable distance 10kpc), $&lt;4\,\hbox{kpc}$ in distance for L+22 (authors trust structures up to 4kpc though the map extends to 16kpc), a heliocentric box of size $3kpc \times 3kpc \times 800\,\hbox{pc}$ with $10^3\,\hbox{pc}^3$ voxels for VLC22 with at most $2.16\,\hbox{kpc}$ in distance, and a heliocentric box of size $\rm |X|, |Y| &lt; 370pc, |Z| &lt; 270\,\hbox{pc}$ and up to $590\,\hbox{pc}$ in distance for LGE20.
+In addition, we show the Planck 2013 extragalactic dust map (<a href="https://doi.org/10.1051/0004-6361/201323195">Planck2013</a>) and the Gaia Total Galactic Extinction (TGE) 2022 map (<a href="https://doi.org/10.48550/arXiv.2206.06710">Delchambre2022</a>).</p>
+<p>All maps agree on fine structures at high galactic latitudes but differ in the Galactic plane due to the difference in distance up to which the respective reconstruction extends.
+3D dust reconstructions do not probe deep enough into the Galactic plane to fully recover the Planck 2013 extragalactic dust map.
+Bayestar19 and L+22 probe much deeper than VLC22, LGE20 and this work, yet they do not probe the full column of dust seen in Planck 2013 and Gaia TGE 2022.
+Both VLC22 and our map probe up to a similar depth while LGE20 only probes dust at much closer distances.</p>
+<p><img src="/img/parsec_res/regions_of_interest.png" alt="Photo">}}
+\caption{%
+Zoomed-in views toward individual molecular clouds (Perseus, Orion, Taurus, Corona Australis, and Chamaeleon) seen in \Cref{fig:mollview_versus}.
+The colorbars are logarithmic and span the full dynamic range of the selected POS slice in every image.
+Each row is a separate region and each column a separate reconstruction.
+}</p>
+<p>\Cref{fig:regions_of_interest} shows a zoom-in comparison of the Perseus, Orion A, Taurus, Corona Australis (CrA), and Chamaeleon molecular clouds, integrated out to the maximum distance of each map (4kpc for L+22).
+Among the 3D dust reconstructions, Bayestar19 and L+22 have arguably the highest angular resolution with 3.4' ($N_\text{side}=1024$) and 1.9' respectively.
+They resolves the high latitude dust clouds with great detail although L+22 suffers from localized artifacts in patches of the sky.
+Both LGE20 (1\,\hbox{pc}^3 boxes) and this work ($N_\text{side}=256$) achieve a comparable angular resolution.
+The VLC22 reconstruction (10^3\,\hbox{pc}^3 voxels) is noticeably lower in resolution and does not resolve the cloud substructure on the POS.</p>
+<h2>8. Conclusions<a id=s8></a></h2>
+<p>We present a 3D dust map with a POS and LOS resolution comparable to <a href="#Literature">Leike2020</a> that extends out to 1.25kpc.
+We use the distance and extinction estimates of <a href="https://doi.org/10.48550/arXiv.2303.03420">Zhang2023</a> which have much lower extinction uncertainties than competing catalogs while probing a similar number of stars.
+Our reconstruction has an angular resolution of $14'$ and a distance resolution of up to 0.4pc.
+We show the map to be in good agreement with existing 3D dust maps and improves upon them in terms of covered volume and spatial resolution.
+The map is made publicly available at <a href="https://doi.org/10.5281/zenodo.8187943">https://doi.org/10.5281/zenodo.8187943</a> and can also be queried via the <code>dustmaps</code> Python package.
+We anticipate that the map will be useful for a wide range of applications in studying the distribution of dust and the ISM more broadly.</p>
+<blockquote>
+<p>We thank Joao Alves for many fruitful discussions at the &quot;Self-Organization Across Scales: From nm to parsec (SOcraSCALES)'' workshop at the Munich Institute for Astro-, Particle and BioPhysics, an institute of the Excellence Cluster ORIGINS in 2022 and afterwards.
+Furthermore, we thank Jakob Roth for many invaluable discussions about the model and for providing feedback on the early versions of the reconstruction.
+We thank Alyssa Goodman for providing invaluable feedback on the late versions of the reconstructions.
+We also thank Michael A. Kuhn for providing us with a unified catalog of Young Stellar Objects.
+Gordian Edenhofer acknowledges the support of the German Academic Scholarship Foundation in the form of a PhD scholarship (&quot;Promotionsstipendium der Studienstiftung des Deutschen Volkes'').
+Catherine Zucker acknowledges that support for this work was provided by NASA through the NASA Hubble Fellowship grant #HST-HF2-51498.001 awarded by the Space Telescope Science Institute (STScI), which is operated by the Association of Universities for Research in Astronomy, Inc., for NASA, under contract NAS5-26555.
+Andrew K. Saydjari acknowledges support by a National Science Foundation Graduate Research Fellowship (DGE-1745303).
+Andrew K. Saydjari and Douglas Finkbeiner acknowledge support by NASA ADAP grant 80NSSC21K0634 &quot;Knitting Together the Milky Way: An Integrated Model of the Galaxy's Stars, Gas, and Dust''.
+This work was supported by the National Science Foundation under Cooperative Agreement PHY-2019786 (The NSF AI Institute for Artificial Intelligence and Fundamental Interactions).
+A portion of this work was enabled by the FASRC Cannon cluster supported by the FAS Division of Science Research Computing Group at Harvard University.
+We acknowledge support by the Max-Planck Computing and Data Facility (MPCDF).
+This work has made use of data from the European Space Agency (ESA) mission Gaia (<a href="https://www.cosmos.esa.int/gaia">https://www.cosmos.esa.int/gaia</a>), processed by the Gaia Data Processing and Analysis Consortium (DPAC, <a href="https://www.cosmos.esa.int/web/gaia/dpac/consortium">https://www.cosmos.esa.int/web/gaia/dpac/consortium</a>).
+Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.</p>
+</blockquote>
+<h2>9. ZGR23 in dust-free Regions<a id=s9></a></h2>
+<p>To gauge the reliability of the ZGR23 catalog, we analyze the extinction to stars in dust-free regions, c.f. <a href="#Literature">Leike2019</a>, <a href="#Literature">Leike2020</a>.
+In dust-free regions, we would expect the extinction to be zero within the uncertainties of the catalog.
+To classify a region as dust-free, we use the Planck dust emission map (<a href="https://doi.org/10.1051/0004-6361/201323195">Planck2013</a>).
+A region is said to be dust-free if the Planck $E(B-V)$ map is below or equal to $0.0095 \mathrm{mag}$ or approximately $0.029$ in terms of $A_V$.</p>
+<p><strong>ZGR23 extinction in dust-free regions.</strong></p>
+<p><img src="/img/parsec_res/zgr23_dust_free_offset.png" alt="Photo">}}
+}</p>
+<p><strong>ZGR23 standardized extinction in dust-free regions.</strong></p>
+<p><img src="/img/parsec_res/zgr23_dust_free_spread.png" alt="Photo">}}
+}
+\caption{%
+The top plot shows the histogram of the ZGR23 extinctions in dust-free regions translated to $A_V$.
+The mean extinction in dust-free regions based on Planck is shown as a vertical green line and the cutoff value translated to $A_V$ for our definition of dust-free is shown in red.
+The bottom plot shows the same figure from above, but the extinctions are scaled by their accompanying uncertainties.
+A truncated standard normal distribution and a standard normal distribution are plotted on top.
+Both ordinates are logarithmic.
+}</p>
+<p>The first panel of \Cref{fig:zgr23_offset} shows the histogram of ZGR23 extinction to stars with <code>quality_flags&lt;8</code> in dust-free regions translated to $A_V$.
+We see that the histogram of the extinction peaks at the cutoff value and coincides with the mean total extinction as measured by Planck in those regions translated to $A_V$.
+The density of extinction values falls of exponentially after the cutoff value.
+Overall, the ZGR23 extinction seems to be in good agreement with <a href="https://doi.org/10.1051/0004-6361/201323195">Planck2013</a> for dust-free regions.</p>
+<p>The second panel of \Cref{fig:zgr23_offset} shows the extinction divided by their uncertainties for the stars from \Cref{fig:zgr23_offset}.
+The standardized extinctions are centered around unity, indicating that the ZGR23 extinction indeed are offset from zero by about one standard deviation in dust-free regions.
+This is in agreement with the previous finding that the extinctions are centered around the cutoff value instead of clustering around zero.
+The width around the center is comparable to a truncated standard normal distribution or a normal distribution.
+In total, about $1%$ of the probability mass lies outside the possible range of all ZGR23 extinction with <code>quality_flags&lt;8</code> if we assume a normal distribution for the extinctions.</p>
+<p>Except for outliers far away from the center which can be captured by an outlier model, the ZGR23 catalog seems to be in agreement with POS measurements in dust-free regions and the spread around the cutoff value approximately follows a (truncated) normal distribution.
+We deem the ZGR23 catalog to be reliable for our purposes and approximate the uncertainties using a normal distribution.
+We accept the mismodeling of a small fraction of probability mass for a simpler model, see \Cref{sec:caveats,sec:posterior_inference}.</p>
+<h2>10. Metric Gaussian Variational Inference<a id=s10></a></h2>
+<p>The variational inference method Metric Gaussian Variational Inference (MGVI) approximates the true posterior $P(\xi,|,d)$ with a standard normal distribution in a linearly transformed space in which the posterior more closely resembles a standard normal.
+Let $Q_{\bar{\xi}}(y,|,d)=\mathcal{G}(y(\xi),|,y(\bar{\xi}),\mathbb{1})\left|\frac{\mathrm{d}y}{\mathrm{d}\xi}\right|$ be the approximate posterior and $y(\xi): \xi \mapsto y(\xi)$ the coordinate transformation.
+In this space the transformed posterior reads $P(\xi(y),|,d)\left|\frac{\mathrm{d}\xi}{\mathrm{d}y}\right|$.
+We denote the metric of the space in which $P(\xi(y),|,d)\left|\frac{\mathrm{d}\xi}{\mathrm{d}y}\right|$ is &quot;more'' standard normal by $M := \frac{\mathrm{d}y}{\mathrm{d}\xi} \left(\frac{\mathrm{d}y}{\mathrm{d}\xi}\right)^\dagger$.
+Assuming $y(\xi): \xi \mapsto y(\xi)$ is known, the difficulty lies solely in finding the optimal $\bar{\xi}$ for $Q_{\bar{\xi}}$.</p>
+<p>Based on the Fisher information metric and Frequentist statistics, <a href="https://doi.org/10.48550/ARXIV.1901.11033">Knollmueller2019</a> derive a coordinate transformation $y_{\bar{\xi}}(\xi)$ centered on $\bar{\xi}$ that is linear in $\xi$.
+In <a href="https://doi.org/10.3390/e23070853">Frank2021</a>, the authors find that a set of Riemannian normal coordinates $y_{\bar{\xi}}(\xi)$ centered on $\bar{\xi}$ are an improved, non-linear estimate of the coordinate transform $y(\xi) \approx y_{\bar{\xi}}(\xi)$.
+The improvements though come at slightly higher computational costs.
+We refer the reader to <a href="https://doi.org/10.3390/e23070853">Frank2021</a>, <a href="https://doi.org/10.3390/psf2022005006">Frank2022</a> for further details on geoVI and its relation to MGVI, the choice of metric, and an analysis of its failure modes.
+For computational reasons, we use MGVI for our inference.</p>
+<p>We start at a random initial position for $\bar{\xi}$ and draw $n_\text{samples}$ standard normal samples in the space of $y$.
+Next, we transform the samples to the space of $\xi$ via $y_{\bar{\xi}}$, our local, linear approximation to $y(\xi)$ at $\bar{\xi}$.
+We denote the samples in our parameter space by $\{\xi_1, \dots, \xi_{n_\text{sampels}}\}$.
+Relative to the expansion point $\bar{\xi}$ the samples read $\{\Delta\xi_1:=\xi_1-\bar{\xi}, \dots, \Delta\xi_{n_\text{samples}}:=\xi_{n_\text{sampels}}-\bar{\xi}\}$.
+The samples $\{\Delta\xi_1,\dots,\Delta\xi_{n_\text{samples}}\}$ around $\bar{\xi}$ provide an empirical, sampled approximation to $Q_{\bar{\xi}}$ which we denote by $\tilde{Q}_{\bar{\xi}}$.
+We optimize $\bar{\xi}$ of our sampled distribution $\tilde{Q}_{\bar{\xi}}$ by minimizing the variational Kullback–Leibler (KL) divergence between $\tilde{Q}_{\bar{\xi}}$ and the true distribution $P$</p>
+<div class=math>
+$$
+\begin{align}
+   \bar{\xi}' = &\mathop{\hbox{arg min}}_{\bar{\xi}} \mathrm{KL}\left(\tilde{Q}_{\bar{\xi}} ,\, P(\xi\,|\,d)\right)
+   \\ &= \mathop{\hbox{arg min}}_{\bar{\xi}} {\left\langle \ln{\frac{\tilde{Q}_{\bar{\xi}}}{P(\xi\,|\,d)}} \right\rangle}_{\tilde{Q}_{\bar{\xi}}}\label{eq:evi_true_kl}
+   \\ &= \mathop{\hbox{arg min}}_{\bar{\xi}} {\left\langle -\ln{P(\xi\,|\,d)} \right\rangle}_{\tilde{Q}_{\bar{\xi}}}\label{eq:evi_kl_wo_approx_dist_vol}
+   \\ &= \mathop{\hbox{arg min}}_{\bar{\xi}} \frac{-1}{n_\text{samples}} \sum_{i=1}^{n_\text{samples}} \ln{P(\Delta\xi_i - \bar{\xi}\,|\,d)}\label{eq:evi_kl_sampled}
+   \ .
+\end{align}
+$$
+</div>
+<p>Note, we keep the relative samples $\{\Delta\xi_1:=\xi_1-\bar{\xi}, \dots, \Delta\xi_{n_\text{samples}}:=\xi_{n_\text{sampels}}-\bar{\xi}\}$ fixed during the optimization and only vary $\bar{\xi}$.
+Finally, we update the expansion point $\bar{\xi}$ to the new found optimum $\bar{\xi}'$.</p>
+<p>After the minimization we draw a new set of samples, transform them via a local, linear expansion of $y$, and then minimize again.
+We repeat the drawing of samples and minimization until we reach a fixed point for $\bar{\xi}$.
+\Cref{alg:expansion_point_vi} summarizes the algorithmic steps of our variational approximation to the true posterior.</p>
+<p><img src="/img/parsec_res/Algorithm2.webp" alt=""></p>
+<p>Pseudocode for our expansion point variational inference scheme using MGVI.
+}</p>
+<h2>11. Extinction Catalog<a id=s11></a></h2>
+<p>We release a catalog of expected extinction for all stars within the subset of the ZGR23 catalog that we use for our reconstruction (see \Cref{sec:data}).
+We predict the expected extinction conditional on the known parallax including parallax uncertainties.
+Our prediction is the best guess of our model for the extinction towards a star but is not necessarily the best guess for the extinction at the mean parallax of the star.</p>
+<p>Our extinction predictions (see \Cref{sec:priors,sec:likelihood:response}) differ from the extinctions in the ZGR23 catalog by coupling the individual stars via the 3D dust extinction density.
+By virtue of every star depending on all nearby stars via the prior, our extinction predictions come in the form of joint predictions for all stars.
+In regions where the 3D dust extinction density is well constraint, the joint predictions to first order factorize into predictions for individual stars, and we can compute expected extinctions for individual stars and their uncertainties.</p>
+<p>Our catalog of extinction includes the innermost 69pc from the beginning of our grid and the outer 550pc beyond 1.25kpc that we cut away in the 3D map.
+We advise caution when analyzing the stars of our catalog within those regions as they might carry additional biases.
+See \Cref{sec:caveats,sec:posterior_inference} for details on why these regions where removed from the final map.</p>
+<p><strong>Our extinction prediction versus the ZGR23 extinction.</strong></p>
+<p><img src="/img/parsec_res/zgr23_over_ours.png" alt="Photo">}}
+}</p>
+<p><strong>Our inferred uncertainties versus the ZGR23 extinction uncertainties.</strong></p>
+<p><img src="/img/parsec_res/zgr23_unc_over_ours.png" alt="Photo">}}
+}
+\caption{\label{fig:zgr23_versus_ours}%
+The top panel shows our mean posterior extinctions versus the ZGR23 extinctions to stars as 2D histogram.
+The $16^\text{th}$, $50^\text{th}$, and $84^\text{th}$ quantiles of the ZGR23 extinctions for each bin of our mean extinction are shown as blue lines.
+The respective quantiles of our predictions in bins of the ZGR23 extinctions are shown as orange lines.
+The bottom panel shows the same comparison but for our posterior mean predictions for the ZGR23 measurement uncertainties $\sqrt{\left[n_\sigma(\xi) \cdot \sigma_A\right]^2+\sigma_a^2}$ versus the ZGR23 uncertainties.
+Note, the predictions for the ZGR23 measurement uncertainties are not the uncertainties of our extinction predictions.
+See \Cref{sec:likelihood} and in specific \Cref{eq:total_likelihood} for further details on the quantities shown here.
+The bisectors are shown in red.
+The colorbars are logarithmic.
+}</p>
+<p>The top panel of \Cref{fig:zgr23_versus_ours} compares the ZGR23 extinctions to our mean extinction predictions to stars.
+Overall, our mean extinctions are in very good agreement with the extinctions in the ZGR23 catalog for the vast majority of stars.
+However, below 50 mmag and above 4 mag our extinction predictions deviate from the predictions in ZGR23.
+At any given ZGR23 (respectively our) extinction bin, we would expect half of our (respectively the ZGR23) extinctions to be below and the other half to be above the bisector.
+At 50 mmag, 34% more stars than expected have higher extinctions than the corresponding extinctions in ZGR23.
+The difference further widens for lower ZGR23 extinctions.
+At 4 mag, 34% more stars than expected have lower extinctions than the corresponding extinctions in ZGR23.</p>
+<p>The bottom panel of \Cref{fig:zgr23_versus_ours} shows our and the ZGR23 extinction uncertainties.
+Note, our extinction uncertainties are predictions for the measured uncertainties of the ZGR23 catalog $\left[n_\sigma(\xi) \cdot \sigma_A\right]^2+\sigma_a^2(\rho(\xi))$ and not the uncertainties of our extinction predictions $\mathrm{std}(\bar{a})$, see \Cref{sec:likelihood}.
+Overall, both uncertainties agree well for the vast majority of stars.
+At low extinctions uncertainties our uncertainties only marginally inflate the ZGR23 uncertainties.
+However, at high extinction uncertainties, our predictions cover a larger range, and we find that the ZGR23 significantly underpredicts our extinction uncertainties of stars.</p>
+<p><img src="/img/parsec_res/standardized_residuals.png" alt="Photo">}}
+\caption{%
+The mean standardized extinctions $(A - \bar{a}) / \sqrt{(n_\sigma \cdot \sigma_A)^2 + \sigma^2_a}$ (see \Cref{sec:likelihood} and in specific \Cref{eq:total_likelihood}) within the range of $-5$ to $5$.
+}</p>
+<p>\Cref{fig:standardized_extinction_prediction} summarizes the extinctions and the extinction uncertainties of both ZGR23 and our predictions into a single histogram of the mean standardized extinction.
+The mean standardized residuals follow a standard Gaussian (c.f. \Cref{sec:likelihood}).
+However, the mean standardized residuals have two slight overdensities at each tail of the Gaussian indicating some outliers are not yet fully captured by our inference of the uncertainties.</p>
+<p><img src="/img/parsec_res/zgr23_unc_over_our_std_of_mean.png" alt="Photo">}}
+\caption{\label{fig:actual_zgr23_versus_ours_unc}%
+Similar to \Cref{fig:zgr23_versus_ours} but for the posterior standard deviation of our extinctions versus the ZGR23 uncertainties.
+The $16^\text{th}$, $50^\text{th}$, and $84^\text{th}$ quantiles of the ZGR23 uncertainties for each bin of our standard deviation are shown as blue lines.
+The respective quantiles of our standard deviation in bins of the ZGR23 uncertainties are shown as orange lines.
+The bisectors are shown in red.
+The colorbars are logarithmic.
+}</p>
+<p>\Cref{fig:actual_zgr23_versus_ours_unc} shows the posterior standard deviation of our extinction predictions versus the ZGR23 uncertainties.
+Our model yields approximately one order in magnitude lower extinction uncertainties than the ZGR23 uncertainties for the vast majority of stars.
+The effect is less pronounced for low ZGR23 extinction uncertainties.</p>
+<p>Our predictions for the extinction to stars theoretically contain more information since we allow for the cross-talk of nearby stars via the 3D distribution of dust and thus might be more accurate.
+However, the ZGR23 catalog might yield better results in practice because it does not discretize the 3D volume within which the stars reside.
+By discretizing the modeled volume we can produce contradicting data that in a continuous space is non-contradicting, e.g. by putting highly extincted stars that lie in a dust cloud into the same voxel as less extincted stars that are adjacent to the dust cloud.
+Overall, both predictions agree very well for stars below between 50 mmag and 4 mag.
+More work is needed to validate the discrepant predictions at very low and very high extinctions.</p>
+<h2>12. 2kpc Reconstruction<a id=s12></a></h2>
+<p>In \Cref{sec:posterior_inference} we describe how we iteratively increase the distance out to our maximum reconstructed distance.
+We do so to improve the convergence of the reconstruction.
+We also try naively reconstructing the full volume at once.
+Using all the available data is computationally prohibitive, so we limit the reconstruction to high quality data using <code>quality_flags==0</code>, $\sigma_A \leq 0.04$, and ${\sigma_\omega}/{\omega} &lt; 0.33$.</p>
+<p>We use ${1}/{(\omega-\sigma_\omega)}&lt;3\,\hbox{kpc}$ and ${1}/{(\omega+\sigma_\omega)}&gt;40\,\hbox{pc}$ to select the stars within a 3kpc sphere.
+To further speed up the inference we start the inference using at first only a sample of $10%$, then $20%$, $45%$, $67%$ and finally $100%$ of the stars.
+In total, we select $59,334,214$ stars.
+After the inference, we cut away the outermost 1kpc of the sphere of the data constrained region to avoid degradation effects due to the thinning out of stars at the edge.
+The overall reconstructed volume after removing the outermost HEALPix spheres extends out to 2kpc in distance.</p>
+<p><img src="/img/parsec_res/galactic_2kpc.png" alt="Photo">}}
+\caption{%
+Axis parallel projections of the reconstructed dust extinction in a box of dimensions $4kpc \times 4kpc \times 0.8\,\hbox{kpc}$ centered on the Sun.
+The colorbar is linear and saturates at the $99.9%$ quantile.
+}</p>
+<p><img src="/img/parsec_res/galactic_2kpc_with_ysos.png" alt="Photo">}}
+\caption{%
+Same as \Cref{fig:galactic_2kpc} but with a catalog of clusters of young stellar objects (<a href="#Literature">Kuhn2023YSO</a>) based on <a href="https://doi.org/10.3847/1538-4365/abe465">Kuhn2021</a>, <a href="https://doi.org/10.3847/1538-3881/ab99c8">Winston2020</a>, <a href="https://doi.org/10.48550/arXiv.2206.05796">Marton2022</a> shown a blue dots on top of the reconstruction and their distance uncertainties shown as extended lines.
+}</p>
+<p>The reconstruction is shown in \Cref{fig:galactic_2kpc} and again in \Cref{fig:galactic_2kpc_with_ysos} with a catalog of YSO clusters (<a href="#Literature">Kuhn2023YSO</a>) overlaid on top.
+It shows the same large scale features as the smaller reconstruction discussed in the main text.
+The distribution of dense dust clouds is in agreement with the positions of YSO clusters within the distance uncertainties of the YSO clusters.
+Compared to \Cref{fig:galactic} the reconstruction is less detailed and features more pronounced artifacts.</p>
+<p>We use the larger reconstruction to validate the inference of the smaller one.
+Specifically, we use the larger reconstruction to ensure that structures aligned with or close to the radial boundaries at which we increase the distance of the main reconstruction are independent of the locations at which we increase the distance covered.</p>
+<p>We release the larger reconstruction as an additional data product together with the main reconstruction.
+We advise using the main reconstruction for all regions that fall within its volume.
+Care should be taken when interpreting small scale features or structures at high distances in the larger reconstruction.</p>
+<h2>13. Using the Reconstruction<a id=s13></a></h2>
+<p>All data products are made publicly available at <a href="https://doi.org/10.5281/zenodo.8187943">https://doi.org/10.5281/zenodo.8187943</a>.
+The data products are stored in the FITS file format.
+The main data products are the posterior samples of the spatial 3D distribution of dust extinction discretized to HEALPix spheres at logarithmically spaced distances.
+For convenience, we also provide the posterior mean and standard deviation of the samples of the HEALPix spheres at logarithmically spaced distances.</p>
+<p>We additionally interpolate the posterior mean and standard deviation to a Cartesian grid.
+The interpolation is carried out at a lower resolution using $2^3\,\hbox{pc}^3$ voxels to keep the filesize reasonably small.
+We recommend re-interpolating the map at a higher resolution for the study of individual regions within the map.</p>
+<p>We release the interpolation script as part of the data release.
+Its signature reads <code>interp2box.py [-h] [-o OUTPUT_DIRECTORY] [-b BOX] healpix_path</code>.
+A box is a string of two tuples separated by two colons.
+The first tuple specifies the number of voxels along each axis of the box and the second tuple specifies the corners of the box in parsecs in heliocentric coordinates.
+To interpolate the map to a box with $1051 \times 1051 \times 351$ voxels of size $\rm |X|, |Y| \leq 2100\,\hbox{pc}$ and $\rm |Z| \leq 700\,\hbox{pc}$, use
+<code>interp2box.py -b '(1051,1051,351)::((-2100,2100),(-2100,2100),(-700,700))' -- mean_and_std_healpix.fits</code>.</p>
+<p>In addition, we interpolate the posterior mean and standard deviation to galactic longitude, latitude and distance.
+The signature of the interpolation script reads <code>interp2lbd.py [-h] [-o OUTPUT_DIRECTORY] [-b BOX] healpix_path</code>.
+Its behavior is similar to <code>interp2box.py</code> but the box is specified in terms of galactic longitude, latitude and distance in units of degrees, degrees, and parsecs respectively.</p>
+<p>Both scripts require the Python packages numpy (<a href="https://doi.org/10.1038/s41586-020-2649-2">Harris2020</a>), astropy (<a href="https://doi.org/10.1051/0004-6361/201322068">Astropy2013</a>, <a href="https://doi.org/10.3847/1538-3881/aabc4f">Astropy2018</a>, <a href="https://doi.org/10.3847/1538-4357/ac7c74">Astropy2022</a>), and <code>healpy</code> (<a href="https://doi.org/10.1086/427976">Gorski2005</a>, <a href="https://doi.org/10.21105/joss.01298">Zonca2019</a>).
+Depending on the number of output voxels, the interpolation can be very memory intensive and computationally expensive.</p>
+<h2>Literature<a id=Literature></a></h2>
+<ol>
+<li>[Alves2020] Alves, João and Zucker, Catherine and Goodman, Alyssa A. and Speagle, Joshua S. and Meingast, Stefan and Robitaille, Thomas and Finkbeiner, Douglas P. and Schlafly, Edward F. and Green, Gregory M.: <em>A Galactic-scale gas wave in the solar neighbourhood</em>, Feb-2020, Nature, Vol. 578, Nr. 7794, pp. 237-239, <a href="https://doi.org/10.1038/s41586-019-1874-z">https://doi.org/10.1038/s41586-019-1874-z</a></li>
+<li>[Anders2019] Anders, F. and Khalatyan, A. and Chiappini, C. and Queiroz, A.B. and Santiago, B.X. and Jordi, C. and Girardi, L. and Brown, A.G.A. and Matijevič, G. and Monari, G. and Cantat-Gaudin, T. and Weiler, M. and Khan, S. and Miglio, A. and Carrillo, I. and Romero-Gómez, M. and Minchev, I. and de Jong, R.S. and Antoja, T. and Ramos, P. and Steinmetz, M. and Enke, H.: <em>Photo-astrometric distances, extinctions, and astrophysical parameters for Gaia DR2 stars brighter than G = 18</em>, Aug-2019, Astronomy &amp; Astrophysics, Vol. 628, pp. A94, <a href="https://doi.org/10.1051/0004-6361/201935765">https://doi.org/10.1051/0004-6361/201935765</a></li>
+<li>[Anders2022] Anders, F. and Khalatyan, A. and Queiroz, A.B.A. and Chiappini, C. and Ardèvol, J. and Casamiquela, L. and Figueras, F. and Jiménez-Arranz, Ó. and Jordi, C. and Monguió, M. and Romero-Gómez, M. and Altamirano, D. and Antoja, T. and Assaad, R. and Cantat-Gaudin, T. and Castro-Ginard, A. and Enke, H. and Girardi, L. and Guiglion, G. and Khan, S. and Luri, X. and Miglio, A. and Minchev, I. and Ramos, P. and Santiago, B.X. and Steinmetz, M.: <em>Photo-astrometric distances, extinctions, and astrophysical parameters for Gaia EDR3 stars brighter than G = 18.5</em>, Feb-2022, Astronomy &amp; Astrophysics, Vol. 658, pp. A91, <a href="https://doi.org/10.1051/0004-6361/202142369">https://doi.org/10.1051/0004-6361/202142369</a></li>
+<li>[Arras2019] Arras, Philipp and Baltac, Mihai and Ensslin, Torsten A. and Frank, Philipp and Hutschenreuter, Sebastian and Knollmueller, Jakob and Leike, Reimar and Newrzella, Max-Niklas and Platz, Lukas and Reinecke, Martin and Stadler, Julia: <em>NIFTy5: Numerical Information Field Theory v5</em>, 03-2019</li>
+<li>[Arras2022] Arras, Philipp and Frank, Philipp and Haim, Philipp and Knollmüller, Jakob and Leike, Reimar and Reinecke, Martin and Enßlin, Torsten: <em>Variable structures in M87* from space, time and frequency resolved interferometry</em>, Jan-2022, Nature Astronomy, Vol. 6, pp. 259-269, <a href="https://doi.org/10.1038/s41550-021-01548-0">https://doi.org/10.1038/s41550-021-01548-0</a></li>
+<li>[Astropy2013] Astropy Collaboration and Robitaille, Thomas P. and Tollerud, Erik J. and Greenfield, Perry and Droettboom, Michael and Bray, Erik and Aldcroft, Tom and Davis, Matt and Ginsburg, Adam and Price-Whelan, Adrian M. and Kerzendorf, Wolfgang E. and Conley, Alexander and Crighton, Neil and Barbary, Kyle and Muna, Demitri and Ferguson, Henry and Grollier, Frédéric and Parikh, Madhura M. and Nair, Prasanth H. and Unther, Hans M. and Deil, Christoph and Woillez, Julien and Conseil, Simon and Kramer, Roban and Turner, James E.H. and Singer, Leo and Fox, Ryan and Weaver, Benjamin A. and Zabalza, Victor and Edwards, Zachary I. and Azalee Bostroem, K. and Burke, D.J. and Casey, Andrew R. and Crawford, Steven M. and Dencheva, Nadia and Ely, Justin and Jenness, Tim and Labrie, Kathleen and Lim, Pey Lian and Pierfederici, Francesco and Pontzen, Andrew and Ptak, Andy and Refsdal, Brian and Servillat, Mathieu and Streicher, Ole: <em>Astropy: A community Python package for astronomy</em>, Oct-2013, Astronomy &amp; Astrophysics, Vol. 558, pp. A33, <a href="https://doi.org/10.1051/0004-6361/201322068">https://doi.org/10.1051/0004-6361/201322068</a></li>
+<li>[Astropy2018] Astropy Collaboration and Price-Whelan, A.M. and Sipőcz, B.M. and Günther, H.M. and Lim, P.L. and Crawford, S.M. and Conseil, S. and Shupe, D.L. and Craig, M.W. and Dencheva, N. and Ginsburg, A. and VanderPlas, J.T. and Bradley, L.D. and Pérez-Suárez, D. and de Val-Borro, M. and Aldcroft, T.L. and Cruz, K.L. and Robitaille, T.P. and Tollerud, E.J. and Ardelean, C. and Babej, T. and Bach, Y.P. and Bachetti, M. and Bakanov, A.V. and Bamford, S.P. and Barentsen, G. and Barmby, P. and Baumbach, A. and Berry, K.L. and Biscani, F. and Boquien, M. and Bostroem, K.A. and Bouma, L.G. and Brammer, G.B. and Bray, E.M. and Breytenbach, H. and Buddelmeijer, H. and Burke, D.J. and Calderone, G. and Cano Rodr'\iguez, J.L. and Cara, M. and Cardoso, J.V.M. and Cheedella, S. and Copin, Y. and Corrales, L. and Crichton, D. and D'Avella, D. and Deil, C. and Depagne, É. and Dietrich, J.P. and Donath, A. and Droettboom, M. and Earl, N. and Erben, T. and Fabbro, S. and Ferreira, L.A. and Finethy, T. and Fox, R.T. and Garrison, L.H. and Gibbons, S.L.J. and Goldstein, D.A. and Gommers, R. and Greco, J.P. and Greenfield, P. and Groener, A.M. and Grollier, F. and Hagen, A. and Hirst, P. and Homeier, D. and Horton, A.J. and Hosseinzadeh, G. and Hu, L. and Hunkeler, J.S. and Ivezi'c, Ž. and Jain, A. and Jenness, T. and Kanarek, G. and Kendrew, S. and Kern, N.S. and Kerzendorf, W.E. and Khvalko, A. and King, J. and Kirkby, D. and Kulkarni, A.M. and Kumar, A. and Lee, A. and Lenz, D. and Littlefair, S.P. and Ma, Z. and Macleod, D.M. and Mastropietro, M. and McCully, C. and Montagnac, S. and Morris, B.M. and Mueller, M. and Mumford, S.J. and Muna, D. and Murphy, N.A. and Nelson, S. and Nguyen, G.H. and Ninan, J.P. and Nöthe, M. and Ogaz, S. and Oh, S. and Parejko, J.K. and Parley, N. and Pascual, S. and Patil, R. and Patil, A.A. and Plunkett, A.L. and Prochaska, J.X. and Rastogi, T. and Reddy Janga, V. and Sabater, J. and Sakurikar, P. and Seifert, M. and Sherbert, L.E. and Sherwood-Taylor, H. and Shih, A.Y. and Sick, J. and Silbiger, M.T. and Singanamalla, S. and Singer, L.P. and Sladen, P.H. and Sooley, K.A. and Sornarajah, S. and Streicher, O. and Teuben, P. and Thomas, S.W. and Tremblay, G.R. and Turner, J.E.H. and Terrón, V. and van Kerkwijk, M.H. and de la Vega, A. and Watkins, L.L. and Weaver, B.A. and Whitmore, J.B. and Woillez, J. and Zabalza, V. and Astropy Contributors: <em>The Astropy Project: Building an Open-science Project and Status of the v2.0 Core Package</em>, Sep-2018, Astronomical Journal, Vol. 156, Nr. 3, pp. 123, <a href="https://doi.org/10.3847/1538-3881/aabc4f">https://doi.org/10.3847/1538-3881/aabc4f</a></li>
+<li>[Astropy2022] Astropy Collaboration and Price-Whelan, Adrian M. and Lim, Pey Lian and Earl, Nicholas and Starkman, Nathaniel and Bradley, Larry and Shupe, David L. and Patil, Aarya A. and Corrales, Lia and Brasseur, C.E. and Nöthe, Maximilian and Donath, Axel and Tollerud, Erik and Morris, Brett M. and Ginsburg, Adam and Vaher, Eero and Weaver, Benjamin A. and Tocknell, James and Jamieson, William and van Kerkwijk, Marten H. and Robitaille, Thomas P. and Merry, Bruce and Bachetti, Matteo and Günther, H. Moritz and Aldcroft, Thomas L. and Alvarado-Montes, Jaime A. and Archibald, Anne M. and Bódi, Attila and Bapat, Shreyas and Barentsen, Geert and Bazán, Juanjo and Biswas, Manish and Boquien, Médéric and Burke, D.J. and Cara, Daria and Cara, Mihai and Conroy, Kyle E. and Conseil, Simon and Craig, Matthew W. and Cross, Robert M. and Cruz, Kelle L. and D'Eugenio, Francesco and Dencheva, Nadia and Devillepoix, Hadrien A.R. and Dietrich, Jörg P. and Eigenbrot, Arthur Davis and Erben, Thomas and Ferreira, Leonardo and Foreman-Mackey, Daniel and Fox, Ryan and Freij, Nabil and Garg, Suyog and Geda, Robel and Glattly, Lauren and Gondhalekar, Yash and Gordon, Karl D. and Grant, David and Greenfield, Perry and Groener, Austen M. and Guest, Steve and Gurovich, Sebastian and Handberg, Rasmus and Hart, Akeem and Hatfield-Dodds, Zac and Homeier, Derek and Hosseinzadeh, Griffin and Jenness, Tim and Jones, Craig K. and Joseph, Prajwel and Kalmbach, J. Bryce and Karamehmetoglu, Emir and Ka\luszy'nski, Miko\laj and Kelley, Michael S.P. and Kern, Nicholas and Kerzendorf, Wolfgang E. and Koch, Eric W. and Kulumani, Shankar and Lee, Antony and Ly, Chun and Ma, Zhiyuan and MacBride, Conor and Maljaars, Jakob M. and Muna, Demitri and Murphy, N.A. and Norman, Henrik and O'Steen, Richard and Oman, Kyle A. and Pacifici, Camilla and Pascual, Sergio and Pascual-Granado, J. and Patil, Rohit R. and Perren, Gabriel I. and Pickering, Timothy E. and Rastogi, Tanuj and Roulston, Benjamin R. and Ryan, Daniel F. and Rykoff, Eli S. and Sabater, Jose and Sakurikar, Parikshit and Salgado, Jesús and Sanghi, Aniket and Saunders, Nicholas and Savchenko, Volodymyr and Schwardt, Ludwig and Seifert-Eckert, Michael and Shih, Albert Y. and Jain, Anany Shrey and Shukla, Gyanendra and Sick, Jonathan and Simpson, Chris and Singanamalla, Sudheesh and Singer, Leo P. and Singhal, Jaladh and Sinha, Manodeep and Sipőcz, Brigitta M. and Spitler, Lee R. and Stansby, David and Streicher, Ole and Šumak, Jani and Swinbank, John D. and Taranu, Dan S. and Tewary, Nikita and Tremblay, Grant R. and de Val-Borro, Miguel and Van Kooten, Samuel J. and Vasovi'c, Zlatan and Verma, Shresth and de Miranda Cardoso, José Vin'\icius and Williams, Peter K.G. and Wilson, Tom J. and Winkel, Benjamin and Wood-Vasey, W.M. and Xue, Rui and Yoachim, Peter and Zhang, Chen and Zonca, Andrea and Astropy Project Contributors: <em>The Astropy Project: Sustaining and Growing a Community-oriented Open-source Project and the Latest Major Release (v5.0) of the Core Package</em>, Aug-2022, The Astrophysical Journal, Vol. 935, Nr. 2, pp. 167, <a href="https://doi.org/10.3847/1538-4357/ac7c74">https://doi.org/10.3847/1538-4357/ac7c74</a></li>
+<li>[CantatGaudin2022] Tristan Cantat-Gaudin and Morgan Fouesneau and Hans-Walter Rix and Anthony G. A. Brown and Alfred Castro-Ginard and Zuzanna Kostrzewa-Rutkowska and Ronald Drimmel and David W. Hogg and Andrew R. Casey and Shourya Khanna and Semyeong Oh and Adrian M. Price-Whelan and Vasily Belokurov and Andrew K. Saydjari and G. Green: <em>An empirical model of the $\less$i$\greater$Gaia$\less$/i$\greater$ DR3 selection function</em>, Jan-2023, Astronomy &amp; Astrophysics, Vol. 669, pp. A55, <a href="https://doi.org/10.1051/0004-6361/202244784">https://doi.org/10.1051/0004-6361/202244784</a></li>
+<li>[Capitanio2017] Capitanio, L. and Lallement, R. and Vergely, J.L. and Elyajouri, M. and Monreal-Ibero, A.: <em>Three-dimensional mapping of the local interstellar medium with composite data</em>, Oct-2017, Astronomy &amp; Astrophysics, Vol. 606, pp. A65, <a href="https://doi.org/10.1051/0004-6361/201730831">https://doi.org/10.1051/0004-6361/201730831</a></li>
+<li>[Carasco2021] Carrasco, J.M. and Weiler, M. and Jordi, C. and Fabricius, C. and De Angeli, F. and Evans, D.W. and van Leeuwen, F. and Riello, M. and Montegriffo, P.: <em>Internal calibration of Gaia BP/RP low-resolution spectra</em>, Aug-2021, Astronomy &amp; Astrophysics, Vol. 652, pp. A86, <a href="https://doi.org/10.1051/0004-6361/202141249">https://doi.org/10.1051/0004-6361/202141249</a></li>
+<li>[chambers2019] K. C. Chambers and E. A. Magnier and N. Metcalfe and H. A. Flewelling and M. E. Huber and C. Z. Waters and L. Denneau and P. W. Draper and D. Farrow and D. P. Finkbeiner and C. Holmberg and J. Koppenhoefer and P. A. Price and A. Rest and R. P. Saglia and E. F. Schlafly and S. J. Smartt and W. Sweeney and R. J. Wainscoat and W. S. Burgett and S. Chastel and T. Grav and J. N. Heasley and K. W. Hodapp and R. Jedicke and N. Kaiser and R. -P. Kudritzki and G. A. Luppino and R. H. Lupton and D. G. Monet and J. S. Morgan and P. M. Onaka and B. Shiao and C. W. Stubbs and J. L. Tonry and R. White and E. Bañados and E. F. Bell and R. Bender and E. J. Bernard and M. Boegner and F. Boffi and M. T. Botticella and A. Calamida and S. Casertano and W. -P. Chen and X. Chen and S. Cole and N. Deacon and C. Frenk and A. Fitzsimmons and S. Gezari and V. Gibbs and C. Goessl and T. Goggia and R. Gourgue and B. Goldman and P. Grant and E. K. Grebel and N. C. Hambly and G. Hasinger and A. F. Heavens and T. M. Heckman and R. Henderson and T. Henning and M. Holman and U. Hopp and W. -H. Ip and S. Isani and M. Jackson and C. D. Keyes and A. M. Koekemoer and R. Kotak and D. Le and D. Liska and K. S. Long and J. R. Lucey and M. Liu and N. F. Martin and G. Masci and B. McLean and E. Mindel and P. Misra and E. Morganson and D. N. A. Murphy and A. Obaika and G. Narayan and M. A. Nieto-Santisteban and P. Norberg and J. A. Peacock and E. A. Pier and M. Postman and N. Primak and C. Rae and A. Rai and A. Riess and A. Riffeser and H. W. Rix and S. Röser and R. Russel and L. Rutz and E. Schilbach and A. S. B. Schultz and D. Scolnic and L. Strolger and A. Szalay and S. Seitz and E. Small and K. W. Smith and D. R. Soderblom and P. Taylor and R. Thomson and A. N. Taylor and A. R. Thakar and J. Thiel and D. Thilker and D. Unger and Y. Urata and J. Valenti and J. Wagner and T. Walder and F. Walter and S. P. Watters and S. Werner and W. M. Wood-Vasey and R. Wyse: <em>The Pan-STARRS1 Surveys</em>, 2019</li>
+<li>[Chen2018] Li, Linlin and Shen, Shiyin and Hou, Jinliang and Yuan, Haibo and Xiang, Maosheng and Chen, Bingqiu and Huang, Yang and Liu, Xiaowei: <em>Three-dimensional Structure of the Milky Way Dust: Modeling of LAMOST Data</em>, May-2018, The Astrophysical Journal, Vol. 858, Nr. 2, pp. 75, <a href="https://doi.org/10.3847/1538-4357/aabaef">https://doi.org/10.3847/1538-4357/aabaef</a></li>
+<li>[Chen2019] Chen, B. -Q. and Huang, Y. and Yuan, H. -B. and Wang, C. and Fan, D. -W. and Xiang, M. -S. and Zhang, H. -W. and Tian, Z. -J. and Liu, X. -W.: <em>Three-dimensional interstellar dust reddening maps of the Galactic plane</em>, Mar-2019, Monthly Notices of the RAS, Vol. 483, Nr. 4, pp. 4277-4289, <a href="https://doi.org/10.1093/mnras/sty3341">https://doi.org/10.1093/mnras/sty3341</a></li>
+<li>[DeAngeli2022] De Angeli, F. and Weiler, M. and Montegriffo, P. and Evans, D.W. and Riello, M. and Andrae, R. and Carrasco, J.M. and Busso, G. and Burgess, P.W. and Cacciari, C. and Davidson, M. and Harrison, D.L. and Hodgkin, S.T. and Jordi, C. and Osborne, P.J. and Pancino, E. and Altavilla, G. and Barstow, M.A. and Bailer-Jones, C.A.L. and Bellazzini, M. and Brown, A.G.A. and Castellani, M. and Cowell, S. and Delchambre, L. and De Luise, F. and Diener, C. and Fabricius, C. and Fouesneau, M. and Fremat, Y. and Gilmore, G. and Giuffrida, G. and Hambly, N.C. and Hidalgo, S. and Holland, G. and Kostrzewa-Rutkowska, Z. and van Leeuwen, F. and Lobel, A. and Marinoni, S. and Miller, N. and Pagani, C. and Palaversa, L. and Piersimoni, A.M. and Pulone, L. and Ragaini, S. and Rainer, M. and Richards, P.J. and Rixon, G.T. and Ruz-Mieres, D. and Sanna, N. and Sarro, L.M. and Rowell, N. and Sordo, R. and Walton, N.A. and Yoldas, A.: <em>Gaia Data Release 3: Processing and validation of BP/RP low-resolution spectral data</em>, Jun-2022, arXiv e-prints, pp. arXiv:2206.06143, <a href="https://doi.org/10.48550/arXiv.2206.06143">https://doi.org/10.48550/arXiv.2206.06143</a></li>
+<li>[Delchambre2022] Delchambre, L. and Bailer-Jones, C.A.L. and Bellas-Velidis, I. and Drimmel, R. and Garabato, D. and Carballo, R. and Hatzidimitriou, D. and Marshall, D.J. and Andrae, R. and Dafonte, C. and Livanou, E. and Fouesneau, M. and Licata, E.L. and Lindstrom, H.E.P. and Manteiga, M. and Robin, C. and Silvelo, A. and Abreu Aramburu, A. and Alvarez, M.A. and Bakker, J. and Bijaoui, A. and Brouillet, N. and Brugaletta, E. and Burlacu, A. and Casamiquela, L. and Chaoul, L. and Chiavassa, A. and Contursi, G. and Cooper, W.J. and Creevey, O.L. and Dapergolas, A. and de Laverny, P. and Demouchy, C. and Dharmawardena, T.E. and Edvardsson, B. and Fremat, Y. and Garcia-Lario, P. and Garcia-Torres, M. and Gavel, A. and Gomez, A. and Gonzalez-Santamaria, I. and Heiter, U. and Jean-Antoine Piccolo, A. and Kontizas, M. and Kordopatis, G. and Korn, A.J. and Lanzafame, A.C. and Lebreton, Y. and Lobel, A. and Lorca, A. and Magdaleno Romeo, A. and Marocco, F. and Mary, N. and Nicolas, C. and Ordenovic, C. and Pailler, F. and Palicio, P.A. and Pallas-Quintela, L. and Panem, C. and Pichon, B. and Poggio, E. and Recio-Blanco, A. and Riclet, F. and Rybizki, J. and Santovena, R. and Sarro, L.M. and Schultheis, M.S. and Segol, M. and Slezak, I. and Smart, R.L. and Sordo, R. and Soubiran, C. and Suveges, M. and Thevenin, F. and Torralba Elipe, G. and Ulla, A. and Utrilla, E. and Vallenari, A. and van Dillen, E. and Zhao, H. and Zorec, J.: <em>Gaia DR3: Apsis III -- Non-stellar content and source classification</em>, Jun-2022, arXiv e-prints, pp. arXiv:2206.06710, <a href="https://doi.org/10.48550/arXiv.2206.06710">https://doi.org/10.48550/arXiv.2206.06710</a></li>
+<li>[Dharmawardena2022] Dharmawardena, T.E. and Bailer-Jones, C.A.L. and Fouesneau, M. and Foreman-Mackey, D.: <em>Three-dimensional dust density structure of the Orion, Cygnus X, Taurus, and Perseus star-forming regions</em>, Feb-2022, Astronomy &amp; Astrophysics, Vol. 658, pp. A166, <a href="https://doi.org/10.1051/0004-6361/202141298">https://doi.org/10.1051/0004-6361/202141298</a></li>
+<li>[Draine2011] Draine, Bruce T.: <em>Physics of the Interstellar and Intergalactic Medium</em>, 2011</li>
+<li>[Edenhofer2022] Edenhofer, Gordian and Leike, Reimar H. and Frank, Philipp and Enßlin, Torsten A.: <em>Sparse Kernel Gaussian Processes through Iterative Charted Refinement (ICR)</em>, 2022, <a href="https://doi.org/10.48550/ARXIV.2206.10634">https://doi.org/10.48550/ARXIV.2206.10634</a></li>
+<li>[Edenhofer2023NIFTyRE] Edenhofer, Gordian and Frank, Philipp and Leike, Reimar H. and Roth, Jakob and Guerdi, Massin and Enßlin, Torsten A.: <em>Re-Envisioning Numerical Information Field Theory (NIFTy): An Inference Library for Gaussian Processes and Variational Inference</em>, 2023</li>
+<li>[Frank2021] Philipp Frank and Reimar Leike and Torsten A. Enßlin: <em>Geometric Variational Inference</em>, Jul-2021, Entropy, Vol. 23, Nr. 7, pp. 853, <a href="https://doi.org/10.3390/e23070853">https://doi.org/10.3390/e23070853</a></li>
+<li>[Frank2022] Frank, Philipp: <em>Geometric Variational Inference and Its Application to Bayesian Imaging</em>, 2022, Physical Sciences Forum, Vol. 5, Nr. 1, <a href="https://doi.org/10.3390/psf2022005006">https://doi.org/10.3390/psf2022005006</a></li>
+<li>[GaiaCollaboration2022] Gaia Collaboration and Vallenari, A. and Brown, A.G.A. and Prusti, T. and de Bruijne, J.H.J. and Arenou, F. and Babusiaux, C. and Biermann, M. and Creevey, O.L. and Ducourant, C. and Evans, D.W. and Eyer, L. and Guerra, R. and Hutton, A. and Jordi, C. and Klioner, S.A. and Lammers, U.L. and Lindegren, L. and Luri, X. and Mignard, F. and Panem, C. and Pourbaix, D. and Randich, S. and Sartoretti, P. and Soubiran, C. and Tanga, P. and Walton, N.A. and Bailer-Jones, C.A.L. and Bastian, U. and Drimmel, R. and Jansen, F. and Katz, D. and Lattanzi, M.G. and van Leeuwen, F. and Bakker, J. and Cacciari, C. and Castañeda, J. and De Angeli, F. and Fabricius, C. and Fouesneau, M. and Frémat, Y. and Galluccio, L. and Guerrier, A. and Heiter, U. and Masana, E. and Messineo, R. and Mowlavi, N. and Nicolas, C. and Nienartowicz, K. and Pailler, F. and Panuzzo, P. and Riclet, F. and Roux, W. and Seabroke, G.M. and Sordo\orcit, R. and Thévenin, F. and Gracia-Abril, G. and Portell, J. and Teyssier, D. and Altmann, M. and Andrae, R. and Audard, M. and Bellas-Velidis, I. and Benson, K. and Berthier, J. and Blomme, R. and Burgess, P.W. and Busonero, D. and Busso, G. and Cánovas, H. and Carry, B. and Cellino, A. and Cheek, N. and Clementini, G. and Damerdji, Y. and Davidson, M. and de Teodoro, P. and Nuñez Campos, M. and Delchambre, L. and Dell'Oro, A. and Esquej, P. and Fernández-Hernández, J. and Fraile, E. and Garabato, D. and Garc'\ia-Lario, P. and Gosset, E. and Haigron, R. and Halbwachs, J. -L. and Hambly, N.C. and Harrison, D.L. and Hernández, J. and Hestroffer, D. and Hodgkin, S.T. and Holl, B. and Janßen, K. and Jevardat de Fombelle, G. and Jordan, S. and Krone-Martins, A. and Lanzafame, A.C. and Löffler, W. and Marchal, O. and Marrese, P.M. and Moitinho, A. and Muinonen, K. and Osborne, P. and Pancino, E. and Pauwels, T. and Recio-Blanco, A. and Reylé, C. and Riello, M. and Rimoldini, L. and Roegiers, T. and Rybizki, J. and Sarro, L.M. and Siopis, C. and Smith, M. and Sozzetti, A. and Utrilla, E. and van Leeuwen, M. and Abbas, U. and Ábrahám, P. and Abreu Aramburu, A. and Aerts, C. and Aguado, J.J. and Ajaj, M. and Aldea-Montero, F. and Altavilla, G. and Álvarez, M.A. and Alves, J. and Anders, F. and Anderson, R.I. and Anglada Varela, E. and Antoja, T. and Baines, D. and Baker, S.G. and Balaguer-Núñez, L. and Balbinot, E. and Balog, Z. and Barache, C. and Barbato, D. and Barros, M. and Barstow, M.A. and Bartolomé, S. and Bassilana, J. -L. and Bauchet, N. and Becciani, U. and Bellazzini, M. and Berihuete, A. and Bernet, M. and Bertone, S. and Bianchi, L. and Binnenfeld, A. and Blanco-Cuaresma, S. and Blazere, A. and Boch, T. and Bombrun, A. and Bossini, D. and Bouquillon, S. and Bragaglia, A. and Bramante, L. and Breedt, E. and Bressan, A. and Brouillet, N. and Brugaletta, E. and Bucciarelli, B. and Burlacu, A. and Butkevich, A.G. and Buzzi, R. and Caffau, E. and Cancelliere, R. and Cantat-Gaudin, T. and Carballo, R. and Carlucci, T. and Carnerero, M.I. and Carrasco, J.M. and Casamiquela, L. and Castellani, M. and Castro-Ginard, A. and Chaoul, L. and Charlot, P. and Chemin, L. and Chiaramida, V. and Chiavassa, A. and Chornay, N. and Comoretto, G. and Contursi, G. and Cooper, W.J. and Cornez, T. and Cowell, S. and Crifo, F. and Cropper, M. and Crosta, M. and Crowley, C. and Dafonte, C. and Dapergolas, A. and David, M. and David, P. and de Laverny, P. and De Luise, F. and De March, R. and De Ridder, J. and de Souza, R. and de Torres, A. and del Peloso, E.F. and del Pozo, E. and Delbo, M. and Delgado, A. and Delisle, J. -B. and Demouchy, C. and Dharmawardena, T.E. and Di Matteo, P. and Diakite, S. and Diener, C. and Distefano, E. and Dolding, C. and Edvardsson, B. and Enke, H. and Fabre, C. and Fabrizio, M. and Faigler, S. and Fedorets, G. and Fernique, P. and Fienga, A. and Figueras, F. and Fournier, Y. and Fouron, C. and Fragkoudi, F. and Gai, M. and Garcia-Gutierrez, A. and Garcia-Reinaldos, M. and Garc'\ia-Torres, M. and Garofalo, A. and Gavel, A. and Gavras, P. and Gerlach, E. and Geyer, R. and Giacobbe, P. and Gilmore, G. and Girona, S. and Giuffrida, G. and Gomel, R. and Gomez, A. and González-Núñez, J. and González-Santamar'\ia, I. and González-Vidal, J.J. and Granvik, M. and Guillout, P. and Guiraud, J. and Gutiérrez-Sánchez, R. and Guy, L.P. and Hatzidimitriou, D. and Hauser, M. and Haywood, M. and Helmer, A. and Helmi, A. and Sarmiento, M.H. and Hidalgo, S.L. and Hilger, T. and H\ladczuk, N. and Hobbs, D. and Holland, G. and Huckle, H.E. and Jardine, K. and Jasniewicz, G. and Jean-Antoine Piccolo, A. and Jiménez-Arranz, Ó. and Jorissen, A. and Juaristi Campillo, J. and Julbe, F. and Karbevska, L. and Kervella, P. and Khanna, S. and Kontizas, M. and Kordopatis, G. and Korn, A.J. and Kóspál, Á and Kostrzewa-Rutkowska, Z. and Kruszy'nska, K. and Kun, M. and Laizeau, P. and Lambert, S. and Lanza, A.F. and Lasne, Y. and Le Campion, J. -F. and Lebreton, Y. and Lebzelter, T. and Leccia, S. and Leclerc, N. and Lecoeur-Taibi, I. and Liao, S. and Licata, E.L. and Lindstr\om, H.E.P. and Lister, T.A. and Livanou, E. and Lobel, A. and Lorca, A. and Loup, C. and Madrero Pardo, P. and Magdaleno Romeo, A. and Managau, S. and Mann, R.G. and Manteiga, M. and Marchant, J.M. and Marconi, M. and Marcos, J. and Marcos Santos, M.M.S. and Mar'\in Pina, D. and Marinoni, S. and Marocco, F. and Marshall, D.J. and Polo, L. Martin and Mart'\in-Fleitas, J.M. and Marton, G. and Mary, N. and Masip, A. and Massari, D. and Mastrobuono-Battisti, A. and Mazeh, T. and McMillan, P.J. and Messina, S. and Michalik, D. and Millar, N.R. and Mints, A. and Molina, D. and Molinaro, R. and Molnár, L. and Monari, G. and Monguió, M. and Montegriffo, P. and Montero, A. and Mor, R. and Mora, A. and Morbidelli, R. and Morel, T. and Morris, D. and Muraveva, T. and Murphy, C.P. and Musella, I. and Nagy, Z. and Noval, L. and Ocaña, F. and Ogden, A. and Ordenovic, C. and Osinde, J.O. and Pagani, C. and Pagano, I. and Palaversa, L. and Palicio, P.A. and Pallas-Quintela, L. and Panahi, A. and Payne-Wardenaar, S. and Peñalosa Esteller, X. and Penttilä, A. and Pichon, B. and Piersimoni, A.M. and Pineau, F. -X. and Plachy, E. and Plum, G. and Poggio, E. and Prša, A. and Pulone, L. and Racero, E. and Ragaini, S. and Rainer, M. and Raiteri, C.M. and Rambaux, N. and Ramos, P. and Ramos-Lerate, M. and Re Fiorentin, P. and Regibo, S. and Richards, P.J. and Rios Diaz, C. and Ripepi, V. and Riva, A. and Rix, H. -W. and Rixon, G. and Robichon, N. and Robin, A.C. and Robin, C. and Roelens, M. and Rogues, H.R.O. and Rohrbasser, L. and Romero-Gómez, M. and Rowell, N. and Royer, F. and Ruz Mieres, D. and Rybicki, K.A. and Sadowski, G. and Sáez Núñez, A. and Sagristà Sellés, A. and Sahlmann, J. and Salguero, E. and Samaras, N. and Sanchez Gimenez, V. and Sanna, N. and Santoveña, R. and Sarasso, M. and Schultheis, M. and Sciacca, E. and Segol, M. and Segovia, J.C. and Ségransan, D. and Semeux, D. and Shahaf, S. and Siddiqui, H.I. and Siebert, A. and Siltala, L. and Silvelo, A. and Slezak, E. and Slezak, I. and Smart, R.L. and Snaith, O.N. and Solano, E. and Solitro, F. and Souami, D. and Souchay, J. and Spagna, A. and Spina, L. and Spoto, F. and Steele, I.A. and Steidelmüller, H. and Stephenson, C.A. and Süveges, M. and Surdej, J. and Szabados, L. and Szegedi-Elek, E. and Taris, F. and Taylo, M.B. and Teixeira, R. and Tolomei, L. and Tonello, N. and Torra, F. and Torra, J. and Torralba Elipe, G. and Trabucchi, M. and Tsounis, A.T. and Turon, C. and Ulla, A. and Unger, N. and Vaillant, M.V. and van Dillen, E. and van Reeven, W. and Vanel, O. and Vecchiato, A. and Viala, Y. and Vicente, D. and Voutsinas, S. and Weiler, M. and Wevers, T. and Wyrzykowski, L. and Yoldas, A. and Yvard, P. and Zhao, H. and Zorec, J. and Zucker, S. and Zwitter, T.: <em>Gaia Data Release 3: Summary of the content and survey properties</em>, Jul-2022, arXiv e-prints, pp. arXiv:2208.00211, <a href="https://doi.org/10.48550/arXiv.2208.00211">https://doi.org/10.48550/arXiv.2208.00211</a></li>
+<li>[Gorski2005] Górski, K.M. and Hivon, E. and Banday, A.J. and : <em>HEALPix: A Framework for High-Resolution Discretization and Fast Analysis of Data Distributed on the Sphere</em>, Apr-2005, The Astrophysical Journal, Vol. 622, pp. 759-771, <a href="https://doi.org/10.1086/427976">https://doi.org/10.1086/427976</a></li>
+<li>[Green2017] Green, Gregory M. and Schlafly, Edward F. and Finkbeiner, Douglas and Rix, Hans-Walter and Martin, Nicolas and Burgett, William and Draper, Peter W. and Flewelling, Heather and Hodapp, Klaus and Kaiser, Nicholas and Kudritzki, Rolf-Peter and Magnier, Eugene A. and Metcalfe, Nigel and Tonry, John L. and Wainscoat, Richard and Waters, Christopher: <em>Galactic reddening in 3D from stellar photometry - an improved map</em>, Jul-2018, Monthly Notices of the RAS, Vol. 478, Nr. 1, pp. 651-666, <a href="https://doi.org/10.1093/mnras/sty1008">https://doi.org/10.1093/mnras/sty1008</a></li>
+<li>[Green2018] Green, Gregory M.: <em>dustmaps: A Python interface for maps of interstellar dust</em>, Jun-2018, The Journal of Open Source Software, Vol. 3, Nr. 26, pp. 695, <a href="https://doi.org/10.21105/joss.00695">https://doi.org/10.21105/joss.00695</a></li>
+<li>[Green2018Dustmaps] Green, Gregory M.: <em>dustmaps: A Python interface for maps of interstellar dust</em>, Jun-2018, The Journal of Open Source Software, Vol. 3, Nr. 26, pp. 695, <a href="https://doi.org/10.21105/joss.00695">https://doi.org/10.21105/joss.00695</a></li>
+<li>[Green2019] Green, Gregory M. and Schlafly, Edward and Zucker, Catherine and Speagle, Joshua S. and Finkbeiner, Douglas: <em>A 3D Dust Map Based on Gaia, Pan-STARRS 1, and 2MASS</em>, Dec-2019, The Astrophysical Journal, Vol. 887, Nr. 1, pp. 93, <a href="https://doi.org/10.3847/1538-4357/ab5362">https://doi.org/10.3847/1538-4357/ab5362</a></li>
+<li>[Harris2020] Charles R. Harris and K. Jarrod Millman and St'efan J.: <em>Array programming with NumPy</em>, Sep-2020, Nature, Vol. 585, Nr. 7825, pp. 357--362, <a href="https://doi.org/10.1038/s41586-020-2649-2">https://doi.org/10.1038/s41586-020-2649-2</a></li>
+<li>[Hoffman2011] Hoffman, Matthew D. and Gelman, Andrew: <em>The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo</em>, Jan-2014, J. Mach. Learn. Res., Vol. 15, Nr. 1, pp. 1593–1623</li>
+<li>[Hutschenreuter2022] Hutschenreuter, S. and Anderson, C.S. and Betti, S. and Bower, G.C. and Brown, J. -A. and Brüggen, M. and Carretti, E. and Clarke, T. and Clegg, A. and Costa, A. and Croft, S. and Van Eck, C. and Gaensler, B.M. and de Gasperin, F. and Haverkorn, M. and Heald, G. and Hull, C.L.H. and Inoue, M. and Johnston-Hollitt, M. and Kaczmarek, J. and Law, C. and Ma, Y.K. and MacMahon, D. and Mao, S.A. and Riseley, C. and Roy, S. and Shanahan, R. and Shimwell, T. and Stil, J. and Sobey, C. and O'Sullivan, S.P. and Tasse, C. and Vacca, V. and Vernstrom, T. and Williams, P.K.G. and Wright, M. and Enßlin, T.A.: <em>The Galactic Faraday rotation sky 2020</em>, Jan-2022, Astronomy &amp; Astrophysics, Vol. 657, pp. A43, <a href="https://doi.org/10.1051/0004-6361/202140486">https://doi.org/10.1051/0004-6361/202140486</a></li>
+<li>[Hutschenreuter2023] Hutschenreuter, Sebastian and Haverkorn, Marijke and Frank, Philipp and Raycheva, Nergis C. and Enßlin, Torsten A.: <em>Disentangling the Faraday rotation sky</em>, Apr-2023, arXiv e-prints, pp. arXiv:2304.12350, <a href="https://doi.org/10.48550/arXiv.2304.12350">https://doi.org/10.48550/arXiv.2304.12350</a></li>
+<li>[Jax2018] James Bradbury and Roy Frostig and Peter Hawkins and Matthew James Johnson and Chris Leary and Dougal Maclaurin and George Necula and Adam Paszke and Jake VanderPlas and Skye Wanderman-Milne and Qiao Zhang: <em>JAX: composable transformations of Python+NumPy programs</em>, 2018, <a href="http://github.com/google/jax">http://github.com/google/jax</a></li>
+<li>[Knollmueller2019] Knollmüller, Jakob and Enßlin, Torsten A.: <em>Metric Gaussian Variational Inference</em>, 2019, <a href="https://doi.org/10.48550/ARXIV.1901.11033">https://doi.org/10.48550/ARXIV.1901.11033</a></li>
+<li>[Kuhn2021] Kuhn, Michael A. and de Souza, Rafael S. and Krone-Martins, Alberto and Castro-Ginard, Alfred and Ishida, Emille E.O. and Povich, Matthew S. and Hillenbrand, Lynne A. and COIN Collaboration: <em>SPICY: The Spitzer/IRAC Candidate YSO Catalog for the Inner Galactic Midplane</em>, Jun-2021, Astrophysical Journal, Supplement, Vol. 254, Nr. 2, pp. 33, <a href="https://doi.org/10.3847/1538-4365/abe465">https://doi.org/10.3847/1538-4365/abe465</a></li>
+<li>[Kuhn2023YSO] Kuhn, Mike: <em>personal communication</em>, 2023-05-1</li>
+<li>[Lallement2018] Lallement, R. and Capitanio, L. and Ruiz-Dern, L. and Danielski, C. and Babusiaux, C. and Vergely, L. and Elyajouri, M. and Arenou, F. and Leclerc, N.: <em>Three-dimensional maps of interstellar dust in the Local Arm: using Gaia, 2MASS, and APOGEE-DR14</em>, Aug-2018, Astronomy &amp; Astrophysics, Vol. 616, pp. A132, <a href="https://doi.org/10.1051/0004-6361/201832832">https://doi.org/10.1051/0004-6361/201832832</a></li>
+<li>[Lallement2019] Lallement, R. and Babusiaux, C. and Vergely, J.L. and Katz, D. and Arenou, F. and Valette, B. and Hottier, C. and Capitanio, L.: <em>Gaia-2MASS 3D maps of Galactic interstellar dust within 3 kpc</em>, May-2019, Astronomy &amp; Astrophysics, Vol. 625, pp. A135, <a href="https://doi.org/10.1051/0004-6361/201834695">https://doi.org/10.1051/0004-6361/201834695</a></li>
+<li>[Lallement2022] Lallement, R. and Vergely, J.L. and Babusiaux, C. and Cox, N.L.J.: <em>Updated Gaia-2MASS 3D maps of Galactic interstellar dust</em>, May-2022, Astronomy &amp; Astrophysics, Vol. 661, pp. A147, <a href="https://doi.org/10.1051/0004-6361/202142846">https://doi.org/10.1051/0004-6361/202142846</a></li>
+<li>[Leike2019] Leike, RH and Enßlin, TA: <em>Charting nearby dust clouds using Gaia data only</em>, 2019, Astronomy &amp; Astrophysics, Vol. 631, pp. A32</li>
+<li>[Leike2020] Leike,R.L. and Glatzle,M. and Enßlin,T.A.: <em>Resolving nearby dust clouds</em>, 2020, Astronomy &amp; Astrophysics, Vol. 639, pp. A138</li>
+<li>[Leike2022] Leike, R.H. and Edenhofer, G. and Knollmüller, J. and Alig, C. and Frank, P. and Enßlin, T.A.: <em>The Galactic 3D large-scale dust distribution via Gaussian process regression on spherical coordinates</em>, Apr-2022, arXiv e-prints, pp. arXiv:2204.11715, <a href="https://doi.org/10.48550/arXiv.2204.11715">https://doi.org/10.48550/arXiv.2204.11715</a></li>
+<li>[Marton2022] Marton, Gábor and Ábrahám, Péter and Rimoldini, Lorenzo and Audard, Marc and Kun, Mária and Nagy, Zsófia and Kóspál, Ágnes and Szabados, László and Holl, Berry and Gavras, Panagiotis and Mowlavi, Nami and Nienartowicz, Krzysztof and Jevardat de Fombelle, Grégory and Lecoeur-Taïbi, Isabelle and Karbevska, Lea and Garcia-Lario, Pedro and Eyer, Laurent: <em>Gaia Data Release 3 Validating the classification of variable Young Stellar Object candidates</em>, Jun-2022, arXiv e-prints, pp. arXiv:2206.05796, <a href="https://doi.org/10.48550/arXiv.2206.05796">https://doi.org/10.48550/arXiv.2206.05796</a></li>
+<li>[Mertsch2023] Mertsch, P. and Phan, V.H.M.: <em>Bayesian inference of three-dimensional gas maps. II. Galactic HI</em>, Mar-2023, Astronomy &amp; Astrophysics, Vol. 671, pp. A54, <a href="https://doi.org/10.1051/0004-6361/202243326">https://doi.org/10.1051/0004-6361/202243326</a></li>
+<li>[Montegriffo2022] Montegriffo, P. and De Angeli, F. and Andrae, R. and Riello, M. and Pancino, E. and Sanna, N. and Bellazzini, M. and Evans, D.W. and Carrasco, J.M. and Sordo, R. and Busso, G. and Cacciari, C. and Jordi, C. and van Leeuwen, F. and Vallenari, A. and Altavilla, G. and Barstow, M.A. and Brown, A.G.A. and Burgess, P.W. and Castellani, M. and Cowell, S. and Davidson, M. and De Luise, F. and Delchambre, L. and Diener, C. and Fabricius, C. and Fremat, Y. and Fouesneau, M. and Gilmore, G. and Giuffrida, G. and Hambly, N.C. and Harrison, D.L. and Hidalgo, S. and Hodgkin, S.T. and Holland, G. and Marinoni, S. and Osborne, P.J. and Pagani, C. and Palaversa, L. and Piersimoni, A.M. and Pulone, L. and Ragaini, S. and Rainer, M. and Richards, P.J. and Rowell, N. and Ruz-Mieres, D. and Sarro, L.M. and Walton, N.A. and Yoldas, A.: <em>Gaia Data Release 3: External calibration of BP/RP low-resolution spectroscopic data</em>, Jun-2022, arXiv e-prints, pp. arXiv:2206.06205, <a href="https://doi.org/10.48550/arXiv.2206.06205">https://doi.org/10.48550/arXiv.2206.06205</a></li>
+<li>[Planck2013] Planck Collaboration and Abergel, A. and Ade, P.A.R. and Aghanim, N. and Alves, M.I.R. and Aniano, G. and Armitage-Caplan, C. and Arnaud, M. and Ashdown, M. and Atrio-Barandela, F. and Aumont, J. and Baccigalupi, C. and Banday, A.J. and Barreiro, R.B. and Bartlett, J.G. and Battaner, E. and Benabed, K. and Beno^\it, A. and Benoit-Lévy, A. and Bernard, J. -P. and Bersanelli, M. and Bielewicz, P. and Bobin, J. and Bock, J.J. and Bonaldi, A. and Bond, J.R. and Borrill, J. and Bouchet, F.R. and Boulanger, F. and Bridges, M. and Bucher, M. and Burigana, C. and Butler, R.C. and Cardoso, J. -F. and Catalano, A. and Chamballu, A. and Chary, R. -R. and Chiang, H.C. and Chiang, L. -Y. and Christensen, P.R. and Church, S. and Clemens, M. and Clements, D.L. and Colombi, S. and Colombo, L.P.L. and Combet, C. and Couchot, F. and Coulais, A. and Crill, B.P. and Curto, A. and Cuttaia, F. and Danese, L. and Davies, R.D. and Davis, R.J. and de Bernardis, P. and de Rosa, A. and de Zotti, G. and Delabrouille, J. and Delouis, J. -M. and Désert, F. -X. and Dickinson, C. and Diego, J.M. and Dole, H. and Donzelli, S. and Doré, O. and Douspis, M. and Draine, B.T. and Dupac, X. and Efstathiou, G. and Enßlin, T.A. and Eriksen, H.K. and Falgarone, E. and Finelli, F. and Forni, O. and Frailis, M. and Fraisse, A.A. and Franceschi, E. and Galeotta, S. and Ganga, K. and Ghosh, T. and Giard, M. and Giardino, G. and Giraud-Héraud, Y. and González-Nuevo, J. and Górski, K.M. and Gratton, S. and Gregorio, A. and Grenier, I.A. and Gruppuso, A. and Guillet, V. and Hansen, F.K. and Hanson, D. and Harrison, D.L. and Helou, G. and Henrot-Versillé, S. and Hernández-Monteagudo, C. and Herranz, D. and Hildebrandt, S.R. and Hivon, E. and Hobson, M. and Holmes, W.A. and Hornstrup, A. and Hovest, W. and Huffenberger, K.M. and Jaffe, A.H. and Jaffe, T.R. and Jewell, J. and Joncas, G. and Jones, W.C. and Juvela, M. and Keihänen, E. and Keskitalo, R. and Kisner, T.S. and Knoche, J. and Knox, L. and Kunz, M. and Kurki-Suonio, H. and Lagache, G. and Lähteenmäki, A. and Lamarre, J. -M. and Lasenby, A. and Laureijs, R.J. and Lawrence, C.R. and Leonardi, R. and León-Tavares, J. and Lesgourgues, J. and Levrier, F. and Liguori, M. and Lilje, P.B. and Linden-V\ornle, M. and López-Caniego, M. and Lubin, P.M. and Mac'\ias-Pérez, J.F. and Maffei, B. and Maino, D. and Mandolesi, N. and Maris, M. and Marshall, D.J. and Martin, P.G. and Mart'\inez-González, E. and Masi, S. and Massardi, M. and Matarrese, S. and Matthai, F. and Mazzotta, P. and McGehee, P. and Melchiorri, A. and Mendes, L. and Mennella, A. and Migliaccio, M. and Mitra, S. and Miville-Desch^enes, M. -A. and Moneti, A. and Montier, L. and Morgante, G. and Mortlock, D. and Munshi, D. and Murphy, J.A. and Naselsky, P. and Nati, F. and Natoli, P. and Netterfield, C.B. and N\orgaard-Nielsen, H.U. and Noviello, F. and Novikov, D. and Novikov, I. and Osborne, S. and Oxborrow, C.A. and Paci, F. and Pagano, L. and Pajot, F. and Paladini, R. and Paoletti, D. and Pasian, F. and Patanchon, G. and Perdereau, O. and Perotto, L. and Perrotta, F. and Piacentini, F. and Piat, M. and Pierpaoli, E. and Pietrobon, D. and Plaszczynski, S. and Pointecouteau, E. and Polenta, G. and Ponthieu, N. and Popa, L. and Poutanen, T. and Pratt, G.W. and Prézeau, G. and Prunet, S. and Puget, J. -L. and Rachen, J.P. and Reach, W.T. and Rebolo, R. and Reinecke, M. and Remazeilles, M. and Renault, C. and Ricciardi, S. and Riller, T. and Ristorcelli, I. and Rocha, G. and Rosset, C. and Roudier, G. and Rowan-Robinson, M. and Rubiño-Mart'\in, J.A. and Rusholme, B. and Sandri, M. and Santos, D. and Savini, G. and Scott, D. and Seiffert, M.D. and Shellard, E.P.S. and Spencer, L.D. and Starck, J. -L. and Stolyarov, V. and Stompor, R. and Sudiwala, R. and Sunyaev, R. and Sureau, F. and Sutton, D. and Suur-Uski, A. -S. and Sygnet, J. -F. and Tauber, J.A. and Tavagnacco, D. and Terenzi, L. and Toffolatti, L. and Tomasi, M. and Tristram, M. and Tucci, M. and Tuovinen, J. and Türler, M. and Umana, G. and Valenziano, L. and Valiviita, J. and Van Tent, B. and Verstraete, L. and Vielva, P. and Villa, F. and Vittorio, N. and Wade, L.A. and Wandelt, B.D. and Welikala, N. and Ysard, N. and Yvon, D. and Zacchei, A. and Zonca, A.: <em>Planck 2013 results. XI. All-sky model of thermal dust emission</em>, Nov-2014, Astronomy &amp; Astrophysics, Vol. 571, pp. A11, <a href="https://doi.org/10.1051/0004-6361/201323195">https://doi.org/10.1051/0004-6361/201323195</a></li>
+<li>[Popescu2002] Popescu, Cristina C. and Tuffs, Richard J.: <em>The percentage of stellar light re-radiated by dust in late-type Virgo Cluster galaxies</em>, Sep-2002, Monthly Notices of the RAS, Vol. 335, Nr. 2, pp. L41-L44, <a href="https://doi.org/10.1046/j.1365-8711.2002.05881.x">https://doi.org/10.1046/j.1365-8711.2002.05881.x</a></li>
+<li>[Queiroz2023] Queiroz, Anna B.A. and Anders, Friedrich and Chiappini, Cristina and Khalatyan, Arman and Santiago, Basilio X. and Nepal, Samir and Steinmetz, Matthias and Gallart, Carme and Valentini, Marica and Dal Ponte, Marina and Barbuy, Beatriz and Pérez-Villegas, Angeles and Masseron, Thomas and Fernández-Trincado, José G. and Khoperskov, Sergey and Minchev, Ivan and Fernández-Alvar, Emma and Lane, Richard R. and Nitschelm, Christian: <em>StarHorse results for spectroscopic surveys + Gaia DR3: Chrono-chemical populations in the solar vicinity, the genuine thick disk, and young-alpha rich stars</em>, Mar-2023, arXiv e-prints, pp. arXiv:2303.09926, <a href="https://doi.org/10.48550/arXiv.2303.09926">https://doi.org/10.48550/arXiv.2303.09926</a></li>
+<li>[Rezaei2017] Rezaei Kh., S. and Bailer-Jones, C.A.L. and Hanson, R.J. and Fouesneau, M.: <em>Inferring the three-dimensional distribution of dust in the Galaxy with a non-parametric method . Preparing for Gaia</em>, Feb-2017, Astronomy &amp; Astrophysics, Vol. 598, pp. A125, <a href="https://doi.org/10.1051/0004-6361/201628885">https://doi.org/10.1051/0004-6361/201628885</a></li>
+<li>[Rezaei2018] Rezaei Kh., Sara and Bailer-Jones, Coryn A.L. and Hogg, David W. and Schultheis, Mathias: <em>Detection of the Milky Way spiral arms in dust from 3D mapping</em>, Oct-2018, Astronomy &amp; Astrophysics, Vol. 618, pp. A168, <a href="https://doi.org/10.1051/0004-6361/201833284">https://doi.org/10.1051/0004-6361/201833284</a></li>
+<li>[Rezaei2020] Rezaei Kh., Sara and Bailer-Jones, Coryn A.L. and Soler, Juan D. and Zari, Eleonora: <em>Detailed 3D structure of Orion A in dust with Gaia DR2</em>, Nov-2020, Astronomy &amp; Astrophysics, Vol. 643, pp. A151, <a href="https://doi.org/10.1051/0004-6361/202038708">https://doi.org/10.1051/0004-6361/202038708</a></li>
+<li>[Rezaei2022] Rezaei Kh., Sara and Kainulainen, Jouni: <em>Three-dimensional Shape Explains Star Formation Mystery of California and Orion A</em>, May-2022, Astrophysical Journal, Letters, Vol. 930, Nr. 2, pp. L22, <a href="https://doi.org/10.3847/2041-8213/ac67db">https://doi.org/10.3847/2041-8213/ac67db</a></li>
+<li>[Rezende2015] Rezende, Danilo Jimenez and Mohamed, Shakir: <em>Variational Inference with Normalizing Flows</em>, 2015, <a href="http://proceedings.mlr.press/v37/rezende15.html">http://proceedings.mlr.press/v37/rezende15.html</a></li>
+<li>[Roth2023DirectionDependentCalibration] Roth, Jakob and Arras, Philipp and Reinecke, Martin and Perley, Richard A. and Westermann, Rüdiger and Enßlin, Torsten A.: <em>Bayesian radio interferometric imaging with direction-dependent calibration</em>, May-2023, arXiv e-prints, pp. arXiv:2305.05489, <a href="https://doi.org/10.48550/arXiv.2305.05489">https://doi.org/10.48550/arXiv.2305.05489</a></li>
+<li>[Roth2023FastCadenceHighContrastImaging] Roth, J. and Li Causi, G. and Testa, V. and Arras, P. and Ensslin, T.A.: <em>Fast-cadence High-contrast Imaging with Information Field Theory</em>, Mar-2023, Astronomical Journal, Vol. 165, Nr. 3, pp. 86, <a href="https://doi.org/10.3847/1538-3881/acabc1">https://doi.org/10.3847/1538-3881/acabc1</a></li>
+<li>[Schlafly2019] Schlafly, Edward F. and Meisner, Aaron M. and Green, Gregory M.: <em>The unWISE Catalog: Two Billion Infrared Sources from Five Years of WISE Imaging</em>, Feb-2019, Astrophysical Journal, Supplement, Vol. 240, Nr. 2, pp. 30, <a href="https://doi.org/10.3847/1538-4365/aafbea">https://doi.org/10.3847/1538-4365/aafbea</a></li>
+<li>[Selig2013] Selig, Marco and Bell, Michael R. and Junklewitz, Henrik and Oppermann, Niels and Reinecke, Martin and Greiner, Maksim and Pachajoa, Carlos and Ensslin, Torsten A.: <em>NIFTY: A versatile Python library for signal inference</em>, 02-2013</li>
+<li>[Skrutskie2006] Skrutskie, M.F. and Cutri, R.M. and Stiening, R. and Weinberg, M.D. and Schneider, S. and Carpenter, J.M. and Beichman, C. and Capps, R. and Chester, T. and Elias, J. and Huchra, J. and Liebert, J. and Lonsdale, C. and Monet, D.G. and Price, S. and Seitzer, P. and Jarrett, T. and Kirkpatrick, J.D. and Gizis, J.E. and Howard, E. and Evans, T. and Fowler, J. and Fullmer, L. and Hurt, R. and Light, R. and Kopan, E.L. and Marsh, K.A. and McCallon, H.L. and Tam, R. and Van Dyk, S. and Wheelock, S.: <em>The Two Micron All Sky Survey (2MASS)</em>, Feb-2006, Astronomical Journal, Vol. 131, Nr. 2, pp. 1163-1183, <a href="https://doi.org/10.1086/498708">https://doi.org/10.1086/498708</a></li>
+<li>[Steiniger2017] Steininger, Theo and Dixit, Jait and Frank, Philipp and Greiner, Maksim and Hutschenreuter, Sebastian and Knollmüller, Jakob and Leike, Reimar and Porqueres, Natalia and Pumpe, Daniel and Reinecke, Martin and others: <em>NIFTy 3-Numerical Information Field Theory-A Python framework for multicomponent signal inference on HPC clusters</em>, 2017, arXiv preprint arXiv:1708.01073</li>
+<li>[Tsouros2023] Tsouros, Alexandros and Edenhofer, Gordian and Enßlin, Torsten and Mastorakis, Michalis and Pavlidou, Vasiliki: <em>Reconstructing Galactic magnetic fields from local measurements for backtracking ultra-high-energy cosmic rays</em>, Mar-2023, arXiv e-prints, pp. arXiv:2303.10099, <a href="https://doi.org/10.48550/arXiv.2303.10099">https://doi.org/10.48550/arXiv.2303.10099</a></li>
+<li>[Vergely2022] Vergely, J.L. and Lallement, R. and Cox, N.L.J.: <em>Three-dimensional extinction maps: Inverting inter-calibrated extinction catalogues</em>, Aug-2022, Astronomy &amp; Astrophysics, Vol. 664, pp. A174, <a href="https://doi.org/10.1051/0004-6361/202243319">https://doi.org/10.1051/0004-6361/202243319</a></li>
+<li>[Wang2022] Wang, Chun and Huang, Yang and Yuan, Haibo and Zhang, Huawei and Xiang, Maosheng and Liu, Xiaowei: <em>The Value-added Catalog for LAMOST DR8 Low-resolution Spectra</em>, Apr-2022, Astrophysical Journal, Supplement, Vol. 259, Nr. 2, pp. 51, <a href="https://doi.org/10.3847/1538-4365/ac4df7">https://doi.org/10.3847/1538-4365/ac4df7</a></li>
+<li>[Winston2020] Winston, Elaine and Hora, Joseph L. and Tolls, Volker: <em>A Census of Star Formation in the Outer Galaxy. II. The GLIMPSE360 Field</em>, Aug-2020, Astronomical Journal, Vol. 160, Nr. 2, pp. 68, <a href="https://doi.org/10.3847/1538-3881/ab99c8">https://doi.org/10.3847/1538-3881/ab99c8</a></li>
+<li>[Wright2010] Wright, Edward L. and Eisenhardt, Peter R.M. and Mainzer, Amy K. and Ressler, Michael E. and Cutri, Roc M. and Jarrett, Thomas and Kirkpatrick, J. Davy and Padgett, Deborah and McMillan, Robert S. and Skrutskie, Michael and Stanford, S.A. and Cohen, Martin and Walker, Russell G. and Mather, John C. and Leisawitz, David and Gautier, Thomas N., III and McLean, Ian and Benford, Dominic and Lonsdale, Carol J. and Blain, Andrew and Mendez, Bryan and Irace, William R. and Duval, Valerie and Liu, Fengchuan and Royer, Don and Heinrichsen, Ingolf and Howard, Joan and Shannon, Mark and Kendall, Martha and Walsh, Amy L. and Larsen, Mark and Cardon, Joel G. and Schick, Scott and Schwalm, Mark and Abid, Mohamed and Fabinsky, Beth and Naes, Larry and Tsai, Chao-Wei: <em>The Wide-field Infrared Survey Explorer (WISE): Mission Description and Initial On-orbit Performance</em>, Dec-2010, Astronomical Journal, Vol. 140, Nr. 6, pp. 1868-1881, <a href="https://doi.org/10.1088/0004-6256/140/6/1868">https://doi.org/10.1088/0004-6256/140/6/1868</a></li>
+<li>[Xiang2022] Xiang, Maosheng and Rix, Hans-Walter and Ting, Yuan-Sen and Kudritzki, Rolf-Peter and Conroy, Charlie and Zari, Eleonora and Shi, Jian-Rong and Przybilla, Norbert and Ramirez-Tannus, Maria and Tkachenko, Andrew and Gebruers, Sarah and Liu, Xiao-Wei: <em>Stellar labels for hot stars from low-resolution spectra. I. The HotPayne method and results for 330 000 stars from LAMOST DR6</em>, Jun-2022, Astronomy &amp; Astrophysics, Vol. 662, pp. A66, <a href="https://doi.org/10.1051/0004-6361/202141570">https://doi.org/10.1051/0004-6361/202141570</a></li>
+<li>[Zhang2023] Zhang, Xiangyu and Green, Gregory M. and Rix, Hans-Walter: <em>Parameters of 220 million stars from Gaia BP/RP spectra</em>, Mar-2023, arXiv e-prints, pp. arXiv:2303.03420, <a href="https://doi.org/10.48550/arXiv.2303.03420">https://doi.org/10.48550/arXiv.2303.03420</a></li>
+<li>[Zonca2019] Andrea Zonca and Leo Singer and Daniel Lenz and Martin Reinecke and Cyrille Rosset and Eric Hivon and Krzysztof Gorski: <em>healpy: equal area pixelization and spherical harmonics transforms for data on the sphere in Python</em>, Mar-2019, Journal of Open Source Software, Vol. 4, Nr. 35, pp. 1298, <a href="https://doi.org/10.21105/joss.01298">https://doi.org/10.21105/joss.01298</a></li>
+<li>[Zucker2019] Zucker, Catherine and Speagle, Joshua S. and Schlafly, Edward F. and Green, Gregory M. and Finkbeiner, Douglas P. and Goodman, Alyssa A. and Alves, João: <em>A Large Catalog of Accurate Distances to Local Molecular Clouds: The Gaia DR2 Edition</em>, Jul-2019, The Astrophysical Journal, Vol. 879, Nr. 2, pp. 125, <a href="https://doi.org/10.3847/1538-4357/ab2388">https://doi.org/10.3847/1538-4357/ab2388</a></li>
+<li>[Zucker2021] Catherine Zucker and Alyssa Goodman and Joao Alves and Shmuel Bialy and Eric W. Koch and Joshua S. Speagle and Michael M. Foley and Douglas Finkbeiner and Reimar Leike and Torsten Ensslin and Joshua E. G. Peek and Gordian Edenhofer: <em>On the Three-dimensional Structure of Local Molecular Clouds</em>, Sep-2021, The Astrophysical Journal, Vol. 919, Nr. 1, pp. 35, <a href="https://doi.org/10.3847/1538-4357/ac1f96">https://doi.org/10.3847/1538-4357/ac1f96</a></li>
+</ol>
+	</article>
+	</main>
+
+	<br><br>
+	<aside>
+	<p>Share via
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on Facebook" target=_blank>Facebook</a>,
+	<a href="https://twitter.com/intent/tweet?text=A+Parsec-Scale+Galactic+3D+Dust+Map+out+to+1.25+kpc+from+the+Sun%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on Twitter" target=_blank>Twitter/&Xopf;</a>,
+	<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on LinkedIn" target=_blank>LinkedIn</a>,
+	<a href="https://www.xing.com/spi/shares/new?url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on Xing" target=_blank>Xing</a>,
+	<a href="https://share.flipboard.com/bookmarklet/popout?v=2&amp;title=A+Parsec-Scale+Galactic+3D+Dust+Map+out+to+1.25+kpc+from+the+Sun&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on Flipboard" target=_blank>Flipboard</a>,
+	<a href="https://getpocket.com/save?url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on Pocket" target=_blank>Pocket</a>,
+	<a href="https://reddit.com/submit?&amp;url=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun&amp;title=A+Parsec-Scale+Galactic+3D+Dust+Map+out+to+1.25+kpc+from+the+Sun" title="Post on Reddit" target=_blank>Reddit</a>,
+	<a href="mailto:?subject=A+Parsec-Scale+Galactic+3D+Dust+Map+out+to+1.25+kpc+from+the+Sun&amp;body=https%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Send via e-mail">e-mail</a>,
+	<a href="whatsapp://send?text=A+Parsec-Scale+Galactic+3D+Dust+Map+out+to+1.25+kpc+from+the+Sun%0Ahttps%3A%2F%2Feklausmeier.goip.de/blog/2023/08-03-a-parsec-scale-galactic-3d-dust-map-out-to-1-25-kpc-from-the-sun" title="Post on WhatsApp">WhatsApp</a>
+	</p>
+
+	<p>
+	<br><strong><a href=/aux/categories>Categories</a>: </strong><a href=/aux/categories/#mathematics>mathematics</a>, <a href=/aux/categories/#astronomy>astronomy</a>
+	<br><strong><a href=/aux/tags>Tags</a>: </strong><a href=/aux/tags/#interstellar+dust>interstellar dust</a>, <a href=/aux/tags/#interstellar+medium>interstellar medium</a>, <a href=/aux/tags/#Milky+Way>Milky Way</a>, <a href=/aux/tags/#Gaia>Gaia</a>, <a href=/aux/tags/#Gaussian+processes>Gaussian processes</a>, <a href=/aux/tags/#Bayesian+inference>Bayesian inference</a>
+	</p>
+	<p><a href="/blog/2023">Index for the year 2023.</a></p>
+	<p>Blog posts with the same categories.</p>
+	<p><i>mathematics:</i></p>
+	<ol>
+		<li><a href="/blog/2011/08-14-mainframe-rehosting">2011-08-14: Mainframe Rehosting</a></li>
+		<li><a href="/blog/2013/01-07-number-of-combinations-for-german-tax-id">2013-01-07: Number of Combinations for German Tax Id</a></li>
+		<li><a href="/blog/2013/04-30-0x5f3759df-calculating-inverse-square-root">2013-04-30: 0x5f3759df - calculating inverse square root</a></li>
+		<li><a href="/blog/2013/06-01-vasily-volkov-uc-berkeley-unrolling-parallel-loops">2013-06-01: Vasily Volkov (UC Berkeley): Unrolling parallel loops</a></li>
+		<li><a href="/blog/2013/07-27-sundials-suite-of-nonlinear-and-differentialalgebraic-equation-solvers">2013-07-27: SUNDIALS (SUite of Nonlinear and DIfferential/ALgebraic equation Solvers)</a></li>
+		<li><a href="/blog/2013/08-11-design-notes-on-system-for-the-analysis-of-order-and-stepsize-changes-for-cyclic-composite-multistep-methods">2013-08-11: Design Notes on System for the Analysis of Order- and Stepsize Changes for Cyclic Composite Multistep Methods</a></li>
+		<li><a href="/blog/2013/08-21-average-size-of-web-pages-plus-prediction">2013-08-21: Average Size of Web Pages plus Prediction</a></li>
+		<li><a href="/blog/2013/09-13-torricellis-trumpet-infinite-surface-area-but-finite-volume">2013-09-13: Torricelli's Trumpet: Infinite Surface Area but Finite Volume</a></li>
+		<li><a href="/blog/2013/09-16-line-integral-of-a-vector-field">2013-09-16: Line Integral of a Vector Field</a></li>
+		<li><a href="/blog/2013/09-27-gil-kalai-on-zhangs-breakthrough-in-number-theory">2013-09-27: Gil Kalai on Zhang's Breakthrough in Number Theory</a></li>
+		<li><a href="/blog/2013/09-30-electronic-mathematical-journals">2013-09-30: Electronic Mathematical Journals</a></li>
+		<li><a href="/blog/2014/01-02-effort-estimation-using-learning-curves">2014-01-02: Effort Estimation Using Learning Curves</a></li>
+		<li><a href="/blog/2014/05-10-simple-exercises-for-a-c-programming-language-course">2014-05-10: Simple Exercises for a C Programming Language Course</a></li>
+		<li><a href="/blog/2014/07-16-day-1-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-16: Day 1, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2014/07-17-day-2-workshop-programming-of-heterogeneous-systems-in-physics">2014-07-17: Day 2, Workshop Programming of Heterogeneous Systems in Physics</a></li>
+		<li><a href="/blog/2015/02-07-announcement-11th-international-conference-on-parallel-programming-and-applied-mathematics">2015-02-07: Announcement: 11th International Conference on Parallel Programming and Applied Mathematics</a></li>
+		<li><a href="/blog/2015/03-15-on-differential-forms-2">2015-03-15: On Differential Forms</a></li>
+		<li><a href="/blog/2015/06-13-methods-of-proof-diagonalization">2015-06-13: Methods of Proof — Diagonalization</a></li>
+		<li><a href="/blog/2016/10-08-why-does-deep-and-cheap-learning-work-so-well">2016-10-08: Why does deep and cheap learning work so well?</a></li>
+		<li><a href="/blog/2017/06-05-five-value-theorem-of-nevanlinna">2017-06-05: Five-Value Theorem of Nevanlinna</a></li>
+		<li><a href="/blog/2017/11-30-optimal-product-portfolio">2017-11-30: Optimal Product Portfolio</a></li>
+		<li><a href="/blog/2020/06-30-reply-to-neural-network-back-propagation-revisited-with-ordinary-differential-equations">2020-06-30: Reply to: Neural Network Back-Propagation Revisited with Ordinary Differential Equations</a></li>
+		<li><a href="/blog/2020/10-15-online-dial-a-ride">2020-10-15: Online Dial-A-Ride</a></li>
+		<li><a href="/blog/2021/02-09-poisson-log-normal-distributed-random-numbers">2021-02-09: Poisson Log-Normal Distributed Random Numbers</a></li>
+		<li><a href="/blog/2021/07-25-diagonal-of-squared-jacobian">2021-07-25: Diagonal of Squared Jacobian</a></li>
+		<li><a href="/blog/2023/01-29-price-s-law">2023-01-29: Price's Law</a></li>
+		<li><a href="/blog/2023/06-06-theorem-of-stein-rosenberg">2023-06-06: Theorem of Stein and Rosenberg</a></li>
+		<li><a href="/blog/2023/06-07-neural-networking-training-using-stiff-ode-solvers">2023-06-07: Neural Network Training using Stiff ODE Solvers</a></li>
+		<li><a href="/blog/2023/07-01-steve-jobs-on-bicycles">2023-07-01: Steve Jobs on Bicycles</a></li>
+		<li><a href="/blog/2024/01-23-matrixpolynome">2024-01-23: Matrixpolynome</a></li>
+		<li><a href="/blog/2024/01-29-aeusseres-produkt-und-determinanten">2024-01-30: Das äußere Produkt und Determinanten</a></li>
+		<li><a href="/blog/2024/01-31-elementarsymmetrische-polynome">2024-01-31: Elementarsymmetrische Polynome</a></li>
+		<li><a href="/blog/2024/02-03-hermitesche-unitaere-und-normale-matrizen">2024-02-03: Hermitesche, unitäre und normale Matrizen</a></li>
+		<li><a href="/blog/2024/02-04-die-spur-einer-matrix">2024-02-04: Die Spur einer Matrix</a></li>
+		<li><a href="/blog/2024/02-05-stetigkeit-der-eigenwerte-in-abhaengigkeit-der-matrixkomponenten">2024-02-05: Stetigkeit der Eigenwerte in Abhängigkeit der Matrixkomponenten</a></li>
+		<li><a href="/blog/2024/02-06-holomorphe-matrixfunktionen">2024-02-06: Holomorphe Matrixfunktionen</a></li>
+		<li><a href="/blog/2024/02-07-differentiation-von-matrizen-und-determinanten">2024-02-07: Differentiation von Matrizen und Determinanten</a></li>
+		<li><a href="/blog/2024/02-08-taylorformel-fuer-vektorfunktionen">2024-02-08: Taylorformel für Vektorfunktionen</a></li>
+		<li><a href="/blog/2024/02-09-formel-von-faa-di-bruno">2024-02-09: Die Formel von Faà di Bruno</a></li>
+		<li><a href="/blog/2024/02-10-stabilitaet-und-polynome">2024-02-10: Stabilität und Polynome</a></li>
+		<li><a href="/blog/2024/06-09-projektionsmatrix-eines-raumes">2024-06-09: Projektionsmatrix eines Raumes</a></li>
+		<li><a href="/blog/2024/06-10-loesung-linearer-gleichungssysteme">2024-06-10: Lösung linearer Gleichungssysteme</a></li>
+		<li><a href="/blog/2024/06-11-konvergenzresultate-fuer-feste-schrittweiten">2024-06-11: Konvergenzresultate für feste Schrittweiten</a></li>
+		<li><a href="/blog/2024/06-17-divergenz-und-korrektoriteration-theorie-und-experimente">2024-06-17: Divergenz der Korrektoriteration: Theorie und Experimente</a></li>
+		<li><a href="/blog/2024/06-18-stabilitaetsfunktionale-und-semistabilitaetsfunktionale">2024-06-18: Stabilitätsfunktionale und Semistabilitätsfunktionale</a></li>
+		<li><a href="/blog/2024/07-01-das-fehlerverhalten-zusammengesetzter-linearer-mehrschrittformeln">2024-07-01: Das Fehlerverhalten zusammengesetzer linearer Mehrschrittformeln</a></li>
+		<li><a href="/blog/2024/08-13-recursive-generation-of-runge-kutta-formulas">2024-08-13: Recursive Generation of Runge-Kutta Formulas</a></li>
+		<li><a href="/blog/2024/09-03-directed-st-connectivity-with-few-paths-is-in-quantum-logspace">2024-09-03: Direct st-connectivity with few paths is in quantum logspace</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+		<li><a href="/blog/2025/01-07-praktische-gewinnung-zyklischer-steif-stabiler-verfahren">2025-01-07: Praktische Gewinnung zyklischer, steif-stabiler Verfahren</a></li>
+		<li><a href="/blog/2025/02-24-die-verwendeten-zyklischen-formeln-im-programm-tendler">2025-02-24: Die verwendeten zyklischen Formeln im Programm TENDLER</a></li>
+		<li><a href="/blog/2025/03-09-stiffness-in-neural-networks">2025-03-09: Stiffness in Neural Networks</a></li>
+	</ol>
+	<p><i>astronomy:</i></p>
+	<ol>
+		<li><a href="/blog/2013/04-27-brian-koberlein-on-google-astronomy-blog">2013-04-27: Brian Koberlein on Google+: Astronomy Blog</a></li>
+		<li><a href="/blog/2013/04-27-max-planck-institut-fur-astrophysik-the-millennium-simulation-project">2013-04-27: Max Planck Institut für Astrophysik: The Millennium Simulation Project</a></li>
+		<li><a href="/blog/2013/06-16-keplers-hypothesis-explained-by-brian-koberlein">2013-06-16: Kepler’s Hypothesis explained by Brian Koberlein</a></li>
+		<li><a href="/blog/2013/09-13-the-attraction-of-curves-brian-koberlein">2013-09-13: The Attraction of Curves – Brian Koberlein</a></li>
+		<li><a href="/blog/2013/10-01-photographs-from-space-by-karen-l-nyberg">2013-10-01: Photographs from Space by Karen L. Nyberg</a></li>
+		<li><a href="/blog/2013/10-25-why-brian-koberlein-is-in-the-dark-matter-camp">2013-10-25: Why Brian Koberlein Is In The Dark Matter Camp</a></li>
+		<li><a href="/blog/2013/12-03-astronomy-at-home-brian-koberlein">2013-12-03: Astronomy at Home – Brian Koberlein</a></li>
+		<li><a href="/blog/2015/06-12-photograph-from-space">2015-06-12: Photograph from Space</a></li>
+		<li><a href="/blog/2015/07-26-international-space-station-after-undocking-of-sts-132">2015-07-26: International Space Station after undocking of STS-132</a></li>
+		<li><a href="/blog/2015/10-21-photographs-from-apollo-mission-to-moon">2015-10-21: Photographs from Apollo Mission to Moon</a></li>
+		<li><a href="/blog/2017/01-12-victoria-kaspi-public-lecture-the-cosmic-gift-of-neutron-stars">2017-01-12: Victoria Kaspi Public Lecture: The Cosmic Gift of Neutron Stars</a></li>
+		<li><a href="/blog/2023/12-01-our-neighborhood-in-the-milky-way-in-3d">2023-12-01: Our Neighborhood in the Milky Way in 3D</a></li>
+		<li><a href="/blog/2024/10-08-on-the-stability-of-the-solar-system">2024-10-08: On The Stability Of The Solar System</a></li>
+	</ol>
+	</aside>
+
+
+	<footer>
+		<p><br><br>Generated 23-Mar-25 16:47 CET (Europe/Berlin) using <a href="/blog/2021/10-31-simplified-saaze">Simplified Saaze</a>, rendered in 163.94 ms<br><br>
+		</p>
+	</footer>
+
+
+<script>
+function darkLightToggle(setLocal=1) {
+	if (setLocal) {
+		let dts = localStorage.getItem("dark-theme") ?? 0;
+		if (dts != 1 && dts != 0) dts = 0;	// in case the user has tampered with localStorage
+		localStorage.setItem("dark-theme", 1 - dts);
+	}
+	document.body.classList.toggle("dark-mode");
+	darkLightIcon.innerHTML = document.body.classList.contains("dark-mode") ?
+		'<g><path d="M58.57,25.81c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8l9.88,17.1c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8L58.57,25.81L58.57,25.81z M120,51.17c19.01,0,36.21,7.7,48.67,20.16 C181.12,83.79,188.83,101,188.83,120c0,19.01-7.7,36.21-20.16,48.67c-12.46,12.46-29.66,20.16-48.67,20.16 c-19.01,0-36.21-7.7-48.67-20.16C58.88,156.21,51.17,139.01,51.17,120c0-19.01,7.7-36.21,20.16-48.67 C83.79,58.88,101,51.17,120,51.17L120,51.17z M158.27,81.73c-9.79-9.79-23.32-15.85-38.27-15.85c-14.95,0-28.48,6.06-38.27,15.85 c-9.79,9.79-15.85,23.32-15.85,38.27c0,14.95,6.06,28.48,15.85,38.27c9.79,9.79,23.32,15.85,38.27,15.85 c14.95,0,28.48-6.06,38.27-15.85c9.79-9.79,15.85-23.32,15.85-38.27C174.12,105.05,168.06,91.52,158.27,81.73L158.27,81.73z M113.88,7.71c0-4.26,3.45-7.71,7.71-7.71c4.26,0,7.71,3.45,7.71,7.71v19.75c0,4.26-3.45,7.71-7.71,7.71 c-4.26,0-7.71-3.45-7.71-7.71V7.71L113.88,7.71z M170.87,19.72c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48 l-9.88,17.1c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48L170.87,19.72L170.87,19.72z M214.19,58.57 c3.67-2.13,8.38-0.87,10.51,2.8c2.13,3.67,0.88,8.38-2.8,10.51l-17.1,9.88c-3.67,2.13-8.38,0.87-10.51-2.8 c-2.13-3.67-0.88-8.38,2.8-10.51L214.19,58.57L214.19,58.57z M232.29,113.88c4.26,0,7.71,3.45,7.71,7.71 c0,4.26-3.45,7.71-7.71,7.71h-19.75c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71H232.29L232.29,113.88z M220.28,170.87 c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83l-17.1-9.88c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83L220.28,170.87L220.28,170.87z M181.43,214.19c2.13,3.67,0.87,8.38-2.8,10.51 c-3.67,2.13-8.38,0.88-10.51-2.8l-9.88-17.1c-2.13-3.67-0.87-8.38,2.8-10.51c3.67-2.13,8.38-0.88,10.51,2.8L181.43,214.19 L181.43,214.19z M126.12,232.29c0,4.26-3.45,7.71-7.71,7.71c-4.26,0-7.71-3.45-7.71-7.71v-19.75c0-4.26,3.45-7.71,7.71-7.71 c4.26,0,7.71,3.45,7.71,7.71V232.29L126.12,232.29z M69.13,220.28c-2.11,3.67-6.8,4.94-10.48,2.83c-3.67-2.11-4.94-6.8-2.83-10.48 l9.88-17.1c2.11-3.67,6.8-4.94,10.48-2.83c3.67,2.11,4.94,6.8,2.83,10.48L69.13,220.28L69.13,220.28z M25.81,181.43 c-3.67,2.13-8.38,0.87-10.51-2.8c-2.13-3.67-0.88-8.38,2.8-10.51l17.1-9.88c3.67-2.13,8.38-0.87,10.51,2.8 c2.13,3.67,0.88,8.38-2.8,10.51L25.81,181.43L25.81,181.43z M7.71,126.12c-4.26,0-7.71-3.45-7.71-7.71c0-4.26,3.45-7.71,7.71-7.71 h19.75c4.26,0,7.71,3.45,7.71,7.71c0,4.26-3.45,7.71-7.71,7.71H7.71L7.71,126.12z M19.72,69.13c-3.67-2.11-4.94-6.8-2.83-10.48 c2.11-3.67,6.8-4.94,10.48-2.83l17.1,9.88c3.67,2.11,4.94,6.8,2.83,10.48c-2.11,3.67-6.8,4.94-10.48,2.83L19.72,69.13L19.72,69.13z"/></g>' :
+		'<g><path d="M49.06,1.27c2.17-0.45,4.34-0.77,6.48-0.98c2.2-0.21,4.38-0.31,6.53-0.29c1.21,0.01,2.18,1,2.17,2.21 c-0.01,0.93-0.6,1.72-1.42,2.03c-9.15,3.6-16.47,10.31-20.96,18.62c-4.42,8.17-6.1,17.88-4.09,27.68l0.01,0.07 c2.29,11.06,8.83,20.15,17.58,25.91c8.74,5.76,19.67,8.18,30.73,5.92l0.07-0.01c7.96-1.65,14.89-5.49,20.3-10.78 c5.6-5.47,9.56-12.48,11.33-20.16c0.27-1.18,1.45-1.91,2.62-1.64c0.89,0.21,1.53,0.93,1.67,1.78c2.64,16.2-1.35,32.07-10.06,44.71 c-8.67,12.58-22.03,21.97-38.18,25.29c-16.62,3.42-33.05-0.22-46.18-8.86C14.52,104.1,4.69,90.45,1.27,73.83 C-2.07,57.6,1.32,41.55,9.53,28.58C17.78,15.57,30.88,5.64,46.91,1.75c0.31-0.08,0.67-0.16,1.06-0.25l0.01,0l0,0L49.06,1.27 L49.06,1.27z"/></g>' ;
+}
+const darkLightIcon = document.querySelector("#darkLightIcon");
+addEventListener('load', (event) => {
+	let dst = localStorage.getItem("dark-theme");
+	if (dst == 1	// explicit user request
+	|| (dst == null && window.matchMedia('(prefers-color-scheme: dark)').matches )) { // as per Browser setting
+		darkLightToggle(0);
+	} else {
+		document.body.classList.remove('dark-mode');
+	}
+});
+</script>
+
+	<script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+</html>
